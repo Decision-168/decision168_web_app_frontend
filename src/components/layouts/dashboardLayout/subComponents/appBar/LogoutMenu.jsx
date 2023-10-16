@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import BackgroundLetterAvatars from "../common/BackgroundLetterAvatars";
+import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import SettingsAccessibilityIcon from "@mui/icons-material/SettingsAccessibility";

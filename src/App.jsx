@@ -1,11 +1,14 @@
-import Dashboard from "./components/dashboard/Dashboard";
-import GlobalTheme from "./theme/GlobalTheme";
+import Dashboard from "./components/dashboard";
+import DashboardLayout from "./components/layouts/dashboardLayout";
+import GlobalThemeProvider from "./theme/GlobalThemeProvider";
 
 function App() {
   return (
-    <GlobalTheme>
-      <Dashboard />
-    </GlobalTheme>
+    <GlobalThemeProvider>
+      <DashboardLayout>
+        <Dashboard />
+      </DashboardLayout>
+    </GlobalThemeProvider>
   );
 }
 
