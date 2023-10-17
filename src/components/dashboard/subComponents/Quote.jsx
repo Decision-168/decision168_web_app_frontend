@@ -7,7 +7,7 @@ export default function Quote() {
   const theme = useTheme();
 
   return (
-    <Paper elevation={4} sx={{ minHeight: "350px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <Paper elevation={0} sx={{ minHeight: "350px", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: theme.palette.secondary.light }}>
       <Stack justifyContent="space-between" alignItems="center" sx={{ minHeight: "200px" }}>
         <Box mb={4}>
           <FormatQuoteIcon sx={{ rotate: "180deg", color: theme.palette.primary.main, width: "30px", height: "30px", marginBottom: "-5px" }} />
@@ -35,7 +35,7 @@ export default function Quote() {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="caption" display="block" gutterBottom>
+            <Typography component="div" variant="caption" display="block" gutterBottom>
               Submit a <Link href="/">Quote</Link>
             </Typography>
           </Grid>

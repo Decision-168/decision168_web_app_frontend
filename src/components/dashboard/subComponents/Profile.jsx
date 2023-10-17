@@ -12,7 +12,7 @@ export default function Profile() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Adjust breakpoint as needed
 
   return (
-    <Paper sx={{ minHeight: isSmallScreen ? "400px" : "350px" }}>
+    <Paper elevation={0} sx={{ minHeight: isSmallScreen ? "400px" : "350px" }}>
       <Box
         sx={{
           position: "relative",
@@ -40,9 +40,13 @@ export default function Profile() {
           <Grid item xs={12} sm={4}>
             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginBottom: "5px" }}>
               <Avatar {...stringAvatar("Arshad Khan")} sx={{ width: "100px", height: "100px", backgroundColor: theme.palette.primary.main, border: "5px solid white" }} />
-              <Typography variant="h6">Arshad Khan</Typography>
+              <Typography component="div" variant="h6">
+                Arshad Khan
+              </Typography>
               <Button variant="outlined" startIcon={<VisibilityIcon />}>
-                <Typography noWrap>view profile</Typography>
+                <Typography component="div" noWrap>
+                  view profile
+                </Typography>
               </Button>
             </Box>
           </Grid>

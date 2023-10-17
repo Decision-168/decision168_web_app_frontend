@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
@@ -10,11 +10,13 @@ import Stack from "@mui/material/Stack";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutMenu from "./LogoutMenu";
 import PortfolioMenu from "./PortfolioMenu";
 import { useTheme } from "@mui/material/styles";
 import { Button, Hidden } from "@mui/material";
+import screenfull from "screenfull";
 
 const drawerWidth = 250;
 const AppBar = styled(MuiAppBar, {
@@ -39,8 +41,32 @@ const AppBar = styled(MuiAppBar, {
 export default function DesktopAppBar({ open, toggleDrawer }) {
   const theme = useTheme();
 
+  const [isFullscreen, setIsFullscreen] = React.useState(screenfull.isFullscreen);
+
+  const toggleFullScreen = () => {
+    if (screenfull.isEnabled) {
+      if (screenfull.isFullscreen) {
+        screenfull.exit();
+      } else {
+        screenfull.request();
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(screenfull.isFullscreen);
+    };
+
+    screenfull.on("change", handleFullscreenChange);
+
+    return () => {
+      screenfull.off("change", handleFullscreenChange);
+    };
+  }, []);
+
   return (
-    <AppBar position="absolute" open={open} sx={{ backgroundColor: theme.palette.secondary.light }}>
+    <AppBar elevation={3} position="absolute" open={open} sx={{ backgroundColor: "white" }}>
       <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "10vh" }}>
         <IconButton
           edge="start"
@@ -90,8 +116,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>
-              <IconButton color="black" sx={{ width: "50px", height: "50px" }}>
-                <FullscreenIcon />
+              <IconButton onClick={toggleFullScreen} color="black" sx={{ width: "50px", height: "50px" }}>
+                {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </IconButton>
 
               <IconButton color="black" sx={{ width: "50px", height: "50px" }}>

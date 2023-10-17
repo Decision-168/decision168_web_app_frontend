@@ -20,9 +20,7 @@ export default function ReusableNestedList({ drawerOpen, icon, primaryText, item
     }
   }, [drawerOpen]);
 
-  console.log(isTabletMobile);
   const handleClick = () => {
-    console.log(drawerOpen);
     if (drawerOpen) {
       setOpen(!open);
     }
