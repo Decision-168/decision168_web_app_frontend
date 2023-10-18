@@ -1,12 +1,14 @@
-import CssBaseline from "@mui/material/CssBaseline";
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./components/dashboard";
+import DashboardLayout from "./components/layouts/dashboardLayout";
+import GlobalThemeProvider from "./theme/GlobalThemeProvider";
 
 function App() {
   return (
-    <>
-      <CssBaseline />
-      <Dashboard />
-    </>
+    <GlobalThemeProvider>
+      <DashboardLayout>
+        <Dashboard />
+      </DashboardLayout>
+    </GlobalThemeProvider>
   );
 }
 
