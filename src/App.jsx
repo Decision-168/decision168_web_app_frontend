@@ -1,14 +1,11 @@
-import Dashboard from "./components/dashboard";
-import DashboardLayout from "./components/layouts/dashboardLayout";
-import GlobalThemeProvider from "./theme/GlobalThemeProvider";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./route";
 
 function App() {
   return (
-    <GlobalThemeProvider>
-      <DashboardLayout>
-        <Dashboard />
-      </DashboardLayout>
-    </GlobalThemeProvider>
+    <>
+      <RouterProvider router={router}></RouterProvider>
+    </>
   );
 }
 
