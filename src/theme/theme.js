@@ -66,5 +66,56 @@ export const theme = createTheme({
                 },
             },
         },
+        MuiTextField: {
+            styleOverrides: {
+                root: {
+                    marginTop:0,
+                    '& .MuiInputBase-input': {
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: "5px",
+                        color: '#383838',
+                        height: '30px',
+                        padding: '5px 10px',
+                    },
+                },
+            },
+        },
+        MuiCheckbox: {
+            styleOverrides: {
+                root: {
+                    color: '#C7DF19',
+                }
+            }
+        },
+        MuiFormControl: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#383838', // Background color
+                    height: '60px', // Height
+                },
+            },
+        },
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    color: 'red', // Text color
+
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#FFFFFF', // Background color
+                    padding: '20px 0px',
+                    height: '30px', // Height
+                    '&:hover': {
+                        backgroundColor: '#FFFFFF'
+                    },
+                },
+            },
+        },
     },
+
+
 });
