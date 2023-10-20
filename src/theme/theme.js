@@ -16,6 +16,20 @@ export const theme = createTheme({
             main: "#383838",
         },
     },
+    typography: {
+        h2: {
+            fontSize: '1.5rem', // Set the default font size
+            '@media (min-width:600px)': {
+                fontSize: '2.5rem',
+            },
+            '@media (min-width:900px)': {
+                fontSize: '3rem',
+            },
+            '@media (min-width:1200px)': {
+                fontSize: '3.5rem',
+            },
+        },
+    },
     components: {
         MuiTooltip: {
             styleOverrides: {
@@ -69,14 +83,20 @@ export const theme = createTheme({
         MuiTextField: {
             styleOverrides: {
                 root: {
-                    marginTop:0,
                     '& .MuiInputBase-input': {
                         backgroundColor: '#FFFFFF',
-                        borderRadius: "5px",
+                        borderRadius: "4px",
                         color: '#383838',
-                        height: '30px',
-                        padding: '5px 10px',
+                        padding: '7px 10px',
+                        border: "none"
                     },
+                },
+            },
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#FFFFFF',
                 },
             },
         },
@@ -87,34 +107,26 @@ export const theme = createTheme({
                 }
             }
         },
-        MuiFormControl: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#383838', // Background color
-                    height: '60px', // Height
-                },
-            },
-        },
-        MuiInputLabel: {
-            styleOverrides: {
-                root: {
-                    color: 'red', // Text color
+        // MuiFormControl: {
+        //     styleOverrides: {
+        //         root: {
+        //             backgroundColor: 'yellow', 
+        //             height:"60px"
 
-                },
-            },
-        },
-        MuiOutlinedInput: {
+        //         },
+        //     },
+        // },
+        MuiFormControlLabel: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#FFFFFF', // Background color
-                    padding: '20px 0px',
-                    height: '30px', // Height
-                    '&:hover': {
-                        backgroundColor: '#FFFFFF'
-                    },
+                    color: 'white',
                 },
-            },
-        },
+                label: {
+                    fontSize: "13px"
+                }
+            }
+        }
+
     },
 
 

@@ -5,11 +5,11 @@ import { useTheme } from "@mui/material/styles";
 export default function Header({ title, text }) {
   const theme = useTheme();
   return (
-    <Box textAlign="left">
+    <Box textAlign="left" my={2}>
       <Typography component="h1" variant="h6" color={theme.palette.primary.main}>
         {title}
       </Typography>
-      <Typography component="p" variant="body1">
+      <Typography component="p" variant="caption">
         {text}
       </Typography>
     </Box>

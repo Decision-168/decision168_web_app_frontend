@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import  "./App.css"
 import App from "./App.jsx";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import "@fontsource/roboto/300.css";

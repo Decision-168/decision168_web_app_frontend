@@ -1,13 +1,14 @@
 import React from "react";
-import { Link, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
+import CustomLink from "../../common/CustomLink";
 
 export default function Navigation({ question, linkLabel, path }) {
   return (
     <Typography component="p" variant="caption">
       {question}
-      <Link href={path} variant="caption" pl={1}>
-        {linkLabel}
-      </Link>
+      <Box component="span" pl={1}>
+        <CustomLink path={path}>{linkLabel}</CustomLink>
+      </Box>
     </Typography>
   );
 }
