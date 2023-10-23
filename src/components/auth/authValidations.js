@@ -25,7 +25,7 @@ export const authValidations = {
         required: "Password is required",
         pattern: {
             value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
-            message: "Password must be at least 5 characters with at least one uppercase letter, one lowercase letter, one number, and can contain special characters.",
+            message: "Invaid password",
         },
         maxLength: {
             value: 32,
@@ -39,6 +39,21 @@ export const authValidations = {
                 return true;
             }
             return "Passwords do not match";
+        },
+    },
+    otp: {
+        required: "OTP is required",
+        minLength: {
+            value: 6,
+            message: "OTP must be at least 6 digits",
+        },
+        maxLength: {
+            value: 6,
+            message: "OTP must not exceed 6 digits",
+        },
+        pattern: {
+            value: /^[0-9]+$/,
+            message: "Invalid OTP format, only numbers are allowed",
         },
     },
 };

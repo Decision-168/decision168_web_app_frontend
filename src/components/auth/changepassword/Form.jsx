@@ -4,6 +4,7 @@ import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomTextField from "../subComponents/CustomTextField";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
+import Navigation from "../subComponents/Navigation";
 
 export default function Form() {
   const {
@@ -13,17 +14,17 @@ export default function Form() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    alert(JSON.stringify(data));
   };
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
       <CustomTextField
-        name="email"
-        placeholder="Email Address"
+        name="otp"
+        placeholder="Enter OTP"
         register={register}
         errors={errors}
-        validation={authValidations.email} // Pass the validation rules as a prop
+        validation={authValidations.otp} // Pass the validation rules as a prop
       />
 
       <CustomPasswordField
@@ -42,9 +43,11 @@ export default function Form() {
         validation={authValidations.confirmPassword} // Pass the validation rules as a prop
       />
 
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, borderRadius: "3px" }}>
+      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
         Change Password
       </Button>
+
+      <Navigation question="Remember It?" linkLabel="Sign In Here" path="/login" />
     </Box>
   );
 }

@@ -106,7 +106,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           }}>
           <PortfolioMenu />
 
-          {/* <SelectMenu/> */}
+          <SelectMenu/>
 
           <Hidden lgDown>
             <Typography component="h1" variant="h6" color="black" noWrap sx={{ flexGrow: 0 }}>

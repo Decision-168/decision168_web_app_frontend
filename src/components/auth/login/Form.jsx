@@ -15,7 +15,7 @@ export default function Form() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    alert(JSON.stringify(data));
   };
 
   return (
@@ -41,7 +41,7 @@ export default function Form() {
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, borderRadius: "3px" }}>
+      <Button type="submit" fullWidth variant="contained" sx={{ my:2, borderRadius: "3px" }}>
         Login
       </Button>
 

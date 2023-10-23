@@ -16,7 +16,7 @@ export default function CustomTextField({ name, placeholder, register, errors, v
   return (
     <TextField
       placeholder={placeholder}
-      margin="normal"
+      margin="dense"
       required
       fullWidth
       name={name}

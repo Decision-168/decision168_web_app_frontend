@@ -18,10 +18,10 @@ export default function Register() {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid item xs={12} sm={12} md={8} lg={8} xl={9}>
+      <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
         <BackImage />
       </Grid>
-      <Grid item xs={12} sm={12} md={4} lg={4} xl={3} component={Paper} elevation={6} square bgcolor={theme.palette.secondary.main} sx={{ position: "relative", minHeight: "100vh" }}>
+      <Grid item xs={12} sm={12} md={4} lg={3} xl={3} component={Paper} elevation={6} square bgcolor={theme.palette.secondary.main} sx={{ position: "relative", minHeight: "100vh" }}>
         <Stack direction="column" justifyContent="space-between" alignItems="center" color="white" p={4} sx={{ height: "100%" }}>
           <Box>
             {/* Decision-168 logo */}

@@ -13,7 +13,7 @@ export default function Form() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    alert(JSON.stringify(data));
   };
 
   return (
@@ -32,10 +32,10 @@ export default function Form() {
         validation={authValidations.email} // Pass the validation rules as a prop
       />
 
-      <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, borderRadius: "3px" }}>
+      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
         Reset
       </Button>
-      
+
       {/* Navigation */}
       <Navigation question="Remember It?" linkLabel="Sign In here" path="/login" />
     </Box>

@@ -2,18 +2,18 @@ import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import logo from "../../../assets/images/logo.png";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import { LoginStyles } from "../login/styles";
+import { AuthStyles } from "../styles";
 import { useTheme } from "@mui/material/styles";
-import Carousel from "./Carousel";
+import ResponsiveCarousel from "./ResponsiveCarousel";
 
 export default function BackImage() {
   const theme = useTheme();
-  const styles = LoginStyles();
+  const styles = AuthStyles();
   return (
     <Box sx={styles.backGroundImage} p={4} color="white">
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <img src={logo} alt="logo" style={{ width: "10%" }} />
-        <Grid container wrap="nowrap" spacing={2}>
+        <Grid container wrap="nowrap" spacing={4}>
           <Grid item xs zeroMinWidth>
             <Typography noWrap component="h1" variant="h2" textAlign="center" sx={{ fontWeight: "bold" }}>
               Visualize.
@@ -34,9 +34,7 @@ export default function BackImage() {
           Let’s get you unstuck!
         </Typography>
 
-        <Box sx={{ width: "100%", height: "280px", backgroundColor: "transparent", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Carousel />
-        </Box>
+        <ResponsiveCarousel />
       </Stack>
     </Box>
   );

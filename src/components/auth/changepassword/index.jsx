@@ -9,6 +9,7 @@ import Navigation from "../subComponents/Navigation";
 import Copyright from "../subComponents/Copyright";
 import BackImage from "../subComponents/BackImage";
 import { useTheme } from "@mui/material/styles";
+import { Stack } from "@mui/material";
 
 export default function ChangePassword() {
   const theme = useTheme();
@@ -19,29 +20,25 @@ export default function ChangePassword() {
         <BackImage />
       </Grid>
       <Grid item xs={12} sm={12} md={4} lg={4} xl={3} component={Paper} elevation={6} square bgcolor={theme.palette.secondary.main} sx={{ position: "relative" }}>
-        {/* Render your form and data below  */}
-        <Box color="white" p={4}>
-          {/* Decision-168 logo */}
-          <Box mb={10}>
-            <Brand />
-          </Box>
+        <Stack direction="column" justifyContent="space-between" alignItems="center" color="white" p={4} sx={{ height: "100%" }}>
+          <Box color="white">
+            {/* Decision-168 logo */}
+            <Box mb={10}>
+              <Brand />
+            </Box>
 
-          {/* Welcome and text */}
-          <Header title="Change Password" text="Change-Password with Decision 168." />
+            {/* Welcome and text */}
+            <Header title="Change Password" text="Change-Password with Decision 168." />
 
-          {/* Form */}
-          <Box my={2}>
-            <Form />
-          </Box>
-
-          {/* Navigation */}
-          <Box my={4}>
-            <Navigation question="Remember It?" linkLabel="Sign In Here" path="/login" />
+            {/* Form */}
+            <Box my={2}>
+              <Form />
+            </Box>
           </Box>
 
           {/* Copyright */}
           <Copyright />
-        </Box>
+        </Stack>
       </Grid>
     </Grid>
   );

@@ -3,7 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import AddIcon from "@mui/icons-material/Add";
-import { Avatar, Stack, Typography } from "@mui/material";
+import { Avatar, Button, Stack, Typography } from "@mui/material";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
 
 export default function SelectSmall() {
@@ -28,7 +28,7 @@ export default function SelectSmall() {
               <Avatar alt={item.label} src={item.imageUrl}>
                 {item.imageUrl ? null : stringAvatar(item.text)}
               </Avatar>
-              <Typography component="h1" variant="caption">
+              <Typography component="h6" variant="subtitle2" sx={{ textTransform: "capitalize" }}>
                 {item.label}
               </Typography>
             </Stack>
