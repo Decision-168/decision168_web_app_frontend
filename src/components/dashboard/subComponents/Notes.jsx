@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -16,7 +16,9 @@ function CustomTabPanel(props) {
     <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
         <Box sx={{ p: 0 }}>
-          <Typography component="div" textAlign="left">{children}</Typography>
+          <Typography component="div" textAlign="left">
+            {children}
+          </Typography>
         </Box>
       )}
     </div>

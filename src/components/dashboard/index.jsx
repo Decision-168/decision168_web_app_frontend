@@ -4,16 +4,17 @@ import Grid from "@mui/material/Grid";
 import Quote from "./subComponents/Quote";
 import OtherFeatures from "./subComponents/OtherFeatures";
 import { useTheme } from "@mui/material/styles";
-import Profile from "./subComponents/Profile";
+import DashboardProfileCard from "./subComponents/DashboardProfileCard";
 
 export default function Dashboard() {
   const theme = useTheme();
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }} mb={2}>
         <Grid container spacing={2}>
           <Grid item xs={12} lg={8}>
-            <Profile />
+            <DashboardProfileCard />
           </Grid>
           <Grid item xs={12} lg={4}>
             <Quote />

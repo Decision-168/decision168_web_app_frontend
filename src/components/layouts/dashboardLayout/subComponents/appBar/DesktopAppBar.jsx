@@ -17,7 +17,7 @@ import PortfolioMenu from "./PortfolioMenu";
 import { useTheme } from "@mui/material/styles";
 import { Button, Hidden } from "@mui/material";
 import screenfull from "screenfull";
-import SelectMenu from "./SelectMenu";
+// import SelectMenu from "./SelectMenu";
 
 const drawerWidth = 250;
 const AppBar = styled(MuiAppBar, {
@@ -106,7 +106,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           }}>
           <PortfolioMenu />
 
-          <SelectMenu/>
+          {/* <SelectMenu/> */}
 
           <Hidden lgDown>
             <Typography component="h1" variant="h6" color="black" noWrap sx={{ flexGrow: 0 }}>

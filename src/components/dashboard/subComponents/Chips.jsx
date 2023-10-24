@@ -1,4 +1,4 @@
-import { Chip, Grid, Avatar} from "@mui/material";
+import { Chip, Grid, Avatar } from "@mui/material";
 import React from "react";
 
 const items = [
@@ -22,14 +22,12 @@ const items = [
 
 export default function Chips() {
   return (
-    <div>
-      <Grid container justifyContent="center">
-        {items.map((item, index) => (
-          <Grid item key={index} p={1}>
-            <Chip avatar={<Avatar>{item.count}</Avatar>} label={item.label} />
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+    <Grid container justifyContent="center">
+      {items.map((item, index) => (
+        <Grid item key={index} p={1}>
+          <Chip avatar={<Avatar>{item.count}</Avatar>} label={item.label} />
+        </Grid>
+      ))}
+    </Grid>
   );
 }

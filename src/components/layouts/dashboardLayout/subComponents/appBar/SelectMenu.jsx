@@ -20,7 +20,7 @@ export default function SelectSmall() {
   ];
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 170 }} size="small">
+    <FormControl sx={{ m: 1, minWidth: "200px" }} size="small">
       <Select id="demo-select-small" value={portfolio} onChange={handleChange}>
         {items.map((item) => (
           <MenuItem key={item.value} value={item.value}>
@@ -34,7 +34,7 @@ export default function SelectSmall() {
             </Stack>
           </MenuItem>
         ))}
-        <MenuItem disableRipple>
+        <MenuItem>
           <AddIcon />
           Create New Portfolio
         </MenuItem>
