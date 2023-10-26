@@ -1,10 +1,11 @@
-import { RouterProvider } from "react-router-dom";
-import { router } from "./route";
+import CssBaseline from "@mui/material/CssBaseline";
+import Dashboard from "./components/dashboard/Dashboard";
 
 function App() {
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <CssBaseline />
+      <Dashboard />
     </>
   );
 }
