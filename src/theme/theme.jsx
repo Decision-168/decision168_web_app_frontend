@@ -73,7 +73,7 @@ export const theme = createTheme({
           "&:hover": {
             boxShadow: "none",
           },
-          borderRadius: "50px",
+          // borderRadius: "50px",
           textTransform: "capitalize",
           color: "#383838",
         },

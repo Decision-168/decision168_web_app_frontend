@@ -4,6 +4,7 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function handleClick(event) {
   event.preventDefault();
@@ -24,7 +25,7 @@ export default function BasicBreadcrumbs({ currentPage }) {
         <Typography component="h6" variant="subtitle2" sx={{ color: theme.palette.secondary.dark, textTransform: "uppercase", fontWeight: "bold" }}>
           {currentPage}
         </Typography>
-        <Button size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
+        <Button startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
           Back
         </Button>
       </Breadcrumbs>

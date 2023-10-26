@@ -6,8 +6,9 @@ import Client from "../../common/Client";
 import CardFeatures from "../../common/CardFeatures";
 import CoverImage from "../../common/CoverImage";
 import { Link } from "react-router-dom";
+import PersonalInfo from "./PersonalInfo";
 
-export default function ProfileCard() {
+export default function ViewProfileDialogContent() {
   const theme = useTheme();
 
   return (
@@ -28,14 +29,27 @@ export default function ProfileCard() {
           <CardFeatures />
 
           <Grid container>
-            <Grid item xs={12} sm={6} p={2} textAlign="left">
+            <Grid item xs={12} md={4} p={2} textAlign="left">
               <Link to="/update-profile">
                 <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small">
                   Update Profile
                 </Button>
               </Link>
             </Grid>
+            <Grid item xs={12} md={4} p={2} textAlign="left">
+              <Link to="/">
+                <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+                  Change Password
+                </Button>
+              </Link>
+            </Grid>
           </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid container mt={2}>
+        <Grid item xs={12}>
+          <PersonalInfo />
         </Grid>
       </Grid>
     </Paper>

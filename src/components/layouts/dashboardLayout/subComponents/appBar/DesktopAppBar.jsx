@@ -115,7 +115,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           </Hidden>
 
           <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} gap={2}>
-            <Button variant="contained" size="medium">
+            <Button variant="contained" size="small">
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>

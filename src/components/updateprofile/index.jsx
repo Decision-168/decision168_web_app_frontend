@@ -4,7 +4,6 @@ import { useTheme } from "@mui/material/styles";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ProfileCard from "./subComponents/ProfileCard";
 
-
 export default function UpdateProfile() {
   const theme = useTheme();
   return (
@@ -12,11 +11,9 @@ export default function UpdateProfile() {
       <BasicBreadcrumbs currentPage="update" />
       <Grid container>
         <Grid item xs={12} lg={9}>
-         <ProfileCard/>
+          <ProfileCard />
         </Grid>
       </Grid>
-
-    
     </Box>
   );
 }
