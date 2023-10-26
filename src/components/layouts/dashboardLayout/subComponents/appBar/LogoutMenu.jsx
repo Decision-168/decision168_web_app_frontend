@@ -11,14 +11,18 @@ import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import BackgroundLetterAvatars from "../common/BackgroundLetterAvatars";
+import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import SettingsAccessibilityIcon from "@mui/icons-material/SettingsAccessibility";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 export default function LogoutMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const theme = useTheme();
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,12 +73,14 @@ export default function LogoutMenu() {
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <BadgeIcon fontSize="small" />
-          </ListItemIcon>
-          My Profile
-        </MenuItem>
+        <Link to="/profile" style={{ textDecoration: "none", color: theme.palette.secondary.main }}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <BadgeIcon fontSize="small" />
+            </ListItemIcon>
+            My Profile
+          </MenuItem>
+        </Link>
 
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
@@ -105,7 +111,7 @@ export default function LogoutMenu() {
         </MenuItem>
 
         <Divider />
-        
+
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Logout fontSize="small" />

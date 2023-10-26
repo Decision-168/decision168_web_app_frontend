@@ -3,12 +3,10 @@ import { styled, alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
 import Divider from "@mui/material/Divider";
-import ArchiveIcon from "@mui/icons-material/Archive";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Stack, Typography } from "@mui/material";
-import BackgroundLetterAvatars from "../common/BackgroundLetterAvatars";
+import {  Typography } from "@mui/material";
+import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
 import AddIcon from "@mui/icons-material/Add";
 
 const StyledMenu = styled((props) => (
@@ -61,7 +59,7 @@ export default function CustomizedMenus() {
     <div>
       <Button sx={{color: "#B9B8B9"}} id="demo-customized-button" aria-controls={open ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} variant="text" disableElevation onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
         <BackgroundLetterAvatars avatarBgColor="#383838" />
-        <Typography variant="subtitle2" sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
+        <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
           Arshad Khan
         </Typography>
       </Button>
@@ -75,7 +73,7 @@ export default function CustomizedMenus() {
         onClose={handleClose}>
         <MenuItem onClick={handleClose} disableRipple>
           <BackgroundLetterAvatars />
-          <Typography variant="subtitle2" sx={{ textTransform: "capitalize", paddingX: "5px" }}>
+          <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingX: "5px" }}>
             Arshad Khan
           </Typography>
         </MenuItem>
