@@ -37,6 +37,7 @@ export default function Form() {
       />
 
       <CustomPasswordField
+        showTooltip={true}
         name="password"
         placeholder="Password"
         register={register}

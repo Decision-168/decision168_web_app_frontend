@@ -29,8 +29,10 @@ export default function CustomLabelTextField({ name, label, placeholder, registe
           ...inputProps,
           sx: {
             "&::placeholder": placeholderStyles,
+          
           },
         }}
+    
         error={!!errors[name]}
         helperText={errors[name]?.message}
       />

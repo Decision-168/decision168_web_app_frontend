@@ -3,9 +3,9 @@ import { stringAvatar } from "../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
 import Client from "../../common/Client";
 import CoverImage from "../../common/CoverImage";
-import CustomLabelTextField from "../../common/CustomLabelTextField";
+
 import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
+import UpdateProfileForm from "./UpdateProfileForm";
 
 export default function ProfileCard() {
   const {
@@ -29,43 +29,9 @@ export default function ProfileCard() {
           </Box>
         </Grid>
 
-        <Grid container>
-          <Grid item xs={12} sm={4} p={2}>
-            <CustomLabelTextField
-              label="First Name"
-              name="firstName"
-              required={true}
-              placeholder="First Name"
-              register={register}
-              errors={errors}
-              validation={globalValidations.email} // Pass the validation rules as a prop
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4} p={2}>
-            <CustomLabelTextField
-              label="Middle Name"
-              name="middleName"
-              required={true}
-              placeholder="Middle Name"
-              register={register}
-              errors={errors}
-              validation={globalValidations.email} // Pass the validation rules as a prop
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4} p={2}>
-            <CustomLabelTextField
-              label="Last Name"
-              name="lastName"
-              required={true}
-              placeholder="Last Name"
-              register={register}
-              errors={errors}
-              validation={globalValidations.email} // Pass the validation rules as a prop
-            />
-          </Grid>
-        </Grid>
+        {/* Form */}
+        <UpdateProfileForm />
+        
       </Grid>
     </Paper>
   );

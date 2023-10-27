@@ -134,5 +134,14 @@ export const theme = createTheme({
         },
       },
     },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            padding: "0px",
+          },
+        },
+      },
+    },
   },
 });

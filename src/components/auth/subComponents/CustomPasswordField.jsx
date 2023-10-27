@@ -6,7 +6,7 @@ import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
 import { useTheme } from "@mui/material/styles";
 import { useLocation } from "react-router-dom";
 
-export default function CustomPasswordField({ name, placeholder, register, errors, validation }) {
+export default function CustomPasswordField({ name, placeholder, register, errors, validation, showTooltip }) {
   const [showPassword, setShowPassword] = useState(false);
   const theme = useTheme();
   const location = useLocation();
@@ -42,7 +42,7 @@ export default function CustomPasswordField({ name, placeholder, register, error
               </IconButton>
             </InputAdornment>
 
-            {location.pathname === "/register" ? (
+            {showTooltip ? (
               <InputAdornment position="end">
                 <Tooltip title="Password must be at least 5 characters with at least one uppercase letter, one lowercase letter, one number, and can contain special characters." arrow placement="bottom-start">
                   <IconButton edge="end">

@@ -28,6 +28,7 @@ export default function Form() {
       />
 
       <CustomPasswordField
+        showTooltip={false}
         name="password"
         placeholder="New Password"
         register={register}
@@ -36,6 +37,7 @@ export default function Form() {
       />
 
       <CustomPasswordField
+        showTooltip={false}
         name="confirmPassword"
         placeholder="Confirm Password"
         register={register}
