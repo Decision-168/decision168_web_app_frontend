@@ -1,11 +1,17 @@
-import { Box, Button, FormControlLabel, Checkbox, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomLink from "../../common/CustomLink";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import CustomTextField from "../subComponents/CustomTextField";
-import Navigation from "../subComponents/Navigation";
 
 export default function Form() {
   const {
@@ -19,7 +25,12 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
       <CustomTextField
         name="fullName"
         placeholder="Full Name"
@@ -43,19 +54,25 @@ export default function Form() {
         errors={errors}
         validation={authValidations.password} // Pass the validation rules as a prop
       />
+      <FormControlLabel
+        control={<Checkbox value="remember" size="small" />}
+        label={
+          <Typography component="p" variant="caption">
+            By signing up you agree to Decision 168's
+            <CustomLink path="/">Terms </CustomLink>&
+            <CustomLink path="/">Privacy Policy.</CustomLink>
+          </Typography>
+        }
+      />
 
-      <Stack justifyContent="start" alignItems="start">
-        <FormControlLabel control={<Checkbox value="remember" size="small" />} label="By signing up you agree to Decision 168's" />
-
-        <CustomLink path="/">Terms & Privacy Policy.</CustomLink>
-      </Stack>
-
-      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ my: 2, borderRadius: "3px" }}
+      >
         Register
       </Button>
-
-      {/* Navigation */}
-      <Navigation question="Already have an account?" linkLabel="Login" path="/login" />
     </Box>
   );
 }

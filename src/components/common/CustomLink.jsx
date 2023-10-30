@@ -11,6 +11,7 @@ export default function CustomLink({ children, path }) {
     <Link
       sx={{
         color: theme.palette.primary.main,
+        margin:'0px 2px',
         textDecoration: "none",
         "&:hover": {
           textDecoration: "underline",
