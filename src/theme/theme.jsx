@@ -106,6 +106,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
+          // padding: 0,
         },
       },
     },

@@ -46,7 +46,7 @@ export default function ChangePasswordForm({ handleClose }) {
         validation={authValidations.confirmPassword} // Pass the validation rules as a prop
       />
 
-      <Grid item xs={12} sm={12} py={2} textAlign="left">
+      <Grid item xs={12} sm={12} py={2} textAlign="end">
         <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
           Change Password
         </Button>

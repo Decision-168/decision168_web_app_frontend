@@ -48,11 +48,42 @@ export const globalValidations = {
             message: "Invalid company",
         },
     },
+    otherGender: {
+        required: "Other gender is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid gender",
+        },
+    },
     country: {
         required: "Country is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
             message: "Invalid country",
         },
+    },
+    phoneNo: {
+        required: "Phone no is required",
+        pattern: {
+            value: /^[0-9]+$/,
+            message: "Invalid phone no",
+        },
+    },
+    authorName: {
+        required: "Author name is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid author name",
+        },
+    },
+    quote: {
+        required: "Quote is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid quote",
+        },
+    },
+    link: {
+        required: "link is required",
     },
 };

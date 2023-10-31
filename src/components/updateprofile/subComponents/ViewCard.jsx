@@ -7,6 +7,7 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import CustomDailog from "../../common/CustomDailog";
 import ChangePasswordForm from "./ChangePasswordForm";
+import PlanTable from "./PlanTable";
 
 export default function ViewCard() {
   const theme = useTheme();
@@ -16,14 +17,24 @@ export default function ViewCard() {
     setSelectedView(view);
   };
 
-  //Dailog code
-  const [open, setOpen] = React.useState(false);
+  //Change password Dailog code
+  const [openChangePasswordDialog, setOpenChangePasswordDialog] = React.useState(false);
 
-  const handleOpenDailog = () => {
-    setOpen(true);
+  const handleOpenChangePasswordDailog = () => {
+    setOpenChangePasswordDialog(true);
   };
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseChangePasswordDailog = () => {
+    setOpenChangePasswordDialog(false);
+  };
+
+  //Plan  Dailog code
+  const [openPlanDialog, setOpenPlanDialog] = React.useState(false);
+
+  const handleOpenPlanDailog = () => {
+    setOpenPlanDialog(true);
+  };
+  const handleClosePlanDailog = () => {
+    setOpenPlanDialog(false);
   };
 
   return (
@@ -46,27 +57,31 @@ export default function ViewCard() {
           <Divider />
 
           <Box py={1}>
-            <ButtonBase onClick={handleOpenDailog} sx={{ width: "100%", display: "flex", justifyContent: "left", alignItems: "center" }}>
+            <ButtonBase onClick={handleOpenChangePasswordDailog} sx={{ width: "100%", display: "flex", justifyContent: "left", alignItems: "center" }}>
               <IconButton>
                 <LockIcon />
               </IconButton>
               <Typography variant="subtitle2">Change Password</Typography>
             </ButtonBase>
 
-            <CustomDailog handleClose={handleClose} open={open} modalTitle="Change Password" showModalButton={false} modalSize="sm">
-              <ChangePasswordForm handleClose={handleClose} />
+            <CustomDailog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="xs">
+              <ChangePasswordForm handleClose={handleCloseChangePasswordDailog} />
             </CustomDailog>
           </Box>
 
           <Divider />
 
           <Box py={1}>
-            <ButtonBase sx={{ width: "100%", display: "flex", justifyContent: "left", alignItems: "center" }}>
+            <ButtonBase onClick={handleOpenPlanDailog} sx={{ width: "100%", display: "flex", justifyContent: "left", alignItems: "center" }}>
               <IconButton>
                 <AssignmentIcon />
               </IconButton>
-              <Typography variant="subtitle2">Plans</Typography>
+              <Typography variant="subtitle2">My Plan</Typography>
             </ButtonBase>
+
+            <CustomDailog handleClose={handleClosePlanDailog} open={openPlanDialog} modalTitle="My Plan Details" showModalButton={false} modalSize="md">
+              <PlanTable />
+            </CustomDailog>
           </Box>
         </Grid>
       </Grid>

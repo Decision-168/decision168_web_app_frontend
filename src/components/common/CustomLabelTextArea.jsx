@@ -2,9 +2,9 @@ import React from "react";
 import { TextareaAutosize, InputLabel, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomLabelTextArea({ name, label, placeholder, register, errors, validation, required }) {
+export default function CustomLabelTextArea({ name, label, labelColor, placeholder, register, errors, validation, required }) {
   const theme = useTheme();
-
+  const inputProps = register(name, validation);
   // Define custom CSS styles for the placeholder
   const placeholderStyles = {
     fontSize: "14px",
@@ -31,11 +31,19 @@ export default function CustomLabelTextArea({ name, label, placeholder, register
 
   return (
     <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px" }}>
+      <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
         {label}
-        {required && <span style={{ color: theme.palette.error.main }}>*</span>}
+
+        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
       </InputLabel>
-      <TextareaAutosize placeholder={placeholder} minRows={3} style={textAreaStyles} name={name} />
+      <TextareaAutosize
+        // {...register(name, validation)}
+        placeholder={placeholder}
+        minRows={3}
+        style={textAreaStyles}
+        name={name}
+      />
+      {errors[name] && <span style={{ color: theme.palette.error.main }}>{errors[name].message}</span>}
     </Box>
   );
 }
