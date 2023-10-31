@@ -7,6 +7,9 @@ import ResetPassword from "../components/auth/resetpassword";
 import ChangePassword from "../components/auth/changepassword";
 import Profile from "../components/profile";
 import UpdateProfile from "../components/updateprofile";
+import PortfolioView from "../components/portfolio/viewporfolio/";
+import CreatePortfolio from "../components/portfolio/createportfolio";
+import EditPortfolio from "../components/portfolio/editPortfolio";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +48,30 @@ export const router = createBrowserRouter([
     element: (
       <DashboardLayout>
         <UpdateProfile />
+      </DashboardLayout>
+    ),
+  },
+  {
+    path: "/portfolio-view",
+    element: (
+      <DashboardLayout>
+        <PortfolioView />
+      </DashboardLayout>
+    ),
+  },
+  {
+    path: "/portfolio-create",
+    element: (
+      <DashboardLayout>
+        <CreatePortfolio />
+      </DashboardLayout>
+    ),
+  },
+  {
+    path: "/portfolio-edit",
+    element: (
+      <DashboardLayout>
+        <EditPortfolio />
       </DashboardLayout>
     ),
   },

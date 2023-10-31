@@ -20,14 +20,14 @@ export default function BasicBreadcrumbs({ currentPage }) {
   }
 
   return (
-    <div role="presentation" onClick={handleClick} style={{ padding: "10px", marginBottom: "1rem" }}>
+    <div role="presentation" onClick={handleClick} style={{ padding: "10px 0", marginBottom: "1rem" }}>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography component="h6" variant="subtitle2" sx={{ color: theme.palette.secondary.dark, textTransform: "uppercase", fontWeight: "bold" }}>
           {currentPage}
         </Typography>
-        <Button startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
+        {/* <Button startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
           Back
-        </Button>
+        </Button> */}
       </Breadcrumbs>
     </div>
   );

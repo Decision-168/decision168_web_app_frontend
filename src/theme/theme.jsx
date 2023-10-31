@@ -108,6 +108,9 @@ export const theme = createTheme({
           backgroundColor: "#FFFFFF",
           // padding: 0,
         },
+        input: {
+          padding: "7px 10px",
+        },
       },
     },
     MuiCheckbox: {
@@ -144,5 +147,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          marginTop: "8px",
+        },
+      },
+    },
+  
   },
 });

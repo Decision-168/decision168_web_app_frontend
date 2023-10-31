@@ -7,6 +7,25 @@ import CardFeatures from "../../common/CardFeatures";
 import CoverImage from "../../common/CoverImage";
 import { Link } from "react-router-dom";
 
+const items = [
+  {
+    count: 1,
+    label: "Portfolio",
+  },
+  {
+    count: 8,
+    label: "Projects",
+  },
+  {
+    count: 0,
+    label: "Planned Content",
+  },
+  {
+    count: 1,
+    label: "Tasks",
+  },
+];
+
 export default function ProfileCard() {
   const theme = useTheme();
 
@@ -25,7 +44,7 @@ export default function ProfileCard() {
         </Grid>
 
         <Grid item xs={12} sm={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}>
-          <CardFeatures />
+          <CardFeatures items={items} />
 
           <Grid container>
             <Grid item xs={12} sm={6} p={2} textAlign="left">
