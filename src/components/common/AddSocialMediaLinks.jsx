@@ -1,10 +1,10 @@
 import { Grid, Stack, Typography, IconButton, Box } from "@mui/material";
 import React from "react";
-import CustomAutocomplete from "../../common/CustomAutocomplete";
-import CustomLabelTextField from "../../common/CustomLabelTextField";
+import CustomAutocomplete from "./CustomAutocomplete";
+import CustomLabelTextField from "./CustomLabelTextField";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { globalValidations } from "../../../utils/GlobalValidation";
+import { globalValidations } from "../../utils/GlobalValidation";
 import { useForm } from "react-hook-form";
 import { useTheme } from "@mui/material/styles";
 

@@ -10,7 +10,7 @@ import { useTheme } from "@mui/material/styles";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import { useNavigate } from "react-router-dom";
 
-import AddSocialMediaLinks from "./AddSocialMediaLinks";
+import AddSocialMediaLinks from "../../../components/common/AddSocialMediaLinks";
 import CustomNumberField from "../../common/CustomNumberField";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
 

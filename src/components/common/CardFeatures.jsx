@@ -1,26 +1,9 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
 
-const items = [
-  {
-    count: 1,
-    label: "Portfolio",
-  },
-  {
-    count: 8,
-    label: "Projects",
-  },
-  {
-    count: 0,
-    label: "Planned Content",
-  },
-  {
-    count: 1,
-    label: "Tasks",
-  },
-];
 
-export default function CardFeatures() {
+
+export default function CardFeatures({items}) {
   return (
     <Grid container>
       {items.map((item, index) => (
