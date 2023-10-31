@@ -16,11 +16,30 @@ export default function ChangePassword() {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
-      <Grid item xs={12} sm={12} md={8} lg={8} xl={9}>
+      <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
         <BackImage />
       </Grid>
-      <Grid item xs={12} sm={12} md={4} lg={4} xl={3} component={Paper} elevation={6} square bgcolor={theme.palette.secondary.main} sx={{ position: "relative" }}>
-        <Stack direction="column" justifyContent="space-between" alignItems="center" color="white" p={4} sx={{ height: "100%" }}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={3}
+        lg={3}
+        xl={3}
+        component={Paper}
+        elevation={6}
+        square
+        bgcolor={theme.palette.secondary.main}
+        sx={{ position: "relative" }}
+      >
+        <Stack
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
+          color="white"
+          p={4}
+          sx={{ height: "100%" }}
+        >
           <Box color="white">
             {/* Decision-168 logo */}
             <Box mb={10}>
@@ -28,7 +47,10 @@ export default function ChangePassword() {
             </Box>
 
             {/* Welcome and text */}
-            <Header title="Change Password" text="Change-Password with Decision 168." />
+            <Header
+              title="Change Password"
+              text="Change-Password with Decision 168."
+            />
 
             {/* Form */}
             <Box my={2}>

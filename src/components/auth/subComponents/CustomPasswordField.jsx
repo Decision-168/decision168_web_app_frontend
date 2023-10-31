@@ -20,7 +20,6 @@ export default function CustomPasswordField({ name, placeholder, register, error
   return (
     <TextField
       placeholder={placeholder}
-      margin="dense"
       required
       fullWidth
       name={name}

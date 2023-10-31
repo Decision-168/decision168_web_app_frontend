@@ -121,7 +121,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "transparent",
-          height: "60px",
+          height: "55px",
         },
       },
     },
