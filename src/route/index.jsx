@@ -13,6 +13,14 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
+const CreatePortfolio = lazy(() =>
+  import("../components/portfolio/createportfolio")
+);const EditPortfolio = lazy(() =>
+  import("../components/portfolio/editPortfolio")
+);
 const RouteIndex = () => {
   return (
     <Router>
@@ -55,6 +63,30 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <UpdateProfile />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-view"
+            element={
+              <DashboardLayout>
+                <PortfolioView />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-create"
+            element={
+              <DashboardLayout>
+                <CreatePortfolio />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-edit"
+            element={
+              <DashboardLayout>
+                <EditPortfolio />
               </DashboardLayout>
             }
           />

@@ -12,63 +12,65 @@ import { useNavigate } from "react-router-dom";
 
 export default function ListItems({ drawerOpen }) {
   const styles = DashboardLayoutStyle();
-  const [open, setOpen] = React.useState([]);
-  const [redirectPath, setRedirectPath] = React.useState(null);
   const theme = useTheme();
   const isTabletMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-
+  const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
-    if (redirectPath) {
-      setOpen([...open, ...redirectPath]);
-      navigate(redirectPath[0]);
-      setRedirectPath(null);
+    if (!drawerOpen) {
+      setOpen(false);
     }
-  }, [redirectPath]);
+  }, [drawerOpen]);
 
-  const handleClick = (index, path) => {
-    if (drawerOpen || isTabletMobile) {
-      const isOpen = open.includes(index);
-      if (isOpen) {
-        setOpen(open.filter((item) => item !== index));
-      } else {
-        setRedirectPath([path, index]);
-      }
+  const handleClick = (path) => {
+    if (drawerOpen) {
+      setOpen(!open);
+    }
+    //less than 900 px
+    if (isTabletMobile) {
+      setOpen(!open);
     }
   };
 
   return (
     <List component="nav" sx={styles.nav}>
-      {menuItems.map((menuItem, index) => (
+      {menuItems?.map((menuItem, index) => (
         <React.Fragment key={index}>
-          <ListItemButton onClick={() => handleClick(index, menuItem.link)}>
+          <ListItemButton
+            onClick={() => {
+              // handleClick();
+              navigate(menuItem?.link);
+            }}
+          >
             <ListItemIcon sx={{ color: "#B9B8B9" }}>
               {menuItem.icon}
             </ListItemIcon>
             <ListItemText primary={menuItem.text} />
             {menuItem?.subItems?.length > 0 ? (
               <React.Fragment>
-                {open.includes(index) ? <ExpandLess /> : <ExpandMore />}
+                {open ? <ExpandLess /> : <ExpandMore />}
               </React.Fragment>
             ) : null}
           </ListItemButton>
-          <Collapse in={open.includes(index)} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {menuItem?.subItems?.map((subItem, subIndex) => (
-                <ListItemButton
-                  sx={{ pl: 4 }}
-                  key={subIndex}
-                  to={subItem.link}
-                  component={Link}
-                >
-                  <ListItemIcon sx={{ color: "#B9B8B9" }}>
-                    {subItem.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={subItem.text} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Collapse>
+          {menuItem?.subItems?.length > 0 && (
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {menuItem.subItems.map((subItem, subIndex) => (
+                  <ListItemButton
+                    sx={{ pl: 4 }}
+                    key={subIndex}
+                    to={subItem.link}
+                    component={Link}
+                  >
+                    <ListItemIcon sx={{ color: "#B9B8B9" }}>
+                      {subItem.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={subItem.text} />
+                  </ListItemButton>
+                ))}
+              </List>
+            </Collapse>
+          )}
         </React.Fragment>
       ))}
     </List>

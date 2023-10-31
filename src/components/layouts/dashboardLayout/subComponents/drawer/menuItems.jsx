@@ -32,7 +32,7 @@ export const menuItems = [
       { icon: <Groups />, text: "Meetings", link: "/calendar/meetings" },
     ],
   },
-  { icon: <Badge />, text: "Portfolio", link: "/portfolio" },
+  { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
   { icon: <Adjust />, text: "Goals & Strategies", link: "/goals" },
   { icon: <AccountTree />, text: "Projects", link: "/projects" },
   { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/tasks" },
