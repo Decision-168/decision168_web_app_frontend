@@ -1,56 +1,74 @@
-import { createBrowserRouter } from "react-router-dom";
-import Dashboard from "../components/dashboard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { lazy } from "react";
 import DashboardLayout from "../components/layouts/dashboardLayout";
-import Login from "../components/auth/login";
-import Register from "../components/auth/register";
-import ResetPassword from "../components/auth/resetpassword";
-import ChangePassword from "../components/auth/changepassword";
-import Profile from "../components/profile";
-import UpdateProfile from "../components/updateprofile";
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <DashboardLayout>
-        <Dashboard />
-      </DashboardLayout>
-    ),
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/reset-password",
-    element: <ResetPassword />,
-  },
-  {
-    path: "/change-password",
-    element: <ChangePassword />,
-  },
-  {
-    path: "/profile",
-    element: (
-      <DashboardLayout>
-        <Profile />
-      </DashboardLayout>
-    ),
-  },
-  {
-    path: "/update-profile",
-    element: (
-      <DashboardLayout>
-        <UpdateProfile />
-      </DashboardLayout>
-    ),
-  },
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
+import PageNotFound from "../utils/PageNotFound";
+const Login = lazy(() => import("../components/auth/login"));
+const Register = lazy(() => import("../components/auth/register"));
+const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
+const ChangePassword = lazy(() => import("../components/auth/changepassword"));
+const Profile = lazy(() => import("../components/profile"));
+const Dashboard = lazy(() => import("../components/dashboard"));
+const Calendar = lazy(() => import("../components/calendar"));
+const Community = lazy(() => import("../components/community"));
+const UpdateProfile = lazy(() => import("../components/updateprofile"));
+const RouteIndex = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<PrivateRoute />}>
+          <Route
+            path="/dashboard"
+            element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <DashboardLayout>
+                <Calendar />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/community"
+            element={
+              <DashboardLayout>
+                <Community />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <DashboardLayout>
+                <Profile />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/update-profile"
+            element={
+              <DashboardLayout>
+                <UpdateProfile />
+              </DashboardLayout>
+            }
+          />
+        </Route>
+        <Route path="/" element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+        </Route>
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
+    </Router>
+  );
+};
 
-  {
-    path: "*",
-    element: <h1>Page not found</h1>,
-  },
-]);
+export default RouteIndex;

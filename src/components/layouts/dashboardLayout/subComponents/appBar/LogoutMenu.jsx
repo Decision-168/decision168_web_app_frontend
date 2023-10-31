@@ -1,14 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
@@ -16,13 +13,13 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import SettingsAccessibilityIcon from "@mui/icons-material/SettingsAccessibility";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
 export default function LogoutMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const theme = useTheme();
-
+ const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,11 +27,21 @@ export default function LogoutMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const LogoutFromApp = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip title="Account settings">
-          <IconButton onClick={handleClick} size="small" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
             <BackgroundLetterAvatars avatarBgColor="#B9B8B9" />
           </IconButton>
         </Tooltip>
@@ -72,8 +79,15 @@ export default function LogoutMenu() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-        <Link to="/profile" style={{ textDecoration: "none", color: theme.palette.secondary.main }}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <Link
+          to="/profile"
+          style={{
+            textDecoration: "none",
+            color: theme.palette.secondary.main,
+          }}
+        >
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <BadgeIcon fontSize="small" />
@@ -112,7 +126,7 @@ export default function LogoutMenu() {
 
         <Divider />
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={LogoutFromApp}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
