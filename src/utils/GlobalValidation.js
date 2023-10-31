@@ -1,17 +1,30 @@
 export const globalValidations = {
-    fullName: {
-        required: "Full Name is required",
-        minLength: {
-            value: 4,
-            message: "Full Name must be at least 4 characters",
-        },
-        maxLength: {
-            value: 20,
-            message: "Full Name must not exceed 20 characters",
-        },
+    firstName: {
+        required: "Fisrt Name is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
-            message: "Invalid full name format",
+            message: "Invalid first name",
+        },
+    },
+    middleName: {
+        required: "Middle Name is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid middle name",
+        },
+    },
+    lastName: {
+        required: "Last Name is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid last name",
+        },
+    },
+    aboutMe: {
+        required: "About me description is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid description",
         },
     },
     email: {
@@ -21,39 +34,56 @@ export const globalValidations = {
             message: "Invalid email format",
         },
     },
-    password: {
-        required: "Password is required",
+    designation: {
+        required: "Designation is required",
         pattern: {
-            value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
-            message: "Invaid password",
-        },
-        maxLength: {
-            value: 32,
-            message: "Password must not exceed 32 characters",
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid designation",
         },
     },
-    confirmPassword: {
-        required: "Confirm Password is required",
-        validate: (value, values) => {
-            if (value === values.password) {
-                return true;
-            }
-            return "Passwords do not match";
+    company: {
+        required: "Company is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid company",
         },
     },
-    otp: {
-        required: "OTP is required",
-        minLength: {
-            value: 6,
-            message: "OTP must be at least 6 digits",
+    otherGender: {
+        required: "Other gender is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid gender",
         },
-        maxLength: {
-            value: 6,
-            message: "OTP must not exceed 6 digits",
+    },
+    country: {
+        required: "Country is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid country",
         },
+    },
+    phoneNo: {
+        required: "Phone no is required",
         pattern: {
             value: /^[0-9]+$/,
-            message: "Invalid OTP format, only numbers are allowed",
+            message: "Invalid phone no",
         },
+    },
+    authorName: {
+        required: "Author name is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid author name",
+        },
+    },
+    quote: {
+        required: "Quote is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid quote",
+        },
+    },
+    link: {
+        required: "link is required",
     },
 };

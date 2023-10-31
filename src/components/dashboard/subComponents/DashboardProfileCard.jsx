@@ -45,7 +45,7 @@ export default function DashboardProfileCard() {
                 View Profile
               </Button>
 
-              <CustomDailog handleClose={handleClose} open={open} modalTitle="Profile">
+              <CustomDailog handleClose={handleClose} open={open} modalTitle="Profile" showModalButton={true} modalSize="md">
                 <ViewProfileDialogContent />
               </CustomDailog>
             </Grid>

@@ -44,6 +44,7 @@ export default function Form() {
       />
 
       <CustomPasswordField
+        showTooltip={false}
         name="password"
         placeholder="Password"
         register={register}
@@ -63,13 +64,8 @@ export default function Form() {
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ my: 2, borderRadius: "3px" }}
-      >
-        Log In
+      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
+        Log In 
       </Button>
     </Box>
   );

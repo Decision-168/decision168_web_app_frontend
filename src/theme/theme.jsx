@@ -106,6 +106,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
+          // padding: 0,
         },
       },
     },
@@ -131,6 +132,15 @@ export const theme = createTheme({
         },
         label: {
           fontSize: "13px",
+        },
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            padding: "0px",
+          },
         },
       },
     },

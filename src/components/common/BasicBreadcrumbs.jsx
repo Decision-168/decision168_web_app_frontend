@@ -1,10 +1,10 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
 function handleClick(event) {
   event.preventDefault();
@@ -12,8 +12,8 @@ function handleClick(event) {
 }
 
 export default function BasicBreadcrumbs({ currentPage }) {
-  const navigate = useNavigate();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   function handleGoBack() {
     navigate(-1);

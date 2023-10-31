@@ -2,7 +2,7 @@ import React from "react";
 import { TextField, InputLabel, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomLabelTextField({ name, label,labelColor,  placeholder, register, errors, validation, required }) {
+export default function CustomMultilineTextField({ name, label, labelColor, placeholder, register, errors, validation, required }) {
   const theme = useTheme();
 
   //to style placeholder
@@ -14,12 +14,16 @@ export default function CustomLabelTextField({ name, label,labelColor,  placehol
   };
 
   return (
-    <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px" , color: labelColor }}>
+    <Box sx={{ textAlign: "left", height:"170px" }}>
+      <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
         {label}
         {required && <span style={{ color: theme.palette.error.main }}> *</span>}
       </InputLabel>
       <TextField
+        id="outlined-multiline-static"
+        multiline
+        rows={3}
+        defaultValue=""
         placeholder={placeholder}
         margin="dense"
         required
@@ -29,10 +33,8 @@ export default function CustomLabelTextField({ name, label,labelColor,  placehol
           ...inputProps,
           sx: {
             "&::placeholder": placeholderStyles,
-          
           },
         }}
-    
         error={!!errors[name]}
         helperText={errors[name]?.message}
       />
