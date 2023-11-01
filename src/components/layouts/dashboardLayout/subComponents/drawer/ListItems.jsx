@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useCallback, useEffect } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -9,13 +9,15 @@ import { DashboardLayoutStyle } from "../../styles";
 import { menuItems } from "./menuItems";
 import { Collapse, Link, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function ListItems({ drawerOpen }) {
   const styles = DashboardLayoutStyle();
   const theme = useTheme();
   const isTabletMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
   React.useEffect(() => {
     if (!drawerOpen) {
       setOpen(false);
@@ -23,25 +25,21 @@ export default function ListItems({ drawerOpen }) {
   }, [drawerOpen]);
 
   const handleClick = (path) => {
-    if (drawerOpen) {
-      setOpen(!open);
-    }
-    //less than 900 px
-    if (isTabletMobile) {
-      setOpen(!open);
-    }
+    navigate(path);
+    //  if (drawerOpen) {
+    //    setOpen(!open);
+    //  }
+    //  //less than 900 px
+    //  if (isTabletMobile) {
+    //    setOpen(!open);
+    //  }
   };
 
   return (
     <List component="nav" sx={styles.nav}>
       {menuItems?.map((menuItem, index) => (
         <React.Fragment key={index}>
-          <ListItemButton
-            onClick={() => {
-              // handleClick();
-              navigate(menuItem?.link);
-            }}
-          >
+          <ListItemButton onClick={() => handleClick(menuItem?.link)}>
             <ListItemIcon sx={{ color: "#B9B8B9" }}>
               {menuItem.icon}
             </ListItemIcon>
