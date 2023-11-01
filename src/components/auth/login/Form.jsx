@@ -6,6 +6,7 @@ import CustomTextField from "../subComponents/CustomTextField";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useNavigate } from "react-router-dom";
 
 export default function Form() {
   const {
@@ -13,19 +14,26 @@ export default function Form() {
     register,
     formState: { errors },
   } = useForm();
-  const [isCaptchaVerified, setCaptchaVerified] = useState(false);
+  const navigate = useNavigate();
+  // const [isCaptchaVerified, setCaptchaVerified] = useState(false);
 
-  const handleCaptchaChange = (response) => {
-    if (response) {
-      setCaptchaVerified(true);
-    }
-  };
+  // const handleCaptchaChange = (response) => {
+  //   if (response) {
+  //     setCaptchaVerified(true);
+  //   }
+  // };
+  // const onSubmit = (data) => {
+  //   if (isCaptchaVerified) {
+  //     alert(JSON.stringify(data));
+  //   } else {
+  //     alert("Please verify that you are not a robot.");
+  //   }
+  // };
+
   const onSubmit = (data) => {
-    if (isCaptchaVerified) {
-      alert(JSON.stringify(data));
-    } else {
-      alert("Please verify that you are not a robot.");
-    }
+    // alert(JSON.stringify(data));
+    localStorage.setItem("token", "dummyToken");
+    navigate("/dashboard");
   };
 
   return (
@@ -64,8 +72,13 @@ export default function Form() {
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
-        Log In 
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ my: 2, borderRadius: "3px" }}
+      >
+        Log In
       </Button>
     </Box>
   );
