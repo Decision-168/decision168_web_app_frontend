@@ -20,7 +20,7 @@ export default function BasicBreadcrumbs({ currentPage }) {
   }
 
   return (
-    <div role="presentation" onClick={handleClick} style={{ padding: "10px 0", marginBottom: "1rem" }}>
+    <div role="presentation" onClick={handleClick}>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography component="h6" variant="subtitle2" sx={{ color: theme.palette.secondary.dark, textTransform: "uppercase", fontWeight: "bold" }}>
           {currentPage}
