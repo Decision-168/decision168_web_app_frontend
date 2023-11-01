@@ -1,14 +1,16 @@
 import React from "react";
-import { Avatar, Box, Button, Grid, Paper, Typography, Menu, MenuItem } from "@mui/material";
+import { Avatar, Box, Button, Grid, Paper, Typography, Menu, MenuItem, useMediaQuery, Stack } from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Client from "../../../common/Client";
-
 import CoverImage from "../../../common/CoverImage";
 import { Link } from "react-router-dom";
 import CustomAvatarGroup from "../../../common/CustomAvatarGroup";
 import DecisionLogo from "../../../../assets/images/Decision1-168.png";
+import CustomDailog from "../../../common/CustomDailog";
+import AddMemberForm from "./AddMemberForm";
+import AddDepartmentForm from "./AddDepartmentForm";
 
 const items = [
   {
@@ -27,6 +29,7 @@ const items = [
 
 export default function PortfolioCard() {
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   //Menu Code
   //TODO : We will use Redux State
@@ -39,14 +42,35 @@ export default function PortfolioCard() {
     setAnchorEl(null);
   };
 
+  //Add Member Dailog code
+  const [openMemberDialog, setOpenMemberDialog] = React.useState(false);
+
+  const handleOpenMemberDailog = () => {
+    setOpenMemberDialog(true);
+  };
+  const handleCloseMemberDailog = () => {
+    setOpenMemberDialog(false);
+  };
+
+  //Add Department Dailog code
+  const [openDepartmentDialog, setOpenDepartmentDialog] = React.useState(false);
+
+  const handleOpenDepartmentDailog = () => {
+    setOpenDepartmentDialog(true);
+    handleClose();
+  };
+  const handleCloseDepartmentDailog = () => {
+    setOpenDepartmentDialog(false);
+  };
+
   return (
     <Paper elevation={0}>
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={12}>
           <CoverImage />
         </Grid>
 
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} md={4}>
           <Box px={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start", marginTop: "-50px" }}>
             <Avatar {...stringAvatar("John Doe")} src={DecisionLogo} sx={{ width: "100px", height: "100px", backgroundColor: theme.palette.primary.main, border: "5px solid white" }} />
             <Client clientName="DECISION 168, Inc" clientPosition="" />
@@ -76,43 +100,53 @@ export default function PortfolioCard() {
           </Link>
         </Grid>
 
-        <Grid item xs={12} md={8} textAlign="end" p={2}>
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }}>
+        <Grid item xs={12} md={8} textAlign={isSmallScreen ? "left" : "end"} p={1} >
+          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m:1 }}>
             Add project
           </Button>
 
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }}>
-            Add member
-          </Button>
+          <Box display="inline-block" sx={{ m:1 }}>
+            <Button onClick={handleOpenMemberDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+              Add member
+            </Button>
+            <CustomDailog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
+              <AddMemberForm handleClose={handleCloseMemberDailog} />
+            </CustomDailog>
+          </Box>
 
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }}>
+          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m:1 }}>
             Members
           </Button>
 
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
-            More
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}>
-            <MenuItem onClick={handleClose}>Add Department</MenuItem>
-            <MenuItem onClick={handleClose}>View Department</MenuItem>
+          <Box display="inline-block" sx={{ m:1 }}>
+            <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
+              More
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}>
+              <MenuItem onClick={handleOpenDepartmentDailog}>Add Department</MenuItem>
+              <MenuItem onClick={handleClose}>View Department</MenuItem>
 
-            <MenuItem component={Link} to="/portfolio-edit" onClick={handleClose}>
-              Edit
-            </MenuItem>
+              <MenuItem component={Link} to="/portfolio-edit" onClick={handleClose}>
+                Edit
+              </MenuItem>
+              <MenuItem onClick={handleClose}>Archive</MenuItem>
+              <MenuItem onClick={handleClose}>Delete</MenuItem>
+            </Menu>
 
-            <MenuItem onClick={handleClose}>Archive</MenuItem>
-            <MenuItem onClick={handleClose}>Delete</MenuItem>
-          </Menu>
+            <CustomDailog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="sm">
+              <AddDepartmentForm handleClose={handleCloseDepartmentDailog} />
+            </CustomDailog>
+          </Box>
         </Grid>
 
-        <Grid item xs={12} md={4} p={2}>
+        <Grid item xs={12} md={4} p={1} >
           <CustomAvatarGroup />
         </Grid>
       </Grid>
