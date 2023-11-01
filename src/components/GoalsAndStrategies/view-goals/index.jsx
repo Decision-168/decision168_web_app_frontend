@@ -4,13 +4,13 @@ import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
-import { Link } from "react-router-dom";
 import ListSection from "./subComponents/ListSection";
 import GridSection from "./subComponents/GridSection";
 import RadioSection from "./subComponents/RadioSection";
-const GoalsView = () => {
+import { useNavigate } from "react-router-dom";
+const ViewGoalsIndex = () => {
   const [alignment, setAlignment] = useState("grid");
-
+  const navigate = useNavigate();
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
@@ -42,11 +42,14 @@ const GoalsView = () => {
                 <GridView sx={{ fontSize: 14 }} />
               </ToggleButton>
             </ToggleButtonGroup>
-            <Link>
-              <Button variant="contained" startIcon={<Add />} size="small">
-                Create New
-              </Button>
-            </Link>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              size="small"
+              onClick={() => navigate("/goal-create")}
+            >
+              Create New
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={12} lg={9}>
@@ -60,4 +63,4 @@ const GoalsView = () => {
   );
 };
 
-export default memo(GoalsView);
+export default memo(ViewGoalsIndex);

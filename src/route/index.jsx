@@ -4,7 +4,7 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
-import ViewGoals from "../components/GoalsAndStrategies/view-goals";
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -22,6 +22,10 @@ const CreatePortfolio = lazy(() =>
 );const EditPortfolio = lazy(() =>
   import("../components/portfolio/editPortfolio")
 );
+const ViewGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/view-goals")
+);
+const CreateGoals = lazy(() => import("../components/GoalsAndStrategies/create-goals"));
 const RouteIndex = () => {
   return (
     <Router>
@@ -96,6 +100,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <ViewGoals />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/goal-create"
+            element={
+              <DashboardLayout>
+                <CreateGoals />
               </DashboardLayout>
             }
           />
