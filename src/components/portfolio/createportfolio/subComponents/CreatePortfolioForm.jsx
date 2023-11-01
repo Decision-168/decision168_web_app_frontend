@@ -1,4 +1,4 @@
-import { Box, Button, Grid, InputLabel} from "@mui/material";
+import { Box, Button, Grid, InputLabel } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
@@ -12,6 +12,7 @@ import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
 import CustomSelect from "../../../common/CustomSelect";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
+import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 
 const countries = [{ label: "India" }, { label: "China" }, { label: "Pakistan" }, { label: "Afganistan" }, { label: "Russia" }, { label: "Bangladesh" }];
 
@@ -20,7 +21,7 @@ const items = [
   { value: "individual", text: "Individual", selected: false },
 ];
 
-const departments = ["Admnistration", "Accounting & Finanace", "Customer Service", "Human Resources", "Marketing", "Sales", "Research & Development"];
+const departments = [{ title: "Admnistration" }, { title: "Accounting & Finanace" }, { title: "Customer Service" }, { title: "Human Resources" }, { title: "Marketing" }, { title: "Sales" }, { title: "Research & Development" }];
 
 export default function CreatePortfolioForm() {
   const {
@@ -209,8 +210,8 @@ export default function CreatePortfolioForm() {
           </Button>
         </Grid>
 
-        <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomAutocomplete label="Add Department" options={departments} />
+        <Grid item xs={12} sm={8} px={2} py={1}>
+          <FilterSelectedOptions label="Add Department" labelColor="" required={true} placeholder="Departments" items={departments} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -228,9 +229,9 @@ export default function CreatePortfolioForm() {
           <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
             Create
           </Button>
-          <Button size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
+          {/* <Button size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
             Cancel
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
     </Box>

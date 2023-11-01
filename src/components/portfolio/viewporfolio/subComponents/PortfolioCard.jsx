@@ -89,29 +89,27 @@ export default function PortfolioCard() {
             Members
           </Button>
 
-          <div>
-            <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
-              More
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}>
-              <MenuItem onClick={handleClose}>Add Department</MenuItem>
-              <MenuItem onClick={handleClose}>View Department</MenuItem>
+          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
+            More
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}>
+            <MenuItem onClick={handleClose}>Add Department</MenuItem>
+            <MenuItem onClick={handleClose}>View Department</MenuItem>
 
-              <MenuItem component={Link} to="/portfolio-edit" onClick={handleClose}>
-                Edit
-              </MenuItem>
+            <MenuItem component={Link} to="/portfolio-edit" onClick={handleClose}>
+              Edit
+            </MenuItem>
 
-              <MenuItem onClick={handleClose}>Archive</MenuItem>
-              <MenuItem onClick={handleClose}>Delete</MenuItem>
-            </Menu>
-          </div>
+            <MenuItem onClick={handleClose}>Archive</MenuItem>
+            <MenuItem onClick={handleClose}>Delete</MenuItem>
+          </Menu>
         </Grid>
 
         <Grid item xs={12} md={4} p={2}>
