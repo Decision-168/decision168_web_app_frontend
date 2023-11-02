@@ -45,7 +45,7 @@ export default function CustomDailog({ children, handleClose, open, modalTitle, 
           <CloseIcon />
         </IconButton>
 
-        <DialogContent dividers>{children}</DialogContent>
+        <DialogContent dividers >{children}</DialogContent>
 
         {/* <DialogActions>
           <Button autoFocus onClick={handleClose} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>

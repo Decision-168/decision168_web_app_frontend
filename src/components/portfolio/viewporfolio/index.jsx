@@ -3,7 +3,6 @@ import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import PortfolioCard from "./subComponents/PortfolioCard";
 import PersonalInfo from "./subComponents/PersonalInfo";
 import { Link } from "react-router-dom";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddIcon from "@mui/icons-material/Add";
 
 export default function PortfolioView() {
