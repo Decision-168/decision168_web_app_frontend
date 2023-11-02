@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import React from "react";
 import CustomSearchField from "./CustomSearchField";
-import Card from "./Card";
+import CustomCard from "../../../common/CustomCard";
 
 const GridSection = () => {
   const data = [1, 2, 3, 4];
@@ -17,7 +17,7 @@ const GridSection = () => {
         {data.map((item,index) => {
           return (
             <Grid item xs={12} lg={3} key={index}>
-              <Card />
+              <CustomCard />
             </Grid>
           );
         })}

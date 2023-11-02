@@ -9,7 +9,7 @@ import GridSection from "./subComponents/GridSection";
 import RadioSection from "./subComponents/RadioSection";
 import { useNavigate } from "react-router-dom";
 const ViewGoalsIndex = () => {
-  const [alignment, setAlignment] = useState("grid");
+  const [alignment, setAlignment] = useState("list");
   const navigate = useNavigate();
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
