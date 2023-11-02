@@ -14,9 +14,9 @@ const GridSection = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2}>
-        {data.map((item) => {
+        {data.map((item,index) => {
           return (
-            <Grid item xs={12} lg={3}>
+            <Grid item xs={12} lg={3} key={index}>
               <Card />
             </Grid>
           );

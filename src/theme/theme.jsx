@@ -142,7 +142,8 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiOutlinedInput-root": {
-            padding: "0px",
+            padding: "0px 7px",
+            fontSize:13
           },
         },
       },
@@ -154,6 +155,5 @@ export const theme = createTheme({
         },
       },
     },
-  
   },
 });

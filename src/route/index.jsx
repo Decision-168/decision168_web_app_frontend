@@ -17,15 +17,14 @@ const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
-const CreatePortfolio = lazy(() =>
-  import("../components/portfolio/createportfolio")
-);const EditPortfolio = lazy(() =>
-  import("../components/portfolio/editPortfolio")
-);
 const ViewGoals = lazy(() =>
   import("../components/GoalsAndStrategies/view-goals")
 );
 const CreateGoals = lazy(() => import("../components/GoalsAndStrategies/create-goals"));
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+
 const RouteIndex = () => {
   return (
     <Router>
@@ -83,7 +82,7 @@ const RouteIndex = () => {
             path="/portfolio-create"
             element={
               <DashboardLayout>
-                <CreatePortfolio />
+                <CreateEditPortfolio />
               </DashboardLayout>
             }
           />
@@ -91,7 +90,7 @@ const RouteIndex = () => {
             path="/portfolio-edit"
             element={
               <DashboardLayout>
-                <EditPortfolio />
+                <CreateEditPortfolio />
               </DashboardLayout>
             }
           />
