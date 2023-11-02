@@ -54,13 +54,11 @@ export default function AddDepartmentForm({ handleClose }) {
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Grid container>
-        {show && (
-          <Grid item xs={12} py={1} textAlign="start">
-            <FilterSelectedOptions label="" labelColor="" required={false} placeholder="Departments" items={departments} />
-          </Grid>
-        )}
+        <Grid item xs={12} py={2} textAlign="start" mb={2}>
+          {show && <FilterSelectedOptions label="" labelColor="" required={false} placeholder="Departments" items={departments} />}
+        </Grid>
 
-        <Grid item xs={12} py={1} textAlign="start">
+        <Grid item xs={12} py={0} textAlign="start">
           <Button onClick={handleAddClick} size="small" variant="contained">
             Add Custom Department
           </Button>
@@ -68,7 +66,7 @@ export default function AddDepartmentForm({ handleClose }) {
 
         <Grid item xs={12} py={1} textAlign="start">
           {inputFields.map((inputField, index) => (
-            <Grid container key={index}>
+            <Grid container key={index} spacing={2}>
               <Grid item xs={10} py={2} textAlign="start">
                 <TextField fullWidth name="email" onChange={(event) => handleInputChange(event, index)} placeholder="Enter email to invite portfolio member..." variant="outlined" />
               </Grid>
@@ -86,10 +84,10 @@ export default function AddDepartmentForm({ handleClose }) {
         </Grid>
 
         <Grid item xs={12} sm={12} py={1} textAlign="end">
-          <Button onClick={handleClose} size="small" variant="contained" sx={{  mr:1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+          <Button onClick={handleClose} size="small" variant="contained" sx={{ mr: 1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
             Close
           </Button>
-          <Button size="small" type="submit" variant="contained" >
+          <Button size="small" type="submit" variant="contained">
             Add
           </Button>
         </Grid>

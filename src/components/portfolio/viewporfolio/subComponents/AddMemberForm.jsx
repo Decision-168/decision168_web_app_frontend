@@ -42,13 +42,13 @@ export default function AddMemberForm({ handleClose }) {
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Grid container>
-        <Grid item xs={12} py={1} textAlign="start">
+        <Grid item xs={12} py={1} textAlign="start" >
           {inputFields.map((inputField, index) => (
-            <Grid container key={index}>
-              <Grid item xs={9} py={2} textAlign="start">
+            <Grid container key={index} spacing={5}>
+              <Grid item xs={10} py={2} textAlign="start">
                 <TextField fullWidth name="email" onChange={(event) => handleInputChange(event, index)} placeholder="Enter email to invite portfolio member..." variant="outlined" />
               </Grid>
-              <Grid item xs={3} py={2}>
+              <Grid item xs={2} py={2}>
                 <Stack direction="row" justifyContent="end" alignItems="center">
                   <IconButton onClick={handleAddClick}>
                     <AddCircleRoundedIcon />

@@ -8,7 +8,7 @@ import { useTheme } from "@mui/material/styles";
 export default function FilterSelectedOptions({ label, labelColor, required, placeholder, items }) {
   const theme = useTheme();
   return (
-    <Stack spacing={1} sx={{ width: "100%", height: "100%", textAlign: "left" }}>
+    <Stack spacing={1} sx={{ width: "100%", height: "100%", textAlign: "left", margin:"10px 0" }}>
       <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
         {label}
         {required && <span style={{ color: theme.palette.error.main }}> *</span>}
