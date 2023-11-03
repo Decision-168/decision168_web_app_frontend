@@ -5,6 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -20,15 +21,18 @@ const PortfolioView = lazy(() =>
 const ViewGoals = lazy(() =>
   import("../components/GoalsAndStrategies/view-goals")
 );
-const CreateGoals = lazy(() => import("../components/GoalsAndStrategies/create-goals"));
 const CreateEditPortfolio = lazy(() =>
   import("../components/portfolio/createEditPortfolio")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
 );
 
 const RouteIndex = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/" element={<PrivateRoute />}>
           <Route
             path="/dashboard"
@@ -103,16 +107,15 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/goal-create"
+            path="/goal-overview"
             element={
               <DashboardLayout>
-                <CreateGoals />
+                <GoalsOverview />
               </DashboardLayout>
             }
           />
         </Route>
         <Route path="/" element={<PublicRoute />}>
-          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />

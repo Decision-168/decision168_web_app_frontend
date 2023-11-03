@@ -1,10 +1,13 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { Box, Button, Grid } from "@mui/material";
+import React, { memo } from "react";
 import { globalValidations } from "../../../../utils/GlobalValidation";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "./CustomLabelTextField";
 import CustomMultilineTextField from "./CustomMultilineTextField";
 import CustomAutocomplete from "./CustomAutocomplete";
+import FilterSelectedOptions from "./FilterSelectedOptions";
+import InviteMembers from "./InviteMembers";
+import Duration from "./Duration";
 const departments = [
   { label: "Marketing" },
   { label: "Implementation" },
@@ -15,14 +18,19 @@ const assignee = [
   { label: "Amin Syed" },
   { label: "Don Mehmood" },
 ];
-const Goal = () => {
+const member = [
+  { title: "Afrin Syed" },
+  { title: "Amin Syed" },
+  { title: "Don Mehmood" },
+];
+const Goal = ({ individual }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
   return (
-    <Grid container>
+    <Grid container spacing={1}>
       <CustomLabelTextField
         label="Objective/Goal"
         name="Objective"
@@ -52,6 +60,15 @@ const Goal = () => {
         errors={errors}
         validation={globalValidations.goalManager}
       />
+      <FilterSelectedOptions
+        label="Add Team Members"
+        labelColor=""
+        required={false}
+        placeholder="Add Team Members..."
+        items={member}
+      />
+      <InviteMembers />
+      <Duration label="Duration " labelColor="" required={true} />
       <CustomMultilineTextField
         label="Description"
         name="Description"
@@ -61,8 +78,24 @@ const Goal = () => {
         errors={errors}
         validation={globalValidations.Description}
       />
+      {individual && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "end",
+            pt: 1,
+            width: "100%",
+          }}
+        >
+          <Box sx={{ flex: "1 1 auto" }} />
+          <Button variant="contained" size="small">
+            Save Changes
+          </Button>
+        </Box>
+      )}
     </Grid>
   );
 };
 
-export default Goal;
+export default memo(Goal);

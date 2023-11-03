@@ -7,14 +7,18 @@ import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import ListSection from "./subComponents/ListSection";
 import GridSection from "./subComponents/GridSection";
 import RadioSection from "./subComponents/RadioSection";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openModal } from "../../../redux/action/modalSlice";
+import CreateGoal from "../create-goals";
+import Goal from "../create-goals/subComponents/Goal";
+import KPIs from "../create-goals/subComponents/KPIs";
+import ReduxDialog from "../../common/ReduxDialog";
 const ViewGoalsIndex = () => {
   const [alignment, setAlignment] = useState("list");
-  const navigate = useNavigate();
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-
+  const dispatch = useDispatch();
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -46,7 +50,7 @@ const ViewGoalsIndex = () => {
               variant="contained"
               startIcon={<Add />}
               size="small"
-              onClick={() => navigate("/goal-create")}
+              onClick={() => dispatch(openModal("create-goals-kpis"))}
             >
               Create New
             </Button>
@@ -59,6 +63,23 @@ const ViewGoalsIndex = () => {
           {alignment === "list" ? <ListSection /> : <GridSection />}
         </Grid>
       </Grid>
+      <CreateGoal />
+      <ReduxDialog
+        value="create-goals"
+        modalTitle="Edit Goal"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <Goal individual={true} />
+      </ReduxDialog>
+      <ReduxDialog
+        value="create-kpis"
+        modalTitle="Add KPIs"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <KPIs individual={true} />
+      </ReduxDialog>
     </Box>
   );
 };

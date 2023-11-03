@@ -8,7 +8,7 @@ import CoverImage from "../../../common/CoverImage";
 import { Link } from "react-router-dom";
 import CustomAvatarGroup from "../../../common/CustomAvatarGroup";
 import DecisionLogo from "../../../../assets/images/Decision1-168.png";
-import CustomDailog from "../../../common/CustomDailog";
+import CustomDialog from "../../../common/CustomDialog";
 import AddMemberForm from "./AddMemberForm";
 import AddDepartmentForm from "./AddDepartmentForm";
 
@@ -109,9 +109,9 @@ export default function PortfolioCard() {
             <Button onClick={handleOpenMemberDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
               Add member
             </Button>
-            <CustomDailog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
+            <CustomDialog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
               <AddMemberForm handleClose={handleCloseMemberDailog} />
-            </CustomDailog>
+            </CustomDialog>
           </Box>
 
           <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m:1 }}>
@@ -140,9 +140,9 @@ export default function PortfolioCard() {
               <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
 
-            <CustomDailog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="sm">
+            <CustomDialog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="sm">
               <AddDepartmentForm handleClose={handleCloseDepartmentDailog} />
-            </CustomDailog>
+            </CustomDialog>
           </Box>
         </Grid>
 

@@ -1,11 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Avatar, Grid } from "@mui/material";
+import { Avatar } from "@mui/material";
 import KPIs from "./KPIs";
 import Goal from "./Goal";
 
@@ -97,17 +94,9 @@ export default function HorizontalLinearStepper() {
         })}
       </Box>
       {activeStep === 0 ? (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ pt: 1 }}>
           <Goal />
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 10 }}>
-            <Button
-              disabled
-              variant="contained"
-              size="small"
-              sx={{ background: "#383838", color: "#fff", ml: 1 }}
-            >
-              Back
-            </Button>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button variant="contained" size="small" onClick={handleSave}>
               Save & Next
@@ -115,9 +104,9 @@ export default function HorizontalLinearStepper() {
           </Box>
         </Box>
       ) : (
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ pt: 1 }}>
           <KPIs />
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 10 }}>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 1 }}>
             <Button
               variant="contained"
               size="small"

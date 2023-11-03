@@ -1,0 +1,67 @@
+import { RemoveCircleRounded } from "@mui/icons-material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
+import React, { Fragment, memo, useState } from "react";
+
+const InviteMembers = ({}) => {
+  const [inputFields, setInputFields] = useState([]);
+
+
+  const handleInputChange = (event, index) => {
+    const values = [...inputFields];
+    values[index][event.target.name] = event.target.value;
+    setInputFields(values);
+  };
+
+  const handleAddClick = () => {
+    setInputFields([...inputFields, { email: "" }]);
+  };
+
+  const handleRemoveClick = (index) => {
+    const values = [...inputFields];
+    values.splice(index, 1);
+    setInputFields(values);
+  };
+
+  return (
+    <>
+      <Grid item xs={12} md={3} lg={3} alignSelf={"top"}>
+        <Button
+          fullWidth
+          variant="contained"
+          size="medium"
+          onClick={handleAddClick}
+          sx={{width:'100%',fontSize:12}}
+        >
+          Invite More Member
+        </Button>
+      </Grid>
+      {inputFields.map((inputField, index) => (
+        <Fragment key={index}>
+          <Grid item xs={false} lg={2}></Grid>
+          <Grid item xs={12} lg={8} textAlign="start">
+            <TextField
+              fullWidth
+              name="email"
+              value={inputField.email}
+              onChange={(event) => handleInputChange(event, index)}
+              placeholder="Enter Email ID To Invite Member..."
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} lg={2} alignSelf={"top"}>
+              <IconButton onClick={() => handleRemoveClick(index)}>
+                <RemoveCircleRounded />
+              </IconButton>
+          </Grid>
+        </Fragment>
+      ))}
+    </>
+  );
+};
+
+export default memo(InviteMembers);

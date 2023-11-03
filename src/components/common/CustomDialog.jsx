@@ -21,7 +21,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function CustomDailog({ children, handleClose, open, modalTitle, showModalButton, modalSize }) {
+export default function CustomDialog({ children, handleClose, open, modalTitle, showModalButton, modalSize,redirectPath }) {
   const theme = useTheme();
   return (
     <div>
@@ -31,7 +31,7 @@ export default function CustomDailog({ children, handleClose, open, modalTitle, 
             {modalTitle}
           </Typography>
 
-          {showModalButton && <CustomLinkButton path="/profile" text="Open" />}
+          {showModalButton && <CustomLinkButton path={redirectPath} text="Open" />}
         </DialogTitle>
         <IconButton
           aria-label="close"
