@@ -19,6 +19,11 @@ const ViewGoalsIndex = () => {
     setAlignment(newAlignment);
   };
   const dispatch = useDispatch();
+  const [inputFields, setInputFields] = useState([]);
+
+  const handleAddClick = () => {
+    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+  };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -78,7 +83,12 @@ const ViewGoalsIndex = () => {
         showModalButton={false}
         modalSize="sm"
       >
-        <KPIs individual={true} />
+        <KPIs
+          individual={true}
+          inputFields={inputFields}
+          setInputFields={setInputFields}
+          handleAddClick={handleAddClick}
+        />
       </ReduxDialog>
     </Box>
   );

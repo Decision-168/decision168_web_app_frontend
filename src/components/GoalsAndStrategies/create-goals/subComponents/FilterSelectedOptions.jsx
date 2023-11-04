@@ -14,7 +14,7 @@ const FilterSelectedOptions = ({
   const theme = useTheme();
   return (
     <>
-      <Grid item xs={12} lg={2} alignSelf={"center"}>
+      <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -22,7 +22,7 @@ const FilterSelectedOptions = ({
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={12} md={7} lg={7}>
+      <Grid item xs={7}>
         <Autocomplete
           sx={{ height: "100%" }}
           multiple

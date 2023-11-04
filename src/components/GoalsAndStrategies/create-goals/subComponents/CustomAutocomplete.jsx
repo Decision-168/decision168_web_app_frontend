@@ -28,7 +28,7 @@ const CustomAutocomplete = ({
   };
   return (
     <>
-      <Grid item xs={12} lg={2} alignSelf={"center"}>
+      <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -36,7 +36,7 @@ const CustomAutocomplete = ({
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={12} lg={10}>
+      <Grid item xs={10}>
         <Autocomplete
           options={options}
           renderInput={(params) => (

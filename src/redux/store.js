@@ -1,9 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
 import modalReducer from './action/modalSlice';
+import confirmModalReducer from './action/confirmationModalSlice';
 
 export default configureStore({
   reducer: {
     modal: modalReducer,
-    // ... other reducers
+    confirmation_modal: confirmModalReducer,
   },
 });

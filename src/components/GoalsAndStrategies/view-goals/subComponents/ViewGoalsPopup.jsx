@@ -8,7 +8,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
 import {
   Add,
@@ -19,10 +19,16 @@ import {
   History,
   NoteAdd,
 } from "@mui/icons-material";
-import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../../common/ConfirmationDialog";
+import {
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import { openModal } from "../../../../redux/action/modalSlice";
+import DuplicateDialog from "../../goals-overview/subComponents/DuplicateDialog";
+import ReduxDialog from "../../../common/ReduxDialog";
 
-const ViewGoalsPopup = () => {
+const ViewGoalsPopup = ({ popup }) => {
   const theme = useTheme();
   const CommonList = ({ icon, title, info }) => {
     return (
@@ -51,6 +57,29 @@ const ViewGoalsPopup = () => {
     );
   };
   const dispatch = useDispatch();
+
+  const handleFileIt = () => {
+    dispatch(
+      openCnfModal({
+        modalName: "fileItGoal",
+        title: "Are you sure?",
+        description: "You want to File it!",
+      })
+    );
+  };
+  const handleDelete = () => {
+    dispatch(
+      openCnfModal({
+        modalName: "deleteGoal",
+        title: "Are you sure?",
+        description: "You want to Delete!",
+      })
+    );
+  };
+
+  const handleDuplicate=()=>{
+    dispatch(openModal("duplicate-goal"));
+  }
   return (
     <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
       <Grid container spacing={2}>
@@ -121,17 +150,17 @@ const ViewGoalsPopup = () => {
               flexDirection: "row",
             }}
           >
-            <Tooltip title="Duplicate">
+            <Tooltip title="Duplicate" onClick={handleDuplicate}>
               <IconButton>
                 <ContentCopy sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="File It">
+            <Tooltip title="File It" onClick={handleFileIt}>
               <IconButton>
                 <NoteAdd sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Delete">
+            <Tooltip title="Delete" onClick={handleDelete}>
               <IconButton>
                 <Delete sx={{ fontSize: "20px" }} />
               </IconButton>
@@ -144,7 +173,9 @@ const ViewGoalsPopup = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Typography sx={{ fontSize: 14, color: "#212934",textAlign:'start' }}>
+          <Typography
+            sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}
+          >
             Description :
           </Typography>
         </Grid>
@@ -177,8 +208,18 @@ const ViewGoalsPopup = () => {
           />
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"fileItGoal"} />
+      <ConfirmationDialog value={"deleteGoal"} />
+      <ReduxDialog
+        value="duplicate-goal"
+        modalTitle="Copy Goal"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateDialog />
+      </ReduxDialog>
     </Box>
   );
 };
 
-export default ViewGoalsPopup;
+export default memo(ViewGoalsPopup);

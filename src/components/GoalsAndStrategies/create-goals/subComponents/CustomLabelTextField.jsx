@@ -25,7 +25,7 @@ export default function CustomLabelTextField({
 
   return (
     <>
-      <Grid item xs={12} lg={2} alignSelf={"center"}>
+      <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -33,7 +33,7 @@ export default function CustomLabelTextField({
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={12} lg={10}>
+      <Grid item xs={10}>
         <TextField
           placeholder={placeholder}
           margin="dense"

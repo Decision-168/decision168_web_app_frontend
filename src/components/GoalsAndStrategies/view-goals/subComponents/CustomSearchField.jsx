@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Search, Clear } from "@mui/icons-material";
+import { Search, Clear, SearchRounded } from "@mui/icons-material";
 const CustomSearchField = ({}) => {
   const [show, setShow] = useState(false);
   const theme = useTheme();
@@ -24,8 +24,8 @@ const CustomSearchField = ({}) => {
         endAdornment: (
           <>
             <InputAdornment position="end">
-              <IconButton onClick={() => setValue('')} edge="end">
-                {value && <Clear />}
+              <IconButton onClick={() => setValue("")} edge="end">
+                {value ? <Clear /> : <SearchRounded />}
               </IconButton>
             </InputAdornment>
           </>

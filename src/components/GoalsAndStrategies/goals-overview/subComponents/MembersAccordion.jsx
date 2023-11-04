@@ -9,9 +9,10 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import ChildAccordion from "./ChildAccordion";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../../common/ConfirmationDialog";
 
 const BasicAccordion = ({}) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState("acceptedBy");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -117,6 +118,7 @@ const BasicAccordion = ({}) => {
           />
         </AccordionDetails>
       </Accordion>
+      <ConfirmationDialog value={"removeMember"} />
     </div>
   );
 };

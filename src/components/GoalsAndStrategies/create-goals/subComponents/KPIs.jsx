@@ -1,22 +1,22 @@
-import { Box, Button, Grid, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  useTheme,
+} from "@mui/material";
 import React, { Fragment, useState } from "react";
 import { globalValidations } from "../../../../utils/GlobalValidation";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "./CustomLabelTextField";
 import CustomMultilineTextField from "./CustomMultilineTextField";
-const KPIs = ({ individual }) => {
+const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const [inputFields, setInputFields] = useState([]);
-
-  const theme = useTheme();
-
-  const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
-  };
 
   const handleRemoveClick = (index) => {
     const values = [...inputFields];
@@ -24,21 +24,9 @@ const KPIs = ({ individual }) => {
     setInputFields(values);
   };
 
-  const CommonFields = ({ onClick, btnText, style }) => {
+  const CommonForm = ({}) => {
     return (
-      <>
-        <Grid item xs={12} lg={12}>
-          <Box sx={{ width: "100%", display: "flex", justifyContent: "end" }}>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={onClick}
-              sx={style}
-            >
-              {btnText}
-            </Button>
-          </Box>
-        </Grid>
+      <Grid container>
         <CustomLabelTextField
           label="KPI"
           name="KPI"
@@ -57,43 +45,70 @@ const KPIs = ({ individual }) => {
           errors={errors}
           validation={globalValidations.Description}
         />
-      </>
+
+        {inputFields.map((inputField, index) => (
+          <Grid container key={index}>
+            <CustomLabelTextField
+              label="KPI"
+              name="KPI"
+              required={true}
+              placeholder="Enter KPi..."
+              register={register}
+              errors={errors}
+              validation={globalValidations.KPI}
+            />
+            <CustomMultilineTextField
+              label="Description"
+              name="Description"
+              required={false}
+              placeholder="Enter Description..."
+              register={register}
+              errors={errors}
+              validation={globalValidations.Description}
+            />
+            <Grid item xs={12} lg={12}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleRemoveClick(index)}
+                  sx={{ background: "#383838", color: "#fff", ml: 1 }}
+                >
+                  Remove KPI
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        ))}
+      </Grid>
     );
   };
   return (
     <>
-      <Grid container>
-        <CommonFields
-          onClick={() => handleAddClick()}
-          btnText={"Add More KPI's"}
-        />
-
-        {inputFields.map((inputField, index) => (
-          <Grid container key={index}>
-            <CommonFields
-              onClick={() => handleRemoveClick(index)}
-              btnText={"Remove KPI"}
-              style={{ background: "#383838", color: "#fff", ml: 1 }}
-            />
-          </Grid>
-        ))}
-        {individual && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "end",
-              pt: 1,
-              width: "100%",
-            }}
-          >
+      {individual ? (
+        <>
+          <DialogContent dividers>
+            <CommonForm />
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" size="small" onClick={handleAddClick}>
+              Add More KPI's
+            </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button variant="contained" size="small">
               Create
             </Button>
-          </Box>
-        )}
-      </Grid>
+          </DialogActions>
+        </>
+      ) : (
+        <CommonForm />
+      )}
     </>
   );
 };

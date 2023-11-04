@@ -1,6 +1,6 @@
 import { ArrowBack } from '@mui/icons-material';
 import { Box, Button, Grid, Typography, useTheme } from '@mui/material';
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ViewGoalsPopup from '../view-goals/subComponents/ViewGoalsPopup';
 import ReduxDialog from '../../common/ReduxDialog';
@@ -12,6 +12,11 @@ import AddMemberDialog from './subComponents/AddMemberDialog';
 const GoalsOverview = () => {
   const theme= useTheme()
   const navigate = useNavigate()
+    const [inputFields, setInputFields] = useState([]);
+
+    const handleAddClick = () => {
+      setInputFields([...inputFields, { KPI: "", Description: "" }]);
+    };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container spacing={1}>
@@ -67,7 +72,12 @@ const GoalsOverview = () => {
         showModalButton={false}
         modalSize="sm"
       >
-        <KPIs individual={true} />
+        <KPIs
+          individual={true}
+          inputFields={inputFields}
+          setInputFields={setInputFields}
+          handleAddClick={handleAddClick}
+        />
       </ReduxDialog>
       <ReduxDialog
         value="add-team-members"
@@ -75,7 +85,7 @@ const GoalsOverview = () => {
         showModalButton={false}
         modalSize="sm"
       >
-     <AddMemberDialog/>
+        <AddMemberDialog />
       </ReduxDialog>
     </Box>
   );

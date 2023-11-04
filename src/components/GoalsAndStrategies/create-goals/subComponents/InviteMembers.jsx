@@ -29,7 +29,7 @@ const InviteMembers = ({}) => {
 
   return (
     <>
-      <Grid item xs={12} md={3} lg={3} alignSelf={"top"}>
+      <Grid item xs={3} alignSelf={"top"}>
         <Button
           fullWidth
           variant="contained"
@@ -42,8 +42,8 @@ const InviteMembers = ({}) => {
       </Grid>
       {inputFields.map((inputField, index) => (
         <Fragment key={index}>
-          <Grid item xs={false} lg={2}></Grid>
-          <Grid item xs={12} lg={8} textAlign="start">
+          <Grid item xs={2}></Grid>
+          <Grid item xs={7} textAlign="start">
             <TextField
               fullWidth
               name="email"
@@ -53,7 +53,7 @@ const InviteMembers = ({}) => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={12} lg={2} alignSelf={"top"}>
+          <Grid item xs={3} alignSelf={"top"}>
               <IconButton onClick={() => handleRemoveClick(index)}>
                 <RemoveCircleRounded />
               </IconButton>

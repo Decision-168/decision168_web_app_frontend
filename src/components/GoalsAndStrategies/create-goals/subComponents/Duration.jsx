@@ -16,7 +16,7 @@ const Duration = ({ label, labelColor, required }) => {
   };
   return (
     <>
-      <Grid item xs={12} lg={2} alignSelf={"center"}>
+      <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -24,7 +24,7 @@ const Duration = ({ label, labelColor, required }) => {
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={12} lg={10}>
+      <Grid item xs={10}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <DatePicker

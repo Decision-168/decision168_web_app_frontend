@@ -26,7 +26,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-const CustomCard = ({}) => {
+const CustomCard = ({ handleClick }) => {
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
   const handleExpandClick = () => {
@@ -42,7 +42,7 @@ const CustomCard = ({}) => {
           borderRadius: "10px",
         }}
       >
-        <CardActionArea>
+        <CardActionArea onClick={handleClick}>
           <CardHeader
             sx={{ pb: 0 }}
             avatar={

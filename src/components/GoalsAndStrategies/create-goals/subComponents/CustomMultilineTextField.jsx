@@ -24,7 +24,7 @@ export default function CustomMultilineTextField({
 
   return (
     <>
-      <Grid item xs={12} lg={2} alignSelf={"start"}>
+      <Grid item xs={2} alignSelf={"start"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -32,7 +32,7 @@ export default function CustomMultilineTextField({
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={12} lg={10}>
+      <Grid item xs={10}>
         <TextField
           sx={{
             "& .MuiOutlinedInput-input": {
