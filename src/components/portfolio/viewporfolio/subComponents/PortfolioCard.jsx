@@ -12,6 +12,7 @@ import CustomDailog from "../../../common/CustomDailog";
 import AddMemberForm from "./AddMemberForm";
 import AddDepartmentForm from "./AddDepartmentForm";
 import ViewDepartmentTable from "./ViewDepartmentTable";
+import AllMembersTable from "./AllMembersTable";
 
 const items = [
   {
@@ -62,6 +63,16 @@ export default function PortfolioCard() {
   };
   const handleCloseDepartmentDailog = () => {
     setOpenDepartmentDialog(false);
+  };
+
+  //Members Dailog code
+  const [openMembersDialog, setOpenMembersDialog] = React.useState(false);
+
+  const handleOpenMembersDailog = () => {
+    setOpenMembersDialog(true);
+  };
+  const handleCloseMembersDailog = () => {
+    setOpenMembersDialog(false);
   };
 
   //View Department Dailog code
@@ -126,9 +137,14 @@ export default function PortfolioCard() {
             </CustomDailog>
           </Box>
 
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }}>
-            Members
-          </Button>
+          <Box display="inline-block" sx={{ m: 1 }}>
+            <Button onClick={handleOpenMembersDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+              Members
+            </Button>
+            <CustomDailog handleClose={handleCloseMembersDailog} open={openMembersDialog} modalTitle="All Portfolio Members" showModalButton={false} modalSize="md">
+              <AllMembersTable />
+            </CustomDailog>
+          </Box>
 
           <Box display="inline-block" sx={{ m: 1 }}>
             <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
@@ -157,8 +173,7 @@ export default function PortfolioCard() {
             </CustomDailog>
 
             <CustomDailog handleClose={handleCloseViewDepartmentDailog} open={openViewDepartmentDialog} modalTitle="All Portfolio Departments" showModalButton={false} modalSize="md">
-              {/* <AddDepartmentForm handleClose={handleCloseViewDepartmentDailog} /> */}
-               <ViewDepartmentTable/>
+              <ViewDepartmentTable />
             </CustomDailog>
           </Box>
         </Grid>

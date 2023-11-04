@@ -6,7 +6,7 @@ import {
 } from "material-react-table";
 import { Box, Button, CircularProgress, IconButton, Tooltip, Typography } from "@mui/material";
 import { QueryClient, QueryClientProvider, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fakeData, usStatus } from "./DepartmentsData";
+import { fakeData, usStatus } from "./MembersData ";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const Example = () => {
@@ -23,8 +23,8 @@ const Example = () => {
       //   size: 80,
       // },
       {
-        accessorKey: "department",
-        header: "Department",
+        accessorKey: "member",
+        header: "Team Members",
         size: 400,
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: "text",
@@ -33,7 +33,7 @@ const Example = () => {
           helperText: validationErrors?.[cell.id],
           //store edited user in state to be saved later
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value) ? "Department is Required" : undefined;
+            const validationError = !validateRequired(event.currentTarget.value) ? "Member is Required" : undefined;
             setValidationErrors({
               ...validationErrors,
               [cell.id]: validationError,
@@ -152,7 +152,7 @@ const Example = () => {
     //       //   }),
     //       // );
     //     }}>
-    //     Create New Department
+    //     Create New member
     //   </Button>
     // ),
     state: {
@@ -243,20 +243,20 @@ function useDeleteUser() {
 
 const queryClient = new QueryClient();
 
-const ViewDepartmentTable = () => (
+const AllMembersTable = () => (
   //Put this with your other react-query providers near root of your app
   <QueryClientProvider client={queryClient}>
     <Example />
   </QueryClientProvider>
 );
 
-export default ViewDepartmentTable;
+export default AllMembersTable;
 
 const validateRequired = (value) => !!value.length;
 
 function validateUser(user) {
   return {
-    department: !validateRequired(user.department) ? "Department is Required" : "",
+    member: !validateRequired(user.member) ? "Member is Required" : "",
     status: !validateRequired(user.status) ? "Status is Required" : "",
   };
 }
