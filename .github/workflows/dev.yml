@@ -25,10 +25,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-
-      - name: Build React App
-        run: npm install && npm run build
-
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn run build
 
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./ s3://decision168-front-dev --delete
+        run: aws s3 sync --acl public-read --delete build s3://decision168-front-dev
