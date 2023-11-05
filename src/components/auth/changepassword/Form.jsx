@@ -49,7 +49,7 @@ export default function Form() {
         Change Password
       </Button>
 
-      <Navigation question="Remember It?" linkLabel="Sign In Here" path="/login" />
+      <Navigation question="Remember It?" linkLabel="Sign In Here" path="/" />
     </Box>
   );
 }

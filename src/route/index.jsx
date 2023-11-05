@@ -4,6 +4,8 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
+
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -16,11 +18,16 @@ const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
-const CreatePortfolio = lazy(() =>
-  import("../components/portfolio/createportfolio")
-);const EditPortfolio = lazy(() =>
-  import("../components/portfolio/editPortfolio")
+const ViewGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/view-goals")
 );
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+
 const RouteIndex = () => {
   return (
     <Router>
@@ -79,7 +86,7 @@ const RouteIndex = () => {
             path="/portfolio-create"
             element={
               <DashboardLayout>
-                <CreatePortfolio />
+                <CreateEditPortfolio />
               </DashboardLayout>
             }
           />
@@ -87,7 +94,23 @@ const RouteIndex = () => {
             path="/portfolio-edit"
             element={
               <DashboardLayout>
-                <EditPortfolio />
+                <CreateEditPortfolio />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-goals"
+            element={
+              <DashboardLayout>
+                <ViewGoals />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/goal-overview"
+            element={
+              <DashboardLayout>
+                <GoalsOverview />
               </DashboardLayout>
             }
           />

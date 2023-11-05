@@ -5,7 +5,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import CustomDailog from "../../common/CustomDailog";
+import CustomDialog from "../../common/CustomDialog";
 import ChangePasswordForm from "./ChangePasswordForm";
 import PlanTable from "./PlanTable";
 
@@ -64,9 +64,9 @@ export default function ViewCard() {
               <Typography variant="subtitle2">Change Password</Typography>
             </ButtonBase>
 
-            <CustomDailog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="xs">
+            <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="xs">
               <ChangePasswordForm handleClose={handleCloseChangePasswordDailog} />
-            </CustomDailog>
+            </CustomDialog>
           </Box>
 
           <Divider />
@@ -79,9 +79,9 @@ export default function ViewCard() {
               <Typography variant="subtitle2">My Plan</Typography>
             </ButtonBase>
 
-            <CustomDailog handleClose={handleClosePlanDailog} open={openPlanDialog} modalTitle="My Plan Details" showModalButton={false} modalSize="md">
+            <CustomDialog handleClose={handleClosePlanDailog} open={openPlanDialog} modalTitle="My Plan Details" showModalButton={false} modalSize="md">
               <PlanTable />
-            </CustomDailog>
+            </CustomDialog>
           </Box>
         </Grid>
       </Grid>

@@ -7,7 +7,13 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { DashboardLayoutStyle } from "../../styles";
 import { menuItems } from "./menuItems";
-import { Collapse, Link, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Collapse,
+  Link,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -37,13 +43,37 @@ export default function ListItems({ drawerOpen }) {
 
   return (
     <List component="nav" sx={styles.nav}>
+      <Typography
+        sx={{
+          fontSize: 11,
+          fontWeight: "600",
+          textAlign: "left",
+          p: 2,
+          color: "#6a7187",
+        }}
+      >
+        MENU
+      </Typography>
       {menuItems?.map((menuItem, index) => (
         <React.Fragment key={index}>
           <ListItemButton onClick={() => handleClick(menuItem?.link)}>
-            <ListItemIcon sx={{ color: "#B9B8B9" }}>
+            <ListItemIcon sx={{   color:
+                      window.location.pathname === menuItem?.link ? "#c7df19":"#6a7187" }}>
               {menuItem.icon}
             </ListItemIcon>
-            <ListItemText primary={menuItem.text} />
+            <ListItemText
+              primary={
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color:
+                      window.location.pathname === menuItem?.link && "#c7df19",
+                  }}
+                >
+                  {menuItem.text}
+                </Typography>
+              }
+            />
             {menuItem?.subItems?.length > 0 ? (
               <React.Fragment>
                 {open ? <ExpandLess /> : <ExpandMore />}

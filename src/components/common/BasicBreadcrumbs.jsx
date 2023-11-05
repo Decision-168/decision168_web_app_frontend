@@ -1,17 +1,12 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
-export default function BasicBreadcrumbs({ currentPage }) {
+export default function BasicBreadcrumbs({ currentPage, showBackButton }) {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -20,15 +15,18 @@ export default function BasicBreadcrumbs({ currentPage }) {
   }
 
   return (
-    <div role="presentation" onClick={handleClick} style={{ padding: "10px 0", marginBottom: "1rem" }}>
+    <Stack direction="row" justifyContent="space-between" alignItems="center" py={2}>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography component="h6" variant="subtitle2" sx={{ color: theme.palette.secondary.dark, textTransform: "uppercase", fontWeight: "bold" }}>
           {currentPage}
         </Typography>
-        {/* <Button startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
-          Back
-        </Button> */}
       </Breadcrumbs>
-    </div>
+
+      {showBackButton && (
+        <Button startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} onClick={handleGoBack}>
+          Back
+        </Button>
+      )}
+    </Stack>
   );
 }

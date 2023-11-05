@@ -33,7 +33,7 @@ export const menuItems = [
   //   ],
   // },
   { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
-  { icon: <Adjust />, text: "Goals & Strategies", link: "/goals" },
+  { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
   { icon: <AccountTree />, text: "Projects", link: "/projects" },
   { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/tasks" },
   { icon: <Notes />, text: "Notes", link: "/notes" },

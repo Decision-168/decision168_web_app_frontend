@@ -6,7 +6,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Client from "../../common/Client";
 import CardFeatures from "../../common/CardFeatures";
 import CoverImage from "../../common/CoverImage";
-import CustomDailog from "../../common/CustomDailog";
+import CustomDialog from "../../common/CustomDialog";
 import ViewProfileDialogContent from "../../profile/subComponents/ViewProfileDialogContent";
 
 const items = [
@@ -49,24 +49,63 @@ export default function DashboardProfileCard() {
         </Grid>
 
         <Grid item xs={12} sm={4}>
-          <Box px={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start", marginTop: "-50px" }}>
-            <Avatar {...stringAvatar("Arshad Khan")} sx={{ width: "100px", height: "100px", backgroundColor: theme.palette.primary.main, border: "5px solid white" }} />
+          <Box
+            px={4}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "start",
+              marginTop: "-50px",
+            }}
+          >
+            <Avatar
+              {...stringAvatar("Arshad Khan")}
+              sx={{
+                width: "100px",
+                height: "100px",
+                backgroundColor: theme.palette.primary.main,
+                border: "5px solid white",
+              }}
+            />
             <Client clientName="Arshad Khan" clientPosition="Project Manager" />
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
           <CardFeatures items={items} />
 
           <Grid container>
             <Grid item xs={12} sm={6} p={2} textAlign="left">
-              <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" onClick={handleOpenDailog}>
+              <Button
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                size="small"
+                onClick={handleOpenDailog}
+              >
                 View Profile
               </Button>
 
-              <CustomDailog handleClose={handleClose} open={open} modalTitle="Profile" showModalButton={true} modalSize="md">
+              <CustomDialog
+                handleClose={handleClose}
+                open={open}
+                modalTitle="Profile"
+                redirectPath={"/profile"}
+                showModalButton={true}
+                modalSize="md"
+              >
                 <ViewProfileDialogContent />
-              </CustomDailog>
+              </CustomDialog>
             </Grid>
           </Grid>
         </Grid>

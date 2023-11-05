@@ -6,7 +6,7 @@ import PersonalInfo from "./subComponents/PersonalInfo";
 export default function Profile() {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <BasicBreadcrumbs currentPage="profile" />
+      <BasicBreadcrumbs currentPage="profile" showBackButton={false} />
       <Grid container>
         <Grid item xs={12} lg={9}>
           <ProfileCard />
