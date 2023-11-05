@@ -22,7 +22,7 @@ const PageNotFound = () => {
       </Typography>
       <Button
         component={Link}
-        to={isLoggedIn ? "/dashboard" : "/login"}
+        to={isLoggedIn ? "/dashboard" : "/"}
         variant="contained"
         sx={{
           px: 6,

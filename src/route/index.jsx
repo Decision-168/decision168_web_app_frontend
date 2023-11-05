@@ -27,6 +27,7 @@ const RouteIndex = () => {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<Login />} />
         <Route path="/" element={<PrivateRoute />}>
           <Route
             path="/dashboard"
@@ -102,7 +103,7 @@ const RouteIndex = () => {
             }
           />
         <Route path="/" element={<PublicRoute />}>
-          <Route path="/login" element={<Login />} />
+          
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
