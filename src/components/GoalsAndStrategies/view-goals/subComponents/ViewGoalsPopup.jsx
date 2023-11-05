@@ -80,6 +80,10 @@ const ViewGoalsPopup = ({ popup }) => {
   const handleDuplicate=()=>{
     dispatch(openModal("duplicate-goal"));
   }
+
+  const handleViewHistory=()=>{
+        dispatch(openModal("view-all-history"));
+  }
   return (
     <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
       <Grid container spacing={2}>
@@ -167,7 +171,7 @@ const ViewGoalsPopup = ({ popup }) => {
             </Tooltip>
             <Tooltip title="View History">
               <IconButton>
-                <History sx={{ fontSize: "20px" }} />
+                <History sx={{ fontSize: "20px" }} onClick={handleViewHistory} />
               </IconButton>
             </Tooltip>
           </Box>

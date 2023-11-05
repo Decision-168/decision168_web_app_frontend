@@ -1,10 +1,10 @@
 import { Box, DialogContent, Grid } from "@mui/material";
 import React from "react";
 import CustomSearchField from "./CustomSearchField";
-import CustomCard from "../../../common/CustomCard";
 import ViewGoalsPopup from "./ViewGoalsPopup";
 import ReduxDialog from "../../../common/ReduxDialog";
 import { useNavigate } from "react-router-dom";
+import CustomCard from "./CustomCard";
 
 const GridSection = () => {
   const navigate = useNavigate()

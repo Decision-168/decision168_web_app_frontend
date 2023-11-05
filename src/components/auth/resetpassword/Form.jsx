@@ -37,7 +37,7 @@ export default function Form() {
       </Button>
 
       {/* Navigation */}
-      <Navigation question="Remember It?" linkLabel="Sign In here" path="/login" />
+      <Navigation question="Remember It?" linkLabel="Sign In here" path="/" />
     </Box>
   );
 }

@@ -1,10 +1,17 @@
-import React,{memo, useState} from "react";
+import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { FormControl, FormControlLabel, Radio, RadioGroup, useTheme } from "@mui/material";
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  useTheme,
+} from "@mui/material";
+import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -18,7 +25,7 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3,textAlign:'start'}}>
+        <Box sx={{ p: 3, textAlign: "start" }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -39,12 +46,55 @@ function a11yProps(index) {
   };
 }
 
-const TabSection=({})=> {
+const TabSection = ({}) => {
   const [value, setValue] = useState(0);
-  const theme = useTheme()
+  const theme = useTheme();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const info = [
+    {
+      text: "Import all Goal Details",
+      alert: "",
+    },
+    {
+      text: "Request Send to Goal Manager",
+      alert: "(* If Any!)",
+    },
+    {
+      text: "Request Send to Goal Team Members",
+      alert: "(* Not Suggested Members!)",
+    },
+    {
+      text: "Import all Goal's KPIs",
+      alert: "",
+    },
+    {
+      text: "Import all Projects & Contents of KPIs",
+      alert: "",
+    },
+    {
+      text: "Request Send to Project Manager",
+      alert: "(* If Any!)",
+    },
+    {
+      text: "Request Send to Team Members",
+      alert: "(* Not Suggested Members!)",
+    },
+    {
+      text: "Planned Content details with Assignee's",
+      alert: "",
+    },
+    {
+      text: "Task details with Assignee's",
+      alert: "",
+    },
+    {
+      text: "Subtask details with Assignee's",
+      alert: "",
+    },
+  ];
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -60,17 +110,59 @@ const TabSection=({})=> {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Everything
+        {info.map((item, index) => {
+          return (
+            <Box
+              key={index}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <KeyboardDoubleArrowRight
+                sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
+              />
+              <Typography sx={{ fontSize: 13, display: "inline" }}>
+                {item.text}
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    mx: 1,
+                    fontWeight: "700",
+                    display: "inline",
+                    color: "#F46A6A",
+                  }}
+                >
+                  {item.alert}
+                </Typography>
+              </Typography>
+            </Box>
+          );
+        })}
+        <Typography
+          sx={{
+            color: "#F46A6A",
+            display: "inline",
+            fontSize: 13,
+            mx: 1,
+            fontWeight: "700",
+          }}
+        >
+          * Any Files and Comments will not copy!
+        </Typography>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <Typography sx={{ fontSize: 13, display: "inline" }}>
           Select option to import with
           <Typography
-            sx={{ fontSize: 13,mx:1, fontWeight: "700", display: "inline" }}
+            sx={{ fontSize: 13, mx: 1, fontWeight: "700", display: "inline" }}
           >
             Goal Details
           </Typography>
-          <Typography sx={{ color: "#F46A6A", display: "inline" }}>
+          <Typography
+            sx={{ color: "#F46A6A", display: "inline", fontSize: 13 }}
+          >
             (* Request not Send to Team Member and Manager!):
           </Typography>
         </Typography>
@@ -84,28 +176,40 @@ const TabSection=({})=> {
               value="importKpi"
               control={<Radio />}
               label="Import Only KPIs"
-              sx={{ color: theme.palette.secondary.main }}
+              sx={{
+                color: theme.palette.secondary.main,
+                fontSize: 13,
+                fontWeight: "500",
+              }}
             />
             <FormControlLabel
               value="importKpiProject"
               control={<Radio />}
               label="Import KPIs with Projects Only"
-              sx={{ color: theme.palette.secondary.main }}
+              sx={{
+                color: theme.palette.secondary.main,
+                fontSize: 13,
+                fontWeight: "500",
+              }}
             />
             <FormControlLabel
               value="importAll"
               control={<Radio />}
               label="Import KPIs with Projects, Planned Content, Task & Its Subtask"
-              sx={{ color: theme.palette.secondary.main }}
+              sx={{
+                color: theme.palette.secondary.main,
+                fontSize: 13,
+                fontWeight: "500",
+              }}
             />
           </RadioGroup>
         </FormControl>
-        <Typography>
+        <Typography sx={{ color: "#F46A6A", fontSize: 13 }}>
           * Request not Send to Team Member and Manager! Planned Content, Task &
           Its Subtask Without Assignee's!
         </Typography>
       </CustomTabPanel>
     </Box>
   );
-}
-export default memo(TabSection)
+};
+export default memo(TabSection);

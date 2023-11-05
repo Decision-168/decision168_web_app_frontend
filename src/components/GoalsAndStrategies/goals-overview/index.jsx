@@ -8,6 +8,8 @@ import Goal from '../create-goals/subComponents/Goal';
 import KPIs from '../create-goals/subComponents/KPIs';
 import MembersAccordion from './subComponents/MembersAccordion';
 import AddMemberDialog from './subComponents/AddMemberDialog';
+import OverallHistory from './history/OverallHistory';
+import RecentHistory from './history/RecentHistory';
 
 const GoalsOverview = () => {
   const theme= useTheme()
@@ -56,6 +58,7 @@ const GoalsOverview = () => {
         </Grid>
         <Grid item xs={12} lg={4}>
           <MembersAccordion />
+          <RecentHistory/>
         </Grid>
       </Grid>
       <ReduxDialog
@@ -86,6 +89,14 @@ const GoalsOverview = () => {
         modalSize="sm"
       >
         <AddMemberDialog />
+      </ReduxDialog>
+      <ReduxDialog
+        value="view-all-history"
+        modalTitle="HISTORY"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <OverallHistory />
       </ReduxDialog>
     </Box>
   );

@@ -9,6 +9,7 @@ const Duration = ({ label, labelColor, required }) => {
   const theme = useTheme();
   const handleStartDateChange = (date) => {
     setStartDate(date);
+    setEndDate(date);
   };
 
   const handleEndDateChange = (date) => {

@@ -16,10 +16,10 @@ const BasicAccordion = ({}) => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <div>
-      <Accordion>
+      <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -73,10 +73,32 @@ const BasicAccordion = ({}) => {
             <Typography
               sx={{ fontSize: 13, fontWeight: "600", color: "white" }}
             >
-              Goal Owner:{" "}
+              Goal Owner:
             </Typography>
             <Typography
-              sx={{ fontSize: 13, fontWeight: "600", color: "white" }}
+              sx={{ ml: 1, fontSize: 13, fontWeight: "600", color: "white" }}
+            >
+              Don Mahmood
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              height: 46,
+              background: "white",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              p: 2,
+              mt: 1,
+            }}
+          >
+            <Typography
+              sx={{ fontSize: 13, fontWeight: "600", color: "#343A40" }}
+            >
+              Goal Manager:
+            </Typography>
+            <Typography
+              sx={{ ml: 1, fontSize: 13, fontWeight: "600", color: "#343A40" }}
             >
               Uzma Karjikar
             </Typography>
@@ -119,6 +141,7 @@ const BasicAccordion = ({}) => {
         </AccordionDetails>
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />
+      <ConfirmationDialog value={"assignManager"} />
     </div>
   );
 };

@@ -57,7 +57,7 @@ const ChildAccordion = ({ value, expanded, handleChange, title, bgColor }) => {
         {username.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList username={item} />
+              <UserList username={item} assignManagerFlag={value}/>
             </List>
           );
         })}

@@ -29,7 +29,7 @@ export default function LogoutMenu() {
   };
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/");
   };
   return (
     <React.Fragment>

@@ -66,7 +66,7 @@ export default function Register() {
           <Navigation
             question="Already have an account?"
             linkLabel="Login"
-            path="/login"
+            path="/"
           />
           {/* Copyright */}
           <Copyright />

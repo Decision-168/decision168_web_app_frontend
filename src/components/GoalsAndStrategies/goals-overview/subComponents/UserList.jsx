@@ -1,17 +1,18 @@
 import React, { memo } from "react";
 import {
   Avatar,
+  Box,
   IconButton,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
 } from "@mui/material";
-import { DisabledByDefaultRounded } from "@mui/icons-material";
+import { DisabledByDefaultRounded, PersonAddAlt1 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
-const UserList = ({ username }) => {
+const UserList = ({ username, assignManagerFlag }) => {
   const dispatch = useDispatch();
 
   const handleRemoveUser = (name) => {
@@ -23,17 +24,39 @@ const UserList = ({ username }) => {
       })
     );
   };
+    const handleAssignManager = (name) => {
+      dispatch(
+        openCnfModal({
+          modalName: "assignManager",
+          title: "Are you sure?",
+          description: `Assign ${name} as Goal Manager`,
+        })
+      );
+    };
   return (
     <ListItem
       sx={{ m: 1, p: 0 }}
       secondaryAction={
-        <IconButton
-          edge="end"
-          aria-label="remove"
-          onClick={() => handleRemoveUser(username)}
-        >
-          <DisabledByDefaultRounded />
-        </IconButton>
+        <Box>
+        {
+          assignManagerFlag==="acceptedBy" &&   
+          <IconButton
+            edge="end"
+            aria-label="remove"
+            onClick={() => handleAssignManager(username)}
+          >
+            <PersonAddAlt1 sx={{color:'#c7df19',fontSize: 20, }}/>
+          </IconButton>
+        }
+        
+          <IconButton
+            edge="end"
+            aria-label="remove"
+            onClick={() => handleRemoveUser(username)}
+          >
+            <DisabledByDefaultRounded sx={{fontSize: 20,}}/>
+          </IconButton>
+        </Box>
       }
     >
       <ListItemAvatar>
