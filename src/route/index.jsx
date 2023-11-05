@@ -18,9 +18,11 @@ const PortfolioView = lazy(() =>
 );
 const CreatePortfolio = lazy(() =>
   import("../components/portfolio/createportfolio")
-);const EditPortfolio = lazy(() =>
+);
+const EditPortfolio = lazy(() =>
   import("../components/portfolio/editPortfolio")
 );
+const Notes = lazy(() => import("../components/notes"));
 const RouteIndex = () => {
   return (
     <Router>
@@ -91,6 +93,14 @@ const RouteIndex = () => {
             }
           />
         </Route>
+          <Route
+            path="/notes"
+            element={
+              <DashboardLayout>
+                <Notes />
+              </DashboardLayout>
+            }
+          />
         <Route path="/" element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
