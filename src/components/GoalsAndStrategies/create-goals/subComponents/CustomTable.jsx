@@ -74,7 +74,7 @@ const CustomTable = ({ title }) => {
     columns,
     data,
     initialState: {
-      pagination: { pageSize: 5, pageIndex: 0 },
+      pagination: { pageSize: 10, pageIndex: 0 },
       showGlobalFilter: true,
     },
     paginationDisplayMode: "pages",

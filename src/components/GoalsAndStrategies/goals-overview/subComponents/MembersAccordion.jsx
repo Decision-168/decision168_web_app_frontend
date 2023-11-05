@@ -18,7 +18,7 @@ const BasicAccordion = ({}) => {
   };
   const dispatch = useDispatch();
   return (
-    <div>
+    <Box sx={{ borderRadius: 1 }}>
       <Accordion elevation={0}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -142,7 +142,7 @@ const BasicAccordion = ({}) => {
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />
       <ConfirmationDialog value={"assignManager"} />
-    </div>
+    </Box>
   );
 };
 

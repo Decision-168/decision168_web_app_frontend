@@ -52,13 +52,13 @@ export default function AddDepartmentForm({ handleClose }) {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box component="form" onSubmit={handleSubmit} noValidate  >
       <Grid container>
-        <Grid item xs={12} py={2} textAlign="start" mb={2}>
+        <Grid item xs={12} py={2} textAlign="start"  >
           {show && <FilterSelectedOptions label="" labelColor="" required={false} placeholder="Departments" items={departments} />}
         </Grid>
 
-        <Grid item xs={12} py={0} textAlign="start">
+        <Grid item xs={12} py={2} textAlign="start" >
           <Button onClick={handleAddClick} size="small" variant="contained">
             Add Custom Department
           </Button>
@@ -96,13 +96,4 @@ export default function AddDepartmentForm({ handleClose }) {
   );
 }
 
-{
-  /* <CustomTextField
-                  name="email"
-                  placeholder="Enter email id to invite portfolio member..."
-                  register={register}
-                  errors={errors}
-                  value={inputField.email}
-                  validation={authValidations.email} // Pass the validation rules as a prop
-                /> */
-}
+

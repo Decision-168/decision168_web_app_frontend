@@ -1,4 +1,4 @@
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button, DialogContent } from "@mui/material";
 import { memo, useState } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -13,6 +13,9 @@ import CreateGoal from "../create-goals";
 import Goal from "../create-goals/subComponents/Goal";
 import KPIs from "../create-goals/subComponents/KPIs";
 import ReduxDialog from "../../common/ReduxDialog";
+import DuplicateDialog from "../goals-overview/subComponents/DuplicateDialog";
+import OverallHistory from "../goals-overview/history/OverallHistory";
+import ViewGoalsPopup from "./subComponents/ViewGoalsPopup";
 const ViewGoalsIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const handleChange = (event, newAlignment) => {
@@ -89,6 +92,33 @@ const ViewGoalsIndex = () => {
           setInputFields={setInputFields}
           handleAddClick={handleAddClick}
         />
+      </ReduxDialog>
+      <ReduxDialog
+        value="overview-goals-kpis"
+        modalTitle="Demo Goal"
+        redirectPath={"/goal-overview"}
+        showModalButton={true}
+        modalSize="sm"
+      >
+        <DialogContent dividers>
+          <ViewGoalsPopup />
+        </DialogContent>
+      </ReduxDialog>
+      <ReduxDialog
+        value="view-all-history"
+        modalTitle="HISTORY"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <OverallHistory />
+      </ReduxDialog>
+      <ReduxDialog
+        value="duplicate-goal"
+        modalTitle="Copy Goal"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateDialog />
       </ReduxDialog>
     </Box>
   );

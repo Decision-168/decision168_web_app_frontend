@@ -1,16 +1,14 @@
-import { Box, DialogContent, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import CustomSearchField from "./CustomSearchField";
-import ViewGoalsPopup from "./ViewGoalsPopup";
-import ReduxDialog from "../../../common/ReduxDialog";
 import { useNavigate } from "react-router-dom";
 import CustomCard from "./CustomCard";
 
 const GridSection = () => {
-  const navigate = useNavigate()
-  const handleRedirect = ()=>{
-   navigate("/goal-overview");
-  }
+  const navigate = useNavigate();
+  const handleRedirect = () => {
+    navigate("/goal-overview");
+  };
   const data = [1, 2, 3, 4];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -29,17 +27,6 @@ const GridSection = () => {
           );
         })}
       </Grid>
-      <ReduxDialog
-        value="overview-goals-kpis"
-        modalTitle="Demo Goal"
-        redirectPath={"/goal-overview"}
-        showModalButton={true}
-        modalSize="sm"
-      >
-        <DialogContent dividers>
-          <ViewGoalsPopup />
-        </DialogContent>
-      </ReduxDialog>
     </Box>
   );
 };

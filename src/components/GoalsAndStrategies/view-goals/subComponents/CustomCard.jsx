@@ -26,7 +26,7 @@ const CustomCard = ({ handleClick }) => {
           borderRadius: "10px",
         }}
       >
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea onClick={handleClick}sx={{borderRadius:0}}>
           <CardHeader
             sx={{ pb: 0 }}
             avatar={
@@ -81,7 +81,7 @@ const CustomCard = ({ handleClick }) => {
               aria-label="settings"
               onClick={() => dispatch(openModal("overview-goals-kpis"))}
             >
-              <VisibilityOutlined />
+              <VisibilityOutlined fontSize="small" />
             </IconButton>
         </CardActions>
       </Card>

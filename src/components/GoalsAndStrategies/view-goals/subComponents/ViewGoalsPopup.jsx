@@ -21,9 +21,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import {
-  openCnfModal,
-} from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import DuplicateDialog from "../../goals-overview/subComponents/DuplicateDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
@@ -77,15 +75,15 @@ const ViewGoalsPopup = ({ popup }) => {
     );
   };
 
-  const handleDuplicate=()=>{
+  const handleDuplicate = () => {
     dispatch(openModal("duplicate-goal"));
-  }
+  };
 
-  const handleViewHistory=()=>{
-        dispatch(openModal("view-all-history"));
-  }
+  const handleViewHistory = () => {
+    dispatch(openModal("view-all-history"));
+  };
   return (
-    <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
+    <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2,borderRadius:1 }} mb={2}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={12} lg={12}>
           <Box
@@ -171,7 +169,10 @@ const ViewGoalsPopup = ({ popup }) => {
             </Tooltip>
             <Tooltip title="View History">
               <IconButton>
-                <History sx={{ fontSize: "20px" }} onClick={handleViewHistory} />
+                <History
+                  sx={{ fontSize: "20px" }}
+                  onClick={handleViewHistory}
+                />
               </IconButton>
             </Tooltip>
           </Box>
@@ -212,16 +213,6 @@ const ViewGoalsPopup = ({ popup }) => {
           />
         </Grid>
       </Grid>
-      <ConfirmationDialog value={"fileItGoal"} />
-      <ConfirmationDialog value={"deleteGoal"} />
-      <ReduxDialog
-        value="duplicate-goal"
-        modalTitle="Copy Goal"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <DuplicateDialog />
-      </ReduxDialog>
     </Box>
   );
 };
