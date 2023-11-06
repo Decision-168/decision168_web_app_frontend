@@ -5,7 +5,6 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 
-
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -15,18 +14,11 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
-const PortfolioView = lazy(() =>
-  import("../components/portfolio/viewporfolio/")
-);
-const ViewGoals = lazy(() =>
-  import("../components/GoalsAndStrategies/view-goals")
-);
-const CreateEditPortfolio = lazy(() =>
-  import("../components/portfolio/createEditPortfolio")
-);
-const GoalsOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/goals-overview")
-);
+const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const ViewGoals = lazy(() => import("../components/GoalsAndStrategies/view-goals"));
+const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
+const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const Tasks = lazy(() => import("../components/Tasks"));
 
 const RouteIndex = () => {
   return (
@@ -111,6 +103,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <GoalsOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
               </DashboardLayout>
             }
           />

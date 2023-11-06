@@ -106,7 +106,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
-          // padding: 0,
+          // padding: 0, // But it is changing the style for date picker field
         },
         input: {
           padding: "7px 10px",
@@ -142,8 +142,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiOutlinedInput-root": {
-            padding: "0px 7px",
-            fontSize:13
+            padding: "0px",
           },
         },
       },

@@ -1,17 +1,10 @@
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  Checkbox,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, FormControlLabel, Checkbox, Stack, Typography } from "@mui/material";
 import React from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomLink from "../../common/CustomLink";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
-import CustomTextField from "../subComponents/CustomTextField";
+import CustomTextField from "../../common/CustomTextField";
 
 export default function Form() {
   const {
@@ -25,53 +18,49 @@ export default function Form() {
   };
 
   return (
-    <Box
-      component="form"
-      noValidate
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{ mt: 1 }}
-    >
-      <CustomTextField
-        name="fullName"
-        placeholder="Full Name"
-        register={register}
-        errors={errors}
-        validation={authValidations.fullName} // Pass the validation rules as a prop
-      />
+    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+      <Box sx={{ height: "65px"}}>
+        <CustomTextField
+          name="fullName"
+          placeholder="Full Name"
+          register={register}
+          errors={errors}
+          validation={authValidations.fullName} // Pass the validation rules as a prop
+        />
+      </Box>
 
-      <CustomTextField
-        name="email"
-        placeholder="Email Address"
-        register={register}
-        errors={errors}
-        validation={authValidations.email} // Pass the validation rules as a prop
-      />
+      <Box sx={{ height: "65px"}}>
+        <CustomTextField
+          name="email"
+          placeholder="Email Address"
+          register={register}
+          errors={errors}
+          validation={authValidations.email} // Pass the validation rules as a prop
+        />
+      </Box>
 
-      <CustomPasswordField
-        showTooltip={true}
-        name="password"
-        placeholder="Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.password} // Pass the validation rules as a prop
-      />
+      <Box sx={{ height: "65px"}}>
+        <CustomPasswordField
+          showTooltip={true}
+          name="password"
+          placeholder="Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.password} // Pass the validation rules as a prop
+        />
+      </Box>
+
       <FormControlLabel
         control={<Checkbox value="remember" size="small" />}
         label={
-          <Typography component="p" variant="caption">
+          <Typography component="p" variant="caption" textAlign="left">
             By signing up you agree to Decision 168's
-            <CustomLink path="/">Terms </CustomLink>&
-            <CustomLink path="/">Privacy Policy.</CustomLink>
+            <CustomLink path="/">Terms </CustomLink>&<CustomLink path="/">Privacy Policy.</CustomLink>
           </Typography>
         }
       />
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ my: 2, borderRadius: "3px" }}
-      >
+      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
         Register
       </Button>
     </Box>

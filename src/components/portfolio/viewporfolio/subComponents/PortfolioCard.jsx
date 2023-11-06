@@ -11,6 +11,8 @@ import DecisionLogo from "../../../../assets/images/Decision1-168.png";
 import CustomDialog from "../../../common/CustomDialog";
 import AddMemberForm from "./AddMemberForm";
 import AddDepartmentForm from "./AddDepartmentForm";
+import ViewDepartmentTable from "./ViewDepartmentTable";
+import AllMembersTable from "./AllMembersTable";
 
 const items = [
   {
@@ -63,6 +65,27 @@ export default function PortfolioCard() {
     setOpenDepartmentDialog(false);
   };
 
+  //Members Dailog code
+  const [openMembersDialog, setOpenMembersDialog] = React.useState(false);
+
+  const handleOpenMembersDailog = () => {
+    setOpenMembersDialog(true);
+  };
+  const handleCloseMembersDailog = () => {
+    setOpenMembersDialog(false);
+  };
+
+  //View Department Dailog code
+  const [openViewDepartmentDialog, setOpenViewDepartmentDialog] = React.useState(false);
+
+  const handleOpenViewDepartmentDailog = () => {
+    setOpenViewDepartmentDialog(true);
+    handleClose();
+  };
+  const handleCloseViewDepartmentDailog = () => {
+    setOpenViewDepartmentDialog(false);
+  };
+
   return (
     <Paper elevation={0}>
       <Grid container>
@@ -100,12 +123,12 @@ export default function PortfolioCard() {
           </Link>
         </Grid>
 
-        <Grid item xs={12} md={8} textAlign={isSmallScreen ? "left" : "end"} p={1} >
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m:1 }}>
+        <Grid item xs={12} md={8} textAlign={isSmallScreen ? "left" : "end"} p={1}>
+          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }}>
             Add project
           </Button>
 
-          <Box display="inline-block" sx={{ m:1 }}>
+          <Box display="inline-block" sx={{ m: 1 }}>
             <Button onClick={handleOpenMemberDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
               Add member
             </Button>
@@ -114,11 +137,16 @@ export default function PortfolioCard() {
             </CustomDialog>
           </Box>
 
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m:1 }}>
-            Members
-          </Button>
+          <Box display="inline-block" sx={{ m: 1 }}>
+            <Button onClick={handleOpenMembersDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+              Members
+            </Button>
+            <CustomDialog handleClose={handleCloseMembersDailog} open={openMembersDialog} modalTitle="All Portfolio Members" showModalButton={false} modalSize="md">
+              <AllMembersTable />
+            </CustomDialog>
+          </Box>
 
-          <Box display="inline-block" sx={{ m:1 }}>
+          <Box display="inline-block" sx={{ m: 1 }}>
             <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }} id="basic-button" aria-controls={open ? "basic-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleClick}>
               More
             </Button>
@@ -131,7 +159,7 @@ export default function PortfolioCard() {
                 "aria-labelledby": "basic-button",
               }}>
               <MenuItem onClick={handleOpenDepartmentDailog}>Add Department</MenuItem>
-              <MenuItem onClick={handleClose}>View Department</MenuItem>
+              <MenuItem onClick={handleOpenViewDepartmentDailog}>View Department</MenuItem>
 
               <MenuItem component={Link} to="/portfolio-edit" onClick={handleClose}>
                 Edit
@@ -143,10 +171,14 @@ export default function PortfolioCard() {
             <CustomDialog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="sm">
               <AddDepartmentForm handleClose={handleCloseDepartmentDailog} />
             </CustomDialog>
+
+            <CustomDialog handleClose={handleCloseViewDepartmentDailog} open={openViewDepartmentDialog} modalTitle="All Portfolio Departments" showModalButton={false} modalSize="md">
+              <ViewDepartmentTable />
+            </CustomDialog>
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={4} p={1} >
+        <Grid item xs={12} md={4} p={1}>
           <CustomAvatarGroup />
         </Grid>
       </Grid>

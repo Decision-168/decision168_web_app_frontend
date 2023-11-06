@@ -1,6 +1,6 @@
 import { Box, DialogContent, Grid } from "@mui/material";
 import React from "react";
-import CustomSearchField from "./CustomSearchField";
+import CustomSearchField from "../../../common/CustomSearchField";
 import ViewGoalsPopup from "./ViewGoalsPopup";
 import ReduxDialog from "../../../common/ReduxDialog";
 import { useNavigate } from "react-router-dom";

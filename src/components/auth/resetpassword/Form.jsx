@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Box, Button, Alert } from "@mui/material";
-import CustomTextField from "../subComponents/CustomTextField";
+import CustomTextField from "../../common/CustomTextField";
 import { authValidations } from "../authValidations";
 import Navigation from "../subComponents/Navigation";
 
@@ -24,13 +24,15 @@ export default function Form() {
         </Alert>
       </Box>
 
-      <CustomTextField
-        name="email"
-        placeholder="Email Address"
-        register={register}
-        errors={errors}
-        validation={authValidations.email} // Pass the validation rules as a prop
-      />
+      <Box sx={{ height: "65px" }}>
+        <CustomTextField
+          name="email"
+          placeholder="Email Address"
+          register={register}
+          errors={errors}
+          validation={authValidations.email} // Pass the validation rules as a prop
+        />
+      </Box>
 
       <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
         Reset
