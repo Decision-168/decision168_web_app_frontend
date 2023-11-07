@@ -1,10 +1,21 @@
-import { Box, Grid, Typography } from "@mui/material";
-import React, { Fragment } from "react";
-import CustomSearchField from "../../view-goals/subComponents/CustomSearchField";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import React, { Fragment, useState } from "react";
+import CustomSearchField from "../../subComponents/CustomSearchField";
 import KPIAccordion from "./KPIAccordion";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { Add } from "@mui/icons-material";
+import ReduxDialog from "../../../common/ReduxDialog";
+import KPIs from "../../create-goals/subComponents/KPIs";
+import { openModal } from "../../../../redux/action/modalSlice";
+import { useDispatch } from "react-redux";
 const KPISection = () => {
-  const data = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3];
+  const data = [1, 2];
+  const [inputFields, setInputFields] = useState([]);
+
+  const handleAddClick = () => {
+    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+  };
+  const dispatch = useDispatch();
   return (
     <PerfectScrollbar>
       <Box
@@ -41,7 +52,30 @@ const KPISection = () => {
               );
             })}
           </Grid>
+          <Box mt={1} textAlign={"start"}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Add />}
+              onClick={() => dispatch(openModal("create-kpis"))}
+            >
+              Add KPIs
+            </Button>
+          </Box>
         </Grid>
+        <ReduxDialog
+          value="create-kpis"
+          modalTitle="Add KPIs"
+          showModalButton={false}
+          modalSize="sm"
+        >
+          <KPIs
+            individual={true}
+            inputFields={inputFields}
+            setInputFields={setInputFields}
+            handleAddClick={handleAddClick}
+          />
+        </ReduxDialog>
       </Box>
     </PerfectScrollbar>
   );

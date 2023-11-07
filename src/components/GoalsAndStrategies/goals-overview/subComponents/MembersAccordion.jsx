@@ -10,6 +10,8 @@ import ChildAccordion from "./ChildAccordion";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
+import AddMemberDialog from "./AddMemberDialog";
+import ReduxDialog from "../../../common/ReduxDialog";
 
 const BasicAccordion = ({}) => {
   const [expanded, setExpanded] = useState("acceptedBy");
@@ -142,6 +144,14 @@ const BasicAccordion = ({}) => {
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />
       <ConfirmationDialog value={"assignManager"} />
+      <ReduxDialog
+        value="add-team-members"
+        modalTitle="Add Team Members"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <AddMemberDialog />
+      </ReduxDialog>
     </Box>
   );
 };

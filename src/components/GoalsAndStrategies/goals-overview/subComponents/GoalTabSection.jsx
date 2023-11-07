@@ -46,7 +46,7 @@ function a11yProps(index) {
   };
 }
 
-const TabSection = ({}) => {
+const GoalTabSection = ({}) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
@@ -212,4 +212,4 @@ const TabSection = ({}) => {
     </Box>
   );
 };
-export default memo(TabSection);
+export default memo(GoalTabSection);

@@ -1,10 +1,10 @@
 import { Box, Grid } from "@mui/material";
-import React from "react";
-import CustomSearchField from "./CustomSearchField";
+import React,{memo} from "react";
+import CustomSearchField from "../../subComponents/CustomSearchField";
 import { useNavigate } from "react-router-dom";
 import CustomCard from "./CustomCard";
 
-const GridSection = () => {
+const GridSection = ({ handleGoalOpen }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {
     navigate("/goal-overview");
@@ -22,7 +22,7 @@ const GridSection = () => {
         {data.map((item, index) => {
           return (
             <Grid item xs={12} lg={3} key={index}>
-              <CustomCard handleClick={handleRedirect} />
+              <CustomCard handleClick={handleRedirect} handleOpen={handleGoalOpen}/>
             </Grid>
           );
         })}
@@ -31,4 +31,4 @@ const GridSection = () => {
   );
 };
 
-export default GridSection;
+export default memo(GridSection);

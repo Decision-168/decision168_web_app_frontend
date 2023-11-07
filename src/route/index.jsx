@@ -27,6 +27,9 @@ const ViewGoals = lazy(() =>
 const GoalsOverview = lazy(() =>
   import("../components/GoalsAndStrategies/goals-overview")
 );
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const RouteIndex = () => {
   return (
     <Router>
@@ -110,6 +113,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <GoalsOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/kpi-overview"
+            element={
+              <DashboardLayout>
+                <KPIOverview />
               </DashboardLayout>
             }
           />

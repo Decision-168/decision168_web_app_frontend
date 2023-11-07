@@ -2,16 +2,16 @@ import { ArrowBack } from "@mui/icons-material";
 import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ViewGoalsPopup from "../view-goals/subComponents/ViewGoalsPopup";
+import ViewGoalsPopup from "../subComponents/ViewGoalsPopup";
 import ReduxDialog from "../../common/ReduxDialog";
 import Goal from "../create-goals/subComponents/Goal";
 import KPIs from "../create-goals/subComponents/KPIs";
 import MembersAccordion from "./subComponents/MembersAccordion";
 import AddMemberDialog from "./subComponents/AddMemberDialog";
-import OverallHistory from "./history/OverallHistory";
-import RecentHistory from "./history/RecentHistory";
+import OverallHistory from "./goal-history/OverallHistory";
+import RecentHistory from "./goal-history/RecentHistory";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import DuplicateDialog from "./subComponents/DuplicateDialog";
+import DuplicateDialog from "../subComponents/DuplicateDialog";
 import KPISection from "./Kpi";
 
 const GoalsOverview = () => {
@@ -98,14 +98,7 @@ const GoalsOverview = () => {
           handleAddClick={handleAddClick}
         />
       </ReduxDialog>
-      <ReduxDialog
-        value="add-team-members"
-        modalTitle="Add Team Members"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <AddMemberDialog />
-      </ReduxDialog>
+   
       <ReduxDialog
         value="view-all-history"
         modalTitle="HISTORY"

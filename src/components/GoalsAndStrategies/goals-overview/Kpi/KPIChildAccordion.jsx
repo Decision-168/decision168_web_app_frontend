@@ -1,14 +1,25 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { IconButton } from "@mui/material";
-import { VisibilityOutlined } from "@mui/icons-material";
+import { Grid, IconButton } from "@mui/material";
+import { AssignmentTurnedInOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import ProgressBar from "../../subComponents/ProgressBar";
+import ViewProjectPopup from "../../subComponents/ViewProjectPopup";
+import CustomDialog from "../../../common/CustomDialog";
 
 const KPIChildAccordion = ({}) => {
+    const [openProject, setOpenProject] = useState(false);
+
+    const handleProjectClose = () => {
+      setOpenProject(false);
+    };
+    const handleProjectOpen = () => {
+      setOpenProject(true);
+    };
   return (
     <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
       <AccordionSummary
@@ -18,7 +29,7 @@ const KPIChildAccordion = ({}) => {
         sx={{ bgcolor: "#f3f3f3" }}
       >
         <Typography sx={{ fontSize: 13, display: "inline", fontWeight: "700" }}>
-          CONTENT:
+          PROJECT:
           <Typography
             sx={{
               fontSize: 13,
@@ -27,25 +38,57 @@ const KPIChildAccordion = ({}) => {
               display: "inline",
             }}
           >
-            con proj 2 ABC Strategy 3
+            Dashboard Module
           </Typography>
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
-          }}
+        <Grid
+          container
+          p={1}
+          spacing={1}
+          sx={{ borderBottom: "1px solid #f5f5f5" }}
         >
-          <Typography sx={{ fontSize: 12 }}>No Description!</Typography>
-          <IconButton aria-label="delete" size="small">
-            <VisibilityOutlined fontSize="small" />
-          </IconButton>
-        </Box>
+          <Grid item xs={7} textAlign={"left"}>
+            <Typography sx={{ fontSize: 12 }}>
+              Dashboards provide users from all different businesses the ability
+              to monitor performance, crea...
+            </Typography>
+          </Grid>
+          <Grid xs={3} alignSelf={"center"}>
+            <ProgressBar />
+          </Grid>
+          <Grid
+            xs={2}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "end",
+            }}
+          >
+            <IconButton aria-label="view" size="small">
+              <AssignmentTurnedInOutlined fontSize="small" />
+            </IconButton>
+            <IconButton
+              aria-label="view"
+              size="small"
+              onClick={handleProjectOpen}
+            >
+              <VisibilityOutlined fontSize="small" />
+            </IconButton>
+          </Grid>
+        </Grid>
       </AccordionDetails>
+      <CustomDialog
+        handleClose={handleProjectClose}
+        open={openProject}
+        modalTitle="Dashboard Module"
+        // redirectPath={"/kpi-overview"}
+        showModalButton={true}
+        modalSize="md"
+      >
+        <ViewProjectPopup />
+      </CustomDialog>
     </Accordion>
   );
 };
