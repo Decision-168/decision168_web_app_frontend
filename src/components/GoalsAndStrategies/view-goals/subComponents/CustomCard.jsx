@@ -8,15 +8,11 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { VisibilityOutlined } from "@mui/icons-material";
-import { Box, CardActionArea } from "@mui/material";
+import { CardActionArea } from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
-import { useDispatch } from "react-redux";
-import { openModal } from "../../../../redux/action/modalSlice";
 
 const CustomCard = ({ handleClick, handleOpen }) => {
-  const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
-  const dispatch = useDispatch();
   return (
     <>
       <Card
@@ -76,7 +72,7 @@ const CustomCard = ({ handleClick, handleOpen }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ justifyContent: "end" }}>
+        <CardActions sx={{ justifyContent: "end",padding:'1px 4px' }}>
           <IconButton
             aria-label="settings"
             onClick={handleOpen}

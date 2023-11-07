@@ -182,27 +182,24 @@ const ViewGoalsPopup = ({}) => {
               flexDirection: "row",
             }}
           >
-            <Tooltip title="Duplicate" onClick={handleDuplicate}>
-              <IconButton>
+            <Tooltip title="Duplicate">
+              <IconButton onClick={handleDuplicate}>
                 <ContentCopy sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="File It" onClick={handleFileIt}>
-              <IconButton>
+            <Tooltip title="File It">
+              <IconButton onClick={handleFileIt}>
                 <NoteAdd sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Delete" onClick={handleDelete}>
-              <IconButton>
+            <Tooltip title="Delete">
+              <IconButton onClick={handleDelete}>
                 <Delete sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="View History">
-              <IconButton>
-                <History
-                  sx={{ fontSize: "20px" }}
-                  onClick={handleViewHistory}
-                />
+              <IconButton onClick={handleViewHistory}>
+                <History sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
           </Box>

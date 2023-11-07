@@ -32,6 +32,8 @@ import ReduxDialog from "../../common/ReduxDialog";
 import EditKPIPopup from "./EditKPIPopup";
 import DuplicateKPI from "../goals-overview/Kpi/DuplicateKPI";
 import OverallHistory from "../kpi-overview/kpi-history/OverallHistory";
+import ViewProjectPopup from "./ViewProjectPopup";
+import CustomDialog from "../../common/CustomDialog";
 const ViewKpiPopup = ({}) => {
   const theme = useTheme();
   const CommonList = ({ icon, title, info }) => {
@@ -88,6 +90,14 @@ const ViewKpiPopup = ({}) => {
   const handleViewHistory = () => {
     dispatch(openModal("view-all-kpi-history"));
   };
+    const [openProject, setOpenProject] = useState(false);
+
+    const handleProjectClose = () => {
+      setOpenProject(false);
+    };
+    const handleProjectOpen = () => {
+      setOpenProject(true);
+    };
   return (
     <Box
       sx={{
@@ -160,27 +170,24 @@ const ViewKpiPopup = ({}) => {
               flexDirection: "row",
             }}
           >
-            <Tooltip title="Duplicate" onClick={handleDuplicate}>
-              <IconButton>
+            <Tooltip title="Duplicate">
+              <IconButton onClick={handleDuplicate}>
                 <ContentCopy sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="File It" onClick={handleFileIt}>
-              <IconButton>
+            <Tooltip title="File It">
+              <IconButton onClick={handleFileIt}>
                 <NoteAdd sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Delete" onClick={handleDelete}>
-              <IconButton>
+            <Tooltip title="Delete">
+              <IconButton onClick={handleDelete}>
                 <Delete sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="View History">
-              <IconButton>
-                <History
-                  sx={{ fontSize: "20px" }}
-                  onClick={handleViewHistory}
-                />
+              <IconButton onClick={handleViewHistory}>
+                <History sx={{ fontSize: "20px" }} />
               </IconButton>
             </Tooltip>
           </Box>
@@ -297,7 +304,7 @@ const ViewKpiPopup = ({}) => {
                       <IconButton
                         aria-label="view"
                         size="small"
-                        // onClick={handleKPIOpen}
+                        onClick={handleProjectOpen}
                       >
                         <VisibilityOutlined fontSize="small" />
                       </IconButton>
@@ -335,6 +342,16 @@ const ViewKpiPopup = ({}) => {
       >
         <OverallHistory />
       </ReduxDialog>
+      <CustomDialog
+        handleClose={handleProjectClose}
+        open={openProject}
+        modalTitle="Dashboard Module"
+        // redirectPath={"/kpi-overview"}
+        showModalButton={true}
+        modalSize="md"
+      >
+        <ViewProjectPopup />
+      </CustomDialog>
     </Box>
   );
 };

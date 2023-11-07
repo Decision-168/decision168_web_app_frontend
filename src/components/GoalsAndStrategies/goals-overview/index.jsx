@@ -7,7 +7,6 @@ import ReduxDialog from "../../common/ReduxDialog";
 import Goal from "../create-goals/subComponents/Goal";
 import KPIs from "../create-goals/subComponents/KPIs";
 import MembersAccordion from "./subComponents/MembersAccordion";
-import AddMemberDialog from "./subComponents/AddMemberDialog";
 import OverallHistory from "./goal-history/OverallHistory";
 import RecentHistory from "./goal-history/RecentHistory";
 import ConfirmationDialog from "../../common/ConfirmationDialog";

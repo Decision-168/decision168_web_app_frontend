@@ -1,26 +1,68 @@
 import { Box, Grid } from "@mui/material";
-import React from "react";
+import React,{memo} from "react";
 import CustomTable from "../../subComponents/CustomTable";
 
-const ListSection = () => {
+const ListSection = ({ handleGoalOpen, value }) => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2} mt={2}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} lg={12}>
-          <CustomTable title={"Created Goals"} />
+      {value === "all" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={12}>
+            <CustomTable title={"Created Goals"} handleOpen={handleGoalOpen} />
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <CustomTable title={"Accepted Goals"} handleOpen={handleGoalOpen} />
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <CustomTable
+              title={"Pending Requests"}
+              handleOpen={handleGoalOpen}
+            />
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <CustomTable
+              title={"More Info Requests"}
+              handleOpen={handleGoalOpen}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={12}>
-          <CustomTable title={"Accepted Goals"} />
+      )}
+      {value === "created-goals" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={12}>
+            <CustomTable title={"Created Goals"} handleOpen={handleGoalOpen} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={12}>
-          <CustomTable title={"Pending Requests"} />
+      )}
+      {value === "accepted-goals" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={12}>
+            <CustomTable title={"Accepted Goals"} handleOpen={handleGoalOpen} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={12}>
-          <CustomTable title={"More Info Requests"} />
+      )}
+      {value === "pending-requests" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={12}>
+            <CustomTable
+              title={"Pending Requests"}
+              handleOpen={handleGoalOpen}
+            />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+      {value === "more-info-requests" && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} lg={12}>
+            <CustomTable
+              title={"More Info Requests"}
+              handleOpen={handleGoalOpen}
+            />
+          </Grid>
+        </Grid>
+      )}
     </Box>
   );
 };
 
-export default ListSection
+export default memo(ListSection)

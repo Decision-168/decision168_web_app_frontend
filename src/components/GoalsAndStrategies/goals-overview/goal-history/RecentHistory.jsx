@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import React, { Fragment,memo } from "react";
-import HistoryList from "./HistoryList";
 import RecentList from "./RecentList";
 
 const RecentHistory = ({}) => {

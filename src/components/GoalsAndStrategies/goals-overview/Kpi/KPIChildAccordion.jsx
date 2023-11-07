@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Grid, IconButton } from "@mui/material";
 import { AssignmentTurnedInOutlined, VisibilityOutlined } from "@mui/icons-material";
-import { Box } from "@mui/system";
 import ProgressBar from "../../subComponents/ProgressBar";
 import ViewProjectPopup from "../../subComponents/ViewProjectPopup";
 import CustomDialog from "../../../common/CustomDialog";

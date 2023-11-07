@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Grid, Link, Paper, Stack, Typography } from "@mui/material";
+import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import { useTheme } from "@mui/material/styles";
 import QuoteDailog from "./QuoteDialog";
