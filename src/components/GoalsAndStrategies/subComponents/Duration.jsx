@@ -27,7 +27,7 @@ const Duration = ({ label, labelColor, required }) => {
       </Grid>
       <Grid item xs={10}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "row", }}>
             <DatePicker
               inputFormat="MM/dd/yyyy"
               value={startDate}

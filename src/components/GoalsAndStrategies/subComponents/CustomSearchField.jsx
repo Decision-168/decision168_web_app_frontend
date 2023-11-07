@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Search, Clear, SearchRounded } from "@mui/icons-material";
+import { Clear, SearchRounded } from "@mui/icons-material";
 const CustomSearchField = ({}) => {
   const [show, setShow] = useState(false);
   const theme = useTheme();

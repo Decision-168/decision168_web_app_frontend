@@ -1,13 +1,16 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, useTheme } from '@mui/material';
-import React, { memo, useState } from 'react'
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  useTheme,
+} from "@mui/material";
+import React, { memo } from "react";
 
-const RadioSection = ({}) => {
-      const theme = useTheme();
-      const [value, setValue] = useState("all");
+const RadioSection = ({ handleChange, value }) => {
+  const theme = useTheme();
 
-      const handleChange = (event) => {
-        setValue(event.target.value);
-      };
   return (
     <Box
       sx={{
@@ -60,6 +63,6 @@ const RadioSection = ({}) => {
       </FormControl>
     </Box>
   );
-}
+};
 
-export default memo(RadioSection)
+export default memo(RadioSection);
