@@ -27,7 +27,6 @@ const CreateEditPortfolio = lazy(() =>
 const GoalsOverview = lazy(() =>
   import("../components/GoalsAndStrategies/goals-overview")
 );
-
 const RouteIndex = () => {
   return (
     <Router>

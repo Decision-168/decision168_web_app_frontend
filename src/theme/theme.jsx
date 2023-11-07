@@ -124,7 +124,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "transparent",
-          // height: "55px",
+          // height: "65px",
         },
       },
     },
@@ -142,8 +142,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiOutlinedInput-root": {
-            padding: "0px 7px",
-            fontSize:13
+            padding: "0px",
           },
         },
       },
@@ -155,5 +154,6 @@ export const theme = createTheme({
         },
       },
     },
+  
   },
 });
