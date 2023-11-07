@@ -86,7 +86,7 @@ export const globalValidations = {
     link: {
         required: "link is required",
     },
-    task: {
+    taskDescription: {
         required: "Task description is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,

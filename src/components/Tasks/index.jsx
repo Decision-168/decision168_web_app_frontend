@@ -21,7 +21,7 @@ const Tasks = () => {
   const [inputFields, setInputFields] = useState([]);
 
   return (
-    <Box sx={{ flexGrow: 1 }} mb={2}>
+    <Box sx={{ flexGrow: 1 }} mb={2} >
       <Grid container>
         <Grid item xs={10} lg={3}>
           <Box
