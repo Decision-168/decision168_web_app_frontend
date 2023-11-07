@@ -21,7 +21,7 @@ const OverallHistory = () => {
           <Typography
             sx={{ fontSize: 15, fontWeight: "600", color: "#212934" }}
           >
-            Demo Goal History
+            GOAL: Demo Goal
           </Typography>
           <Button variant="contained" size="small">
             Export To Excel

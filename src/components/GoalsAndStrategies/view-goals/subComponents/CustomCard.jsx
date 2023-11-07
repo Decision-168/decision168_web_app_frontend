@@ -13,7 +13,7 @@ import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../../redux/action/modalSlice";
 
-const CustomCard = ({ handleClick }) => {
+const CustomCard = ({ handleClick, handleOpen }) => {
   const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const CustomCard = ({ handleClick }) => {
           borderRadius: "10px",
         }}
       >
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea onClick={handleClick} sx={{ borderRadius: 0 }}>
           <CardHeader
             sx={{ pb: 0 }}
             avatar={
@@ -69,7 +69,7 @@ const CustomCard = ({ handleClick }) => {
                 textTransform: "uppercase",
                 fontSize: "12px",
                 pl: 1,
-                textAlign:'end'
+                textAlign: "end",
               }}
             >
               END: 2023-04-30
@@ -77,12 +77,12 @@ const CustomCard = ({ handleClick }) => {
           </CardContent>
         </CardActionArea>
         <CardActions sx={{ justifyContent: "end" }}>
-            <IconButton
-              aria-label="settings"
-              onClick={() => dispatch(openModal("overview-goals-kpis"))}
-            >
-              <VisibilityOutlined />
-            </IconButton>
+          <IconButton
+            aria-label="settings"
+            onClick={handleOpen}
+          >
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
         </CardActions>
       </Card>
     </>

@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import React from "react";
-import CustomTable from "../../create-goals/subComponents/CustomTable";
+import CustomTable from "../../subComponents/CustomTable";
 
 const ListSection = () => {
   return (

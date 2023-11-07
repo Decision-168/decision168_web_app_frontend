@@ -10,19 +10,22 @@ import RadioSection from "./subComponents/RadioSection";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/action/modalSlice";
 import CreateGoal from "../create-goals";
-import Goal from "../create-goals/subComponents/Goal";
-import KPIs from "../create-goals/subComponents/KPIs";
-import ReduxDialog from "../../common/ReduxDialog";
+import ViewGoalsPopup from "../subComponents/ViewGoalsPopup";
+import CustomDialog from "../../common/CustomDialog";
 const ViewGoalsIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
   const dispatch = useDispatch();
-  const [inputFields, setInputFields] = useState([]);
 
-  const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+  const [openGoal, setOpenGoal] = useState(false);
+
+  const handleGoalClose = () => {
+    setOpenGoal(false);
+  };
+  const handleGoalOpen = () => {
+    setOpenGoal(true);
   };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -65,31 +68,25 @@ const ViewGoalsIndex = () => {
           <RadioSection />
         </Grid>
         <Grid item xs={12}>
-          {alignment === "list" ? <ListSection /> : <GridSection />}
+          {alignment === "list" ? (
+            <ListSection handleGoalOpen={handleGoalOpen} />
+          ) : (
+            <GridSection handleGoalOpen={handleGoalOpen} />
+          )}
         </Grid>
       </Grid>
       <CreateGoal />
-      <ReduxDialog
-        value="create-goals"
-        modalTitle="Edit Goal"
-        showModalButton={false}
+
+      <CustomDialog
+        handleClose={handleGoalClose}
+        open={openGoal}
+        modalTitle="Demo Goal"
+        redirectPath={"/goal-overview"}
+        showModalButton={true}
         modalSize="md"
       >
-        <Goal individual={true} />
-      </ReduxDialog>
-      <ReduxDialog
-        value="create-kpis"
-        modalTitle="Add KPIs"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <KPIs
-          individual={true}
-          inputFields={inputFields}
-          setInputFields={setInputFields}
-          handleAddClick={handleAddClick}
-        />
-      </ReduxDialog>
+        <ViewGoalsPopup />
+      </CustomDialog>
     </Box>
   );
 };

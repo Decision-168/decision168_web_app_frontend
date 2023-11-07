@@ -9,8 +9,8 @@ import {
 import React, { Fragment, useState } from "react";
 import { globalValidations } from "../../../../utils/GlobalValidation";
 import { useForm } from "react-hook-form";
-import CustomLabelTextField from "./CustomLabelTextField";
-import CustomMultilineTextField from "./CustomMultilineTextField";
+import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
+import CustomMultilineTextField from "../../subComponents/CustomMultilineTextField";
 const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
   const {
     handleSubmit,

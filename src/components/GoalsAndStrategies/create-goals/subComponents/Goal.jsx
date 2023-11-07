@@ -2,12 +2,12 @@ import { Box, Button, DialogActions, DialogContent, Grid } from "@mui/material";
 import React, { memo } from "react";
 import { globalValidations } from "../../../../utils/GlobalValidation";
 import { useForm } from "react-hook-form";
-import CustomLabelTextField from "./CustomLabelTextField";
-import CustomMultilineTextField from "./CustomMultilineTextField";
-import CustomAutocomplete from "./CustomAutocomplete";
-import FilterSelectedOptions from "./FilterSelectedOptions";
-import InviteMembers from "./InviteMembers";
-import Duration from "./Duration";
+import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
+import CustomMultilineTextField from "../../subComponents/CustomMultilineTextField";
+import CustomAutocomplete from "../../subComponents/CustomAutocomplete";
+import FilterSelectedOptions from "../../subComponents/FilterSelectedOptions";
+import InviteMembers from "../../subComponents/InviteMembers";
+import Duration from "../../subComponents/Duration";
 const departments = [
   { label: "Marketing" },
   { label: "Implementation" },
