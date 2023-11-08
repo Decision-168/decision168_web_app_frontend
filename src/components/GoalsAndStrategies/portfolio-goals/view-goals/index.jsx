@@ -13,7 +13,7 @@ import ListSection from './subComponents/ListSection'
 import CustomDialog from "../../../common/CustomDialog";
 import ViewGoalsPopup from "../../subComponents/ViewGoalsPopup";
 import GridSection from "./subComponents/GridSection";
-import RadioSection from "./subComponents/RadioSection";
+import RadioSection from "../../../common/RadioSection";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateGoal from "../create-goals";
 import { openModal } from "../../../../redux/action/modalSlice";
@@ -35,6 +35,29 @@ const ViewGoalsIndex = () => {
   const handleGoalOpen = () => {
     setOpenGoal(true);
   };
+
+  const data = [
+    {
+      value: "all",
+      label: "All",
+    },
+    {
+      value: "created-goals",
+      label: "Created Goals",
+    },
+    {
+      value: "accepted-goals",
+      label: "Accepted Goals",
+    },
+    {
+      value: "pending-requests",
+      label: "Pending Requests",
+    },
+    {
+      value: "more-info-requests",
+      label: "More Info Requests",
+    },
+  ];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -73,7 +96,7 @@ const ViewGoalsIndex = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9}>
-          <RadioSection value={value} handleChange={handleChangeRadio} />
+          <RadioSection value={value} handleChange={handleChangeRadio} data={data}/>
         </Grid>
         <Grid item xs={12}>
           {alignment === "list" ? (
