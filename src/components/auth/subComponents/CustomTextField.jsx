@@ -2,7 +2,13 @@ import React from "react";
 import { TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomTextField({ name, placeholder, register, errors, validation }) {
+export default function CustomTextField({
+  name,
+  placeholder,
+  register,
+  errors,
+  validation,
+}) {
   const theme = useTheme();
 
   //to style placeholder
@@ -16,6 +22,7 @@ export default function CustomTextField({ name, placeholder, register, errors, v
   return (
     <TextField
       placeholder={placeholder}
+      margin="dense"
       required
       fullWidth
       name={name}

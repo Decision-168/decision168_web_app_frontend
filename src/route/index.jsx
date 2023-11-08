@@ -4,6 +4,7 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -16,18 +17,23 @@ const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
-const CreatePortfolio = lazy(() =>
-  import("../components/portfolio/createportfolio")
+const ViewGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/view-goals")
 );
-const EditPortfolio = lazy(() =>
-  import("../components/portfolio/editPortfolio")
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
 );
 const Notes = lazy(() => import("../components/notes"));
+const Archive = lazy(() => import("../components/archive"));
+const Trash = lazy(() => import("../components/trash"));
 const RouteIndex = () => {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/" element={<PrivateRoute />}>
           <Route
             path="/dashboard"
@@ -81,7 +87,7 @@ const RouteIndex = () => {
             path="/portfolio-create"
             element={
               <DashboardLayout>
-                <CreatePortfolio />
+                <CreateEditPortfolio />
               </DashboardLayout>
             }
           />
@@ -89,21 +95,52 @@ const RouteIndex = () => {
             path="/portfolio-edit"
             element={
               <DashboardLayout>
-                <EditPortfolio />
+                <CreateEditPortfolio />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-goals"
+            element={
+              <DashboardLayout>
+                <ViewGoals />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/goal-overview"
+            element={
+              <DashboardLayout>
+                <GoalsOverview />
               </DashboardLayout>
             }
           />
         </Route>
-          <Route
-            path="/notes"
-            element={
-              <DashboardLayout>
-                <Notes />
-              </DashboardLayout>
-            }
-          />
+        <Route
+          path="/notes"
+          element={
+            <DashboardLayout>
+              <Notes />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/archive"
+          element={
+            <DashboardLayout>
+              <Archive />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/trash"
+          element={
+            <DashboardLayout>
+              <Trash />
+            </DashboardLayout>
+          }
+        />
         <Route path="/" element={<PublicRoute />}>
-          
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/change-password" element={<ChangePassword />} />
