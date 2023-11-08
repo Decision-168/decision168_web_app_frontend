@@ -18,6 +18,8 @@ const TitleWithActions = ({
   description,progressHeading
 }) => {
   const theme = useTheme();
+    const splitString = title.split(" ");
+    const splitTitle = splitString[1]; 
   return (
     <>
       <Grid item xs={12} md={12} lg={12}>
@@ -30,10 +32,10 @@ const TitleWithActions = ({
           }}
         >
           <Avatar
-            sx={{ bgcolor: theme.palette.primary.main, mr: 1 }}
+            sx={{ bgcolor: theme.palette.secondary.main, mr: 1 }}
             aria-label="goal"
           >
-            {...stringAvatar(title)}
+            {...stringAvatar(splitTitle)}
           </Avatar>
           <Typography
             sx={{
