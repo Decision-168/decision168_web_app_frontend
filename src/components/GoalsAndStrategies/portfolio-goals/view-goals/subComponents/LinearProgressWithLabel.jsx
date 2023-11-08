@@ -3,7 +3,6 @@ import { Box, LinearProgress } from "@mui/material";
 import { LinearProgressWithLabel } from "../../../subComponents/style-functions";
 
 const LinearWithValueLabel = ({ value }) => {
-  console.log(value);
 
   return (
     <Box sx={{ width: "100%" }}>

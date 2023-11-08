@@ -1,4 +1,4 @@
-import React,{ memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -41,7 +41,7 @@ const CustomTable = ({ title, handleOpen, data }) => {
             sx={{ display: "flex", alignItems: "center", flexDirection: "row" }}
           >
             <Avatar
-              sx={{ bgcolor: theme.palette.primary.main, mx: 1 }}
+              sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
               aria-label="goal"
             >
               {...stringAvatar(row.original.goals.name)}
@@ -82,9 +82,11 @@ const CustomTable = ({ title, handleOpen, data }) => {
         size: 150,
         minSize: 75,
         maxSize: 150,
-        Cell: ({ row }) => (
-          <LinearProgressWithLabel value={row.original.progress} />
-        ),
+        Cell: ({ row }) => {
+        return(  title === "Created Goals" && (
+            <LinearProgressWithLabel value={row.original.progress} />
+          ));
+        },
       },
       {
         accessorKey: "startDate",

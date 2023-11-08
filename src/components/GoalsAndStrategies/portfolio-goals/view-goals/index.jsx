@@ -79,7 +79,7 @@ const ViewGoalsIndex = () => {
           {alignment === "list" ? (
             <ListSection handleGoalOpen={handleGoalOpen} value={value} />
           ) : (
-            <GridSection handleGoalOpen={handleGoalOpen} />
+            <GridSection handleGoalOpen={handleGoalOpen} value={value} />
           )}
         </Grid>
       </Grid>
