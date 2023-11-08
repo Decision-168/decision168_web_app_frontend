@@ -21,14 +21,14 @@ const data = [
         portfolio: "Uzma K",
         trash: "Task 2",
         title: "Task 2 title",
-        type: "Goals",
+        type: "Goal",
         date: "2023-04-30",
     },
     {
         portfolio: "Uzma K",
         trash: "Task 3",
         title: "Task 3 title",
-        type: "KPIs",
+        type: "KPI",
         date: "2023-04-30",
     },
     {
@@ -49,21 +49,21 @@ const data = [
 
 const FilterTable = () => {
     const dispatch = useDispatch();
-    const handleRestore = () => {
+    const handleRestore = (type) => {
         dispatch(
           openCnfModal({
             modalName: "restoreModule",
             title: "Are you sure?",
-            description: "You want to Restore this",
+            description: `You want to Restore this ${type}`,
           })
         );
       };
-      const handleDelete = () => {
+      const handleDelete = (type) => {
         dispatch(
           openCnfModal({
             modalName: "deleteModule",
             title: "Are you sure?",
-            description: "You want to Delete this Permanently",
+            description: `You want to Delete this ${type} Permanently`,
           })
         );
       };
@@ -108,10 +108,10 @@ const FilterTable = () => {
       <Box sx={{
         display: "flex"
       }}>
-        <Button sx={{ mr: 1}} size='small' variant="contained" onClick={() => handleRestore()}>
+        <Button sx={{ mr: 1}} size='small' variant="contained" onClick={() => handleRestore(row.original.type)}>
         Restore
       </Button>
-      <Button sx={{backgroundColor: "#383838", color: "#ffffff"}} size='small' variant="contained"  onClick={() => handleDelete()}>
+      <Button sx={{backgroundColor: "#383838", color: "#ffffff"}} size='small' variant="contained"  onClick={() => handleDelete(row.original.type)}>
         Delete
       </Button>
       </Box>,

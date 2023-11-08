@@ -21,14 +21,14 @@ const data = [
     portfolio: "Uzma K",
     archived: "Task 2",
     title: "Task 2 title",
-    type: "Goals",
+    type: "Goal",
     date: "2023-04-30",
   },
   {
     portfolio: "Uzma K",
     archived: "Task 3",
     title: "Task 3 title",
-    type: "KPIs",
+    type: "KPI",
     date: "2023-04-30",
   },
   {
@@ -49,12 +49,12 @@ const data = [
 
 const FilterTable = () => {
   const dispatch = useDispatch();
-  const handleReopen = () => {
+  const handleReopen = (type) => {
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
         title: "Are you sure?",
-        description: "You want to Reopen this",
+        description: `You want to Reopen this ${type}`,
       })
     );
   };
@@ -105,7 +105,7 @@ const FilterTable = () => {
           sx={{ mr: 1 }}
           size="small"
           variant="contained"
-          onClick={() => handleReopen()}
+          onClick={() => handleReopen(row.original.type)}
         >
           Reopen
         </Button>
