@@ -4,13 +4,11 @@ import TaskTable from "./TaskTable";
 
 const ListSection = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid container mt={2} sx={{ textAlign: "center" }}>
-        <Grid item xs={12}>
-          <TaskTable />
-        </Grid>
+    <Grid container mt={2} >
+      <Grid item xs={12}>
+        <TaskTable />
       </Grid>
-    </Box>
+    </Grid>
   );
 };
 

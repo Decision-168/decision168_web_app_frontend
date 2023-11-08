@@ -154,5 +154,12 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: "11px",
+        },
+      },
+    },
   },
 });

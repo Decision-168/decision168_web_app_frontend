@@ -14,7 +14,7 @@ export const getPriorityStyle = (selectedPriority) => {
 
     // Default style if status is not found
     return {
-        backgroundColor: '#EBEBEB',
+        backgroundColor: "#EBEBEB",
         color: 'black',
     };
 };
