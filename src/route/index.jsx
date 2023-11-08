@@ -17,14 +17,17 @@ const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
-const ViewGoals = lazy(() =>
-  import("../components/GoalsAndStrategies/view-goals")
-);
 const CreateEditPortfolio = lazy(() =>
   import("../components/portfolio/createEditPortfolio")
 );
+const ViewGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/view-goals")
+);
 const GoalsOverview = lazy(() =>
   import("../components/GoalsAndStrategies/goals-overview")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
 );
 const Notes = lazy(() => import("../components/notes"));
 const Archive = lazy(() => import("../components/archive"));
@@ -112,6 +115,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <GoalsOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/kpi-overview"
+            element={
+              <DashboardLayout>
+                <KPIOverview />
               </DashboardLayout>
             }
           />

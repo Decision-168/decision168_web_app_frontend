@@ -8,15 +8,11 @@ import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { VisibilityOutlined } from "@mui/icons-material";
-import { Box, CardActionArea } from "@mui/material";
+import { CardActionArea } from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
-import { useDispatch } from "react-redux";
-import { openModal } from "../../../../redux/action/modalSlice";
 
-const CustomCard = ({ handleClick }) => {
-  const [expanded, setExpanded] = React.useState(false);
+const CustomCard = ({ handleClick, handleOpen }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
   return (
     <>
       <Card
@@ -26,7 +22,7 @@ const CustomCard = ({ handleClick }) => {
           borderRadius: "10px",
         }}
       >
-        <CardActionArea onClick={handleClick}>
+        <CardActionArea onClick={handleClick} sx={{ borderRadius: 0 }}>
           <CardHeader
             sx={{ pb: 0 }}
             avatar={
@@ -69,20 +65,20 @@ const CustomCard = ({ handleClick }) => {
                 textTransform: "uppercase",
                 fontSize: "12px",
                 pl: 1,
-                textAlign:'end'
+                textAlign: "end",
               }}
             >
               END: 2023-04-30
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ justifyContent: "end" }}>
-            <IconButton
-              aria-label="settings"
-              onClick={() => dispatch(openModal("overview-goals-kpis"))}
-            >
-              <VisibilityOutlined />
-            </IconButton>
+        <CardActions sx={{ justifyContent: "end",padding:'1px 4px' }}>
+          <IconButton
+            aria-label="settings"
+            onClick={handleOpen}
+          >
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
         </CardActions>
       </Card>
     </>

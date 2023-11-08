@@ -6,12 +6,6 @@ import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
 import { ArrowRightAlt } from "@mui/icons-material";
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -20,7 +14,8 @@ const Accordion = styled((props) => (
     display: "none",
     height: "0px",
   },
-  borderLeft: "5px dotted #f5f5f5",
+  borderLeft:'5px dotted #f5f5f5',
+
 }));
 
 const AccordionSummary = styled((props) => (
@@ -35,7 +30,7 @@ const AccordionSummary = styled((props) => (
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          animation: "slideRightToLeft 1s ease-in-out",
+          animation: "slideRightToLeft 1s ease-in-out", 
           "@keyframes slideRightToLeft": {
             from: {
               transform: "translateX(100%)",
@@ -66,7 +61,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: 0,
 }));
 
-const RecentList = ({}) => {
+const HistoryList = ({}) => {
   return (
     <Accordion>
       <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
@@ -87,8 +82,8 @@ const RecentList = ({}) => {
               background: "white",
               border: "1px solid #212934",
               borderRadius: "50%",
-              width: 24,
-              height: 16,
+              width: 14,
+              height: 14,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -96,11 +91,21 @@ const RecentList = ({}) => {
           >
             <ArrowForwardIosSharpIcon sx={{ fontSize: 8, color: "#212934" }} />
           </Box>
-          <Typography sx={{ fontSize: 13, color: "#212934", mx: 0.5 }}>
-            00:58
+          <Typography
+            sx={{ fontSize: 14, color: "#212934", mx: 1 }}
+          >
+            00:58:10
           </Typography>
           <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
-          <Typography sx={{ fontSize: 13, color: "#212934", mx: 0.5 }}>
+          <Typography
+            sx={{ fontSize: 14, color: "#212934", mx: 1 }}
+          >
+            Uzma Karjikar
+          </Typography>
+          <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
+          <Typography
+            sx={{ fontSize: 14, color: "#212934", mx: 1 }}
+          >
             Uzma Karjikar Assigned Uzma Testing As A Goal Manager
           </Typography>
         </Box>
@@ -109,4 +114,4 @@ const RecentList = ({}) => {
   );
 };
 
-export default memo(RecentList);
+export default memo(HistoryList);

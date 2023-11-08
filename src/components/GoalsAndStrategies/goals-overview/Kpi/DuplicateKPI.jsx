@@ -1,17 +1,22 @@
-import { Box, Button, DialogActions, DialogContent, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
-import CustomLabelTextField from "../../create-goals/subComponents/CustomLabelTextField";
-import Duration from "../../create-goals/subComponents/Duration";
+import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
 import { globalValidations } from "../../../../utils/GlobalValidation";
-import TabSection from "./TabSection";
-
-const DuplicateDialog = () => {
-      const {
-        handleSubmit,
-        register,
-        formState: { errors },
-      } = useForm();
+import KpiTabSection from "./KpiTabSection";
+const DuplicateKPI = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
   return (
     <>
       <DialogContent dividers>
@@ -21,21 +26,22 @@ const DuplicateDialog = () => {
         >
           <Grid container spacing={2}>
             <CustomLabelTextField
-              label="Objective/Goal"
-              name="Objective"
+              label="KPI"
+              name="KPI"
               required={true}
-              placeholder="Enter Objective/Goal..."
+              placeholder="Enter KPI..."
               register={register}
               errors={errors}
-              validation={globalValidations.Objective}
+              validation={globalValidations.KPI}
             />
-            <Duration label="Duration " labelColor="" required={true} />
             <Grid item xs={12}>
               <Box p={2} sx={{ background: "#f5f5f5" }}>
-                <Typography sx={{ fontSize: 15, fontWeight: "600",textAlign:'start' }}>
+                <Typography
+                  sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}
+                >
                   Import Options
                 </Typography>
-                <TabSection/>
+                <KpiTabSection />
               </Box>
             </Grid>
           </Grid>
@@ -50,4 +56,4 @@ const DuplicateDialog = () => {
   );
 };
 
-export default DuplicateDialog;
+export default DuplicateKPI;
