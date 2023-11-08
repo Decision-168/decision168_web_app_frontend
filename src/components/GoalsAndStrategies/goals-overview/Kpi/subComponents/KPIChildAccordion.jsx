@@ -1,28 +1,34 @@
 import React, { memo, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid, IconButton } from "@mui/material";
-import { AssignmentTurnedInOutlined, VisibilityOutlined } from "@mui/icons-material";
-import ProgressBar from "../../subComponents/ProgressBar";
-import ViewProjectPopup from "../../subComponents/ViewProjectPopup";
-import CustomDialog from "../../../common/CustomDialog";
+import {
+  Grid,
+  IconButton,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import {
+  AssignmentTurnedInOutlined,
+  VisibilityOutlined,
+  ExpandMore,
+} from "@mui/icons-material";
+import ViewProjectPopup from "../../../subComponents/ViewProjectPopup";
+import CustomDialog from "../../../../common/CustomDialog";
+import ProgressBar from "../../../subComponents/ProgressBar";
 
 const KPIChildAccordion = ({}) => {
-    const [openProject, setOpenProject] = useState(false);
+  const [openProject, setOpenProject] = useState(false);
 
-    const handleProjectClose = () => {
-      setOpenProject(false);
-    };
-    const handleProjectOpen = () => {
-      setOpenProject(true);
-    };
+  const handleProjectClose = () => {
+    setOpenProject(false);
+  };
+  const handleProjectOpen = () => {
+    setOpenProject(true);
+  };
   return (
     <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={<ExpandMore />}
         aria-controls="panel1a-content"
         id="panel1a-header"
         sx={{ bgcolor: "#f3f3f3" }}

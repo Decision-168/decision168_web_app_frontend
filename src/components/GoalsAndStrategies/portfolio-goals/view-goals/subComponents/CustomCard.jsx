@@ -1,15 +1,17 @@
 import React, { memo } from "react";
 import { useTheme } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { VisibilityOutlined } from "@mui/icons-material";
-import { CardActionArea } from "@mui/material";
-import { stringAvatar } from "../../../../helpers/stringAvatar";
+import {
+  CardActionArea,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Avatar,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { stringAvatar } from "../../../../../helpers/stringAvatar";
 
 const CustomCard = ({ handleClick, handleOpen }) => {
   const theme = useTheme();
@@ -72,11 +74,8 @@ const CustomCard = ({ handleClick, handleOpen }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions sx={{ justifyContent: "end",padding:'1px 4px' }}>
-          <IconButton
-            aria-label="settings"
-            onClick={handleOpen}
-          >
+        <CardActions sx={{ justifyContent: "end", padding: "1px 4px" }}>
+          <IconButton aria-label="settings" onClick={handleOpen}>
             <VisibilityOutlined fontSize="small" />
           </IconButton>
         </CardActions>

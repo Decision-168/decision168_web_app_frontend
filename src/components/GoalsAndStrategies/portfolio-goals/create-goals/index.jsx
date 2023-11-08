@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import ReduxDialog from "../../common/ReduxDialog";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { Avatar, DialogActions, DialogContent } from "@mui/material";
+import {
+  Avatar,
+  DialogActions,
+  DialogContent,
+  Typography,
+  Button,
+  Box,
+} from "@mui/material";
 import Goal from "./subComponents/Goal";
 import KPIs from "./subComponents/KPIs";
 
@@ -59,12 +62,7 @@ const CreateGoal = () => {
     backgroundColor: "transparent",
   };
   return (
-    <ReduxDialog
-      value="create-goals-kpis"
-      modalTitle="Create Goal and KPIs"
-      showModalButton={false}
-      modalSize="md"
-    >
+    <>
       <DialogContent dividers>
         <Box sx={{ width: "100%", background: "white", p: 3, borderRadius: 1 }}>
           <Box
@@ -147,7 +145,7 @@ const CreateGoal = () => {
           </>
         )}
       </DialogActions>
-    </ReduxDialog>
+    </>
   );
 };
 

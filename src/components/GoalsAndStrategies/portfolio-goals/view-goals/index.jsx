@@ -1,18 +1,23 @@
-import { Box, Grid, Button } from "@mui/material";
-import { memo, useState } from "react";
-import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {
+  Box,
+  Grid,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
+import { memo, useState, useCallback } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
-import ListSection from "./subComponents/ListSection";
+import { useDispatch } from "react-redux";
+import BasicBreadcrumbs from "../../../common/BasicBreadcrumbs";
+import ListSection from './subComponents/ListSection'
+import CustomDialog from "../../../common/CustomDialog";
+import ViewGoalsPopup from "../../subComponents/ViewGoalsPopup";
 import GridSection from "./subComponents/GridSection";
 import RadioSection from "./subComponents/RadioSection";
-import { useDispatch } from "react-redux";
-import { openModal } from "../../../redux/action/modalSlice";
+import ReduxDialog from "../../../common/ReduxDialog";
 import CreateGoal from "../create-goals";
-import ViewGoalsPopup from "../subComponents/ViewGoalsPopup";
-import CustomDialog from "../../common/CustomDialog";
-import { useCallback } from "react";
+import { openModal } from "../../../../redux/action/modalSlice";
+
 const ViewGoalsIndex = () => {
   const dispatch = useDispatch();
   const [openGoal, setOpenGoal] = useState(false);
@@ -78,8 +83,15 @@ const ViewGoalsIndex = () => {
           )}
         </Grid>
       </Grid>
-      <CreateGoal />
 
+      <ReduxDialog
+        value="create-goals-kpis"
+        modalTitle="Create Goal and KPIs"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateGoal />
+      </ReduxDialog>
       <CustomDialog
         handleClose={handleGoalClose}
         open={openGoal}

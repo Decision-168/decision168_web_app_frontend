@@ -1,16 +1,24 @@
 import React, { memo } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  Avatar, Box, List,
+  Avatar,
+  Box,
+  List,
+  Typography,
+  AccordionSummary,
+  AccordionDetails,
+  Accordion,
 } from "@mui/material";
 import UserList from "./UserList";
 
-const ChildAccordion = ({ value, expanded, handleChange, title, bgColor }) => {
-  const username = ["Alim Mohammad","Arshad Khan","Syed Jameel"]
+const MembersChildAccordion = ({
+  value,
+  expanded,
+  handleChange,
+  title,
+  bgColor,
+}) => {
+  const username = ["Alim Mohammad", "Arshad Khan", "Syed Jameel"];
   return (
     <Accordion expanded={expanded === value} onChange={handleChange(value)}>
       <AccordionSummary
@@ -57,7 +65,7 @@ const ChildAccordion = ({ value, expanded, handleChange, title, bgColor }) => {
         {username.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList username={item} assignManagerFlag={value}/>
+              <UserList username={item} assignManagerFlag={value} />
             </List>
           );
         })}
@@ -65,4 +73,4 @@ const ChildAccordion = ({ value, expanded, handleChange, title, bgColor }) => {
     </Accordion>
   );
 };
-export default memo(ChildAccordion);
+export default memo(MembersChildAccordion);

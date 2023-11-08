@@ -1,9 +1,8 @@
 import { Box, Grid } from "@mui/material";
 import React,{memo} from "react";
-import CustomSearchField from "../../subComponents/CustomSearchField";
 import { useNavigate } from "react-router-dom";
-import CustomCard from "./CustomCard";
-
+import CustomSearchField from "../../../subComponents/CustomSearchField";
+import CustomCard from './CustomCard'
 const GridSection = ({ handleGoalOpen }) => {
   const navigate = useNavigate();
   const handleRedirect = () => {

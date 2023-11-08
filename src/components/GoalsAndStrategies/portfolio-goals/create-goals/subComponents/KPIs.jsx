@@ -5,11 +5,11 @@ import {
   DialogContent,
   Grid,
 } from "@mui/material";
-import React, {  } from "react";
-import { globalValidations } from "../../../../utils/GlobalValidation";
+import React from "react";
 import { useForm } from "react-hook-form";
-import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
-import CustomMultilineTextField from "../../subComponents/CustomMultilineTextField";
+import { globalValidations } from "../../../../../utils/GlobalValidation";
+import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
+import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
 const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
   const {
     handleSubmit,

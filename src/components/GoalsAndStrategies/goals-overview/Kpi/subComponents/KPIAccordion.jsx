@@ -2,15 +2,13 @@ import React, { Fragment, memo, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Box, Button, Grid, IconButton,Typography } from "@mui/material";
 import { Add, VisibilityOutlined } from "@mui/icons-material";
-import { Box } from "@mui/system";
 import KPIChildAccordion from "./KPIChildAccordion";
-import ViewKpiPopup from "../../subComponents/ViewKpiPopup";
-import CustomDialog from "../../../common/CustomDialog";
-import ProgressBar from "../../subComponents/ProgressBar";
+import ViewKpiPopup from "../../../subComponents/ViewKpiPopup";
+import CustomDialog from "../../../../common/CustomDialog";
+import ProgressBar from "../../../subComponents/ProgressBar";
 
 const KPIAccordion = ({}) => {
   const data = [1, 2];

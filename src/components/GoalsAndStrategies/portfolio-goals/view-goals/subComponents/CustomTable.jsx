@@ -1,10 +1,8 @@
-import { useMemo } from "react";
+import React,{ memo, useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import React from "react";
-import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import {
   Avatar,
   Box,
@@ -13,68 +11,23 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { stringAvatar } from "../../../helpers/stringAvatar";
+import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
-const CustomTable = ({ title, handleOpen }) => {
+const CustomTable = ({ title, handleOpen, data }) => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const data = useMemo(
-    () => [
-      {
-        goals: {
-          name: "ABC Goal",
-          description:
-            "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
-        },
-        progress: "26%",
-        startDate: "2023-01-19",
-        endDate: "2023-04-30",
-      },
-      {
-        goals: {
-          name: "Test",
-          description:
-            "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
-        },
-        progress: "76%",
-        startDate: "2023-01-19",
-        endDate: "2023-04-30",
-      },
-      {
-        goals: {
-          name: "PQR",
-          description:
-            "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
-        },
-        progress: "56%",
-        startDate: "2023-01-19",
-        endDate: "2023-04-30",
-      },
-      {
-        goals: {
-          name: "OCT Goal",
-          description:
-            "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
-        },
-        progress: "72%",
-        startDate: "2023-01-19",
-        endDate: "2023-04-30",
-      },
-      {
-        goals: {
-          name: "G & K",
-          description:
-            "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
-        },
-        progress: "32%",
-        startDate: "2023-01-19",
-        endDate: "2023-04-30",
-      },
-    ],
-    []
-  );
+  const [load, setLoad] = useState(false);
+  useEffect(() => {
+    if (data.length > 0) {
+      setLoad(false);
+    } else {
+      setLoad(true);
+    }
+  }, []);
+
   const columns = useMemo(
     () => [
       {
@@ -99,7 +52,7 @@ const CustomTable = ({ title, handleOpen }) => {
                   color: "#343a40",
                   fontWeight: "900",
                   fontSize: "14px",
-                  cursor:'pointer'
+                  cursor: "pointer",
                 }}
                 textAlign={"start"}
                 onClick={() => navigate("/goal-overview")}
@@ -175,6 +128,7 @@ const CustomTable = ({ title, handleOpen }) => {
     ],
     []
   );
+
   const table = useMaterialReactTable({
     columns,
     data,
@@ -183,6 +137,9 @@ const CustomTable = ({ title, handleOpen }) => {
     enableColumnFilters: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
+    state: {
+      showSkeletons: load,
+    },
     enableHiding: false,
     // enableEditing: true,
     // editDisplayMode: "cell",
@@ -235,7 +192,21 @@ const CustomTable = ({ title, handleOpen }) => {
     ),
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <MaterialReactTable
+      table={table}
+      state={{ isLoading: load }}
+      muiCircularProgressProps={{
+        color: "secondary",
+        thickness: 5,
+        size: 55,
+      }}
+      muiSkeletonProps={{
+        animation: "pulse",
+        height: 28,
+      }}
+    />
+  );
 };
 
-export default CustomTable;
+export default memo(CustomTable);

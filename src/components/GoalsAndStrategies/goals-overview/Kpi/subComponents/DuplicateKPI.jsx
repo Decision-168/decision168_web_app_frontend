@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
-import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
-import { globalValidations } from "../../../../utils/GlobalValidation";
+import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
+import { globalValidations } from "../../../../../utils/GlobalValidation";
 import KpiTabSection from "./KpiTabSection";
 const DuplicateKPI = () => {
   const {
