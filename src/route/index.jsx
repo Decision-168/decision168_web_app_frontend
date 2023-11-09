@@ -30,6 +30,8 @@ const GoalsOverview = lazy(() =>
 const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
+const FileCabinet = lazy(() => import("../components/filecabinet")
+);
 const RouteIndex = () => {
   return (
     <Router>
@@ -121,6 +123,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <KPIOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/file-cabinet"
+            element={
+              <DashboardLayout>
+                <FileCabinet />
               </DashboardLayout>
             }
           />
