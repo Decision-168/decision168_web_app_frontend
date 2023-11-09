@@ -4,6 +4,7 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
+import CreateTask from "../components/Tasks/createTask";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -118,7 +119,7 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-            <Route
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
@@ -126,7 +127,15 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-            <Route
+          <Route
+            path="/tasks-create"
+            element={
+              <DashboardLayout>
+                <CreateTask />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/kpi-overview"
             element={
               <DashboardLayout>

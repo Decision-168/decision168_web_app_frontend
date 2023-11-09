@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for the date picker
-import { IconButton } from "@mui/material";
+import { Box, IconButton, InputLabel } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { useTheme } from "@mui/material/styles";
 
 // Function to format the date as YY/MM/DD
 function formatDateAsYYMMDD(date) {
@@ -13,7 +14,8 @@ function formatDateAsYYMMDD(date) {
   return `${year}-${month}-${day}`;
 }
 
-function MyDatePicker() {
+function MyDatePicker({ label, required, sizeWidth }) {
+  const theme = useTheme();
   const [startDate, setStartDate] = useState(new Date());
 
   const textFieldStyles = {
@@ -23,13 +25,17 @@ function MyDatePicker() {
   };
 
   return (
-    <div>
+    <Box sx={{ textAlign: "left" }}>
+      <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
+        {label}
+        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+      </InputLabel>
       <TextField
         variant="outlined"
         disabled
         fullWidth
         value={formatDateAsYYMMDD(startDate)} // Format the date in YY/MM/DD format
-        sx={{ width: "155px", ...textFieldStyles }}
+        sx={{ width: sizeWidth, ...textFieldStyles }}
         InputProps={{
           endAdornment: (
             <DatePicker
@@ -44,7 +50,7 @@ function MyDatePicker() {
           ),
         }}
       />
-    </div>
+    </Box>
   );
 }
 

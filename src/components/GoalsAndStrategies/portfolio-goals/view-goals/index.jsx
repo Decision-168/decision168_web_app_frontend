@@ -92,6 +92,7 @@ const ViewGoalsIndex = () => {
       >
         <CreateGoal />
       </ReduxDialog>
+      
       <CustomDialog
         handleClose={handleGoalClose}
         open={openGoal}

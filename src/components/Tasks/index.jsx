@@ -1,4 +1,4 @@
-import { Box, Grid, Button, Icon, IconButton } from "@mui/material";
+import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
 import { memo, useState } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -10,6 +10,8 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CustomSearchField from "../common/CustomSearchField";
 import ListSection from "./subComponents/ListSection";
 import GridSection from "./subComponents/GridSection";
+import ReduxDialog from "../common/ReduxDialog";
+import CreateTaskForm from "./createTask/CreateTaskForm";
 
 const Tasks = () => {
   const [alignment, setAlignment] = useState("list");
@@ -20,7 +22,7 @@ const Tasks = () => {
   const [inputFields, setInputFields] = useState([]);
 
   return (
-    <Box sx={{ flexGrow: 1 }} mb={2} >
+    <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
         <Grid item xs={10} lg={3}>
           <Box
@@ -41,9 +43,13 @@ const Tasks = () => {
               </ToggleButton>
             </ToggleButtonGroup>
 
-            <Button variant="contained" startIcon={<Add />} size="small" onClick={() => dispatch(openModal("create-goals-kpis"))}>
+            <Button onClick={() => dispatch(openModal("create-new-task"))} variant="contained" startIcon={<Add />} size="small">
               Create New
             </Button>
+
+            <ReduxDialog value="create-new-task" modalTitle="Create New Task" showModalButton={false} modalSize="md">
+              <CreateTaskForm />
+            </ReduxDialog>
           </Box>
         </Grid>
 
