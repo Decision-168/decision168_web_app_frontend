@@ -48,9 +48,7 @@ const Tasks = () => {
             </Button>
 
             <ReduxDialog value="create-new-task" modalTitle="Create New Task" showModalButton={false} modalSize="md">
-              <DialogContent dividers>
-                <CreateTaskForm />
-              </DialogContent>
+              <CreateTaskForm />
             </ReduxDialog>
           </Box>
         </Grid>
