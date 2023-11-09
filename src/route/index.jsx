@@ -15,6 +15,7 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
+const FileCabinet = lazy(() => import("../components/filecabinet"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
@@ -29,8 +30,6 @@ const GoalsOverview = lazy(() =>
 );
 const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
-);
-const FileCabinet = lazy(() => import("../components/filecabinet")
 );
 const RouteIndex = () => {
   return (

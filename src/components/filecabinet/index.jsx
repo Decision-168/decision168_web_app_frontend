@@ -1,14 +1,14 @@
 import { Box, Grid, Button } from "@mui/material";
-import { memo, useState } from "react";
+import { useState } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
-import ListSection from "subComponents/ListSection";
-import GridSection from "subComponents/GridSection";
-import RadioSection from "subComponents/RadioSection";
 import { useCallback } from "react";
-const index = () => {
+import GridSection from "./subComponents/GridSection";
+import RadioSection from "./subComponents/RadioSection";
+// import TreeSection from "./subComponents/TreeSection";
+const FileCabinet = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
 
@@ -18,6 +18,29 @@ const index = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
+
+  const treedata = [
+    {
+      id: 0,
+      name: 'Root',
+      children: [
+        {
+          id: 1,
+          name: 'Child 1',
+          children: [
+            {
+              id: 2,
+              name: 'Child 2',
+            },
+          ],
+        },
+        {
+          id: 3,
+          name: 'Child 3',
+        },
+      ],
+    },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -53,7 +76,7 @@ const index = () => {
         </Grid>
         <Grid item xs={12}>
           {alignment === "list" ? (
-            <ListSection value={value} />
+            <TreeSection nodes={treedata} value={value} />
           ) : (
             <GridSection value={value} />
           )}
@@ -63,4 +86,4 @@ const index = () => {
   );
 };
 
-export default memo(index);
+export default FileCabinet;
