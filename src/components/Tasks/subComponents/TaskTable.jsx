@@ -275,7 +275,7 @@ export default function TaskTable() {
 
                             {/* Due Date */}
                             <TableCell sx={{ width: "20%" }} align="center">
-                              <MyDatePicker />
+                              <MyDatePicker label="" required={false} sizeWidth="155px" />
                             </TableCell>
 
                             {/* Actions */}
@@ -408,7 +408,7 @@ export default function TaskTable() {
 
                                 {/* Due Date */}
                                 <TableCell align="center">
-                                  <MyDatePicker />
+                                  <MyDatePicker label="" required={false} sizeWidth="155px" />
                                 </TableCell>
 
                                 {/* Actions */}
