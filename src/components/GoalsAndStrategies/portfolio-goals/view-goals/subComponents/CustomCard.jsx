@@ -20,6 +20,7 @@ const CustomCard = ({ item, handleClick, handleOpen, value }) => {
     <Card
       sx={{
         maxWidth: "100%",
+        height: "200px",
         borderLeft:
           value === "accepted-goals"
             ? `7px solid ${theme.palette.secondary.main}`
@@ -61,7 +62,7 @@ const CustomCard = ({ item, handleClick, handleOpen, value }) => {
             }}
             textAlign={"start"}
           >
-            {item?.goals?.description}
+            {item?.goals?.description ? item?.goals?.description :"No Description!"}
           </Typography>
           <Typography
             sx={{

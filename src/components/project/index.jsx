@@ -10,6 +10,9 @@ import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import CustomFilter from "../common/CustomFilter";
+import CustomSearchField from "../common/CustomSearchField";
+import ProjectListView from "./portfolio-projects-list/ProjectListView";
+import ProjectGridView from "./portfolio-projects-list/ProjectGridView";
 
 const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
@@ -20,8 +23,8 @@ const ProjectIndex = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
-
-  const data = [
+  const [openProject, setOpenProject] = useState(false);
+  const filterOption = [
     {
       value: "all",
       label: "All",
@@ -51,16 +54,22 @@ const ProjectIndex = () => {
       label: "Goal Projects",
     },
   ];
-
+    const handleProjectClose = () => {
+      setOpenProject(false);
+    };
+    const handleProjectOpen = () => {
+      setOpenProject(true);
+    };
+  const align = alignment === "list";
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={8} sm={4} md={4} lg={4}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
@@ -71,6 +80,7 @@ const ProjectIndex = () => {
               exclusive
               onChange={handleChangeSwitch}
               aria-label="Platform"
+              sx={{ mx: 1 }}
             >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
@@ -89,7 +99,14 @@ const ProjectIndex = () => {
             </Button>
           </Box>
         </Grid>
-        <Grid item xs={12} lg={9} alignSelf={"center"}>
+        <Grid
+          item
+          xs={4}
+          sm={align ? 8 : 5}
+          md={align ? 8 : 5}
+          lg={align ? 8 : 5}
+          alignSelf={"center"}
+        >
           <Box
             sx={{
               display: "flex",
@@ -101,17 +118,23 @@ const ProjectIndex = () => {
             <CustomFilter
               value={value}
               handleChange={handleChangeRadio}
-              data={data}
+              filterOption={filterOption}
             />
           </Box>
         </Grid>
-        {/* <Grid item xs={12}>
-          {alignment === "list" ? (
-            <ListSection handleGoalOpen={handleGoalOpen} value={value} />
+        {!align && (
+          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+            <CustomSearchField />
+          </Grid>
+        )}
+
+        <Grid item xs={12}>
+          {align ? (
+            <ProjectListView handleOpen={handleProjectOpen} value={value} />
           ) : (
-            <GridSection handleGoalOpen={handleGoalOpen} />
+            <ProjectGridView handleOpen={handleProjectOpen} value={value} />
           )}
-        </Grid> */}
+        </Grid>
       </Grid>
     </Box>
   );

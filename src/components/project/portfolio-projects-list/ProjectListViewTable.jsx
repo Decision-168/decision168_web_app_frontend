@@ -1,22 +1,23 @@
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import {
   Avatar,
+  AvatarGroup,
   Box,
   Chip,
   IconButton,
   Typography,
   useTheme,
 } from "@mui/material";
-import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
+import { stringAvatar } from "../../../helpers/stringAvatar";
+import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
 
-const CustomTable = ({ title, handleOpen, data }) => {
+const ProjectListViewTable = ({ title, handleOpen, data }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
@@ -31,7 +32,7 @@ const CustomTable = ({ title, handleOpen, data }) => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "goals.name",
+        accessorKey: "project.name",
         header: "Goals",
         size: 300,
         minSize: 200,
@@ -54,9 +55,9 @@ const CustomTable = ({ title, handleOpen, data }) => {
             >
               <Avatar
                 sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
-                aria-label="goal"
+                aria-label="project"
               >
-                {...stringAvatar(row.original.goals.name)}
+                {...stringAvatar(row.original.project.name)}
               </Avatar>
               <Box>
                 <Typography
@@ -67,9 +68,9 @@ const CustomTable = ({ title, handleOpen, data }) => {
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  onClick={() => navigate("/goal-overview")}
+                  // onClick={() => navigate("/goal-overview")}
                 >
-                  {row.original.goals.name}
+                  {row?.original?.project?.name}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -79,10 +80,13 @@ const CustomTable = ({ title, handleOpen, data }) => {
                   }}
                   textAlign={"start"}
                 >
-                  {row.original.goals.description}
+                  {row?.original?.project?.description === null
+                    ? "No Description!"
+                    : row?.original?.project?.description}
                 </Typography>
               </Box>
             </Box>
+
             <IconButton aria-label="settings" onClick={handleOpen}>
               <VisibilityOutlined fontSize="small" />
             </IconButton>
@@ -90,56 +94,76 @@ const CustomTable = ({ title, handleOpen, data }) => {
         ),
       },
       {
-        accessorKey: "progress",
-        header: "Progress",
+        accessorKey: "acceptedTeam",
+        header: "Accepted Team",
         size: 150,
         minSize: 75,
         maxSize: 150,
-        Cell: ({ row }) => {
-          return (
-            title === "Created Goals" && (
-              <LinearProgressWithLabel value={row.original.progress} />
-            )
-          );
-        },
-      },
-      {
-        accessorKey: "startDate",
-        header: "Start Date",
-        size: 75,
-        minSize: 40,
-        maxSize: 75,
+        enableSorting: false,
         Cell: ({ row }) => (
-          <Chip
+          <Box
             sx={{
-              height: "auto",
-              color: "#556EE6",
-              "& .MuiChip-label": {
-                display: "block",
-                whiteSpace: "normal",
-              },
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "flex-start",
             }}
-            label={row.original.startDate}
-          />
+          >
+            <AvatarGroup max={5}>
+              {row?.original?.acceptedTeam.map((item, index) => {
+                return (
+                    <Avatar
+                      key={index}
+                      sx={{
+                        bgcolor: theme.palette.primary.main,
+                        color: "black",
+                        width: 32,
+                        height: 32,
+                        fontSize: 15,
+                      }}
+                    >
+                      {...stringAvatar(item)}
+                    </Avatar>
+                );
+              })}
+            </AvatarGroup>
+          </Box>
         ),
       },
       {
-        accessorKey: "endDate",
-        header: "End Date",
-        size: 75,
-        minSize: 40,
-        maxSize: 75,
+        accessorKey: "invitedTeam",
+        header: "Invited Team",
+        size: 150,
+        minSize: 75,
+        maxSize: 150,
+        enableSorting: false,
         Cell: ({ row }) => (
-          <Chip
+          <Box
             sx={{
-              height: "auto",
-              "& .MuiChip-label": {
-                display: "block",
-                whiteSpace: "normal",
-              },
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "flex-start",
             }}
-            label={row.original.endDate}
-          />
+          >
+            <AvatarGroup max={5}>
+              {row?.original?.invitedTeam.map((item, index) => {
+                return (
+                    <Avatar
+                      key={index}
+                      sx={{
+                        bgcolor: theme.palette.secondary.main,
+                        width: 32,
+                        height: 32,
+                        fontSize: 15,
+                      }}
+                    >
+                      {...stringAvatar(item)}
+                    </Avatar>
+                );
+              })}
+            </AvatarGroup>
+          </Box>
         ),
       },
     ],
@@ -226,4 +250,4 @@ const CustomTable = ({ title, handleOpen, data }) => {
   );
 };
 
-export default memo(CustomTable);
+export default memo(ProjectListViewTable);

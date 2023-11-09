@@ -17,6 +17,7 @@ import CustomFilter from "../../../common/CustomFilter";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateGoal from "../create-goals";
 import { openModal } from "../../../../redux/action/modalSlice";
+import CustomSearchField from "../../../common/CustomSearchField";
 
 const ViewGoalsIndex = () => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const ViewGoalsIndex = () => {
     setOpenGoal(true);
   };
 
-  const data = [
+  const filterOption = [
     {
       value: "all",
       label: "All",
@@ -58,15 +59,16 @@ const ViewGoalsIndex = () => {
       label: "More Info Requests",
     },
   ];
+  const align = alignment === "list";
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={8} sm={4} md={4} lg={4}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
@@ -77,6 +79,7 @@ const ViewGoalsIndex = () => {
               exclusive
               onChange={handleChangeSwitch}
               aria-label="Platform"
+              sx={{ mx: 1 }}
             >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
@@ -96,7 +99,14 @@ const ViewGoalsIndex = () => {
             </Button>
           </Box>
         </Grid>
-        <Grid item xs={12} lg={9} alignSelf={"center"}>
+        <Grid
+          item
+          xs={4}
+          sm={align ? 8 : 5}
+          md={align ? 8 : 5}
+          lg={align ? 8 : 5}
+          alignSelf={"center"}
+        >
           <Box
             sx={{
               display: "flex",
@@ -108,12 +118,18 @@ const ViewGoalsIndex = () => {
             <CustomFilter
               value={value}
               handleChange={handleChangeRadio}
-              data={data}
+              filterOption={filterOption}
             />
           </Box>
         </Grid>
+        {!align && (
+          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+            <CustomSearchField />
+          </Grid>
+        )}
+
         <Grid item xs={12}>
-          {alignment === "list" ? (
+          {align ? (
             <ListSection handleGoalOpen={handleGoalOpen} value={value} />
           ) : (
             <GridSection handleGoalOpen={handleGoalOpen} value={value} />

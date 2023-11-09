@@ -2,16 +2,19 @@ import { FilterAlt } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Collapse,
   FormControl,
   FormControlLabel,
+  IconButton,
   Popover,
   Radio,
   RadioGroup,
+  Tooltip,
   useTheme,
 } from "@mui/material";
 import React, { memo } from "react";
 
-const CustomFilter = ({ handleChange, value, data }) => {
+const CustomFilter = ({ handleChange, value, filterOption }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -34,15 +37,12 @@ const CustomFilter = ({ handleChange, value, data }) => {
         flexDirection: "row",
       }}
     >
-      <Button
-        aria-describedby={id}
-        variant="contained"
-        startIcon={<FilterAlt />}
-        size="small"
-        onClick={handleClick}
-      >
-        Open Popover
-      </Button>
+      <Tooltip title="filter" placement="left">
+        <IconButton aria-label="filter" onClick={handleClick}>
+          <FilterAlt />
+        </IconButton>
+      </Tooltip>
+
       <Popover
         id={id}
         open={open}
@@ -53,26 +53,28 @@ const CustomFilter = ({ handleChange, value, data }) => {
           horizontal: "left",
         }}
       >
-        <FormControl sx={{ p: 1 }}>
-          <RadioGroup
-            aria-labelledby="demo-row-radio-buttons-group-label"
-            name="row-radio-buttons-group"
-            value={value}
-            onChange={handleChange}
-          >
-            {data.map((item, index) => {
-              return (
-                <FormControlLabel
-                  key={index}
-                  value={item.value}
-                  control={<Radio size="small" />}
-                  label={item.label}
-                  sx={{ color: theme.palette.secondary.main, fontSize: 13 }}
-                />
-              );
-            })}
-          </RadioGroup>
-        </FormControl>
+        <Collapse in={anchorEl} timeout={10000}>
+          <FormControl sx={{ p: 1 }}>
+            <RadioGroup
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="row-radio-buttons-group"
+              value={value}
+              onChange={handleChange}
+            >
+              {filterOption.map((item, index) => {
+                return (
+                  <FormControlLabel
+                    key={index}
+                    value={item.value}
+                    control={<Radio size="small" />}
+                    label={item.label}
+                    sx={{ color: theme.palette.secondary.main, fontSize: 13 }}
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+        </Collapse>
       </Popover>
     </Box>
   );

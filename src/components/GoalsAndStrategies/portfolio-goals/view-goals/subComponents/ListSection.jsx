@@ -10,7 +10,7 @@ import {
 const CustomTable = lazy(() => import("./CustomTable"));
 
 const tableData = {
-  all: [
+  "all": [
     { title: "Created Goals", data: createData },
     { title: "Accepted Goals", data: acceptedData },
     { title: "Pending Requests", data: pendingRequest },

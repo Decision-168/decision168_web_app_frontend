@@ -1,23 +1,35 @@
 import { Box, Grid } from "@mui/material";
 import React, { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import CustomCard from "./CustomCard";
 import {
   acceptedData,
   createData,
   moreInfoRequest,
   pendingRequest,
-} from "./data";
+} from "./project-data";
+import ProjectCard from "./ProjectCard";
 
 const tableData = {
-  "all": [...createData, ...acceptedData, ...pendingRequest, ...moreInfoRequest],
-  "created-goals": [...createData],
-  "accepted-goals": [...acceptedData],
+  all: [...createData, ...acceptedData, ...pendingRequest, ...moreInfoRequest],
+  created: [...createData],
+  accepted: [...acceptedData],
   "pending-requests": [...pendingRequest],
   "more-info-requests": [...moreInfoRequest],
+  "regular-projects": [
+    { title: "Created Projects", data: createData },
+    { title: "Accepted Projects", data: acceptedData },
+    { title: "Pending Requests", data: pendingRequest },
+    { title: "More Info Requests", data: moreInfoRequest },
+  ],
+  "goal-projects": [
+    { title: "Created Projects", data: createData },
+    { title: "Accepted Projects", data: acceptedData },
+    { title: "Pending Requests", data: pendingRequest },
+    { title: "More Info Requests", data: moreInfoRequest },
+  ],
 };
 
-const GridSection = ({ handleGoalOpen, value }) => {
+const ProjectGridView = ({ handleOpen, value }) => {
   const tablesToRender = tableData[value] || [];
   const navigate = useNavigate();
   const handleRedirect = () => {
@@ -30,11 +42,11 @@ const GridSection = ({ handleGoalOpen, value }) => {
         {tablesToRender.map((item, index) => {
           return (
             <Grid item xs={12} lg={3} key={index}>
-              <CustomCard
+              <ProjectCard
                 value={item.type}
                 item={item}
                 handleClick={handleRedirect}
-                handleOpen={handleGoalOpen}
+                handleOpen={handleOpen}
               />
             </Grid>
           );
@@ -44,4 +56,4 @@ const GridSection = ({ handleGoalOpen, value }) => {
   );
 };
 
-export default memo(GridSection);
+export default memo(ProjectGridView);
