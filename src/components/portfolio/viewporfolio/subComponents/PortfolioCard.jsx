@@ -13,6 +13,9 @@ import AddMemberForm from "./AddMemberForm";
 import AddDepartmentForm from "./AddDepartmentForm";
 import ViewDepartmentTable from "./ViewDepartmentTable";
 import AllMembersTable from "./AllMembersTable";
+import ConfirmationDialog from "../../../common/ConfirmationDialog";
+import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { useDispatch } from "react-redux";
 
 const items = [
   {
@@ -85,6 +88,17 @@ export default function PortfolioCard() {
   const handleCloseViewDepartmentDailog = () => {
     setOpenViewDepartmentDialog(false);
   };
+
+  const dispatch =useDispatch()
+  const handleArchive=()=>{
+        dispatch(
+          openCnfModal({
+            modalName: "archivePortfolio",
+            title: "Are you sure?",
+            description: "You want to Archive Portfolio",
+          })
+        );
+  }
 
   return (
     <Paper elevation={0}>
@@ -195,13 +209,7 @@ export default function PortfolioCard() {
             >
               Members
             </Button>
-            <CustomDialog
-              handleClose={handleCloseMembersDailog}
-              open={openMembersDialog}
-              modalTitle="All Portfolio Members"
-              showModalButton={false}
-              modalSize="md"
-            >
+            <CustomDialog handleClose={handleCloseMembersDailog} open={openMembersDialog} modalTitle="All Portfolio Members" showModalButton={false} modalSize="md">
               <AllMembersTable />
             </CustomDialog>
           </Box>
@@ -247,7 +255,7 @@ export default function PortfolioCard() {
               >
                 Edit
               </MenuItem>
-              <MenuItem onClick={handleClose}>Archive</MenuItem>
+              <MenuItem onClick={handleArchive}>Archive</MenuItem>
               <MenuItem onClick={handleClose}>Delete</MenuItem>
             </Menu>
 
@@ -261,13 +269,7 @@ export default function PortfolioCard() {
               <AddDepartmentForm handleClose={handleCloseDepartmentDailog} />
             </CustomDialog>
 
-            <CustomDialog
-              handleClose={handleCloseViewDepartmentDailog}
-              open={openViewDepartmentDialog}
-              modalTitle="All Portfolio Departments"
-              showModalButton={false}
-              modalSize="md"
-            >
+            <CustomDialog handleClose={handleCloseViewDepartmentDailog} open={openViewDepartmentDialog} modalTitle="All Portfolio Departments" showModalButton={false} modalSize="md">
               <ViewDepartmentTable />
             </CustomDialog>
           </Box>
@@ -277,6 +279,7 @@ export default function PortfolioCard() {
           <CustomAvatarGroup />
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"archivePortfolio"} />
     </Paper>
   );
 }

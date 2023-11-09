@@ -20,8 +20,8 @@ const PortfolioView = lazy(() =>
 const CreateEditPortfolio = lazy(() =>
   import("../components/portfolio/createEditPortfolio")
 );
-const ViewGoals = lazy(() =>
-  import("../components/GoalsAndStrategies/view-goals")
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
 );
 const GoalsOverview = lazy(() =>
   import("../components/GoalsAndStrategies/goals-overview")
@@ -29,9 +29,9 @@ const GoalsOverview = lazy(() =>
 const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
-const Notes = lazy(() => import("../components/notes"));
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
+const Tasks = lazy(() => import("../components/Tasks"));
 const RouteIndex = () => {
   return (
     <Router>
@@ -106,7 +106,7 @@ const RouteIndex = () => {
             path="/portfolio-goals"
             element={
               <DashboardLayout>
-                <ViewGoals />
+                <PortfolioGoals />
               </DashboardLayout>
             }
           />
@@ -118,7 +118,15 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
+            <Route
+            path="/portfolio-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+            <Route
             path="/kpi-overview"
             element={
               <DashboardLayout>
@@ -127,14 +135,6 @@ const RouteIndex = () => {
             }
           />
         </Route>
-        <Route
-          path="/notes"
-          element={
-            <DashboardLayout>
-              <Notes />
-            </DashboardLayout>
-          }
-        />
         <Route
           path="/archive"
           element={

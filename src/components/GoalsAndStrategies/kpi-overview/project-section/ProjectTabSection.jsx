@@ -1,44 +1,16 @@
 import React, { memo, useState } from "react";
-import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { Checkbox, FormControlLabel, useTheme } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  useTheme,
+  Tabs,
+  Tab,
+  Typography,
+  Box,
+} from "@mui/material";
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
+import { CustomTabPanel, a11yProps } from "../../subComponents/style-functions";
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3, textAlign: "start" }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
 
 const ProjectTabSection = ({}) => {
   const [value, setValue] = useState(0);
@@ -153,7 +125,7 @@ const ProjectTabSection = ({}) => {
             color: theme.palette.secondary.main,
             fontSize: 13,
             fontWeight: "500",
-            display:'block'
+            display: "block",
           }}
         />
       </CustomTabPanel>
