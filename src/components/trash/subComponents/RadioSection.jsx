@@ -59,6 +59,12 @@ const RadioSection = ({ handleChange, value }) => {
             sx={{ color: theme.palette.secondary.main }}
           />
           <FormControlLabel
+            value="file"
+            control={<Radio />}
+            label="Files"
+            sx={{ color: theme.palette.secondary.main }}
+          />
+          <FormControlLabel
             value="content"
             control={<Radio />}
             label="Content"
