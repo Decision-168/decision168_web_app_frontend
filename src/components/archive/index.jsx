@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import RadioSection from "./subComponents/RadioSection";
-import FilterTable from "./subComponents/FilterTable";
+import ArchiveData from "./subComponents/ArchiveData";
 
 const index = () => {
+  const [value, setValue] = useState("all");
+  const handleChangeRadio = useCallback((event) => {
+    setValue(event.target.value);
+  }, []);
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -21,14 +25,13 @@ const index = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9}>
-          <RadioSection />
+          <RadioSection value={value} handleChange={handleChangeRadio} />
         </Grid>
-        <Grid item xs={12}>
-          <FilterTable/>
-        </Grid>
+        <Grid item xs={12} lg={12}>
+            <ArchiveData value={value} />
+          </Grid>
       </Grid>
     </Box>
   );
 };
-
 export default index;

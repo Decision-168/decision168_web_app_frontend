@@ -9,45 +9,8 @@ import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
 
 //nested data is ok, see accessorKeys in ColumnDef below
-const data = [
-  {
-    portfolio: "Uzma Karjikar",
-    archived: "Task 1",
-    title: "Task 1 title",
-    type: "Project",
-    date: "2023-04-30",
-  },
-  {
-    portfolio: "Uzma K",
-    archived: "Task 2",
-    title: "Task 2 title",
-    type: "Goal",
-    date: "2023-04-30",
-  },
-  {
-    portfolio: "Uzma K",
-    archived: "Task 3",
-    title: "Task 3 title",
-    type: "KPI",
-    date: "2023-04-30",
-  },
-  {
-    portfolio: "Uzma K",
-    archived: "Task 4",
-    title: "Task 4 title",
-    type: "Task",
-    date: "2023-04-30",
-  },
-  {
-    portfolio: "Uzma K",
-    archived: "Task 5",
-    title: "Task 5 title",
-    type: "Subtask",
-    date: "2023-04-30",
-  },
-];
 
-const FilterTable = () => {
+const FilterTable = ({ array_data, array_columns, value }) => {
   const dispatch = useDispatch();
   const handleReopen = (type) => {
     dispatch(
@@ -58,43 +21,45 @@ const FilterTable = () => {
       })
     );
   };
-  //should be memoized or stable
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "portfolio",
-        header: "Portfolio",
-        enableEditing: false,
-      },
-      {
-        accessorKey: "archived",
-        header: "Archived",
-        enableEditing: false,
-      },
-      {
-        accessorKey: "title",
-        header: "Title",
-        enableEditing: false,
-      },
-      {
-        accessorKey: "type",
-        header: "Type",
-        enableEditing: false,
-      },
-      {
-        accessorKey: "date",
-        header: "Date",
-        enableEditing: false,
-      },
-    ],
-    []
-  );
 
+  //should be memoized or stable
+  const data = useMemo(() => array_data, [value]);
+  const columns = useMemo(() => array_columns, [value]);
   const table = useMaterialReactTable({
     columns,
     data,
-    enableRowActions: true,
+    enableColumnActions: false,
+    enableDensityToggle: false,
+    enableFullScreenToggle: false,
+    enableHiding: false,
+    initialState: {
+      pagination: { pageSize: 10, pageIndex: 0 },
+      showGlobalFilter: true,
+    },
+    paginationDisplayMode: "pages",
+    muiSearchTextFieldProps: {
+      size: "small",
+      variant: "outlined",
+    },
+    muiPaginationProps: {
+      color: "primary",
+      rowsPerPageOptions: [10, 25, 50, 100],
+      shape: "rounded",
+      variant: "outlined",
+    },
+    muiTableProps: {
+      sx: {
+        padding: 0.5,
+      },
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        backgroundColor: "#f5f5f5",
+      },
+    },
+    columnFilterDisplayMode: "popover",
     positionActionsColumn: "last",
+    enableRowActions: true,
     renderRowActions: ({ row }) => [
       <Box
         sx={{
@@ -111,34 +76,13 @@ const FilterTable = () => {
         </Button>
       </Box>,
     ],
-    enableColumnActions: false,
-    enableDensityToggle: false,
-    enableFullScreenToggle: false,
-    enableHiding: false,
-    muiPaginationProps: {
-      rowsPerPageOptions: [10, 25, 50, 100],
-      variant: "outlined",
-    },
-    // muiTableProps: {
-    //   sx: {
-    //     border: "1px solid #eff2f7",
-    //   },
-    // },
-    muiTableHeadCellProps: {
-      sx: {
-        backgroundColor: "#f5f5f5",
-      },
-    },
-    // muiTableBodyCellProps: {
-    //   sx: {
-    //     border: "1px solid #eff2f7",
-    //   },
-    // },
-    columnFilterDisplayMode: 'popover',
   });
   return (
     <Box>
-      <MaterialReactTable table={table} />
+      <MaterialReactTable
+        sx={{ "& .MuiTable-root": { size: 130 } }}
+        table={table}
+      />
       <ConfirmationDialog value={"reopenModule"} />
     </Box>
   );
