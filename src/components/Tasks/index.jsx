@@ -4,7 +4,6 @@ import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
-import RadioSection from "../GoalsAndStrategies/view-goals/subComponents/RadioSection";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../redux/action/modalSlice";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";

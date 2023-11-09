@@ -1,15 +1,20 @@
 import React, { memo, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Add, Groups } from "@mui/icons-material";
-import { Box, IconButton, Tooltip } from "@mui/material";
-import ChildAccordion from "./ChildAccordion";
+import { Add, Groups, ExpandMore } from "@mui/icons-material";
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Typography,
+  AccordionDetails,
+  AccordionSummary,
+  Accordion,
+} from "@mui/material";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
+import AddMemberDialog from "./AddMemberDialog";
+import ReduxDialog from "../../../common/ReduxDialog";
+import MembersChildAccordion from "./MembersChildAccordion";
 
 const BasicAccordion = ({}) => {
   const [expanded, setExpanded] = useState("acceptedBy");
@@ -18,10 +23,10 @@ const BasicAccordion = ({}) => {
   };
   const dispatch = useDispatch();
   return (
-    <div>
+    <Box sx={{ borderRadius: 1 }}>
       <Accordion elevation={0}>
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMore />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -103,35 +108,35 @@ const BasicAccordion = ({}) => {
               Uzma Karjikar
             </Typography>
           </Box>
-          <ChildAccordion
+          <MembersChildAccordion
             value={"acceptedBy"}
             expanded={expanded}
             handleChange={() => handleChange("acceptedBy")}
             title={"Request Accepted By:"}
             bgColor={"#d6f3e9"}
           />
-          <ChildAccordion
+          <MembersChildAccordion
             value={"sentTo"}
             expanded={expanded}
             handleChange={() => handleChange("sentTo")}
             title={"Request Sent To:"}
             bgColor={"#fcf0db"}
           />
-          <ChildAccordion
+          <MembersChildAccordion
             value={"invited"}
             expanded={expanded}
             handleChange={() => handleChange("invited")}
             title={"Invited Members:"}
             bgColor={"#fde1e1"}
           />
-          <ChildAccordion
+          <MembersChildAccordion
             value={"suggested"}
             expanded={expanded}
             handleChange={() => handleChange("suggested")}
             title={"Suggested Members:"}
             bgColor={"#dde2fa"}
           />
-          <ChildAccordion
+          <MembersChildAccordion
             value={"suggested-invite"}
             expanded={expanded}
             handleChange={() => handleChange("suggested-invite")}
@@ -142,7 +147,15 @@ const BasicAccordion = ({}) => {
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />
       <ConfirmationDialog value={"assignManager"} />
-    </div>
+      <ReduxDialog
+        value="add-team-members"
+        modalTitle="Add Team Members"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <AddMemberDialog />
+      </ReduxDialog>
+    </Box>
   );
 };
 

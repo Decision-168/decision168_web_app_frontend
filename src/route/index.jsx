@@ -14,12 +14,22 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
-const ViewGoals = lazy(() => import("../components/GoalsAndStrategies/view-goals"));
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Tasks = lazy(() => import("../components/Tasks"));
-
 const RouteIndex = () => {
   return (
     <Router>
@@ -94,7 +104,7 @@ const RouteIndex = () => {
             path="/portfolio-goals"
             element={
               <DashboardLayout>
-                <ViewGoals />
+                <PortfolioGoals />
               </DashboardLayout>
             }
           />
@@ -106,11 +116,19 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
+            <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
                 <Tasks />
+              </DashboardLayout>
+            }
+          />
+            <Route
+            path="/kpi-overview"
+            element={
+              <DashboardLayout>
+                <KPIOverview />
               </DashboardLayout>
             }
           />

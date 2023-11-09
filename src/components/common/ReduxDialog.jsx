@@ -33,7 +33,6 @@ const ReduxDialog = ({
   return (
     <BootstrapDialog
       maxWidth={modalSize}
-      minWidth={modalSize}
       fullWidth={true}
       onClose={() => dispatch(closeModal())}
       aria-labelledby="customized-dialog-title"

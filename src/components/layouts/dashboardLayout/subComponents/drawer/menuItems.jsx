@@ -36,14 +36,14 @@ export const menuItems = [
   { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
   { icon: <AccountTree />, text: "Projects", link: "/projects" },
   { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/portfolio-tasks-list" },
-  { icon: <Notes />, text: "Notes", link: "/notes" },
+  // { icon: <Notes />, text: "Notes", link: "/notes" },
   // {
   //   icon: <DashboardCustomize />,
   //   text: "Content Planner",
   //   link: "/content-planner",
   // },
   { icon: <Description />, text: "File Cabinet", link: "/file-cabinet" },
-  { icon: <LibraryBooks />, text: "My Report", link: "/reports" },
+  // { icon: <LibraryBooks />, text: "My Report", link: "/reports" },
   // {
   //   icon: <Diversity3 />,
   //   text: "Community",
