@@ -4,7 +4,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Copyright from "../dashboardLayout/subComponents/footer/Copyright"
-import { useTheme } from "@mui/material/styles";
 import DesktopAppBar from "./subComponents/appBar/DesktopAppBar";
 import Hidden from "@mui/material/Hidden";
 import TabletMobileAppBar from "./subComponents/appBar/TabletMobileAppBar";

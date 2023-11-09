@@ -5,7 +5,6 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 
-
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -30,6 +29,7 @@ const GoalsOverview = lazy(() =>
 const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
+const Project = lazy(() => import("../components/project"));
 const RouteIndex = () => {
   return (
     <Router>
@@ -121,6 +121,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <KPIOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-projects-list"
+            element={
+              <DashboardLayout>
+                <Project />
               </DashboardLayout>
             }
           />

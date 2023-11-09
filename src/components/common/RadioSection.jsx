@@ -33,9 +33,9 @@ const RadioSection = ({ handleChange, value,data }) => {
               <FormControlLabel
                 key={index}
                 value={item.value}
-                control={<Radio />}
+                control={<Radio size="small" />}
                 label={item.label}
-                sx={{ color: theme.palette.secondary.main }}
+                sx={{ color: theme.palette.secondary.main,fontSize:13 }}
               />
             );
           })}

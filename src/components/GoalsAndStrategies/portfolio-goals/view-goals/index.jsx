@@ -87,16 +87,21 @@ const ViewGoalsIndex = () => {
             </ToggleButtonGroup>
             <Button
               variant="contained"
-              startIcon={<Add />}
+              startIcon={<Add fontSize="small" />}
               size="small"
+              sx={{ fontSize: 12 }}
               onClick={() => dispatch(openModal("create-goals-kpis"))}
             >
               Create New
             </Button>
           </Box>
         </Grid>
-        <Grid item xs={12} lg={9}>
-          <RadioSection value={value} handleChange={handleChangeRadio} data={data}/>
+        <Grid item xs={12} lg={9} alignSelf={"center"}>
+          <RadioSection
+            value={value}
+            handleChange={handleChangeRadio}
+            data={data}
+          />
         </Grid>
         <Grid item xs={12}>
           {alignment === "list" ? (
