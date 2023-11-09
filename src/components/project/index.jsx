@@ -9,7 +9,7 @@ import { useState, useCallback } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
-import RadioSection from "../common/RadioSection";
+import CustomFilter from "../common/CustomFilter";
 
 const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
@@ -55,7 +55,7 @@ const ProjectIndex = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={5} lg={3}>
+        <Grid item xs={12} lg={3}>
           <Box
             sx={{
               display: "flex",
@@ -90,11 +90,20 @@ const ProjectIndex = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9} alignSelf={"center"}>
-          <RadioSection
-            value={value}
-            handleChange={handleChangeRadio}
-            data={data}
-          />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <CustomFilter
+              value={value}
+              handleChange={handleChangeRadio}
+              data={data}
+            />
+          </Box>
         </Grid>
         {/* <Grid item xs={12}>
           {alignment === "list" ? (

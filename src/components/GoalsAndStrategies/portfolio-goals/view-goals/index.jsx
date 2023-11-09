@@ -13,7 +13,7 @@ import ListSection from './subComponents/ListSection'
 import CustomDialog from "../../../common/CustomDialog";
 import ViewGoalsPopup from "../../subComponents/ViewGoalsPopup";
 import GridSection from "./subComponents/GridSection";
-import RadioSection from "../../../common/RadioSection";
+import CustomFilter from "../../../common/CustomFilter";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateGoal from "../create-goals";
 import { openModal } from "../../../../redux/action/modalSlice";
@@ -97,11 +97,20 @@ const ViewGoalsIndex = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9} alignSelf={"center"}>
-          <RadioSection
-            value={value}
-            handleChange={handleChangeRadio}
-            data={data}
-          />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <CustomFilter
+              value={value}
+              handleChange={handleChangeRadio}
+              data={data}
+            />
+          </Box>
         </Grid>
         <Grid item xs={12}>
           {alignment === "list" ? (
