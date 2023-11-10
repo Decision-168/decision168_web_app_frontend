@@ -7,8 +7,13 @@ import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useCallback } from "react";
 import GridSection from "./subComponents/GridSection";
 import RadioSection from "./subComponents/RadioSection";
-// import TreeSection from "./subComponents/TreeSection";
+import TreeSection from "./subComponents/TreeSection";
+import RecentFiles from "./subComponents/RecentFiles";
+import CustomDialog from "../common/CustomDialog";
+import ViewGoalsPopup from "../GoalsAndStrategies/subComponents/ViewGoalsPopup";
 const FileCabinet = () => {
+  const [openGoal, setOpenGoal] = useState(false);
+
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
 
@@ -19,28 +24,12 @@ const FileCabinet = () => {
     setValue(event.target.value);
   }, []);
 
-  const treedata = [
-    {
-      id: 0,
-      name: 'Root',
-      children: [
-        {
-          id: 1,
-          name: 'Child 1',
-          children: [
-            {
-              id: 2,
-              name: 'Child 2',
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: 'Child 3',
-        },
-      ],
-    },
-  ];
+  const handleGoalClose = () => {
+    setOpenGoal(false);
+  };
+  const handleGoalOpen = () => {
+    setOpenGoal(true);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -74,14 +63,25 @@ const FileCabinet = () => {
         <Grid item xs={12} lg={9}>
           <RadioSection value={value} handleChange={handleChangeRadio} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} lg={9}>
           {alignment === "list" ? (
-            <TreeSection nodes={treedata} value={value} />
+            <TreeSection handleGoalOpen={handleGoalOpen} value={value} />
           ) : (
             <GridSection value={value} />
           )}
         </Grid>
+        <Grid item xs={12} lg={3}>
+            <RecentFiles/>
+        </Grid>
       </Grid>
+      <CustomDialog
+        handleClose={handleGoalClose}
+        open={openGoal}
+        modalTitle="Demo Goal"
+        modalSize="md"
+      >
+        <ViewGoalsPopup />
+      </CustomDialog>
     </Box>
   );
 };

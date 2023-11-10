@@ -21,17 +21,47 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function CustomDialog({ children, handleClose, open, modalTitle, showModalButton, modalSize,redirectPath }) {
+export default function CustomDialog({
+  children,
+  handleClose,
+  open,
+  modalTitle,
+  showModalButton,
+  modalSize,
+  redirectPath,
+}) {
   const theme = useTheme();
   return (
     <div>
-      <BootstrapDialog maxWidth={modalSize}  onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "left", alignItems: "center", borderTop: `5px solid ${theme.palette.primary.main} ` }} id="customized-dialog-title">
+      <BootstrapDialog
+        maxWidth={modalSize}
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle
+          sx={{
+            m: 0,
+            p: 2,
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            borderTop: `5px solid ${theme.palette.primary.main} `,
+          }}
+          id="customized-dialog-title"
+        >
           <Typography component="h6" variant="subtitle2" mr={2}>
             {modalTitle}
           </Typography>
-
-          {showModalButton && <CustomLinkButton path={redirectPath} text="Open" />}
+          {window.location.pathname === "/file-cabinet" ? (
+            <Button size="small" variant="contained">Reopen</Button>
+          ) : (
+            <>
+              {showModalButton && (
+                <CustomLinkButton path={redirectPath} text="Open" />
+              )}
+            </>
+          )}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -41,11 +71,12 @@ export default function CustomDialog({ children, handleClose, open, modalTitle, 
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
-          }}>
+          }}
+        >
           <CloseIcon />
         </IconButton>
 
-        <DialogContent dividers >{children}</DialogContent>
+        <DialogContent dividers>{children}</DialogContent>
 
         {/* <DialogActions>
           <Button autoFocus onClick={handleClose} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
