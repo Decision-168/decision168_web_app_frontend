@@ -1,6 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { Fragment, useState } from "react";
-import CustomSearchField from "../../subComponents/CustomSearchField";
 import KPIAccordion from "./subComponents/KPIAccordion";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Add } from "@mui/icons-material";
@@ -8,6 +7,7 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import KPIs from "../../portfolio-goals/create-goals/subComponents/KPIs";
+import CustomSearchField from "../../../common/CustomSearchField";
 const KPISection = () => {
   const data = [1, 2];
   const [inputFields, setInputFields] = useState([]);

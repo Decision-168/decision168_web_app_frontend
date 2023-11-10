@@ -35,7 +35,7 @@ export const menuItems = [
   { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
   { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
   { icon: <AccountTree />, text: "Projects", link: "/portfolio-projects-list" },
-  { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/tasks" },
+  { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/portfolio-tasks-list" },
   // { icon: <Notes />, text: "Notes", link: "/notes" },
   // {
   //   icon: <DashboardCustomize />,

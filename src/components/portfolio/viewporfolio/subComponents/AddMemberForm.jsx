@@ -78,13 +78,4 @@ export default function AddMemberForm({ handleClose }) {
   );
 }
 
-{
-  /* <CustomTextField
-                  name="email"
-                  placeholder="Enter email id to invite portfolio member..."
-                  register={register}
-                  errors={errors}
-                  value={inputField.email}
-                  validation={authValidations.email} // Pass the validation rules as a prop
-                /> */
-}
+

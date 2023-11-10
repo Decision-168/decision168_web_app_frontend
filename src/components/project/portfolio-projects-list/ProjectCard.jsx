@@ -97,7 +97,7 @@ const ProjectCard = ({ item, handleClick, handleOpen, value }) => {
         }}
       >
         <AvatarGroup max={5}>
-          {item?.acceptedTeam.map((it, index) => {
+          {item?.acceptedTeam?.map((it, index) => {
             return (
               <Avatar
                 key={index}

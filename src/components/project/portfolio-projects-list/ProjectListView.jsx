@@ -9,15 +9,15 @@ import {
 import ProjectListViewTable from "./ProjectListViewTable";
 
 const tableData = {
-  all: [
+  "all": [
     { title: "Created Projects", data: createData },
     { title: "Accepted Projects", data: acceptedData },
     { title: "Pending Requests", data: pendingRequest },
     { title: "More Info Requests", data: moreInfoRequest },
   ],
-  created: [{ title: "Created Projects", data: createData }],
-  accepted: [{ title: "Accepted Projects", data: acceptedData }],
-  pending: [{ title: "Pending Requests", data: pendingRequest }],
+  "created": [{ title: "Created Projects", data: createData }],
+  "accepted": [{ title: "Accepted Projects", data: acceptedData }],
+  "pending": [{ title: "Pending Requests", data: pendingRequest }],
   "more-info-requests": [
     { title: "More Info Requests", data: moreInfoRequest },
   ],
