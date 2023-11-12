@@ -8,8 +8,9 @@ export const tasks = [
     priority: "high",
     status: "in review",
     dueDate: "2023-11-18",
-    subRows: [{ id: "1A", code: "AC-2822", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18" }, { id: "1B", code: "AC-2999", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18" }],
+    subRows: [{ id: "1A", code: "AC-2822", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", isParentRow: false }, { id: "1B", code: "AC-2999", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", isParentRow: false }],
     subTasksCount: 0,
+    isParentRow: true
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ export const tasks = [
     dueDate: "2023-11-18",
     subRows: [],
     subTasksCount: 0,
+    isParentRow: true
 
   },
 ];

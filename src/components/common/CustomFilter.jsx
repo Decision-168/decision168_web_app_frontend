@@ -1,17 +1,5 @@
 import { FilterAlt } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Collapse,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  Popover,
-  Radio,
-  RadioGroup,
-  Tooltip,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Collapse, FormControl, FormControlLabel, IconButton, Popover, Radio, RadioGroup, Tooltip, useTheme } from "@mui/material";
 import React, { memo } from "react";
 
 const CustomFilter = ({ handleChange, value, filterOption }) => {
@@ -35,8 +23,7 @@ const CustomFilter = ({ handleChange, value, filterOption }) => {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-      }}
-    >
+      }}>
       <Tooltip title="filter" placement="left">
         <IconButton aria-label="filter" onClick={handleClick}>
           <FilterAlt />
@@ -51,26 +38,12 @@ const CustomFilter = ({ handleChange, value, filterOption }) => {
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
-        }}
-      >
+        }}>
         <Collapse in={anchorEl} timeout={10000}>
           <FormControl sx={{ p: 1 }}>
-            <RadioGroup
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              value={value}
-              onChange={handleChange}
-            >
+            <RadioGroup aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" value={value} onChange={handleChange}>
               {filterOption.map((item, index) => {
-                return (
-                  <FormControlLabel
-                    key={index}
-                    value={item.value}
-                    control={<Radio size="small" />}
-                    label={item.label}
-                    sx={{ color: theme.palette.secondary.main, fontSize: 13 }}
-                  />
-                );
+                return <FormControlLabel key={index} value={item.value} control={<Radio size="small" />} label={item.label} sx={{ color: theme.palette.secondary.main, fontSize: 13 }} />;
               })}
             </RadioGroup>
           </FormControl>

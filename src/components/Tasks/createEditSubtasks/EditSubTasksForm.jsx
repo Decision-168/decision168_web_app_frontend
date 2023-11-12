@@ -1,25 +1,22 @@
 import React from "react";
-import { Box, Button, DialogActions, DialogContent, Grid, InputLabel } from "@mui/material";
+import { Box, Button, Chip, DialogActions, DialogContent, Divider, Grid, InputLabel, Paper } from "@mui/material";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { globalValidations } from "../../../utils/GlobalValidation";
 import { useTheme } from "@mui/material/styles";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
-import { useNavigate } from "react-router-dom";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
 import CustomFileInput from "../../common/CustomFileInput";
 import MyDatePicker from "../subComponents/MyDatePicker ";
-import AddAnotherLink from "./AddAnotherLink";
+import AddAnotherLink from "../subComponents/AddAnotherLink";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 
 const projects = [{ label: "project 1" }, { label: "project 2" }, { label: "project 3" }, { label: "project 4" }, { label: "project 5" }, { label: "project 6" }];
-const departments = [{ label: "Admnistration" }, { label: "Accounting & Finanace" }, { label: "AdmnistrCustomer Serviceation" }, { label: "Human Resources" }, { label: "Marketing" }, { label: "Sales" }, { label: "Research & Development" }];
-const portfolios = [{ label: "Portfolio 1" }, { label: "Portfolio 2" }, { label: "Portfolio 3" }, { label: "Portfolio 3" }, { label: "Portfolio 4" }, { label: "Portfolio 5" }, { label: "Portfolio 6" }];
 const priorities = [{ label: "High" }, { label: "Medium" }, { label: "Low" }];
 const assignees = [{ label: "Assign To Me" }, { label: "John Doe" }, { label: "Sam" }, { label: "Jams" }];
 
-export default function CreateTaskForm() {
+export default function EditSubTasksForm() {
   const {
     handleSubmit,
     register,
@@ -38,28 +35,45 @@ export default function CreateTaskForm() {
     alert(`Selected files: ${fileNames}`);
   };
 
-  const navigate = useNavigate();
-
-  // function handleGoBack() {
-  //   navigate(-1);
-  // }
-  // onClick={handleGoBack}
-
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
+  // const onSubmit = (data) => {
+  //   alert(JSON.stringify(data));
+  // };
 
   return (
     <>
       <DialogContent dividers>
-        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+        <Grid container>
+          <Grid item xs={12} sm={6} px={2} py={1}>
+            <CustomLabelTextField
+              label="Task"
+              name="task"
+              required={true}
+              placeholder="Enter Task Name"
+              register={register}
+              errors={errors}
+              validation={globalValidations.task} // Pass the validation rules as a prop
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} px={2} py={1}>
+            <CustomAutocomplete label="Project" options={projects} placeholder="Select Project" required={false} />
+          </Grid>
+        </Grid>
+
+        {/* Sub Task Form */}
+
+        <Divider sx={{ my: 3 }}>
+          <Chip label="Please Edit Subtask Details" />
+        </Divider>
+
+        <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
           <Grid container>
             <Grid item xs={12} sm={6} px={2} py={1}>
               <CustomLabelTextField
-                label="Task"
-                name="task"
+                label="Sub Task"
+                name="subtask"
                 required={true}
-                placeholder="Enter Task Name"
+                placeholder="Enter Subtask Name"
                 register={register}
                 errors={errors}
                 validation={globalValidations.task} // Pass the validation rules as a prop
@@ -67,7 +81,7 @@ export default function CreateTaskForm() {
             </Grid>
 
             <Grid item xs={12} sm={6} px={2} py={1}>
-              <CustomAutocomplete label="Project" options={projects} placeholder="Select Project" required={false} />
+              <MyDatePicker label="Due Date" required={true} sizeWidth="100%" showBorder={true}/>
             </Grid>
 
             <Grid item xs={12} sm={6} px={2} py={1}>
@@ -82,17 +96,6 @@ export default function CreateTaskForm() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} px={2}>
-              <Grid container>
-                <Grid item xs={12} py={1}>
-                  <CustomAutocomplete label="Identify Department" options={departments} placeholder="Select Department" required={true} />
-                </Grid>
-                <Grid item xs={12} py={1}>
-                  <CustomAutocomplete label="Portfolio" options={portfolios} placeholder="Select Portfolio" required={true} />
-                </Grid>
-              </Grid>
-            </Grid>
-
             <Grid item xs={12} sm={6} px={2} py={1}>
               <CustomMultilineTextField
                 label="Note"
@@ -105,23 +108,16 @@ export default function CreateTaskForm() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} px={2}>
-              <Grid container>
-                <Grid item xs={12} py={1}>
-                  <CustomAutocomplete label="Priority" options={priorities} placeholder="Select priority" required={true} />
-                </Grid>
-                <Grid item xs={12} py={1}>
-                  <CustomAutocomplete label="Assignee" options={assignees} placeholder="Select Assignee" required={true} />
-                </Grid>
-              </Grid>
+            <Grid item xs={12} sm={6} px={2} py={1}>
+              <CustomAutocomplete label="Priority" options={priorities} placeholder="Select priority" required={true} />
+            </Grid>
+
+            <Grid item xs={12} sm={6} px={2} py={1}>
+              <CustomAutocomplete label="Assignee" options={assignees} placeholder="Select Assignee" required={true} />
             </Grid>
 
             <Grid item xs={12} sm={6} px={2} py={1}>
               <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
-            </Grid>
-
-            <Grid item xs={12} sm={6} px={2} py={1}>
-              <MyDatePicker label="Due Date" required={true} sizeWidth="100%" />
             </Grid>
 
             <Grid item xs={12} sm={12} px={2} py={2}>
@@ -129,16 +125,18 @@ export default function CreateTaskForm() {
               <AddAnotherLink />
             </Grid>
           </Grid>
-        </Box>
+        </Paper>
       </DialogContent>
+
       <DialogActions>
         <Grid container>
           <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
             <Button onClick={() => dispatch(closeModal())} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
               Close
             </Button>
+
             <Button onClick={displayFilesInAlert} size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
-              Create
+              Save Changes
             </Button>
           </Grid>
         </Grid>

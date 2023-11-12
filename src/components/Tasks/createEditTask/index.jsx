@@ -1,9 +1,7 @@
 import React from "react";
 import { Box, Grid, Paper } from "@mui/material";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
-import CreateTaskForm from "./CreateTaskForm";
-import CustomSelect from "../../common/CustomSelect";
-import { useLocation } from "react-router-dom";
+import CreateEditTaskForm from "./CreateEditTaskForm";
 
 export default function CreateTask() {
   const handleChange = (event) => {
@@ -17,7 +15,7 @@ export default function CreateTask() {
       <Paper elevation={0}>
         <Grid container p={2}>
           <Grid item xs={12}>
-            <CreateTaskForm />
+            <CreateEditTaskForm editMode={false} />
           </Grid>
         </Grid>
       </Paper>

@@ -4,8 +4,11 @@ import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { kanbanColumns } from "./KanbanData";
+import { useNavigate } from "react-router-dom";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const GridSection = () => {
+  const navigate = useNavigate();
   const [columns, setColumns] = React.useState(kanbanColumns);
 
   const onDragEnd = (result, columns, setColumns) => {
@@ -45,6 +48,10 @@ const GridSection = () => {
     }
   };
 
+  const handleRedirect = (event) => {
+    navigate("/tasks-overview");
+  };
+
   return (
     // <Paper sx={{ p: 2, mt: 2 }}>
     <Box sx={{ mt: 2, display: "grid", gap: 2, gridTemplateColumns: "repeat(4, 1fr)" }}>
@@ -59,7 +66,7 @@ const GridSection = () => {
                     ref={provided.innerRef}
                     style={{
                       background: snapshot.isDraggingOver ? "lightgrey" : "white",
-                      padding: 16,
+                      padding: 14,
                       width: "100%",
                       minHeight: 500,
                       margin: "5px 0",
@@ -69,32 +76,36 @@ const GridSection = () => {
                     <KanbanColumnHeader status={column.name} color={column.color} count={column.items.length > 0 ? column.items.length : 0} />
 
                     {/* Column Body */}
-                    <Box sx={{ mt: 2 }}>
-                      {column.items.map((item, index) => {
-                        return (
-                          <Draggable key={item.id} draggableId={item.id} index={index}>
-                            {(provided) => {
-                              return (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  style={{
-                                    userSelect: "none",
-                                    borderRadius: "0.5rem",
-                                    margin: "0 0 8px 0",
-                                    minHeight: "50px",
-                                    color: "white",
-                                    ...provided.draggableProps.style,
-                                  }}>
-                                  <KanbanCard projectName={item.content.projectName} taskDescription={item.content.description} dueDate={item.content.dueDate} code={item.content.code} subTasksCount={item.content.subTasksCount} />
-                                </div>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
+                    <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
+                      <PerfectScrollbar>
+                        <Box sx={{ mr: 2 }}>
+                          {column.items.map((item, index) => {
+                            return (
+                              <Draggable key={item.id} draggableId={item.id} index={index}>
+                                {(provided) => {
+                                  return (
+                                    <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      style={{
+                                        userSelect: "none",
+                                        borderRadius: "0.5rem",
+                                        margin: "0 0 8px 0",
+                                        minHeight: "50px",
+                                        color: "white",
+                                        ...provided.draggableProps.style,
+                                      }}>
+                                      <KanbanCard handleRedirect={handleRedirect} projectName={item.content.projectName} taskDescription={item.content.description} dueDate={item.content.dueDate} code={item.content.code} subTasksCount={item.content.subTasksCount} />
+                                    </div>
+                                  );
+                                }}
+                              </Draggable>
+                            );
+                          })}
+                          {provided.placeholder}
+                        </Box>
+                      </PerfectScrollbar>
                     </Box>
                   </div>
                 );

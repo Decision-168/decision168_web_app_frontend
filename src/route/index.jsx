@@ -4,7 +4,6 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
-import CreateTask from "../components/Tasks/createTask";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -15,25 +14,18 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
-const PortfolioView = lazy(() =>
-  import("../components/portfolio/viewporfolio/")
-);
-const CreateEditPortfolio = lazy(() =>
-  import("../components/portfolio/createEditPortfolio")
-);
-const PortfolioGoals = lazy(() =>
-  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
-);
-const GoalsOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/goals-overview")
-);
-const KPIOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/kpi-overview")
-);
+const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
+const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
+const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
 const Project = lazy(() => import("../components/project"));
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
+const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
+const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
+
 const RouteIndex = () => {
   return (
     <Router>
@@ -132,7 +124,15 @@ const RouteIndex = () => {
             path="/tasks-create"
             element={
               <DashboardLayout>
-                <CreateTask />
+                <CreateEditTask />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/tasks-overview"
+            element={
+              <DashboardLayout>
+                <TaskOverview />
               </DashboardLayout>
             }
           />

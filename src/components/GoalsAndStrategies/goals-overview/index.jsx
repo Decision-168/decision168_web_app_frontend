@@ -12,6 +12,7 @@ import RecentHistory from "../subComponents/history-section/RecentHistory";
 import OverallHistory from "../subComponents/history-section/OverallHistory";
 import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
 import Goal from "../portfolio-goals/create-goals/subComponents/Goal";
+import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 
 const GoalsOverview = () => {
   const theme = useTheme();
@@ -23,45 +24,16 @@ const GoalsOverview = () => {
   };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
+      <BasicBreadcrumbs currentPage="Overview" showBackButton={true} />
+
       <Grid container spacing={1}>
-        <Grid item xs={12} lg={12}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: "row",
-            }}
-          >
-            <Typography
-              component="h6"
-              variant="subtitle2"
-              sx={{
-                color: theme.palette.secondary.dark,
-                textTransform: "uppercase",
-                fontWeight: "bold",
-              }}
-            >
-              OVERVIEW
-            </Typography>
-            <Button
-              variant="contained"
-              startIcon={<ArrowBack />}
-              size="small"
-              sx={{ background: "#383838", color: "#fff", ml: 1 }}
-              onClick={() => navigate("/portfolio-goals")}
-            >
-              Back
-            </Button>
-          </Box>
-        </Grid>
         <Grid item xs={12} lg={8}>
           <Grid container>
             <Grid item xs={12} lg={12}>
               <ViewGoalsPopup />
             </Grid>
             <Grid item xs={12} lg={12}>
-             <KPISection/>
+              <KPISection />
             </Grid>
           </Grid>
         </Grid>
@@ -76,44 +48,19 @@ const GoalsOverview = () => {
           </Grid>
         </Grid>
       </Grid>
-      <ReduxDialog
-        value="create-goals"
-        modalTitle="Edit Goal"
-        showModalButton={false}
-        modalSize="md"
-      >
+      <ReduxDialog value="create-goals" modalTitle="Edit Goal" showModalButton={false} modalSize="md">
         <Goal individual={true} />
       </ReduxDialog>
-      <ReduxDialog
-        value="create-kpis"
-        modalTitle="Add KPIs"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <KPIs
-          individual={true}
-          inputFields={inputFields}
-          setInputFields={setInputFields}
-          handleAddClick={handleAddClick}
-        />
+      <ReduxDialog value="create-kpis" modalTitle="Add KPIs" showModalButton={false} modalSize="sm">
+        <KPIs individual={true} inputFields={inputFields} setInputFields={setInputFields} handleAddClick={handleAddClick} />
       </ReduxDialog>
-   
-      <ReduxDialog
-        value="view-all-history"
-        modalTitle="HISTORY"
-        showModalButton={false}
-        modalSize="md"
-      >
+
+      <ReduxDialog value="view-all-history" modalTitle="HISTORY" showModalButton={false} modalSize="md">
         <OverallHistory />
       </ReduxDialog>
       <ConfirmationDialog value={"fileItGoal"} />
       <ConfirmationDialog value={"deleteGoal"} />
-      <ReduxDialog
-        value="duplicate-goal"
-        modalTitle="Copy Goal"
-        showModalButton={false}
-        modalSize="sm"
-      >
+      <ReduxDialog value="duplicate-goal" modalTitle="Copy Goal" showModalButton={false} modalSize="sm">
         <DuplicateDialog />
       </ReduxDialog>
     </Box>
