@@ -58,6 +58,7 @@ const GoalsOverview = () => {
       <ReduxDialog value="view-all-history" modalTitle="HISTORY" showModalButton={false} modalSize="md">
         <OverallHistory />
       </ReduxDialog>
+      
       <ConfirmationDialog value={"fileItGoal"} />
       <ConfirmationDialog value={"deleteGoal"} />
       <ReduxDialog value="duplicate-goal" modalTitle="Copy Goal" showModalButton={false} modalSize="sm">

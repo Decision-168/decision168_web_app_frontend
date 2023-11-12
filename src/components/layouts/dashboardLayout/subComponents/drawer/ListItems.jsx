@@ -40,7 +40,37 @@ export default function ListItems({ drawerOpen }) {
     //    setOpen(!open);
     //  }
   };
-
+const CustomButton = ({ menuItem }) => {
+  return (
+    <>
+      <ListItemIcon
+        sx={{
+          color:
+            window.location.pathname === menuItem?.link ? "#c7df19" : "#6a7187",
+        }}
+      >
+        {menuItem.icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={
+          <Typography
+            sx={{
+              fontSize: 13,
+              color: window.location.pathname === menuItem?.link && "#c7df19",
+            }}
+          >
+            {menuItem.text}
+          </Typography>
+        }
+      />
+      {menuItem?.subItems?.length > 0 ? (
+        <React.Fragment>
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </React.Fragment>
+      ) : null}
+    </>
+  );
+};
   return (
     <List component="nav" sx={styles.nav}>
       <Typography
@@ -56,30 +86,16 @@ export default function ListItems({ drawerOpen }) {
       </Typography>
       {menuItems?.map((menuItem, index) => (
         <React.Fragment key={index}>
-          <ListItemButton onClick={() => handleClick(menuItem?.link)}>
-            <ListItemIcon sx={{   color:
-                      window.location.pathname === menuItem?.link ? "#c7df19":"#6a7187" }}>
-              {menuItem.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography
-                  sx={{
-                    fontSize: 13,
-                    color:
-                      window.location.pathname === menuItem?.link && "#c7df19",
-                  }}
-                >
-                  {menuItem.text}
-                </Typography>
-              }
-            />
-            {menuItem?.subItems?.length > 0 ? (
-              <React.Fragment>
-                {open ? <ExpandLess /> : <ExpandMore />}
-              </React.Fragment>
-            ) : null}
-          </ListItemButton>
+          {["Help Center", "Support"].includes(menuItem.text) ? (
+            <ListItemButton to={menuItem?.link} component={Link}>
+              <CustomButton menuItem={menuItem} />
+            </ListItemButton>
+          ) : (
+            <ListItemButton onClick={() => handleClick(menuItem?.link)}>
+              <CustomButton menuItem={menuItem} />
+            </ListItemButton>
+          )}
+
           {menuItem?.subItems?.length > 0 && (
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>

@@ -19,6 +19,7 @@ import OverallHistory from "./history-section/OverallHistory";
 import GridList from "./GridList";
 import TitleWithActions from "./TitleWithActions";
 import { description2 } from "./style-functions";
+import CreateProject from "../../project/Dialogs/CreateProject";
 const ViewProjectPopup = ({}) => {
   const theme = useTheme();
 
@@ -49,7 +50,9 @@ const ViewProjectPopup = ({}) => {
   const handleViewHistory = () => {
     dispatch(openModal("view-project-history"));
   };
-
+  const handleEditProject = () => {
+    dispatch(openModal("edit-project"));
+  };
   const CommonLinks = ({ link, linkName }) => {
     return (
       <>
@@ -100,6 +103,7 @@ const ViewProjectPopup = ({}) => {
       <Grid container spacing={2}>
         <TitleWithActions
           title={"Project: Dashboard Module"}
+          handleClick1={handleEditProject}
           handleDelete={handleDelete}
           handleDuplicate={handleDuplicate}
           handleFileIt={handleFileIt}
@@ -171,6 +175,14 @@ const ViewProjectPopup = ({}) => {
         modalSize="md"
       >
         <OverallHistory />
+      </ReduxDialog>
+      <ReduxDialog
+        value="edit-project"
+        modalTitle="Edit Project"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateProject flag="edit" />
       </ReduxDialog>
     </Box>
   );

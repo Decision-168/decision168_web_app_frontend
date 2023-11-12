@@ -35,7 +35,11 @@ export const menuItems = [
   { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
   { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
   { icon: <AccountTree />, text: "Projects", link: "/portfolio-projects-list" },
-  { icon: <AssignmentTurnedIn />, text: "Tasks", link: "/portfolio-tasks-list" },
+  {
+    icon: <AssignmentTurnedIn />,
+    text: "Tasks",
+    link: "/portfolio-tasks-list",
+  },
   // { icon: <Notes />, text: "Notes", link: "/notes" },
   // {
   //   icon: <DashboardCustomize />,
@@ -63,6 +67,14 @@ export const menuItems = [
   // },
   { icon: <Archive />, text: "Archive", link: "/archive" },
   { icon: <DeleteForever />, text: "Trash", link: "/trash" },
-  { icon: <HelpOutline />, text: "Help Center", link: "/help" },
-  { icon: <SupportAgent />, text: "Support", link: "/support" },
+  {
+    icon: <HelpOutline />,
+    text: "Help Center",
+    link: "https://www.decision168.com/help-center/",
+  },
+  {
+    icon: <SupportAgent />,
+    text: "Support",
+    link: "https://support.dev.decision168.com/login",
+  },
 ];

@@ -28,7 +28,7 @@ const RecentList = ({}) => {
               background: "white",
               border: "1px solid #212934",
               borderRadius: "50%",
-              width: 24,
+              width: 16,
               height: 16,
               display: "flex",
               justifyContent: "center",

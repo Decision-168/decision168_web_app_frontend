@@ -110,6 +110,7 @@ export const theme = createTheme({
         },
         input: {
           padding: "7px 10px",
+          font: "revert",
         },
       },
     },

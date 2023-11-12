@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { DisabledByDefaultRounded, PersonAddAlt1 } from "@mui/icons-material";
@@ -38,24 +39,26 @@ const UserList = ({ username, assignManagerFlag }) => {
       sx={{ m: 1, p: 0 }}
       secondaryAction={
         <Box>
-        {
-          assignManagerFlag==="acceptedBy" &&   
-          <IconButton
-            edge="end"
-            aria-label="remove"
-            onClick={() => handleAssignManager(username)}
-          >
-            <PersonAddAlt1 sx={{color:'#c7df19',fontSize: 20, }}/>
-          </IconButton>
-        }
-        
-          <IconButton
-            edge="end"
-            aria-label="remove"
-            onClick={() => handleRemoveUser(username)}
-          >
-            <DisabledByDefaultRounded sx={{fontSize: 20,}}/>
-          </IconButton>
+          {assignManagerFlag === "acceptedBy" && (
+            <Tooltip title="Assign as Manager" placement="left">
+              <IconButton
+                edge="end"
+                aria-label="add"
+                onClick={() => handleAssignManager(username)}
+              >
+                <PersonAddAlt1 sx={{ color: "#c7df19", fontSize: 20 }} />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title="Remove Member" placement="left">
+            <IconButton
+              edge="end"
+              aria-label="remove"
+              onClick={() => handleRemoveUser(username)}
+            >
+              <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
         </Box>
       }
     >
