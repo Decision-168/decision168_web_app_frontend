@@ -16,26 +16,21 @@ const tableData = {
   "pending-requests": [...pendingRequest],
   "more-info-requests": [...moreInfoRequest],
   "regular-projects": [
-    { title: "Created Projects", data: createData },
-    { title: "Accepted Projects", data: acceptedData },
-    { title: "Pending Requests", data: pendingRequest },
-    { title: "More Info Requests", data: moreInfoRequest },
+    ...createData.filter((i) => i.projectType === 0),
+    ...acceptedData.filter((i) => i.projectType === 0),
+    ...pendingRequest.filter((i) => i.projectType === 0),
+    ...moreInfoRequest.filter((i) => i.projectType === 0),
   ],
   "goal-projects": [
-    { title: "Created Projects", data: createData },
-    { title: "Accepted Projects", data: acceptedData },
-    { title: "Pending Requests", data: pendingRequest },
-    { title: "More Info Requests", data: moreInfoRequest },
+    ...createData.filter((i) => i.projectType === 1),
+    ...acceptedData.filter((i) => i.projectType === 1),
+    ...pendingRequest.filter((i) => i.projectType === 1),
+    ...moreInfoRequest.filter((i) => i.projectType === 1),
   ],
 };
 
 const ProjectGridView = ({ handleOpen, value }) => {
   const tablesToRender = tableData[value] || [];
-  const navigate = useNavigate();
-  const handleRedirect = () => {
-    navigate("/goal-overview");
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container mt={2} spacing={2}>
@@ -45,7 +40,6 @@ const ProjectGridView = ({ handleOpen, value }) => {
               <ProjectCard
                 value={item.type}
                 item={item}
-                handleClick={handleRedirect}
                 handleOpen={handleOpen}
               />
             </Grid>

@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -7,7 +7,6 @@ import {
   Avatar,
   AvatarGroup,
   Box,
-  Chip,
   IconButton,
   Typography,
   useTheme,
@@ -15,7 +14,6 @@ import {
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
 
 const ProjectListViewTable = ({ title, handleOpen, data }) => {
   const theme = useTheme();
@@ -68,7 +66,7 @@ const ProjectListViewTable = ({ title, handleOpen, data }) => {
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  // onClick={() => navigate("/goal-overview")}
+                  onClick={() => navigate("/projects-overview")}
                 >
                   {row?.original?.project?.name}
                 </Typography>
@@ -112,18 +110,18 @@ const ProjectListViewTable = ({ title, handleOpen, data }) => {
             <AvatarGroup max={5}>
               {row?.original?.acceptedTeam.map((item, index) => {
                 return (
-                    <Avatar
-                      key={index}
-                      sx={{
-                        bgcolor: theme.palette.primary.main,
-                        color: "black",
-                        width: 32,
-                        height: 32,
-                        fontSize: 15,
-                      }}
-                    >
-                      {...stringAvatar(item)}
-                    </Avatar>
+                  <Avatar
+                    key={index}
+                    sx={{
+                      bgcolor: theme.palette.primary.main,
+                      color: "black",
+                      width: 32,
+                      height: 32,
+                      fontSize: 15,
+                    }}
+                  >
+                    {...stringAvatar(item)}
+                  </Avatar>
                 );
               })}
             </AvatarGroup>
@@ -149,17 +147,17 @@ const ProjectListViewTable = ({ title, handleOpen, data }) => {
             <AvatarGroup max={5}>
               {row?.original?.invitedTeam.map((item, index) => {
                 return (
-                    <Avatar
-                      key={index}
-                      sx={{
-                        bgcolor: theme.palette.secondary.main,
-                        width: 32,
-                        height: 32,
-                        fontSize: 15,
-                      }}
-                    >
-                      {...stringAvatar(item)}
-                    </Avatar>
+                  <Avatar
+                    key={index}
+                    sx={{
+                      bgcolor: theme.palette.secondary.main,
+                      width: 32,
+                      height: 32,
+                      fontSize: 15,
+                    }}
+                  >
+                    {...stringAvatar(item)}
+                  </Avatar>
                 );
               })}
             </AvatarGroup>

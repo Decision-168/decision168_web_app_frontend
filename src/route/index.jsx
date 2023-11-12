@@ -31,9 +31,13 @@ const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
 const Project = lazy(() => import("../components/project"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
+
 const RouteIndex = () => {
   return (
     <Router>
@@ -152,23 +156,32 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+          <Route
+            path="/projects-overview"
+            element={
+              <DashboardLayout>
+                <ProjectOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/archive"
+            element={
+              <DashboardLayout>
+                <Archive />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <DashboardLayout>
+                <Trash />
+              </DashboardLayout>
+            }
+          />
         </Route>
-        <Route
-          path="/archive"
-          element={
-            <DashboardLayout>
-              <Archive />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/trash"
-          element={
-            <DashboardLayout>
-              <Trash />
-            </DashboardLayout>
-          }
-        />
+
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />

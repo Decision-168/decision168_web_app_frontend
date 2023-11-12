@@ -13,15 +13,15 @@ import {
   AvatarGroup,
 } from "@mui/material";
 import { stringAvatar } from "../../../helpers/stringAvatar";
+import { useNavigate } from "react-router-dom";
 
-const ProjectCard = ({ item, handleClick, handleOpen, value }) => {
+const ProjectCard = ({ item, handleOpen, value }) => {
   const theme = useTheme();
-
+  const navigate = useNavigate()
   return (
     <Card
       sx={{
         maxWidth: "100%",
-
         borderLeft:
           value === "accepted-project"
             ? `7px solid ${theme.palette.secondary.main}`
@@ -30,7 +30,7 @@ const ProjectCard = ({ item, handleClick, handleOpen, value }) => {
       }}
     >
       <CardActionArea
-        // onClick={handleClick}
+        onClick={() => navigate("/projects-overview")}
         sx={{
           borderRadius: 0,
           height: "120px",
@@ -114,9 +114,7 @@ const ProjectCard = ({ item, handleClick, handleOpen, value }) => {
             );
           })}
         </AvatarGroup>
-        <IconButton aria-label="settings" 
-        // onClick={handleOpen}
-        >
+        <IconButton aria-label="settings" onClick={handleOpen}>
           <VisibilityOutlined fontSize="small" />
         </IconButton>
       </CardActions>

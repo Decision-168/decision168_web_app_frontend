@@ -71,7 +71,7 @@ export const CustomTabPanel=(props)=> {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3, textAlign: "start" }}>
+        <Box sx={{  px: 1,py:2, textAlign: "start" }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -96,11 +96,15 @@ export const LinearProgressWithLabel=(props)=> {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Box sx={{ width: "100%", mr: 1 }}>
-        <LinearProgress variant="determinate" {...props} />
+        <LinearProgress
+          variant="determinate"
+          sx={{ height: 10, borderRadius: 5 }}
+          {...props}
+        />
       </Box>
       <Box sx={{ minWidth: 35 }}>
         <Typography variant="body2" color="text.secondary">
-          {props?.value}
+          {props?.value + "%"}
         </Typography>
       </Box>
     </Box>

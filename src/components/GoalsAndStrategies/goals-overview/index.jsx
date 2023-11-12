@@ -23,13 +23,13 @@ const GoalsOverview = () => {
   };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item xs={12} lg={12}>
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
@@ -39,7 +39,9 @@ const GoalsOverview = () => {
               sx={{
                 color: theme.palette.secondary.dark,
                 textTransform: "uppercase",
-                fontWeight: "bold",
+                fontWeight: "600",
+                fontSize: "16px",
+                mx: 1,
               }}
             >
               OVERVIEW
@@ -61,7 +63,7 @@ const GoalsOverview = () => {
               <ViewGoalsPopup />
             </Grid>
             <Grid item xs={12} lg={12}>
-             <KPISection/>
+              <KPISection />
             </Grid>
           </Grid>
         </Grid>
@@ -97,7 +99,7 @@ const GoalsOverview = () => {
           handleAddClick={handleAddClick}
         />
       </ReduxDialog>
-   
+
       <ReduxDialog
         value="view-all-history"
         modalTitle="HISTORY"

@@ -97,7 +97,7 @@ const ProjectAccordion = ({}) => {
         handleClose={handleProjectClose}
         open={openProject}
         modalTitle="Dashboard Module"
-        // redirectPath={"/kpi-overview"}
+        redirectPath={"/projects-overview"}
         showModalButton={true}
         modalSize="md"
       >

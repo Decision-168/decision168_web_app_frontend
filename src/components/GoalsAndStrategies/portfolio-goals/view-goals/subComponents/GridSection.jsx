@@ -10,7 +10,7 @@ import {
 } from "./data";
 
 const tableData = {
-  "all": [...createData, ...acceptedData, ...pendingRequest, ...moreInfoRequest],
+  all: [...createData, ...acceptedData, ...pendingRequest, ...moreInfoRequest],
   "created-goals": [...createData],
   "accepted-goals": [...acceptedData],
   "pending-requests": [...pendingRequest],
@@ -19,10 +19,6 @@ const tableData = {
 
 const GridSection = ({ handleGoalOpen, value }) => {
   const tablesToRender = tableData[value] || [];
-  const navigate = useNavigate();
-  const handleRedirect = () => {
-    navigate("/goal-overview");
-  };
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -33,7 +29,6 @@ const GridSection = ({ handleGoalOpen, value }) => {
               <CustomCard
                 value={item.type}
                 item={item}
-                handleClick={handleRedirect}
                 handleOpen={handleGoalOpen}
               />
             </Grid>
