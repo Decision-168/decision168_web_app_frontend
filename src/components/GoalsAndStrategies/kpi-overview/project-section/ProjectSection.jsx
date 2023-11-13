@@ -1,9 +1,9 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { Fragment } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import CustomSearchField from "../../subComponents/CustomSearchField";
 import ProjectAccordion from "./ProjectAccordion";
 import { Add } from "@mui/icons-material";
+import CustomSearchField from "../../../common/CustomSearchField";
 const ProjectSection = () => {
   const data = [1, 2];
   return (

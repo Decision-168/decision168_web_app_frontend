@@ -53,15 +53,7 @@ export default function CustomDialog({
           <Typography component="h6" variant="subtitle2" mr={2}>
             {modalTitle}
           </Typography>
-          {window.location.pathname === "/file-cabinet" ? (
-            <Button size="small" variant="contained">Reopen</Button>
-          ) : (
-            <>
-              {showModalButton && (
-                <CustomLinkButton path={redirectPath} text="Open" />
-              )}
-            </>
-          )}
+          {showModalButton && ( <CustomLinkButton path={redirectPath} text="Open" /> )}
         </DialogTitle>
         <IconButton
           aria-label="close"

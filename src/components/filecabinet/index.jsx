@@ -1,19 +1,19 @@
-import { Box, Grid, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
-import { useCallback } from "react";
-import GridSection from "./subComponents/GridSection";
-import RadioSection from "./subComponents/RadioSection";
-import TreeSection from "./subComponents/TreeSection";
-import RecentFiles from "./subComponents/RecentFiles";
-import CustomDialog from "../common/CustomDialog";
-import ViewGoalsPopup from "../GoalsAndStrategies/subComponents/ViewGoalsPopup";
-const FileCabinet = () => {
-  const [openGoal, setOpenGoal] = useState(false);
+import { Box, Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { FormatListBulleted, GridView } from "@mui/icons-material";
+import GridSection from "./sections/GridSection";
+import RadioSection from "./sections/RadioSection";
+import TreeSection from "./sections/TreeSection";
+import RecentFiles from "./sections/RecentFiles";
+import GoalPopup from "./popup/GoalPopup";
+import CustomPopup from "./subComponents/CustomPopup";
+import KpiPopup from "./popup/KpiPopup";
+import ProjectPopup from "./popup/ProjectPopup";
 
+const FileCabinet = () => {
+  const [openModule, setOpenModule] = useState(false);
+  const [nodesData, setNodesData] = useState([]);
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
 
@@ -24,11 +24,16 @@ const FileCabinet = () => {
     setValue(event.target.value);
   }, []);
 
-  const handleGoalClose = () => {
-    setOpenGoal(false);
+  const handleModuleClose = () => {
+    setOpenModule(false);
   };
-  const handleGoalOpen = () => {
-    setOpenGoal(true);
+  const handleModuleOpen = (nodes) => {
+    setOpenModule(true);
+    setNodesData(nodes);
+  };
+  const handleFileOpen = (nodes) => {
+    setOpenModule(true);
+    setNodesData(nodes);
   };
 
   return (
@@ -65,23 +70,35 @@ const FileCabinet = () => {
         </Grid>
         <Grid item xs={12} lg={9}>
           {alignment === "list" ? (
-            <TreeSection handleGoalOpen={handleGoalOpen} value={value} />
+            <TreeSection
+              handleModuleOpen={handleModuleOpen}
+              handleFileOpen={handleFileOpen}
+              value={value}
+            />
           ) : (
-            <GridSection value={value} />
+            <GridSection
+              handleModuleOpen={handleModuleOpen}
+              handleFileOpen={handleFileOpen}
+              value={value}
+            />
           )}
         </Grid>
         <Grid item xs={12} lg={3}>
-            <RecentFiles/>
+          <RecentFiles />
         </Grid>
       </Grid>
-      <CustomDialog
-        handleClose={handleGoalClose}
-        open={openGoal}
-        modalTitle="Demo Goal"
+      <CustomPopup
+        handleClose={handleModuleClose}
+        open={openModule}
+        modalTitle={nodesData.name}
         modalSize="md"
       >
-        <ViewGoalsPopup />
-      </CustomDialog>
+        {nodesData.type === "goal-content" && (<GoalPopup nodes={nodesData} />)}
+        {nodesData.type === "kpi-content" && (<KpiPopup nodes={nodesData} />)}
+        {nodesData.type === "project-content" && (<ProjectPopup nodes={nodesData} />)}
+        {nodesData.type === "task-content" && (<GoalPopup nodes={nodesData} />)}
+        {nodesData.type === "subtask-content" && (<GoalPopup nodes={nodesData} />)}
+      </CustomPopup>
     </Box>
   );
 };

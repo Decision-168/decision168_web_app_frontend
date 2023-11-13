@@ -4,14 +4,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ViewGoalsPopup from "../subComponents/ViewGoalsPopup";
 import ReduxDialog from "../../common/ReduxDialog";
-import Goal from "../create-goals/subComponents/Goal";
-import KPIs from "../create-goals/subComponents/KPIs";
 import MembersAccordion from "./subComponents/MembersAccordion";
-import OverallHistory from "./goal-history/OverallHistory";
-import RecentHistory from "./goal-history/RecentHistory";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import DuplicateDialog from "../subComponents/DuplicateDialog";
 import KPISection from "./Kpi";
+import RecentHistory from "../subComponents/history-section/RecentHistory";
+import OverallHistory from "../subComponents/history-section/OverallHistory";
+import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
+import Goal from "../portfolio-goals/create-goals/subComponents/Goal";
 
 const GoalsOverview = () => {
   const theme = useTheme();

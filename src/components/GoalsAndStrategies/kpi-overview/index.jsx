@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ViewKpiPopup from "../subComponents/ViewKpiPopup";
 import ProjectSection from "./project-section/ProjectSection";
 import Quote from "./quote-section/Quote";
-import RecentHistory from './kpi-history/RecentHistory'
+import RecentHistory from "../subComponents/history-section/RecentHistory";
 const KPIOverview = () => {
   const theme = useTheme();
   const navigate = useNavigate();

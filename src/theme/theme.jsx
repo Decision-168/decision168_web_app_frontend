@@ -106,7 +106,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
-          // padding: 0,
+          // padding: 0, // But it is changing the style for date picker field
         },
         input: {
           padding: "7px 10px",
@@ -154,6 +154,12 @@ export const theme = createTheme({
         },
       },
     },
-  
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          padding: "11px",
+        },
+      },
+    },
   },
 });

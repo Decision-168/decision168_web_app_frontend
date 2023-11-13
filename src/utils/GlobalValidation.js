@@ -86,4 +86,28 @@ export const globalValidations = {
     link: {
         required: "link is required",
     },
+    task: {
+        required: "Task is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid task",
+        },
+    },
+    taskDescription: {
+        required: "Task description is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid description",
+        },
+    },
+    taskNote: {
+        required: "Task note is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid task note",
+        },
+    },
+    file: {
+        required: "file is required",
+    },
 };
