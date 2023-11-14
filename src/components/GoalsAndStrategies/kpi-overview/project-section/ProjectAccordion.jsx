@@ -6,6 +6,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Accordion,
+  Tooltip,
 } from "@mui/material";
 import {
   AssignmentTurnedInOutlined,
@@ -15,17 +16,21 @@ import {
 import ProgressBar from "../../subComponents/ProgressBar";
 import CustomDialog from "../../../common/CustomDialog";
 import ViewProjectPopup from "../../subComponents/ViewProjectPopup";
+import { useNavigate } from "react-router";
 
 const ProjectAccordion = ({}) => {
   const data = [1, 2];
   const [openProject, setOpenProject] = useState(false);
-
+  const navigate = useNavigate();
   const handleProjectClose = () => {
     setOpenProject(false);
   };
   const handleProjectOpen = () => {
     setOpenProject(true);
   };
+   const handleViewTasks = () => {
+     navigate("/project-tasks-list");
+   };
   return (
     <>
       <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
@@ -75,20 +80,25 @@ const ProjectAccordion = ({}) => {
                 justifyContent: "end",
               }}
             >
-              <IconButton
-                aria-label="view"
-                size="small"
-                // onClick={handleKPIOpen}
-              >
-                <AssignmentTurnedInOutlined fontSize="small" />
-              </IconButton>
-              <IconButton
-                aria-label="view"
-                size="small"
-                onClick={handleProjectOpen}
-              >
-                <VisibilityOutlined fontSize="small" />
-              </IconButton>
+              <Tooltip title="View All Tasks" placement="top">
+                <IconButton
+                  aria-label="view"
+                  size="small"
+                  onClick={handleViewTasks}
+                >
+                  <AssignmentTurnedInOutlined fontSize="small" />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Preview Project" placement="top">
+                <IconButton
+                  aria-label="view"
+                  size="small"
+                  onClick={handleProjectOpen}
+                >
+                  <VisibilityOutlined fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
         </AccordionDetails>

@@ -30,8 +30,16 @@ const FileContainer = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    console.log(file);
-    setSelectedFile(file);
+
+    if (
+      file &&
+      file.type ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      setSelectedFile(file);
+    } else {
+      alert("Please select a valid .docx file.");
+    }
   };
 
   const [value, setValue] = React.useState(0);
@@ -54,6 +62,7 @@ const FileContainer = () => {
                 hidden
                 name="profileImage"
                 type="file"
+                accept=".pdf, .doc, .docx"
                 onChange={handleFileChange}
               />
               <Tooltip title="Select file" placement="right">

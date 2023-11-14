@@ -40,6 +40,7 @@ const CreateProject = ({flag}) => {
 
   const handleFilesChange = (newValue, info) => {
     setFiles(newValue); // Concatenate the new files with the existing ones
+    console.log(newValue);
   };
 
   return (

@@ -8,18 +8,23 @@ const TitleWithActions = ({
   title,
   handleClick1,
   handleClick2,
+  handleClick3,
   handleDelete,
   handleDuplicate,
   handleFileIt,
   handleViewHistory,
   btn1Text,
   btn2Text,
-  btn1Icon,btn2Icon,
-  description,progressHeading
+  btn3Text,
+  btn1Icon,
+  btn2Icon,
+  btn3Icon,
+  description,
+  progressHeading,
 }) => {
   const theme = useTheme();
-    const splitString = title.split(" ");
-    const splitTitle = splitString[1]; 
+  const splitString = title.split(" ");
+  const splitTitle = splitString[1];
   return (
     <>
       <Grid item xs={12} md={12} lg={12}>
@@ -49,7 +54,7 @@ const TitleWithActions = ({
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={6} md={6} lg={6}>
+      <Grid item xs={12} md={12} lg={8}>
         <Box
           sx={{
             display: "flex",
@@ -72,13 +77,25 @@ const TitleWithActions = ({
             variant="contained"
             startIcon={btn2Icon}
             size="small"
+            sx={{ mr: 1 }}
             onClick={handleClick2}
           >
             {btn2Text}
           </Button>
+          {btn3Text && (
+            <Button
+              variant="contained"
+              startIcon={btn3Icon}
+              size="small"
+              sx={{ mr: 1 }}
+              onClick={handleClick3}
+            >
+              {btn3Text}
+            </Button>
+          )}
         </Box>
       </Grid>
-      <Grid item xs={6} md={6} lg={6}>
+      <Grid item xs={12} md={12} lg={4}>
         <Box
           sx={{
             display: "flex",
