@@ -10,12 +10,15 @@ import GoalPopup from "./popup/GoalPopup";
 import CustomPopup from "./subComponents/CustomPopup";
 import KpiPopup from "./popup/KpiPopup";
 import ProjectPopup from "./popup/ProjectPopup";
+import TaskPopup from "./popup/TaskPopup";
+import SubtaskPopup from "./popup/SubtaskPopup";
+import CustomFilter from "../common/CustomFilter";
 
 const FileCabinet = () => {
   const [openModule, setOpenModule] = useState(false);
   const [nodesData, setNodesData] = useState([]);
   const [alignment, setAlignment] = useState("list");
-  const [value, setValue] = useState("all");
+  const [value, setValue] = useState("department");
 
   const handleChangeSwitch = useCallback((event, newAlignment) => {
     setAlignment(newAlignment);
@@ -35,6 +38,32 @@ const FileCabinet = () => {
     setOpenModule(true);
     setNodesData(nodes);
   };
+  const filterOption = [
+    {
+      value: "department",
+      label: "All",
+    },
+    {
+      value: "goal",
+      label: "Goals",
+    },
+    {
+      value: "kpi",
+      label: "KPIs",
+    },
+    {
+      value: "project",
+      label: "Projects",
+    },
+    {
+      value: "task",
+      label: "Tasks",
+    },
+    {
+      value: "subtask",
+      label: "Subtasks",
+    },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -66,7 +95,13 @@ const FileCabinet = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9}>
-          <RadioSection value={value} handleChange={handleChangeRadio} />
+        {alignment === "list" && (
+            <CustomFilter
+            value={value}
+            handleChange={handleChangeRadio}
+            filterOption={filterOption}
+          />
+          )}
         </Grid>
         <Grid item xs={12} lg={9}>
           {alignment === "list" ? (
@@ -96,8 +131,8 @@ const FileCabinet = () => {
         {nodesData.type === "goal-content" && (<GoalPopup nodes={nodesData} />)}
         {nodesData.type === "kpi-content" && (<KpiPopup nodes={nodesData} />)}
         {nodesData.type === "project-content" && (<ProjectPopup nodes={nodesData} />)}
-        {nodesData.type === "task-content" && (<GoalPopup nodes={nodesData} />)}
-        {nodesData.type === "subtask-content" && (<GoalPopup nodes={nodesData} />)}
+        {nodesData.type === "task-content" && (<TaskPopup nodes={nodesData} />)}
+        {nodesData.type === "subtask-content" && (<SubtaskPopup nodes={nodesData} />)}
       </CustomPopup>
     </Box>
   );

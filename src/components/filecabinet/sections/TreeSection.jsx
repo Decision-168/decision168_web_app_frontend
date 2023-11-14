@@ -43,7 +43,9 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
             />
           )}
 
-          <Typography sx={{ fontSize: "14px", ml: 1 }}>{nodes.name}</Typography>
+          <Typography sx={{ fontSize: "13px", ml: 1 }}>
+            {nodes.name} ({nodes.children ? nodes.children.length : 0})
+          </Typography>
 
           {(nodes.type == "goal-content" ||
             nodes.type == "kpi-content" ||
@@ -97,7 +99,7 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
           defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />}
           defaultExpandIcon={<AddBoxOutlinedIcon />}
         >
-          {data?.map((nodes) => renderTree(nodes))}
+          {data?.filter((i) => i.type === value).map((nodes) => renderTree(nodes))}
         </TreeView>
       </Box>
     </Paper>

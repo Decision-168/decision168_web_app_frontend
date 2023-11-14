@@ -32,7 +32,7 @@ const RecentFiles = () => {
       >
         <Typography sx={{ fontSize: 16, p: 1 }}>Recent Files</Typography>
         {data.map((filedata) => (
-          <Card key={filedata.id} variant="outlined" sx={{ mb: 1 }}>
+          <Card key={filedata.id} variant="outlined" sx={{ mb: 1, cursor: "pointer" }}>
             <CardContent>
               <Grid container>
                 <Grid item xs={12} lg={3}>
