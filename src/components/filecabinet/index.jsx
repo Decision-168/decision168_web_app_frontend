@@ -13,6 +13,8 @@ import ProjectPopup from "./popup/ProjectPopup";
 import TaskPopup from "./popup/TaskPopup";
 import SubtaskPopup from "./popup/SubtaskPopup";
 import CustomFilter from "../common/CustomFilter";
+import CustomSearchField from "../common/CustomSearchField";
+import FilePopup from "./popup/FilePopup";
 
 const FileCabinet = () => {
   const [openModule, setOpenModule] = useState(false);
@@ -95,12 +97,28 @@ const FileCabinet = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={9}>
-        {alignment === "list" && (
-            <CustomFilter
-            value={value}
-            handleChange={handleChangeRadio}
-            filterOption={filterOption}
-          />
+          {alignment === "list" && (
+            <Grid container>
+              <Grid item xs={12} lg={8}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "end",
+                    flexDirection: "row",
+                  }}
+                >
+                  <CustomFilter
+                    value={value}
+                    handleChange={handleChangeRadio}
+                    filterOption={filterOption}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} lg={4}>
+                <CustomSearchField />
+              </Grid>
+            </Grid>
           )}
         </Grid>
         <Grid item xs={12} lg={9}>
@@ -119,20 +137,28 @@ const FileCabinet = () => {
           )}
         </Grid>
         <Grid item xs={12} lg={3}>
-          <RecentFiles />
+          <RecentFiles handleFileOpen={handleFileOpen} />
         </Grid>
       </Grid>
       <CustomPopup
         handleClose={handleModuleClose}
         open={openModule}
         modalTitle={nodesData.name}
+        modalType={nodesData.type}
         modalSize="md"
       >
-        {nodesData.type === "goal-content" && (<GoalPopup nodes={nodesData} />)}
-        {nodesData.type === "kpi-content" && (<KpiPopup nodes={nodesData} />)}
-        {nodesData.type === "project-content" && (<ProjectPopup nodes={nodesData} />)}
-        {nodesData.type === "task-content" && (<TaskPopup nodes={nodesData} />)}
-        {nodesData.type === "subtask-content" && (<SubtaskPopup nodes={nodesData} />)}
+        {nodesData.type === "goal-content" && ( <GoalPopup nodes={nodesData} /> )}
+        {nodesData.type === "kpi-content" && ( <KpiPopup nodes={nodesData} /> )}
+        {nodesData.type === "project-content" && ( <ProjectPopup nodes={nodesData} /> )}
+        {nodesData.type === "task-content" && ( <TaskPopup nodes={nodesData} /> )}
+        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} /> )}
+        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} /> )}
+        {(nodesData.type == "project-file" ||
+            nodesData.type == "task-file" ||
+            nodesData.type == "subtask-file" ||
+            nodesData.type == "content-file") && (
+              <FilePopup nodes={nodesData} />
+          )}
       </CustomPopup>
     </Box>
   );

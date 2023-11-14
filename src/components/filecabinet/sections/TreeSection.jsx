@@ -44,7 +44,12 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
           )}
 
           <Typography sx={{ fontSize: "13px", ml: 1 }}>
-            {nodes.name} ({nodes.children ? nodes.children.length : 0})
+            {nodes.name}
+            {(nodes.type != "project-file" &&
+            nodes.type != "task-file" &&
+            nodes.type != "subtask-file" &&
+            nodes.type != "content-file") && (` (${nodes.children ? nodes.children.length : 0})`)}
+           
           </Typography>
 
           {(nodes.type == "goal-content" ||
@@ -74,7 +79,7 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
       }
     >
       {Array.isArray(nodes.children)
-        ? nodes.children?.map((node) => renderTree(node))
+        ? nodes.children.map((node) => renderTree(node))
         : null}
     </TreeItem>
   );
@@ -99,7 +104,7 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
           defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />}
           defaultExpandIcon={<AddBoxOutlinedIcon />}
         >
-          {data?.filter((i) => i.type === value).map((nodes) => renderTree(nodes))}
+          {data.map((nodes) => renderTree(nodes))}
         </TreeView>
       </Box>
     </Paper>
