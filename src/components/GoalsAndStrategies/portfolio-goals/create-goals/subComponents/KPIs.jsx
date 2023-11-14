@@ -4,12 +4,15 @@ import {
   DialogActions,
   DialogContent,
   Grid,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { globalValidations } from "../../../../../utils/GlobalValidation";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
+import { RemoveCircle } from "@mui/icons-material";
 const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
   const {
     handleSubmit,
@@ -46,7 +49,22 @@ const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
         />
 
         {inputFields.map((inputField, index) => (
-          <Grid container key={index}>
+          <Grid container key={index} sx={{background:'#F5F5F5',p:1,my:1}}>
+            <Grid item xs={12} lg={12}>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Tooltip title="Remove KPI">
+                  <IconButton onClick={() => handleRemoveClick(index)}>
+                    <RemoveCircle sx={{ fontSize: "20px" }} />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Grid>
             <CustomLabelTextField
               label="KPI"
               name="KPI"
@@ -65,24 +83,6 @@ const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
               errors={errors}
               validation={globalValidations.Description}
             />
-            <Grid item xs={12} lg={12}>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "end",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => handleRemoveClick(index)}
-                  sx={{ background: "#383838", color: "#fff", ml: 1 }}
-                >
-                  Remove KPI
-                </Button>
-              </Box>
-            </Grid>
           </Grid>
         ))}
       </Grid>

@@ -71,7 +71,7 @@ const ProjectIndex = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={8} sm={4} md={4} lg={4}>
+        <Grid item xs={8} sm={8} md={4} lg={4}>
           <Box
             sx={{
               display: "flex",

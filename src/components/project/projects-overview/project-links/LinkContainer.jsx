@@ -14,6 +14,10 @@ import {
   CustomTabPanel,
   a11yProps,
 } from "../../../GoalsAndStrategies/subComponents/style-functions";
+import { openModal } from "../../../../redux/action/modalSlice";
+import { useDispatch } from "react-redux";
+import ReduxDialog from "../../../common/ReduxDialog";
+import AddLinksPopup from "./AddLinksPopup";
 
 const links = [
   {
@@ -40,6 +44,8 @@ const links = [
 const LinkContainer = () => {
   const [value, setValue] = React.useState(0);
 
+  const dispatch = useDispatch()
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -57,7 +63,7 @@ const LinkContainer = () => {
               <IconButton
                 aria-label="add"
                 color="primary"
-                // onClick={() => dispatch(openModal("add-team-members"))}
+                onClick={() => dispatch(openModal("add-links"))}
               >
                 <Add />
               </IconButton>
@@ -125,6 +131,14 @@ const LinkContainer = () => {
           </Box>
         </Grid>
       </Grid>
+     <ReduxDialog
+        value="add-links"
+        modalTitle="Add Links"
+        showModalButton={false}
+        modalSize="md"
+      >
+       <AddLinksPopup/>
+      </ReduxDialog>
     </Box>
   );
 };

@@ -15,11 +15,22 @@ const Dashboard = lazy(() => import("../components/dashboard"));
 const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
-const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const FileCabinet = lazy(() => import("../components/filecabinet"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
 const ProjectOverview = lazy(() =>
   import("../components/project/projects-overview/ProjectOverview")
@@ -35,7 +46,7 @@ const RouteIndex = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/" element={<PrivateRoute />}>
+        <Route path="/" element={<PrivateRoute />} >
           <Route
             path="/dashboard"
             element={
@@ -117,6 +128,14 @@ const RouteIndex = () => {
             }
           />
           <Route
+            path="/project-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
@@ -153,6 +172,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <KPIOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/file-cabinet"
+            element={
+              <DashboardLayout>
+                <FileCabinet />
               </DashboardLayout>
             }
           />
