@@ -1,7 +1,5 @@
-import React,{memo} from 'react'
-import {
-  Close,
-} from "@mui/icons-material";
+import React, { memo } from "react";
+import { Close } from "@mui/icons-material";
 import {
   Box,
   DialogContent,
@@ -11,8 +9,17 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
+import DocViewer, {
+  PDFRenderer,
+  MSDocRenderer,PNGRenderer
+} from "@cyntler/react-doc-viewer";
+import pdfFile from "../../../../assets/test-files/ReactLazyLoading.pdf";
+import docxFile from "../../../../assets/test-files/test.docx";
+import pngFile from "../../../../assets/test-files/document.png";
 const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
-    const theme = useTheme();
+  const theme = useTheme();
+
+ const docs = [{ uri: pdfFile }, { uri: docxFile }, { uri: pngFile }];
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
       <DialogTitle
@@ -46,13 +53,9 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
         sx={{ display: "flex", justifyContent: "center", width: "100%" }}
       >
         {selectedFile ? (
-          <iframe
-            title="Docx Viewer"
-            width="100%"
-            height="600px"
-            src={`data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${btoa(
-              selectedFile
-            )}`}
+          <DocViewer
+            documents={docs}
+            pluginRenderers={[PDFRenderer, MSDocRenderer, PNGRenderer]}
           />
         ) : (
           <Box>
@@ -64,4 +67,4 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
   );
 };
 
-export default memo(FilePreviewPopup)
+export default memo(FilePreviewPopup);
