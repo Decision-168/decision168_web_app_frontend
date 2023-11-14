@@ -9,17 +9,31 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
-import DocViewer, {
-  PDFRenderer,
-  MSDocRenderer,PNGRenderer
+import DocViewer, {DocViewerRenderers,
 } from "@cyntler/react-doc-viewer";
 import pdfFile from "../../../../assets/test-files/ReactLazyLoading.pdf";
 import docxFile from "../../../../assets/test-files/test.docx";
 import pngFile from "../../../../assets/test-files/document.png";
+import xlsxFile from "../../../../assets/test-files/AllCalls.xlsx";
+import csvFile from "../../../../assets/test-files/credentials.csv";
+import txtFile from "../../../../assets/test-files/auth.txt";
+import gifFile from "../../../../assets/test-files/noInternet.gif";
+import jpgFile from "../../../../assets/test-files/testi-2.jpg";
+import pptxFile from "../../../../assets/test-files/AlimPresentation.pptx";
 const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
   const theme = useTheme();
 
- const docs = [{ uri: pdfFile }, { uri: docxFile }, { uri: pngFile }];
+ const docs = [
+   { uri: pdfFile },
+   { uri: docxFile, fileType: 'docx'  },
+   { uri: pngFile },
+   { uri: xlsxFile },
+   { uri: csvFile },
+   { uri: txtFile },
+   { uri: gifFile },
+   { uri: jpgFile },
+   { uri: pptxFile },
+ ];
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
       <DialogTitle
@@ -53,10 +67,9 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
         sx={{ display: "flex", justifyContent: "center", width: "100%" }}
       >
         {selectedFile ? (
-          <DocViewer
-            documents={docs}
-            pluginRenderers={[PDFRenderer, MSDocRenderer, PNGRenderer]}
-          />
+          <>
+            <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} />
+          </>
         ) : (
           <Box>
             <Typography>No Preview Available</Typography>
