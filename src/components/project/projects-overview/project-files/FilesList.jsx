@@ -13,6 +13,7 @@ import {
   Typography,
   Button,
   useTheme,
+  Link,
 } from "@mui/material";
 import React, { memo } from "react";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
@@ -65,8 +66,8 @@ const FilesList = ({ item, selectedFile }) => {
             </Avatar>
 
             <Typography
-              component={Button}
-              sx={{ fontSize: 14, ml: 2, color: "#343a40" }}
+              component={Link}
+              sx={{ fontSize: 14, ml: 2, color: "#343a40",cursor:'pointer' }}
               onClick={handlePreview}
             >
               {item.fileName}
