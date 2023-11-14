@@ -1,0 +1,59 @@
+You can achieve similar functionality using the fetch API in React by creating a common file to set headers and handle responses. Here's an example of how you can do it:
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
+const fetchWithHeaders = (url, options = {}) => {
+  const token = localStorage.getItem("token"); // Assuming you store the token in localStorage
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    // Add any other headers you need here
+  };
+
+  const requestOptions = {
+    ...options,
+    headers: {
+      ...options.headers,
+      ...headers,
+    },
+  };
+
+  return fetch(`${apiUrl}/${url}`, requestOptions).then((response) => {
+    if (!response.ok) {
+      if (response.status === 401) {
+        // Token is expired or invalid, handle accordingly
+        window.location.replace("/");
+      }
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  });
+};
+
+export default fetchWithHeaders;
+In this code, we define a fetchWithHeaders function that takes a URL and optional fetch options as parameters. It adds the authorization header and any other headers you need, merges them with the provided options, and then uses the fetch API to make the HTTP request. If the response status is not okay (e.g., 401 for unauthorized), it handles it accordingly.
+
+You can use this fetchWithHeaders function in your React components like this:
+
+import React, { useEffect } from "react";
+import fetchWithHeaders from "./fetchWithHeaders";
+
+function MyComponent() {
+  useEffect(() => {
+    fetchWithHeaders("your-api-endpoint")
+      .then((data) => {
+        // Handle the successful response data here
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    // Your component JSX
+  );
+}
+
+export default MyComponent;
+Make sure to replace "your-api-endpoint" with the actual API endpoint you want to fetch data from. Also, ensure that you have the token stored in localStorage or any other appropriate location.

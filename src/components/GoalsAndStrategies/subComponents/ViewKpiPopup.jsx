@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, useTheme } from "@mui/material";
+import { Box, Grid, IconButton, Tooltip, useTheme } from "@mui/material";
 import React, { memo, useState } from "react";
 import {
   Add,
@@ -24,9 +24,10 @@ import HiddenListOfDialog from "./HiddenListOfDialog";
 import TitleWithActions from "./TitleWithActions";
 import { description1 } from "./style-functions";
 import CreateProject from "../../project/Dialogs/CreateProject";
+import { useNavigate } from "react-router";
 const ViewKpiPopup = ({}) => {
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openProject, setOpenProject] = useState(false);
 
@@ -67,6 +68,9 @@ const ViewKpiPopup = ({}) => {
   };
   const handleAddProject = () => {
     dispatch(openModal("create-project"));
+  };
+  const handleViewTasks = () => {
+    navigate("/project-tasks-list");
   };
   return (
     <Box
@@ -125,20 +129,25 @@ const ViewKpiPopup = ({}) => {
             title={"PROJECT"}
             value={"Dashboard Module"}
           >
-            <IconButton
-              aria-label="view"
-              size="small"
-              // onClick={handleKPIOpen}
-            >
-              <AssignmentTurnedInOutlined fontSize="small" />
-            </IconButton>
-            <IconButton
-              aria-label="view"
-              size="small"
-              onClick={handleProjectOpen}
-            >
-              <VisibilityOutlined fontSize="small" />
-            </IconButton>
+            <Tooltip title="View All Tasks" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleViewTasks}
+              >
+                <AssignmentTurnedInOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Preview Project" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleProjectOpen}
+              >
+                <VisibilityOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </HiddenListOfDialog>
         )}
       </Grid>

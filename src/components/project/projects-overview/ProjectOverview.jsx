@@ -8,6 +8,7 @@ import RecentHistory from "../../GoalsAndStrategies/subComponents/history-sectio
 import TaskContainer from "./project-tasks/TaskContainer";
 import LinkContainer from "./project-links/LinkContainer";
 import FileContainer from "./project-files/FileContainer";
+import CommentSection from "./comment-section";
 const ProjectOverview = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -94,6 +95,9 @@ const ProjectOverview = () => {
           <Grid container>
             <Grid item xs={12} lg={12}>
               <MembersAccordion />
+            </Grid>
+            <Grid item xs={12} lg={12}>
+              <CommentSection />
             </Grid>
             <Grid item xs={12} lg={12}>
               <RecentHistory />

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Grid, Typography, Paper } from "@mui/material";
+import { Box, Grid, Typography, Paper, Button } from "@mui/material";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import TaskOverviewCard from "./subComponents/TaskOverviewCard";
 import { taskOverviewStyles } from "./styles";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import TaskLinks from "./subComponents/TaskLinks";
 import TaskFiles from "./subComponents/TaskFiles";
+import CommentSection from "../../project/projects-overview/comment-section";
 
 export default function TaskOverview() {
   const theme = useTheme();
@@ -34,9 +35,9 @@ export default function TaskOverview() {
           <TaskFiles styles={styles} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0}>
-            <Typography variant="h6">Comments Section</Typography>
-          </Paper>
+          {/* <Paper elevation={0}> */}
+            <CommentSection />
+          {/* </Paper> */}
         </Grid>
       </Grid>
     </Box>

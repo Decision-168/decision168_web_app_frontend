@@ -1,5 +1,4 @@
 import {
-  Close,
   DisabledByDefault,
   Download,
   Folder,
@@ -8,26 +7,23 @@ import {
 import {
   Avatar,
   Box,
-  DialogContent,
   Grid,
   IconButton,
   Tooltip,
   Typography,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Button,
   useTheme,
+  Link,
 } from "@mui/material";
 import React, { memo } from "react";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import FilePreviewPopup from "./FilePreviewPopup";
 const FilesList = ({ item, selectedFile }) => {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const theme = useTheme();
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -70,8 +66,8 @@ const FilesList = ({ item, selectedFile }) => {
             </Avatar>
 
             <Typography
-              component={Button}
-              sx={{ fontSize: 14, ml: 2, color: "#343a40" }}
+              component={Link}
+              sx={{ fontSize: 14, ml: 2, color: "#343a40",cursor:'pointer' }}
               onClick={handlePreview}
             >
               {item.fileName}
@@ -117,74 +113,7 @@ const FilesList = ({ item, selectedFile }) => {
           </Box>
         </Grid>
       </Grid>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
-        <DialogTitle
-          sx={{
-            m: 0,
-            p: 2,
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "center",
-            borderTop: `5px solid ${theme.palette.primary.main} `,
-          }}
-          id="customized-dialog-title"
-        >
-          <Typography component="h6" variant="subtitle2" mr={2}>
-            Preview
-          </Typography>
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <Close />
-        </IconButton>
-        <DialogContent
-          sx={{ display: "flex", justifyContent: "center", width: "100%" }}
-        >
-          {selectedFile ? (
-            <>
-              {selectedFile.type.startsWith("image/") ? (
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Preview"
-                  sx={{
-                    width: "500px",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "500px",
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                  }}
-                />
-              ) : (
-                <DocViewer
-                  pluginRenderers={DocViewerRenderers}
-                  style={{ width: "100%", height: "70vh" }}
-                  documents={[
-                    {
-                      uri: URL.createObjectURL(selectedFile),
-                      fileType: selectedFile?.type,
-                    },
-                  ]}
-                />
-              )}
-            </>
-          ) : (
-            <Box>
-              <Typography>No Preview Available</Typography>
-            </Box>
-          )}
-        </DialogContent>
-      </Dialog>
+      <FilePreviewPopup open={open} handleClose={handleClose} selectedFile={selectedFile}/>
       <ConfirmationDialog value={"deleteFile"} />
     </>
   );
