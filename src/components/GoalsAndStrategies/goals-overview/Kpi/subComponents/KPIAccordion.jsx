@@ -3,7 +3,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Button, Grid, IconButton,Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton,Tooltip,Typography } from "@mui/material";
 import { Add, VisibilityOutlined } from "@mui/icons-material";
 import KPIChildAccordion from "./KPIChildAccordion";
 import ViewKpiPopup from "../../../subComponents/ViewKpiPopup";
@@ -63,13 +63,15 @@ const KPIAccordion = ({}) => {
               <ProgressBar />
             </Grid>
             <Grid xs={1} alignSelf={"center"}>
-              <IconButton
-                aria-label="delete"
-                size="small"
-                onClick={handleKPIOpen}
-              >
-                <VisibilityOutlined fontSize="small" />
-              </IconButton>
+              <Tooltip title="Preview KPI" placement="top">
+                <IconButton
+                  aria-label="preview"
+                  size="small"
+                  onClick={handleKPIOpen}
+                >
+                  <VisibilityOutlined fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
           {data.map((item, index) => {

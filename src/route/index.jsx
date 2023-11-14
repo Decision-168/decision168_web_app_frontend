@@ -116,6 +116,14 @@ const RouteIndex = () => {
             }
           />
           <Route
+            path="/project-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>

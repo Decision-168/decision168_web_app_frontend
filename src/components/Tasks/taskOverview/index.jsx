@@ -1,8 +1,6 @@
 import React from "react";
-import { Box, Button, Grid, Typography, Paper } from "@mui/material";
+import { Box, Grid, Typography, Paper } from "@mui/material";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
-import { Link } from "react-router-dom";
-import AddIcon from "@mui/icons-material/Add";
 import OverviewCard from "./subComponents/OverviewCard";
 import {taskOverviewStyles} from "./styles"
 
