@@ -11,7 +11,7 @@ import { Paper, Typography } from "@mui/material";
 import { data } from "../../../helpers/treeData";
 
 const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
-  const renderTree = (nodes) => (
+  const renderTreeItem = (nodes, renderChildren) => (
     <TreeItem
       sx={{
         paddingBottom: "5px",
@@ -73,11 +73,27 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
         </Box>
       }
     >
-      {Array.isArray(nodes.children)
-        ? nodes.children?.map((node) => renderTree(node))
-        : null}
+      {renderChildren(nodes)}
     </TreeItem>
   );
+
+  const renderTree = (nodes) => renderTreeItem(nodes, renderChildren);
+
+  const renderSubTree = (nodes) => renderTreeItem(nodes, renderSubChildren);
+
+  const renderChildren = (nodes) =>
+    Array.isArray(nodes.children)
+      ? value === "department"
+        ? nodes.children?.map((node) => renderSubTree(node))
+        : nodes.children
+            ?.filter((i) => i.type === value)
+            .map((node) => renderSubTree(node))
+      : null;
+
+  const renderSubChildren = (nodes) =>
+    Array.isArray(nodes.children)
+      ? nodes.children?.map((node) => renderSubTree(node))
+      : null;
 
   return (
     <Paper elevation={0} sx={{ m: 1 }}>
@@ -99,7 +115,7 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
           defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />}
           defaultExpandIcon={<AddBoxOutlinedIcon />}
         >
-          {data?.filter((i) => i.type === value).map((nodes) => renderTree(nodes))}
+          {data?.map((nodes) => renderTree(nodes))}
         </TreeView>
       </Box>
     </Paper>
