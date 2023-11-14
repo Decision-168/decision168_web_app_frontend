@@ -14,15 +14,20 @@ export default function CustomMultilineTextField({ name, label, labelColor, plac
   };
 
   return (
-    <Box sx={{ textAlign: "left", height:"170px" }}>
+    <Box sx={{ textAlign: "left", height: "170px" }}>
       <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
         {label}
         {required && <span style={{ color: theme.palette.error.main }}> *</span>}
       </InputLabel>
       <TextField
         id="outlined-multiline-static"
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            padding:"6px 0",
+          },
+        }}
         multiline
-        rows={3}
+        rows={4}
         defaultValue=""
         placeholder={placeholder}
         margin="dense"

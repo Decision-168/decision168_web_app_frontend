@@ -40,7 +40,7 @@ const UserList = ({ username, assignManagerFlag }) => {
       secondaryAction={
         <Box>
           {assignManagerFlag === "acceptedBy" && (
-            <Tooltip title="Assign as Manager" placement="left">
+            <Tooltip arrow title="Assign as Manager" placement="left">
               <IconButton
                 edge="end"
                 aria-label="add"
@@ -50,7 +50,7 @@ const UserList = ({ username, assignManagerFlag }) => {
               </IconButton>
             </Tooltip>
           )}
-          <Tooltip title="Remove Member" placement="left">
+          <Tooltip arrow title="Remove Member" placement="left">
             <IconButton
               edge="end"
               aria-label="remove"

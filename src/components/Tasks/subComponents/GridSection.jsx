@@ -48,9 +48,7 @@ const GridSection = () => {
     }
   };
 
-  const handleRedirect = (event) => {
-    navigate("/tasks-overview");
-  };
+
 
   return (
     // <Paper sx={{ p: 2, mt: 2 }}>
@@ -65,7 +63,7 @@ const GridSection = () => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     style={{
-                      background: snapshot.isDraggingOver ? "lightgrey" : "white",
+                      background: snapshot.isDraggingOver ? "#DEE1E6" : "#FFFFFF",
                       padding: 14,
                       width: "100%",
                       minHeight: 500,
@@ -96,7 +94,7 @@ const GridSection = () => {
                                         color: "white",
                                         ...provided.draggableProps.style,
                                       }}>
-                                      <KanbanCard handleRedirect={handleRedirect} projectName={item.content.projectName} taskDescription={item.content.description} dueDate={item.content.dueDate} code={item.content.code} subTasksCount={item.content.subTasksCount} />
+                                      <KanbanCard  cardData={item.content}  />
                                     </div>
                                   );
                                 }}

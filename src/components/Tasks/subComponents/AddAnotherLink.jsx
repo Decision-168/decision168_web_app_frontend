@@ -49,14 +49,14 @@ export default function AddAnotherLink() {
               </Grid>
               <Grid item xs={12} sm={1} py={2}>
                 <Stack direction="row" justifyContent="end" alignItems="center">
-                  <Tooltip title="Add another link" arrow size="small" placement="top-end">
+                  <Tooltip arrow title="Add another link"  size="small" placement="top-end">
                     <IconButton onClick={handleAddClick}>
                       <AddCircleRoundedIcon />
                     </IconButton>
                   </Tooltip>
 
                   {inputFields.length > 1 && (
-                    <Tooltip title="Remove link" arrow size="small" placement="top-end">
+                    <Tooltip arrow title="Remove link"  size="small" placement="top-end">
                       <IconButton onClick={() => handleRemoveClick(index)}>
                         <RemoveCircleRoundedIcon />
                       </IconButton>

@@ -3,12 +3,12 @@ import { Avatar, Box, Button, Divider, Grid, IconButton, Tooltip, Typography, us
 import { ContentCopy, Delete, NoteAdd } from "@mui/icons-material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
-const OverviewCardHeader = ({ title, handleClick1, handleClick2, handleClick3, handleDuplicate, handleFileIt, handleDelete, btn1Text, btn2Text, btn3Text, btn1Icon, btn2Icon, btn3Icon }) => {
+const SubTaskOverviewCardHeader = ({ title, handleClick1, handleDuplicate, handleFileIt, handleDelete, btn1Text, btn1Icon }) => {
   const theme = useTheme();
   const isSamllScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <Grid container>
+    <Grid container pr={2}>
       <Grid item xs={12} sm={12} lg={12}>
         <Box
           sx={{
@@ -33,7 +33,7 @@ const OverviewCardHeader = ({ title, handleClick1, handleClick2, handleClick3, h
         </Box>
         <Divider />
       </Grid>
-      <Grid item xs={12} sm={9} lg={6}>
+      <Grid item xs={12} sm={9} lg={8}>
         <Box
           sx={{
             display: "flex",
@@ -45,16 +45,10 @@ const OverviewCardHeader = ({ title, handleClick1, handleClick2, handleClick3, h
           <Button variant="contained" startIcon={btn1Icon} size="small" onClick={handleClick1} sx={{ mr: 1 }}>
             {btn1Text}
           </Button>
-          <Button variant="contained" startIcon={btn2Icon} size="small" onClick={handleClick2} sx={{ mr: 1 }}>
-            {btn2Text}
-          </Button>
-          <Button variant="contained" startIcon={btn3Icon} size="small" onClick={handleClick3}>
-            {btn3Text}
-          </Button>
         </Box>
         <Divider />
       </Grid>
-      <Grid item xs={12} sm={3} lg={6}>
+      <Grid item xs={12} sm={3} lg={4}>
         <Box
           sx={{
             display: "flex",
@@ -85,4 +79,4 @@ const OverviewCardHeader = ({ title, handleClick1, handleClick2, handleClick3, h
   );
 };
 
-export default memo(OverviewCardHeader);
+export default memo(SubTaskOverviewCardHeader);

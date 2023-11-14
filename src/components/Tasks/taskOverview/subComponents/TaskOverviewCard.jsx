@@ -1,29 +1,18 @@
-import { Box, Grid, IconButton, Paper } from "@mui/material";
-import React, { memo, useState } from "react";
-import { Add, BusinessCenter, CalendarMonth, Edit, Person, VisibilityOutlined } from "@mui/icons-material";
+import { Grid, Paper } from "@mui/material";
+import React, { memo } from "react";
+import { Add, Edit } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
-// import ViewKpiPopup from "./ViewKpiPopup";
-import CustomDialog from "../../../common/CustomDialog";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
-// import DuplicateDialog from "./DuplicateDialog";
-// import Goal from "../portfolio-goals/create-goals/subComponents/Goal";
-// import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
-// import OverallHistory from "./history-section/OverallHistory";
-// import GridList from "./GridList";
-import OverviewCardHeader from "./OverviewCardHeader";
-// import { description } from "./style-functions";
-// import HiddenListOfDialog from "./HiddenListOfDialog";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import OverviewCardBody from "./OverviewCardBody";
+import OverviewCardHeader from "./TaskOverviewCardHeader";
+import OverviewCardBody from "./TaskOverviewCardBody";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
-import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 import DuplicateDialog from "../../subComponents/DuplicateDialog";
 
-const OverviewCard = ({ styles }) => {
+const TaskOverviewCard = ({ styles }) => {
   const dispatch = useDispatch();
 
   const handleAddTasksDialog = () => {
@@ -37,10 +26,6 @@ const OverviewCard = ({ styles }) => {
   const handleEditTaskDialog = () => {
     dispatch(openModal("edit-task"));
   };
-
-  // const handleEditSubTaskDialog = () => {
-  //   dispatch(openModal("edit-sub-task"));
-  // };
 
   const handleDuplicateDialog = () => {
     dispatch(openModal("duplicate-task"));
@@ -67,9 +52,9 @@ const OverviewCard = ({ styles }) => {
   };
 
   return (
-    <Paper sx={{ p: 3 }}>
+    <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <OverviewCardHeader title={"TASK: Forgot password"} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <OverviewCardHeader title={"TASK: Task"} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
         <OverviewCardBody styles={styles} />
       </Grid>
 
@@ -99,4 +84,4 @@ const OverviewCard = ({ styles }) => {
     </Paper>
   );
 };
-export default memo(OverviewCard);
+export default memo(TaskOverviewCard);

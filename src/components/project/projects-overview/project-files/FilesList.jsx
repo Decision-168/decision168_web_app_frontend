@@ -87,7 +87,7 @@ const FilesList = ({ item, selectedFile }) => {
               alignItems: "center",
             }}
           >
-            <Tooltip title="Preview" placement="top">
+            <Tooltip arrow title="Preview" placement="top">
               <IconButton
                 aria-label="Preview"
                 color="primary"
@@ -96,7 +96,7 @@ const FilesList = ({ item, selectedFile }) => {
                 <Preview />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Download" placement="top">
+            <Tooltip arrow title="Download" placement="top">
               <IconButton
                 aria-label="Download"
                 color="primary"
@@ -105,7 +105,7 @@ const FilesList = ({ item, selectedFile }) => {
                 <Download />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Delete" placement="top">
+            <Tooltip arrow title="Delete" placement="top">
               <IconButton
                 aria-label="Delete"
                 color="primary"

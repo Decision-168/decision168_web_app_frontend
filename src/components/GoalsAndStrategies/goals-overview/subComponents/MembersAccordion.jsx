@@ -66,7 +66,7 @@ const BasicAccordion = ({}) => {
             >
               Team Members
             </Typography>
-            <Tooltip title="Add Team Member" placement="right">
+            <Tooltip arrow title="Add Team Member" placement="right">
               <IconButton
                 aria-label="add"
                 color="primary"
@@ -133,7 +133,7 @@ const BasicAccordion = ({}) => {
                 Uzma Karjikar
               </Typography>
             </Box>
-            <Tooltip title="Remove Manager" placement="left">
+            <Tooltip arrow title="Remove Manager" placement="left">
               <IconButton
                 edge="end"
                 aria-label="remove"

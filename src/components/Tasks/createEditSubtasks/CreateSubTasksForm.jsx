@@ -118,7 +118,7 @@ export default function CreateSubTasksForm() {
             <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
               <Stack direction="row" justifyContent="end" alignItems="center">
                 {inputFields.length > 1 && (
-                  <Tooltip title="Remove Subtask" arrow size="small" placement="top-end">
+                  <Tooltip arrow title="Remove Subtask"  size="small" placement="top-end">
                     <IconButton onClick={handleRemoveClick}>
                       <RemoveCircleRoundedIcon />
                     </IconButton>

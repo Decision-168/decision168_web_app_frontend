@@ -87,22 +87,22 @@ const TitleWithActions = ({
             flexDirection: "row",
           }}
         >
-          <Tooltip title="Duplicate">
+          <Tooltip arrow title="Duplicate">
             <IconButton onClick={handleDuplicate}>
               <ContentCopy sx={{ fontSize: "20px" }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="File It">
+          <Tooltip arrow title="File It">
             <IconButton onClick={handleFileIt}>
               <NoteAdd sx={{ fontSize: "20px" }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip arrow title="Delete">
             <IconButton onClick={handleDelete}>
               <Delete sx={{ fontSize: "20px" }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="View History">
+          <Tooltip arrow title="View History">
             <IconButton onClick={handleViewHistory}>
               <History sx={{ fontSize: "20px" }} />
             </IconButton>

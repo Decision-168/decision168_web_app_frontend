@@ -53,7 +53,7 @@ const LinkContainer = () => {
             <Typography sx={{ fontSize: 15, fontWeight: "600" }}>
               Add Links
             </Typography>
-            <Tooltip title="Add Links" placement="right">
+            <Tooltip arrow title="Add Links" placement="right">
               <IconButton
                 aria-label="add"
                 color="primary"

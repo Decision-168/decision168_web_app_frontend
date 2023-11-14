@@ -106,12 +106,12 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
-          // padding: 0, // But it is changing the style for date picker field
+          // padding: "0", // But it is changing the style for date picker field
         },
-        input: {
-          padding: "7px 10px",
-          font: "revert",
-        },
+        // input: {
+        //   padding: "7px 10px",
+        //   font: "revert",
+        // },
       },
     },
     MuiCheckbox: {

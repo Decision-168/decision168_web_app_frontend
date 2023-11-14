@@ -21,7 +21,8 @@ export const taskOverviewStyles = () => {
         display: "flex",
         justifyContent: "start",
         alignItems: "center",
-        height: "40px"
+        height: "40px",
+        margin: "0 20px",
     };
     const noteslabel = {
         fontSize: 13,
@@ -52,5 +53,30 @@ export const taskOverviewStyles = () => {
             color: theme.palette.primary.dark,
         }
     }
-    return { label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink };
+
+    const subtaskLinkWrapper = {
+        display: "flex",
+        justifyContent: "start",
+        alignItems: "center",
+        height: "40px",
+    };
+
+    const subtaskLinkText = {
+        fontSize: 13,
+        color: theme.palette.secondary.main,
+        whiteSpace: "pre-wrap",
+        textAlign: "start",
+        cursor: "pointer",
+        p: 1,
+        "&:hover": {
+            color: theme.palette.primary.dark,
+        }
+
+    };
+
+    const subtaskIcon = {
+        color: theme.palette.primary.dark,
+        mr: 1
+    }
+    return { label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink, subtaskLinkWrapper, subtaskLinkText, subtaskIcon };
 };

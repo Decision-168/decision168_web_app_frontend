@@ -56,7 +56,7 @@ const FileContainer = () => {
                 type="file"
                 onChange={handleFileChange}
               />
-              <Tooltip title="Select file" placement="right">
+              <Tooltip arrow title="Select file" placement="right">
                 <Add />
               </Tooltip>
             </IconButton>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -21,7 +21,7 @@ import ReorderIcon from "@mui/icons-material/Reorder";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import SubdirectoryArrowRightRoundedIcon from "@mui/icons-material/SubdirectoryArrowRightRounded";
-import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@mui/material";
 import CustomTextField from "../../common/CustomTextField";
 import { useForm } from "react-hook-form";
 import { globalValidations } from "../../../utils/GlobalValidation";
@@ -34,6 +34,15 @@ import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import CustomDialog from "../../common/CustomDialog";
+import OverviewCard from "../taskOverview/subComponents/TaskOverviewCard";
+import { taskOverviewStyles } from "../taskOverview/styles";
+import TaskInfo from "./TaskInfo";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import OverviewCardHeader from "../taskOverview/subComponents/TaskOverviewCardHeader";
+import TaskPreview from "../taskOverview/subComponents/TaskPreview";
+import SubtaskPreview from "../subtaskOverview/subComponent/SubtaskPreview";
 
 export default function TaskTable() {
   const {
@@ -42,6 +51,7 @@ export default function TaskTable() {
     formState: { errors },
   } = useForm();
   const theme = useTheme();
+  const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const [rows, setRows] = useState(tasks);
   const [openSubrows, setOpenSubrows] = useState(false);
@@ -84,7 +94,7 @@ export default function TaskTable() {
     }
   };
 
-  //   for tasks descrition
+  // tasks descrition
   const onSubmit = (data) => {
     alert(JSON.stringify(data));
   };
@@ -128,6 +138,40 @@ export default function TaskTable() {
       })
     );
     handleMoreClose();
+  };
+
+  //Task PreviewDialog code
+  const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
+  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
+  const [filteredTask, setFilterTask] = useState(null);
+  const [filteredSubTask, setFilterSubTask] = useState(null);
+
+  // Task prview Dailog Code
+  const handleOpenTaskPreviewDialog = (rowId) => {
+    const filteredTaskRow = rows.filter((row, index) => row.id === rowId);
+    setFilterTask(filteredTaskRow);
+    setOpenTaskPreviewDialog(true);
+  };
+  const handleCloseTaskPreviewDialog = () => {
+    setOpenTaskPreviewDialog(false);
+  };
+
+  // Sub Task prview Dailog Code
+  const handleOpenSubTaskPreviewDialog = (subrowId) => {
+    console.log(subrowId);
+    const filteredSubTaskRow = rows.reduce((result, row) => {
+      const matchingSubrow = row.subRows.find((subrow) => subrow.id === subrowId);
+      if (matchingSubrow) {
+        result.push(matchingSubrow);
+      }
+      return result;
+    }, []);
+    console.log(filteredSubTaskRow);
+    setFilterSubTask(filteredSubTaskRow);
+    setOpenSubTaskPreviewDialog(true);
+  };
+  const handleCloseSubTaskPreviewDialog = () => {
+    setOpenSubTaskPreviewDialog(false);
   };
 
   return (
@@ -200,11 +244,17 @@ export default function TaskTable() {
                                       validation={globalValidations.taskDescription} // Pass the validation rules as a prop
                                     />
                                   ) : (
-                                    <Typography component={Link} to="/tasks-overview" className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
-                                      {row.description}
-                                    </Typography>
+                                    <>
+                                      <Typography onClick={() => handleOpenTaskPreviewDialog(row.id)} className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
+                                        {row.description}
+                                      </Typography>
+
+                                      <CustomDialog handleClose={handleCloseTaskPreviewDialog} open={openTaskPreviewDialog} modalTitle="Task" redirectPath={"/tasks-overview"} showModalButton={true} modalSize="lg">
+                                        <TaskPreview styles={styles} filteredRow={filteredTask} />
+                                      </CustomDialog>
+                                    </>
                                   )}
-                                  <Tooltip title={editMode ? "Save task" : "Edit task"} arrow size="small" placement="top-start">
+                                  <Tooltip title={editMode ? "Save task" : "Rename task"} arrow size="small" placement="top-start">
                                     <IconButton size="small" onClick={() => handleTaskDescription(row.id)}>
                                       {editMode && rowId === row.id ? <SaveIcon /> : <EditIcon />}
                                     </IconButton>
@@ -293,7 +343,7 @@ export default function TaskTable() {
 
                             {/* Due Date */}
                             <TableCell sx={{ width: "20%" }} align="center">
-                              <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false}/>
+                              <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false} />
                             </TableCell>
 
                             {/* Actions */}
@@ -333,11 +383,17 @@ export default function TaskTable() {
                                           validation={globalValidations.taskDescription} // Pass the validation rules as a prop
                                         />
                                       ) : (
-                                        <Typography component={Link} to="/tasks-overview" className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
-                                          {subrow.description}
-                                        </Typography>
+                                        <>
+                                          <Typography onClick={() => handleOpenSubTaskPreviewDialog(subrow.id)} className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
+                                            {subrow.description}
+                                          </Typography>
+
+                                          <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
+                                            <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
+                                          </CustomDialog>
+                                        </>
                                       )}
-                                      <Tooltip title={editMode ? "Save task" : "Edit task"} arrow size="small" placement="top-start">
+                                      <Tooltip title={editMode ? "Save task" : "Rename task"} arrow size="small" placement="top-start">
                                         <IconButton size="small" onClick={() => handleTaskDescription(subrow.id)}>
                                           {editMode && rowId === subrow.id ? <SaveIcon /> : <EditIcon />}
                                         </IconButton>
@@ -426,7 +482,7 @@ export default function TaskTable() {
 
                                 {/* Due Date */}
                                 <TableCell align="center">
-                                  <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false}/>
+                                  <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false} />
                                 </TableCell>
 
                                 {/* Actions */}

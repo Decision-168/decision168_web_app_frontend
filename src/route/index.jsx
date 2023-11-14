@@ -4,6 +4,7 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
+import SubtaskOverview from "../components/Tasks/subtaskOverview";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -136,6 +137,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <TaskOverview />
+              </DashboardLayout>
+            }
+          />
+              <Route
+            path="/subtasks-overview"
+            element={
+              <DashboardLayout>
+                <SubtaskOverview/>
               </DashboardLayout>
             }
           />

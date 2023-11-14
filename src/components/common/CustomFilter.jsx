@@ -24,7 +24,7 @@ const CustomFilter = ({ handleChange, value, filterOption }) => {
         justifyContent: "center",
         flexDirection: "row",
       }}>
-      <Tooltip title="filter" placement="left">
+      <Tooltip arrow title="filter" placement="left">
         <IconButton aria-label="filter" onClick={handleClick}>
           <FilterAlt />
         </IconButton>

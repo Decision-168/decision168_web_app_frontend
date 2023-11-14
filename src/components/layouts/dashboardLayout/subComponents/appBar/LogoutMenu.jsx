@@ -34,7 +34,7 @@ export default function LogoutMenu() {
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
+        <Tooltip arrow title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"

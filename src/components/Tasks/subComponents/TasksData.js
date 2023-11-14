@@ -1,30 +1,33 @@
 export const tasks = [
   {
     id: 1,
-    code: "AC-2560",
-    projectName: "Test project name 1",
-    description: "Design Portfolio Design Portfolio",
+    code: "AC-0001",
+    projectName: "Project 1",
+    title: "Task-1",
+    description: "Task-1 Description",
     assignee: "john doe",
     priority: "high",
     status: "in review",
     dueDate: "2023-11-18",
-    subRows: [{ id: "1A", code: "AC-2822", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", isParentRow: false }, { id: "1B", code: "AC-2999", description: "Forgot password", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", isParentRow: false }],
+    note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.",
+    subRows: [{ id: "1A", code: "AC-0001A", title: "Subtask-1A", description: "Subtask-1A Description", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.", isParentRow: false }, { id: "1B", code: "AC-0001B", title: "Subtask-1B", description: "Subtask-1B Description", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.", isParentRow: false }],
     subTasksCount: 0,
     isParentRow: true
   },
   {
     id: 2,
-    code: "AC-2499",
-    projectName: "Test project name 2",
-    description: "Design Portfolio",
+    code: "AC-0002",
+    projectName: "Project 2",
+    title: "Task-2",
+    description: "Task-2 Description",
     assignee: "john doe",
-    priority: "medium",
+    priority: "high",
     status: "in review",
     dueDate: "2023-11-18",
-    subRows: [],
+    note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.",
+    subRows: [{ id: "2A", code: "AC-0002A", title: "Subtask-2A", description: "Subtask-2A Description", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.", isParentRow: false }, { id: "2B", code: "AC-0002B", title: "Subtask-2B", description: "Subtask-2B Description", assignee: "John Doe", priority: "low", status: "in progress", dueDate: "2023-11-18", note: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, nemo.", isParentRow: false }],
     subTasksCount: 0,
     isParentRow: true
-
   },
 ];
 

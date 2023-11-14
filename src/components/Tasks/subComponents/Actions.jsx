@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, IconButton, Menu, MenuItem, Fade, Tooltip } from "@mui/material";
+import { Stack, IconButton, Menu, MenuItem, Fade, Tooltip, Box, DialogContent } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -12,6 +12,7 @@ import DuplicateDialog from "./DuplicateDialog";
 import EditSubTasksForm from "../createEditSubtasks/EditSubTasksForm";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import MyDatePicker from "./MyDatePicker ";
 
 export default function Actions({ rowId, isParentRow }) {
   const dispatch = useDispatch();
@@ -25,6 +26,10 @@ export default function Actions({ rowId, isParentRow }) {
 
   const handleMoreClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleAttachFileDialog = (rowId) => {
+    dispatch(openModal("attach-file"));
   };
 
   const handleEditTaskDialog = (rowId) => {
@@ -74,12 +79,20 @@ export default function Actions({ rowId, isParentRow }) {
       <IconButton>
         <CommentIcon />
       </IconButton>
-      <IconButton>
+      <IconButton onClick={() => handleAttachFileDialog(rowId)}>
         <AttachmentIcon />
       </IconButton>
 
+      <ReduxDialog value="attach-file" modalTitle="Attach File(s)" showModalButton={true} redirectPath="/tasks-overview" modalSize="sm">
+        <DialogContent dividers>
+          <Box sx={{ p: 2 }}>
+            <MyDatePicker label="Attach File(s)" required={false} sizeWidth="100%" showBorder={true} />
+          </Box>
+        </DialogContent>
+      </ReduxDialog>
+
       {/* More icon */}
-      <Tooltip title="More" arrow size="small" placement="top-end">
+      <Tooltip arrow title="More" size="small" placement="top-end">
         <IconButton id="fade-button" aria-controls={open ? "fade-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} onClick={handleMoreClick}>
           <MoreVertIcon />
         </IconButton>
