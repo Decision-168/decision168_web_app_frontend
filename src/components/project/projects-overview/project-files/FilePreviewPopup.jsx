@@ -25,14 +25,20 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
 
  const docs = [
    { uri: pdfFile },
-   { uri: docxFile, fileType: 'docx'  },
+   {
+     uri: "https://docs.google.com/document/d/19BtbPtV8I2Hqfdq5CP85ovU87oWfLS3dVm5CMpc4iwE/edit?usp=drive_link",
+   },
    { uri: pngFile },
-   { uri: xlsxFile },
+   {
+     uri: "https://docs.google.com/spreadsheets/d/1r1kup7PAq-MmFF96s3cWDF8yy6zYbdGQPVvjeMc3ykc/edit#gid=0",
+   },
    { uri: csvFile },
    { uri: txtFile },
    { uri: gifFile },
    { uri: jpgFile },
-   { uri: pptxFile },
+   {
+     uri: "https://docs.google.com/presentation/d/1880vP6ofSnG0ADcb8IUKZCRs1xgEry2A/edit?usp=drive_link&ouid=111146504207628920971&rtpof=true&sd=true",
+   },
  ];
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
@@ -68,7 +74,19 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
       >
         {selectedFile ? (
           <>
-            <DocViewer documents={docs} pluginRenderers={DocViewerRenderers} />
+            <DocViewer
+              documents={docs}
+              pluginRenderers={DocViewerRenderers}
+              theme={{
+                primary: "#5296d8",
+                secondary: "#00000099",
+                tertiary: "#5296d899",
+                text_primary: "#00000099",
+                text_secondary: "#5296d8",
+                text_tertiary: "#00000099",
+                disableThemeScrollbar: false,
+              }}
+            />
           </>
         ) : (
           <Box>
