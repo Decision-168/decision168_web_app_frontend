@@ -5,7 +5,7 @@ export const createData = [
       description:
         "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
     },
-    progress: "26%",
+    progress: 26,
     startDate: "2023-01-19",
     endDate: "2023-04-30",
     type: "created-goals",
@@ -16,7 +16,7 @@ export const createData = [
       description:
         "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
     },
-    progress: "76%",
+    progress:76,
     startDate: "2023-01-19",
     endDate: "2023-04-30",
     type: "created-goals",
@@ -30,7 +30,7 @@ export const acceptedData = [
       description:
         "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
     },
-    progress: "56%",
+    progress: 56,
     startDate: "2023-01-19",
     endDate: "2023-04-30",
     type: "accepted-goals",
@@ -44,7 +44,7 @@ export const pendingRequest = [
       description:
         "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
     },
-    progress: "72%",
+    progress: 72,
     startDate: "2023-01-19",
     endDate: "2023-04-30",
     type: "pending-requests",
@@ -58,7 +58,7 @@ export const moreInfoRequest = [
       description:
         "Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.",
     },
-    progress: "32%",
+    progress: 32,
     startDate: "2023-01-19",
     endDate: "2023-04-30",
     type: "more-info-requests",

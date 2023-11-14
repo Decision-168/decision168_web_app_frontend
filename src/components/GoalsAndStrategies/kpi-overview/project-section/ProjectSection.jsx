@@ -4,7 +4,12 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import ProjectAccordion from "./ProjectAccordion";
 import { Add } from "@mui/icons-material";
 import CustomSearchField from "../../../common/CustomSearchField";
+import ReduxDialog from "../../../common/ReduxDialog";
+import CreateProject from "../../../project/Dialogs/CreateProject";
+import { openModal } from "../../../../redux/action/modalSlice";
+import { useDispatch } from "react-redux";
 const ProjectSection = () => {
+    const dispatch = useDispatch();
   const data = [1, 2];
   return (
     <PerfectScrollbar>
@@ -43,11 +48,24 @@ const ProjectSection = () => {
             })}
           </Grid>
           <Box mt={1} textAlign={"start"}>
-            <Button variant="outlined" size="small" startIcon={<Add />}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Add />}
+              onClick={() => dispatch(openModal("create-project"))}
+            >
               Add Project
             </Button>
           </Box>
         </Grid>
+        <ReduxDialog
+          value="create-project"
+          modalTitle="Create New Project"
+          showModalButton={false}
+          modalSize="md"
+        >
+          <CreateProject flag="add" />
+        </ReduxDialog>
       </Box>
     </PerfectScrollbar>
   );

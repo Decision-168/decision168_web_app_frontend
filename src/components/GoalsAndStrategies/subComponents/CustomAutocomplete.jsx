@@ -45,9 +45,9 @@ const CustomAutocomplete = ({
               placeholder={placeholder}
               InputProps={{
                 ...params.InputProps,
-                // sx: {
-                //   "&::placeholder": placeholderStyles,
-                // },
+                sx: {
+                  "&::placeholder": placeholderStyles,
+                },
               }}
             />
           )}
