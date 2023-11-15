@@ -164,7 +164,7 @@ export default function TaskPreview({ styles, filteredRow }) {
 
       <ConfirmationDialog value={"deleteTask"} />
 
-      <CustomDialog handleClose={handleCloseTaskPreviewDailog} open={openSubTaskPreviewDailog} modalTitle="Subtask" redirectPath={"/tasks-overview"} showModalButton={true} modalSize="lg">
+      <CustomDialog handleClose={handleCloseTaskPreviewDailog} open={openSubTaskPreviewDailog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
         <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
       </CustomDialog>
     </>
