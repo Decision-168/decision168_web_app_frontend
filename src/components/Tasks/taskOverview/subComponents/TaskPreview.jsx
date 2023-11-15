@@ -90,19 +90,19 @@ export default function TaskPreview({ styles, filteredRow }) {
           <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
-                <OverviewCardHeader title={`TASK:${taskData.title}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+                <OverviewCardHeader title={`TASK:${taskData?.title}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
                 <Grid container>
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Task Code:</Typography>
-                    <Typography sx={styles.labelText}>{taskData.code}</Typography>
+                    <Typography sx={styles.labelText}>{taskData?.code}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Task Description :</Typography>
-                    <Typography sx={styles.labelText}>{taskData.description}</Typography>
+                    <Typography sx={styles.labelText}>{taskData?.description}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Task Notes:</Typography>
-                    <Typography sx={styles.labelText}>{taskData.note}</Typography>
+                    <Typography sx={styles.labelText}>{taskData?.note}</Typography>
                   </Grid>
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Tasks Links:</Typography>
@@ -116,7 +116,7 @@ export default function TaskPreview({ styles, filteredRow }) {
                     <Typography sx={styles.label}>Subtasks:</Typography>
                     {/*  */}
                     <Box>
-                      {taskData.subRows?.length > 0 ? (
+                      {taskData?.subRows?.length > 0 ? (
                         taskData?.subRows.map((subrow, index) => (
                           <Box key={index} sx={styles.subtaskLinkWrapper}>
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
