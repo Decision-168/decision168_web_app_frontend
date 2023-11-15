@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Add, Groups, ExpandMore } from "@mui/icons-material";
+import { Add, Groups, ExpandMore, PersonRemoveAlt1Rounded } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -15,6 +15,7 @@ import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import AddMemberDialog from "./AddMemberDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import MembersChildAccordion from "./MembersChildAccordion";
+import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 
 const BasicAccordion = ({}) => {
   const [expanded, setExpanded] = useState("acceptedBy");
@@ -22,6 +23,17 @@ const BasicAccordion = ({}) => {
     setExpanded(isExpanded ? panel : false);
   };
   const dispatch = useDispatch();
+
+  const handleRemoveManager = (name) => {
+    dispatch(
+      openCnfModal({
+        modalName: "removeManager",
+        title: "Are you sure?",
+        description: `Remove ${name} as Goal Manager`,
+      })
+    );
+  };
+
   return (
     <Box sx={{ borderRadius: 1 }}>
       <Accordion elevation={0}>
@@ -54,7 +66,7 @@ const BasicAccordion = ({}) => {
             >
               Team Members
             </Typography>
-            <Tooltip title="Add Team Member" placement="right">
+            <Tooltip arrow title="Add Team Member" placement="right">
               <IconButton
                 aria-label="add"
                 color="primary"
@@ -90,24 +102,50 @@ const BasicAccordion = ({}) => {
             sx={{
               height: 46,
               background: "white",
+              p: 2,
+              mt: 1,
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              p: 2,
-              mt: 1,
+              justifyContent:'space-between'
             }}
           >
-            <Typography
-              sx={{ fontSize: 13, fontWeight: "600", color: "#343A40" }}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
-              Goal Manager:
-            </Typography>
-            <Typography
-              sx={{ ml: 1, fontSize: 13, fontWeight: "600", color: "#343A40" }}
-            >
-              Uzma Karjikar
-            </Typography>
+              <Typography
+                sx={{ fontSize: 13, fontWeight: "600", color: "#343A40" }}
+              >
+                Goal Manager:
+              </Typography>
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontSize: 13,
+                  fontWeight: "600",
+                  color: "#343A40",
+                }}
+              >
+                Uzma Karjikar
+              </Typography>
+            </Box>
+            <Tooltip arrow title="Remove Manager" placement="left">
+              <IconButton
+                edge="end"
+                aria-label="remove"
+                onClick={() => handleRemoveManager("Uzma Karjikar")}
+              >
+                <PersonRemoveAlt1Rounded
+                  sx={{ color: "#c7df19", fontSize: 20 }}
+                />
+              </IconButton>
+            </Tooltip>
           </Box>
+
           <MembersChildAccordion
             value={"acceptedBy"}
             expanded={expanded}
@@ -147,6 +185,7 @@ const BasicAccordion = ({}) => {
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />
       <ConfirmationDialog value={"assignManager"} />
+      <ConfirmationDialog value={"removeManager"} />
       <ReduxDialog
         value="add-team-members"
         modalTitle="Add Team Members"

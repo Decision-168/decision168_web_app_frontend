@@ -66,7 +66,7 @@ const ViewGoalsPopup = ({}) => {
     dispatch(openModal("view-all-history"));
   };
   const handleCreateGoal = () => {
-    dispatch(openModal("create-goals"));
+    dispatch(openModal("edit-goals"));
   };
   const handleCreateKPI = () => {
     dispatch(openModal("create-kpis"));
@@ -171,7 +171,7 @@ const ViewGoalsPopup = ({}) => {
         <DuplicateDialog />
       </ReduxDialog>
       <ReduxDialog
-        value="create-goals"
+        value="edit-goals"
         modalTitle="Edit Goal"
         showModalButton={false}
         modalSize="md"

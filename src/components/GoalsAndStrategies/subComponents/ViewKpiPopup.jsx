@@ -1,9 +1,4 @@
-import {
-  Box,
-  Grid,
-  IconButton,
-  useTheme,
-} from "@mui/material";
+import { Box, Grid, IconButton, Tooltip, useTheme } from "@mui/material";
 import React, { memo, useState } from "react";
 import {
   Add,
@@ -28,18 +23,20 @@ import GridList from "./GridList";
 import HiddenListOfDialog from "./HiddenListOfDialog";
 import TitleWithActions from "./TitleWithActions";
 import { description1 } from "./style-functions";
+import CreateProject from "../../project/Dialogs/CreateProject";
+import { useNavigate } from "react-router";
 const ViewKpiPopup = ({}) => {
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-const [openProject, setOpenProject] = useState(false);
+  const [openProject, setOpenProject] = useState(false);
 
-const handleProjectClose = () => {
-  setOpenProject(false);
-};
-const handleProjectOpen = () => {
-  setOpenProject(true);
-};
+  const handleProjectClose = () => {
+    setOpenProject(false);
+  };
+  const handleProjectOpen = () => {
+    setOpenProject(true);
+  };
   const handleFileIt = () => {
     dispatch(
       openCnfModal({
@@ -66,9 +63,15 @@ const handleProjectOpen = () => {
   const handleViewHistory = () => {
     dispatch(openModal("view-all-kpi-history"));
   };
-    const handleEditKPI = () => {
-     dispatch(openModal("edit-kpi"))
-    };
+  const handleEditKPI = () => {
+    dispatch(openModal("edit-kpi"));
+  };
+  const handleAddProject = () => {
+    dispatch(openModal("create-project"));
+  };
+  const handleViewTasks = () => {
+    navigate("/project-tasks-list");
+  };
   return (
     <Box
       sx={{
@@ -84,6 +87,7 @@ const handleProjectOpen = () => {
         <TitleWithActions
           title={"KPI: ABC Strategy 3"}
           handleClick1={handleEditKPI}
+          handleClick2={handleAddProject}
           handleDelete={handleDelete}
           handleDuplicate={handleDuplicate}
           handleFileIt={handleFileIt}
@@ -125,20 +129,25 @@ const handleProjectOpen = () => {
             title={"PROJECT"}
             value={"Dashboard Module"}
           >
-            <IconButton
-              aria-label="view"
-              size="small"
-              // onClick={handleKPIOpen}
-            >
-              <AssignmentTurnedInOutlined fontSize="small" />
-            </IconButton>
-            <IconButton
-              aria-label="view"
-              size="small"
-              onClick={handleProjectOpen}
-            >
-              <VisibilityOutlined fontSize="small" />
-            </IconButton>
+            <Tooltip title="View All Tasks" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleViewTasks}
+              >
+                <AssignmentTurnedInOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Preview Project" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleProjectOpen}
+              >
+                <VisibilityOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </HiddenListOfDialog>
         )}
       </Grid>
@@ -172,12 +181,20 @@ const handleProjectOpen = () => {
         handleClose={handleProjectClose}
         open={openProject}
         modalTitle="Dashboard Module"
-        // redirectPath={"/kpi-overview"}
+        redirectPath={"/projects-overview"}
         showModalButton={true}
         modalSize="md"
       >
         <ViewProjectPopup />
       </CustomDialog>
+      <ReduxDialog
+        value="create-project"
+        modalTitle="Create New Project"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateProject flag="add" />
+      </ReduxDialog>
     </Box>
   );
 };

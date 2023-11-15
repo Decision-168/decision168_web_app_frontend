@@ -14,7 +14,7 @@ function formatDateAsYYMMDD(date) {
   return `${year}-${month}-${day}`;
 }
 
-function MyDatePicker({ label, required, sizeWidth }) {
+function MyDatePicker({ label, required, sizeWidth, showBorder }) {
   const theme = useTheme();
   const [startDate, setStartDate] = useState(new Date());
 
@@ -35,16 +35,25 @@ function MyDatePicker({ label, required, sizeWidth }) {
         disabled
         fullWidth
         value={formatDateAsYYMMDD(startDate)} // Format the date in YY/MM/DD format
-        sx={{ width: sizeWidth, ...textFieldStyles }}
+        sx={{
+          width: sizeWidth,
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderWidth: showBorder ? "1px" : "0px",
+          },
+          "& .MuiOutlinedInput-root": {
+            paddingRight: "0px",
+          },
+          ...textFieldStyles,
+        }}
         InputProps={{
           endAdornment: (
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               customInput={
-                <IconButton>
-                  <CalendarMonthIcon />
-                </IconButton>
+                // <IconButton>
+                <CalendarMonthIcon sx={{ width: "30px", height: "30px", pr: 1, pt: 1, cursor: "pointer" }} />
+                // </IconButton>
               }
             />
           ),

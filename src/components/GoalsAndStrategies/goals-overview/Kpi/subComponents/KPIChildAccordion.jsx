@@ -6,6 +6,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Tooltip,
 } from "@mui/material";
 import {
   AssignmentTurnedInOutlined,
@@ -15,16 +16,20 @@ import {
 import ViewProjectPopup from "../../../subComponents/ViewProjectPopup";
 import CustomDialog from "../../../../common/CustomDialog";
 import ProgressBar from "../../../subComponents/ProgressBar";
+import { useNavigate } from "react-router";
 
 const KPIChildAccordion = ({}) => {
   const [openProject, setOpenProject] = useState(false);
-
+  const navigate = useNavigate();
   const handleProjectClose = () => {
     setOpenProject(false);
   };
   const handleProjectOpen = () => {
     setOpenProject(true);
   };
+    const handleViewTasks = () => {
+      navigate("/project-tasks-list");
+    };
   return (
     <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
       <AccordionSummary
@@ -71,16 +76,24 @@ const KPIChildAccordion = ({}) => {
               justifyContent: "end",
             }}
           >
-            <IconButton aria-label="view" size="small">
-              <AssignmentTurnedInOutlined fontSize="small" />
-            </IconButton>
-            <IconButton
-              aria-label="view"
-              size="small"
-              onClick={handleProjectOpen}
-            >
-              <VisibilityOutlined fontSize="small" />
-            </IconButton>
+            <Tooltip title="View All Tasks" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleViewTasks}
+              >
+                <AssignmentTurnedInOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Preview Project" placement="top">
+              <IconButton
+                aria-label="view"
+                size="small"
+                onClick={handleProjectOpen}
+              >
+                <VisibilityOutlined fontSize="small" />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </AccordionDetails>
@@ -88,7 +101,7 @@ const KPIChildAccordion = ({}) => {
         handleClose={handleProjectClose}
         open={openProject}
         modalTitle="Dashboard Module"
-        // redirectPath={"/kpi-overview"}
+        redirectPath={"/projects-overview"}
         showModalButton={true}
         modalSize="md"
       >

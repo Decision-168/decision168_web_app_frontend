@@ -4,7 +4,7 @@ import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
-import CreateTask from "../components/Tasks/createTask";
+import SubtaskOverview from "../components/Tasks/subtaskOverview";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -32,15 +32,21 @@ const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
 const Project = lazy(() => import("../components/project"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
+const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
+const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
+
 const RouteIndex = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/" element={<PrivateRoute />} />
+        <Route path="/" element={<PrivateRoute />} >
           <Route
             path="/dashboard"
             element={
@@ -122,6 +128,14 @@ const RouteIndex = () => {
             }
           />
           <Route
+            path="/project-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
@@ -133,7 +147,23 @@ const RouteIndex = () => {
             path="/tasks-create"
             element={
               <DashboardLayout>
-                <CreateTask />
+                <CreateEditTask />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/tasks-overview"
+            element={
+              <DashboardLayout>
+                <TaskOverview />
+              </DashboardLayout>
+            }
+          />
+              <Route
+            path="/subtasks-overview"
+            element={
+              <DashboardLayout>
+                <SubtaskOverview/>
               </DashboardLayout>
             }
           />
@@ -161,22 +191,32 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-        <Route
-          path="/archive"
-          element={
-            <DashboardLayout>
-              <Archive />
-            </DashboardLayout>
-          }
-        />
-        <Route
-          path="/trash"
-          element={
-            <DashboardLayout>
-              <Trash />
-            </DashboardLayout>
-          }
-        />
+          <Route
+            path="/projects-overview"
+            element={
+              <DashboardLayout>
+                <ProjectOverview />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/archive"
+            element={
+              <DashboardLayout>
+                <Archive />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <DashboardLayout>
+                <Trash />
+              </DashboardLayout>
+            }
+          />
+        </Route>
+
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />

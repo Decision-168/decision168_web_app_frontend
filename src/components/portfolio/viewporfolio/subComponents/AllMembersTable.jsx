@@ -125,7 +125,7 @@ const Example = () => {
     onCreatingRowSave: handleCreateUser,
     renderRowActions: ({ row }) => (
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        <Tooltip title="Delete">
+        <Tooltip arrow title="Delete">
           <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon />
           </IconButton>

@@ -13,7 +13,41 @@ import CustomFilter from "../common/CustomFilter";
 import CustomSearchField from "../common/CustomSearchField";
 import ProjectListView from "./portfolio-projects-list/ProjectListView";
 import ProjectGridView from "./portfolio-projects-list/ProjectGridView";
-
+import { openModal } from "../../redux/action/modalSlice";
+import ReduxDialog from "../common/ReduxDialog";
+import CreateProject from "./Dialogs/CreateProject";
+import CustomDialog from "../common/CustomDialog";
+import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
+ const filterOption = [
+   {
+     value: "all",
+     label: "All",
+   },
+   {
+     value: "created",
+     label: "Created",
+   },
+   {
+     value: "accepted",
+     label: "Accepted",
+   },
+   {
+     value: "pending",
+     label: "Pending",
+   },
+   {
+     value: "more-info-requests",
+     label: "More Info Requests",
+   },
+   {
+     value: "regular-projects",
+     label: "Regular Projects",
+   },
+   {
+     value: "goal-projects",
+     label: "Goal Projects",
+   },
+ ];
 const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
@@ -23,48 +57,21 @@ const ProjectIndex = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
-  const [openProject, setOpenProject] = useState(false);
-  const filterOption = [
-    {
-      value: "all",
-      label: "All",
-    },
-    {
-      value: "created",
-      label: "Created",
-    },
-    {
-      value: "accepted",
-      label: "Accepted",
-    },
-    {
-      value: "pending",
-      label: "Pending",
-    },
-    {
-      value: "more-info-requests",
-      label: "More Info Requests",
-    },
-    {
-      value: "regular-projects",
-      label: "Regular Projects",
-    },
-    {
-      value: "goal-projects",
-      label: "Goal Projects",
-    },
-  ];
-    const handleProjectClose = () => {
-      setOpenProject(false);
-    };
-    const handleProjectOpen = () => {
-      setOpenProject(true);
-    };
+  const [previewProject, setPreviewProject] = useState(false);
+ 
+  const handleProjectPreviewClose = () => {
+    setPreviewProject(false);
+  };
+  const handleProjectPreviewOpen = () => {
+    setPreviewProject(true);
+  };
+
+  const dispatch = useDispatch();
   const align = alignment === "list";
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={8} sm={4} md={4} lg={4}>
+        <Grid item xs={8} sm={8} md={4} lg={4}>
           <Box
             sx={{
               display: "flex",
@@ -94,6 +101,7 @@ const ProjectIndex = () => {
               startIcon={<Add fontSize="small" />}
               size="small"
               sx={{ fontSize: 12 }}
+              onClick={() => dispatch(openModal("create-project"))}
             >
               Create New
             </Button>
@@ -130,12 +138,36 @@ const ProjectIndex = () => {
 
         <Grid item xs={12}>
           {align ? (
-            <ProjectListView handleOpen={handleProjectOpen} value={value} />
+            <ProjectListView
+              handleOpen={handleProjectPreviewOpen}
+              value={value}
+            />
           ) : (
-            <ProjectGridView handleOpen={handleProjectOpen} value={value} />
+            <ProjectGridView
+              handleOpen={handleProjectPreviewOpen}
+              value={value}
+            />
           )}
         </Grid>
       </Grid>
+      <ReduxDialog
+        value="create-project"
+        modalTitle="Create New Project"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateProject flag="add" />
+      </ReduxDialog>
+      <CustomDialog
+        handleClose={handleProjectPreviewClose}
+        open={previewProject}
+        modalTitle="Dashboard Module"
+        redirectPath={"/projects-overview"}
+        showModalButton={true}
+        modalSize="md"
+      >
+        <ViewProjectPopup />
+      </CustomDialog>
     </Box>
   );
 };

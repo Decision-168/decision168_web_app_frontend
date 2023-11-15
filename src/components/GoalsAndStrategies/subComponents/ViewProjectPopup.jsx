@@ -7,21 +7,24 @@ import {
   FolderOpenOutlined,
   KeyboardDoubleArrowRight,
   Person,
+  Visibility,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReduxDialog from "../../common/ReduxDialog";
 import DuplicateProject from "../kpi-overview/project-section/DuplicateProject";
 import OverallHistory from "./history-section/OverallHistory";
 import GridList from "./GridList";
 import TitleWithActions from "./TitleWithActions";
 import { description2 } from "./style-functions";
+import CreateProject from "../../project/Dialogs/CreateProject";
+import CreateEditTaskForm from "../../Tasks/createEditTask/CreateEditTaskForm";
 const ViewProjectPopup = ({}) => {
   const theme = useTheme();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleFileIt = () => {
     dispatch(
@@ -49,7 +52,15 @@ const ViewProjectPopup = ({}) => {
   const handleViewHistory = () => {
     dispatch(openModal("view-project-history"));
   };
-
+  const handleEditProject = () => {
+    dispatch(openModal("edit-project"));
+  };
+  const handleAddTask = () => {
+    dispatch(openModal("create-new-task"));
+  };
+  const handleViewAllTask = () => {
+    navigate("/project-tasks-list");
+  };
   const CommonLinks = ({ link, linkName }) => {
     return (
       <>
@@ -100,14 +111,19 @@ const ViewProjectPopup = ({}) => {
       <Grid container spacing={2}>
         <TitleWithActions
           title={"Project: Dashboard Module"}
+          handleClick1={handleEditProject}
+          handleClick2={handleAddTask}
+          handleClick3={handleViewAllTask}
           handleDelete={handleDelete}
           handleDuplicate={handleDuplicate}
           handleFileIt={handleFileIt}
           handleViewHistory={handleViewHistory}
           btn1Text={"Edit Project"}
           btn2Text={"Add Task"}
+          btn3Text={"View All Tasks"}
           btn1Icon={<Edit />}
           btn2Icon={<Add />}
+          btn3Icon={<Visibility />}
           description={description2}
           progressHeading={"Status :- Done: 4 Total: 11"}
         />
@@ -171,6 +187,22 @@ const ViewProjectPopup = ({}) => {
         modalSize="md"
       >
         <OverallHistory />
+      </ReduxDialog>
+      <ReduxDialog
+        value="edit-project"
+        modalTitle="Edit Project"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateProject flag="edit" />
+      </ReduxDialog>
+      <ReduxDialog
+        value="create-new-task"
+        modalTitle="Create New Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateEditTaskForm editMode={false} />
       </ReduxDialog>
     </Box>
   );

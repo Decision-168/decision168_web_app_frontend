@@ -1,5 +1,5 @@
 import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
-import { memo, useState } from "react";
+import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -11,7 +11,39 @@ import CustomSearchField from "../common/CustomSearchField";
 import ListSection from "./subComponents/ListSection";
 import GridSection from "./subComponents/GridSection";
 import ReduxDialog from "../common/ReduxDialog";
-import CreateTaskForm from "./createTask/CreateTaskForm";
+import CreateEditTaskForm from "./createEditTask/CreateEditTaskForm";
+import CustomFilter from "../common/CustomFilter";
+
+const filterOption = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "tomorrow",
+    label: " Tomorrow",
+  },
+  {
+    value: "next 168",
+    label: "Next 168",
+  },
+  {
+    value: "my created",
+    label: "My Created",
+  },
+  {
+    value: "today",
+    label: "Today",
+  },
+  {
+    value: "this week",
+    label: "This Week",
+  },
+  {
+    value: " overdue",
+    label: " Overdue",
+  },
+];
 
 const Tasks = () => {
   const [alignment, setAlignment] = useState("list");
@@ -19,7 +51,12 @@ const Tasks = () => {
     setAlignment(newAlignment);
   };
   const dispatch = useDispatch();
+  const [value, setValue] = useState("all");
   const [inputFields, setInputFields] = useState([]);
+
+  const handleChangeRadio = useCallback((event) => {
+    setValue(event.target.value);
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -48,7 +85,7 @@ const Tasks = () => {
             </Button>
 
             <ReduxDialog value="create-new-task" modalTitle="Create New Task" showModalButton={false} modalSize="md">
-              <CreateTaskForm />
+              <CreateEditTaskForm editMode={false} />
             </ReduxDialog>
           </Box>
         </Grid>
@@ -63,9 +100,11 @@ const Tasks = () => {
               flexDirection: "row",
               padding: "5px",
             }}>
-            <IconButton>
+            {/* <IconButton>
               <FilterAltIcon />
-            </IconButton>
+            </IconButton> */}
+
+            <CustomFilter value={value} handleChange={handleChangeRadio} filterOption={filterOption} />
           </Box>
         </Grid>
 

@@ -3,12 +3,16 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Button, Grid, IconButton,Typography } from "@mui/material";
+import { Box, Button, Grid, IconButton,Tooltip,Typography } from "@mui/material";
 import { Add, VisibilityOutlined } from "@mui/icons-material";
 import KPIChildAccordion from "./KPIChildAccordion";
 import ViewKpiPopup from "../../../subComponents/ViewKpiPopup";
 import CustomDialog from "../../../../common/CustomDialog";
 import ProgressBar from "../../../subComponents/ProgressBar";
+import { useDispatch } from "react-redux";
+import { openModal } from "../../../../../redux/action/modalSlice";
+import ReduxDialog from "../../../../common/ReduxDialog";
+import CreateProject from "../../../../project/Dialogs/CreateProject";
 
 const KPIAccordion = ({}) => {
   const data = [1, 2];
@@ -20,6 +24,7 @@ const KPIAccordion = ({}) => {
   const handleKPIOpen = () => {
     setOpenKPI(true);
   };
+  const dispatch = useDispatch()
   return (
     <>
       <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
@@ -58,13 +63,15 @@ const KPIAccordion = ({}) => {
               <ProgressBar />
             </Grid>
             <Grid xs={1} alignSelf={"center"}>
-              <IconButton
-                aria-label="delete"
-                size="small"
-                onClick={handleKPIOpen}
-              >
-                <VisibilityOutlined fontSize="small" />
-              </IconButton>
+              <Tooltip title="Preview KPI" placement="top">
+                <IconButton
+                  aria-label="preview"
+                  size="small"
+                  onClick={handleKPIOpen}
+                >
+                  <VisibilityOutlined fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
           {data.map((item, index) => {
@@ -75,7 +82,12 @@ const KPIAccordion = ({}) => {
             );
           })}
           <Box mt={1} textAlign={"start"}>
-            <Button variant="outlined" size="small" startIcon={<Add />}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Add />}
+              onClick={() => dispatch(openModal("create-project"))}
+            >
               Add Project
             </Button>
           </Box>
@@ -91,6 +103,14 @@ const KPIAccordion = ({}) => {
       >
         <ViewKpiPopup />
       </CustomDialog>
+      <ReduxDialog
+        value="create-project"
+        modalTitle="Create New Project"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateProject flag="add" />
+      </ReduxDialog>
     </>
   );
 };

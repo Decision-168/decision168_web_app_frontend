@@ -24,7 +24,7 @@ export default function CustomMultilineTextField({
 
   return (
     <>
-      <Grid item xs={2} alignSelf={"start"}>
+      <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
           {required && (
@@ -36,9 +36,8 @@ export default function CustomMultilineTextField({
         <TextField
           sx={{
             "& .MuiOutlinedInput-input": {
-              padding: '0px !important',
+              padding: "0px !important",
             },
-
           }}
           id="outlined-multiline-static"
           multiline
@@ -53,6 +52,9 @@ export default function CustomMultilineTextField({
             ...inputProps,
             sx: {
               "&::placeholder": placeholderStyles,
+              "&.MuiOutlinedInput-input": {
+                font: "inherit",
+              },
             },
           }}
           error={!!errors[name]}
