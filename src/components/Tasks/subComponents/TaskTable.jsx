@@ -129,17 +129,21 @@ export default function TaskTable() {
     setSelectedStatus(event.target.value);
   };
 
-  const handleCodeCheckBoxDialog = (rowId) => {
-    dispatch(
-      openCnfModal({
-        modalName: "statusToComplete",
-        title: "",
-        description: `Do you want to Change Task Status to Complete?`,
-      })
-    );
-    handleMoreClose();
+  const handleCodeCheckBoxDialog = (event, rowId) => {
+    if (event.target.checked) {
+      dispatch(
+        openCnfModal({
+          modalName: "statusToComplete",
+          title: "",
+          description: `Do you want to Change Task Status to Complete?`,
+        })
+      );
+      handleMoreClose();
+    } else {
+      dispatch(closeCnfModal({ modalName: "statusToComplete" }));
+    }
   };
-
+  
   //Task PreviewDialog code
   const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
   const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
@@ -227,7 +231,7 @@ export default function TaskTable() {
                             {/* Code */}
                             <TableCell sx={{ width: "10%" }} align="center">
                               <FormGroup sx={{ width: "100px" }}>
-                                <FormControlLabel sx={{ color: "black" }} control={<Checkbox size="small" onChange={() => handleCodeCheckBoxDialog()} />} label={row.code} />
+                                <FormControlLabel sx={{ color: "black" }} control={<Checkbox size="small" onChange={(event) => handleCodeCheckBoxDialog(event, row.id)} />} label={row.code} />
                               </FormGroup>
                             </TableCell>
 
