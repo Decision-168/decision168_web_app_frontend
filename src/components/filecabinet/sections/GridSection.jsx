@@ -114,7 +114,10 @@ const GridSection = ({ handleModuleOpen, handleFileOpen, value }) => {
                 )}
               </Box>
 
-              <Typography sx={{ fontSize: "12px" }}>{nodes.children ? nodes.children.length : 0} Folder(s)</Typography>
+              <Typography sx={{ fontSize: "12px" }}>{(nodes.type != "project-file" &&
+            nodes.type != "task-file" &&
+            nodes.type != "subtask-file" &&
+            nodes.type != "content-file") && (nodes.children ? nodes.children.length : 0)} Folder(s)</Typography>
             </Box>
           </Box>
         </CardContent>
