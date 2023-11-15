@@ -17,6 +17,7 @@ import PortfolioMenu from "./PortfolioMenu";
 import { useTheme } from "@mui/material/styles";
 import { Button, Hidden } from "@mui/material";
 import screenfull from "screenfull";
+import { Link } from "react-router-dom";
 // import SelectMenu from "./SelectMenu";
 
 const drawerWidth = 250;
@@ -115,7 +116,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           </Hidden>
 
           <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} gap={2}>
-            <Button variant="contained" size="small">
+            <Button component={Link} to="/pricing-packages" variant="contained" size="small">
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>
