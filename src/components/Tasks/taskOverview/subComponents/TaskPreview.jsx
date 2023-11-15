@@ -15,6 +15,7 @@ import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import SubtaskPreview from "../../subtaskOverview/subComponent/SubtaskPreview";
 import CustomDialog from "../../../common/CustomDialog";
+import CommentSection from "../../../project/projects-overview/comment-section";
 
 export default function TaskPreview({ styles, filteredRow }) {
   const dispatch = useDispatch();
@@ -137,8 +138,8 @@ export default function TaskPreview({ styles, filteredRow }) {
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7" }}>
-            <Typography variant="h6">Comments Section</Typography>
+          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7" }}>
+            <CommentSection />
           </Paper>
         </Grid>
       </Grid>

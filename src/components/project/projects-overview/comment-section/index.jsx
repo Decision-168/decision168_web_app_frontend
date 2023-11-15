@@ -13,19 +13,14 @@ const CommentSection = ({ projectId }) => {
   const [mentionInput, setMentionInput] = useState("");
 
   useEffect(() => {
-    const storedMessages = localStorage.getItem(
-      `project_${projectId}_messages`
-    );
+    const storedMessages = localStorage.getItem(`project_${projectId}_messages`);
     if (storedMessages) {
       setMessages(JSON.parse(storedMessages));
     }
   }, [projectId]);
 
   const saveMessagesToLocalStorage = (messages) => {
-    localStorage.setItem(
-      `project_${projectId}_messages`,
-      JSON.stringify(messages)
-    );
+    localStorage.setItem(`project_${projectId}_messages`, JSON.stringify(messages));
   };
 
   const getCurrentDate = () => {
@@ -72,9 +67,7 @@ const CommentSection = ({ projectId }) => {
       setAnchorEl(null);
       setMentionInput("");
     }
-    setNewMessage(
-      inputText.replace(/@\[.*?\]\(\d+\)/g, mentionedUser)
-    );
+    setNewMessage(inputText.replace(/@\[.*?\]\(\d+\)/g, mentionedUser));
   };
 
   const handleMentionClick = (mention) => {
@@ -109,12 +102,7 @@ const CommentSection = ({ projectId }) => {
 
     return Object.keys(groupedMessages).map((date, index) => (
       <Fragment key={index}>
-        <MessagesByDate
-          date={date}
-          groupedMessages={groupedMessages}
-          setMessages={setMessages}
-          saveMessagesToLocalStorage={saveMessagesToLocalStorage}
-        />
+        <MessagesByDate date={date} groupedMessages={groupedMessages} setMessages={setMessages} saveMessagesToLocalStorage={saveMessagesToLocalStorage} />
       </Fragment>
     ));
   };
@@ -126,37 +114,30 @@ const CommentSection = ({ projectId }) => {
         width: "100%",
         background: "white",
         p: 2,
-        mt: 2,
+        // mt: 2,
         borderRadius: 1,
       }}
-      mb={2}
-    >
-      <Typography
-        sx={{ color: "#495057", fontSize: 15, fontWeight: "600", ml: 0.5 }}
-      >
-        Comment Section
-      </Typography>
+      mb={2}>
+      <Typography sx={{ color: "#495057", fontSize: 15, fontWeight: "600", textAlign:"left" }}>Comment Section</Typography>
       <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
         {messages.length > 0 ? (
           <ScrollBar>
-            <Box sx={{ maxHeight: "400px" }}>{renderMessagesByDate()}</Box>
+            <Box sx={{ maxHeight: "380px" }}>{renderMessagesByDate()}</Box>
           </ScrollBar>
         ) : (
           <Box
             sx={{
-              maxHeight: "400px",
+              maxHeight: "380px",
               display: "flex",
               alignItems: "center",
               flexDirection: "row",
               justifyContent: "center",
-            }}
-          >
+            }}>
             <Typography
               sx={{
                 color: "#495057",
                 fontSize: 13,
-              }}
-            >
+              }}>
               No Comments Available
             </Typography>
           </Box>
@@ -166,23 +147,9 @@ const CommentSection = ({ projectId }) => {
           sx={{
             borderTop: "1px solid #E0E0E0",
             p: 1,
-          }}
-        >
-          <MentionsInput
-            value={newMessage}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            style={mentionsInputStyle}
-            placeholder="Enter Comment..."
-          >
-            <Mention
-              trigger="@"
-              data={mentionList}
-              renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                <Box>{highlightedDisplay}</Box>
-              )}
-              onAdd={handleMentionClick}
-            />
+          }}>
+          <MentionsInput value={newMessage} onChange={handleInputChange} onKeyDown={handleKeyDown} style={mentionsInputStyle} placeholder="Enter Comment...">
+            <Mention trigger="@" data={mentionList} renderSuggestion={(suggestion, search, highlightedDisplay) => <Box>{highlightedDisplay}</Box>} onAdd={handleMentionClick} />
           </MentionsInput>
           <Box
             sx={{
@@ -190,31 +157,15 @@ const CommentSection = ({ projectId }) => {
               alignItems: "center",
               flexDirection: "row",
               justifyContent: "end",
-            }}
-          >
-            <Button
-              sx={{ mt: 1 }}
-              onClick={handleSendMessage}
-              variant="contained"
-              color="primary"
-              size="small"
-              endIcon={<Send sx={{ fontSize: 7 }} />}
-            >
+            }}>
+            <Button sx={{ mt: 1 }} onClick={handleSendMessage} variant="contained" color="primary" size="small" endIcon={<Send sx={{ fontSize: 7 }} />}>
               Send
             </Button>
           </Box>
-          <Popover
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={handlePopoverClose}
-          >
+          <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handlePopoverClose}>
             <Typography>
               {mentionList.map((mention) => (
-                <Box
-                  key={mention.id}
-                  onClick={() => handleMentionClick(mention)}
-                  style={{ cursor: "pointer" }}
-                >
+                <Box key={mention.id} onClick={() => handleMentionClick(mention)} style={{ cursor: "pointer" }}>
                   {mention.display}
                 </Box>
               ))}

@@ -100,7 +100,7 @@ export const data = [
                                             children: [
                                               {
                                                 id: "0-0-0-0-0-0-0-0-0-0-0-0",
-                                                name: "file1.txt",
+                                                name: "docx_file.docx",
                                                 color: "#c7df19",
                                                 type: "subtask-file",
                                                 description: "",
@@ -109,7 +109,7 @@ export const data = [
                                               },
                                               {
                                                 id: "0-0-0-0-0-0-0-0-0-0-0-1",
-                                                name: "file2.txt",
+                                                name: "excel_file.xlsx",
                                                 color: "#c7df19",
                                                 type: "subtask-file",
                                                 description: "",
@@ -118,7 +118,16 @@ export const data = [
                                               },
                                               {
                                                 id: "0-0-0-0-0-0-0-0-0-0-0-2",
-                                                name: "file3.txt",
+                                                name: "img_file.png",
+                                                color: "#c7df19",
+                                                type: "subtask-file",
+                                                description: "",
+                                                overview: "yes",
+                                                section: "12",
+                                              },
+                                              {
+                                                id: "0-0-0-0-0-0-0-0-0-0-0-3",
+                                                name: "pdf_file.pdf",
                                                 color: "#c7df19",
                                                 type: "subtask-file",
                                                 description: "",
@@ -144,7 +153,7 @@ export const data = [
                               },
                               {
                                 id: "0-0-0-0-0-0-0-2",
-                                name: "project-file-1.jpg",
+                                name: "docx_file.docx",
                                 color: "#c7df19",
                                 type: "project-file",
                                 description: "",
@@ -153,7 +162,7 @@ export const data = [
                               },
                               {
                                 id: "0-0-0-0-0-0-0-3",
-                                name: "project-file-2.jpg",
+                                name: "excel_file.xlsx",
                                 color: "#c7df19",
                                 type: "project-file",
                                 description: "",
@@ -291,7 +300,7 @@ export const data = [
                                     children: [
                                       {
                                         id: "0-1-0-0-0-0-0-0-0-0",
-                                        name: "file1.txt",
+                                        name: "docx_file.docx",
                                         color: "#c7df19",
                                         type: "subtask-file",
                                         description: "",
@@ -300,7 +309,7 @@ export const data = [
                                       },
                                       {
                                         id: "0-1-0-0-0-0-0-0-0-1",
-                                        name: "file2.txt",
+                                        name: "excel_file.xlsx",
                                         color: "#c7df19",
                                         type: "subtask-file",
                                         description: "",
@@ -309,7 +318,16 @@ export const data = [
                                       },
                                       {
                                         id: "0-1-0-0-0-0-0-0-0-2",
-                                        name: "file3.txt",
+                                        name: "img_file.png",
+                                        color: "#c7df19",
+                                        type: "subtask-file",
+                                        description: "",
+                                        overview: "yes",
+                                        section: "10",
+                                      },
+                                      {
+                                        id: "0-1-0-0-0-0-0-0-0-3",
+                                        name: "pdf_file.pdf",
                                         color: "#c7df19",
                                         type: "subtask-file",
                                         description: "",
@@ -335,7 +353,7 @@ export const data = [
                       },
                       {
                         id: "0-1-0-0-0-2",
-                        name: "project-file-1.jpg",
+                        name: "docx_file.docx",
                         color: "#c7df19",
                         type: "project-file",
                         description: "",
@@ -344,7 +362,7 @@ export const data = [
                       },
                       {
                         id: "0-1-0-0-0-3",
-                        name: "project-file-2.jpg",
+                        name: "excel_file.xlsx",
                         color: "#c7df19",
                         type: "project-file",
                         description: "",
@@ -442,7 +460,7 @@ export const data = [
                             children: [
                               {
                                 id: "0-2-0-0-0-0-0-0",
-                                name: "file1.txt",
+                                name: "docx_file.docx",
                                 color: "#c7df19",
                                 type: "subtask-file",
                                 description: "",
@@ -451,7 +469,7 @@ export const data = [
                               },
                               {
                                 id: "0-2-0-0-0-0-0-1",
-                                name: "file2.txt",
+                                name: "excel_file.xlsx",
                                 color: "#c7df19",
                                 type: "subtask-file",
                                 description: "",
@@ -460,7 +478,16 @@ export const data = [
                               },
                               {
                                 id: "0-2-0-0-0-0-0-2",
-                                name: "file3.txt",
+                                name: "img_file.png",
+                                color: "#c7df19",
+                                type: "subtask-file",
+                                description: "",
+                                overview: "yes",
+                                section: "8",
+                              },
+                              {
+                                id: "0-2-0-0-0-0-0-3",
+                                name: "pdf_file.pdf",
                                 color: "#c7df19",
                                 type: "subtask-file",
                                 description: "",
@@ -486,7 +513,7 @@ export const data = [
               },
               {
                 id: "0-2-0-2",
-                name: "project-file-1.jpg",
+                name: "docx_file.docx",
                 color: "#c7df19",
                 type: "project-file",
                 description: "",
@@ -495,7 +522,7 @@ export const data = [
               },
               {
                 id: "0-2-0-3",
-                name: "project-file-2.jpg",
+                name: "excel_file.xlsx",
                 color: "#c7df19",
                 type: "project-file",
                 description: "",
@@ -553,7 +580,7 @@ export const data = [
                     children: [
                       {
                         id: "0-3-0-0-0-0",
-                        name: "file1.txt",
+                        name: "docx_file.docx",
                         color: "#c7df19",
                         type: "subtask-file",
                         description: "",
@@ -562,7 +589,7 @@ export const data = [
                       },
                       {
                         id: "0-3-0-0-0-1",
-                        name: "file2.txt",
+                        name: "excel_file.xlsx",
                         color: "#c7df19",
                         type: "subtask-file",
                         description: "",
@@ -571,7 +598,16 @@ export const data = [
                       },
                       {
                         id: "0-3-0-0-0-2",
-                        name: "file3.txt",
+                        name: "img_file.png",
+                        color: "#c7df19",
+                        type: "subtask-file",
+                        description: "",
+                        overview: "yes",
+                        section: "6",
+                      },
+                      {
+                        id: "0-3-0-0-0-3",
+                        name: "pdf_file.pdf",
                         color: "#c7df19",
                         type: "subtask-file",
                         description: "",
@@ -606,7 +642,7 @@ export const data = [
             children: [
               {
                 id: "0-4-0-0",
-                name: "file1.txt",
+                name: "docx_file.docx",
                 color: "#c7df19",
                 type: "subtask-file",
                 description: "",
@@ -615,7 +651,7 @@ export const data = [
               },
               {
                 id: "0-4-0-1",
-                name: "file2.txt",
+                name: "excel_file.xlsx",
                 color: "#c7df19",
                 type: "subtask-file",
                 description: "",
@@ -624,7 +660,16 @@ export const data = [
               },
               {
                 id: "0-4-0-2",
-                name: "file3.txt",
+                name: "img_file.png",
+                color: "#c7df19",
+                type: "subtask-file",
+                description: "",
+                overview: "yes",
+                section: "4",
+              },
+              {
+                id: "0-4-0-3",
+                name: "pdf_file.pdf",
                 color: "#c7df19",
                 type: "subtask-file",
                 description: "",

@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import { Box, Button } from "@mui/material";
+import { Box, Button, DialogActions } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
@@ -26,6 +26,7 @@ const CustomPopup = ({
   handleClose,
   open,
   modalTitle,
+  modalType,
   showModalButton,
   modalSize,
   redirectPath,
@@ -63,7 +64,20 @@ const CustomPopup = ({
           <Typography component="h6" variant="subtitle2" mr={2}>
             {modalTitle}
           </Typography>
-          <Button size="small" variant="contained" onClick={() => handleReopen(modalTitle)}>Reopen</Button>
+          {modalType != "project-file" &&
+            modalType != "task-file" &&
+            modalType != "subtask-file" &&
+            modalType != "content-file" && (
+              <>
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() => handleReopen(modalTitle)}
+                >
+                  Reopen
+                </Button>
+              </>
+            )}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -79,6 +93,23 @@ const CustomPopup = ({
         </IconButton>
 
         <DialogContent dividers>{children}</DialogContent>
+        {(modalType === "project-file" ||
+          modalType === "task-file" ||
+          modalType === "subtask-file" ||
+          modalType === "content-file") && (
+          <>
+            <DialogActions>
+              <Button
+                autoFocus
+                variant="contained"
+                href={(modalType === "project-file") && (`./src/assets/project_files/${modalTitle}`) || (modalType === "task-file") && (`./src/assets/task_files/${modalTitle}`) || (modalType === "subtask-file") && (`./src/assets/task_files/${modalTitle}`) || (modalType === "content-file") && (`./src/assets/plan_content_files/${modalTitle}`)}
+                download={modalTitle}
+              >
+                Download
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </BootstrapDialog>
       <ConfirmationDialog value={"reopenModule"} />
     </div>

@@ -4,21 +4,42 @@ import React from "react";
 const data = [
   {
     id: "0",
-    filename: "file1.txt",
-    type: "Subtask",
+    name: "docx_file.docx",
+    type: "subtask-file",
+    label: "Subtask",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
   },
   {
     id: "1",
-    filename: "file2.txt",
-    type: "Subtask",
+    name: "excel_file.xlsx",
+    type: "project-file",
+    label: "Project",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
   },
   {
     id: "2",
-    filename: "file3.txt",
-    type: "Subtask",
+    name: "img_file.png",
+    type: "task-file",
+    label: "Task",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
+  },
+  {
+    id: "23",
+    name: "pdf_file.pdf",
+    type: "task-file",
+    label: "Task",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
   },
 ];
-const RecentFiles = () => {
+const RecentFiles = ({ handleFileOpen }) => {
   return (
     <Paper elevation={0} sx={{ m: 1 }}>
       <Box
@@ -32,7 +53,7 @@ const RecentFiles = () => {
       >
         <Typography sx={{ fontSize: 16, p: 1 }}>Recent Files</Typography>
         {data.map((filedata) => (
-          <Card key={filedata.id} variant="outlined" sx={{ mb: 1, cursor: "pointer" }}>
+          <Card key={filedata.id} variant="outlined" sx={{ mb: 1, cursor: "pointer" }} onClick={() => handleFileOpen(filedata)}>
             <CardContent>
               <Grid container>
                 <Grid item xs={12} lg={3}>
@@ -40,10 +61,10 @@ const RecentFiles = () => {
                 </Grid>
                 <Grid item xs={12} lg={9} sx={{textAlign: "left"}}>
                   <Typography sx={{ fontSize: 14 }}>
-                    {filedata.filename}
+                    {filedata.name}
                   </Typography>
                   <Typography sx={{ color: "#c7df19", fontSize: 12 }}>
-                    {filedata.type}
+                    {filedata.label}
                   </Typography>
                 </Grid>
               </Grid>
