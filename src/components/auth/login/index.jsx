@@ -6,7 +6,6 @@ import Ribbon from "../subComponents/Ribbon";
 import Brand from "../subComponents/Brand";
 import Header from "../subComponents/Header";
 import Form from "./Form";
-import SocialMedia from "../subComponents/SocialMedia";
 import Copyright from "../subComponents/Copyright";
 import BackImage from "../subComponents/BackImage";
 import { useTheme } from "@mui/material/styles";
@@ -62,9 +61,9 @@ export default function Login() {
             <Form />
 
             {/* Social Media platforms */}
-            <Box mt={2}>
+            {/* <Box mt={2}>
               <SocialMedia title="Sign in With" />
-            </Box>
+            </Box> */}
           </Box>
           {/* Navigation */}
           <Navigation

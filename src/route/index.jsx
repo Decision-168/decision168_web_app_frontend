@@ -40,13 +40,13 @@ const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
-
+const MyAlert = lazy(() => import("../components/myAlert"));
 const RouteIndex = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/" element={<PrivateRoute />} >
+        <Route path="/" element={<PrivateRoute />}>
           <Route
             path="/dashboard"
             element={
@@ -135,11 +135,36 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+
+          <Route
+            path="/today-tasks"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/week-tasks"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
           <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
                 <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/my-alerts"
+            element={
+              <DashboardLayout>
+                <MyAlert />
               </DashboardLayout>
             }
           />
@@ -159,11 +184,11 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-              <Route
+          <Route
             path="/subtasks-overview"
             element={
               <DashboardLayout>
-                <SubtaskOverview/>
+                <SubtaskOverview />
               </DashboardLayout>
             }
           />

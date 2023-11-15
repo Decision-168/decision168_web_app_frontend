@@ -201,7 +201,7 @@ const CustomTable = ({ title, handleOpen, data }) => {
           color: "#343a40",
           fontWeight: "900",
           fontSize: "16px",
-          alignSelf: "end",
+          alignSelf: "center",
         }}
       >
         {title}

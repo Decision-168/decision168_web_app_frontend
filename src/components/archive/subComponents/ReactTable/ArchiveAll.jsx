@@ -3,10 +3,11 @@ import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import CustomTable from "../../../common/CustomTable";
 
 const ArchiveAll = () => {
   const dispatch = useDispatch();
@@ -147,15 +148,24 @@ const ArchiveAll = () => {
       },
     },
     columnFilterDisplayMode: "popover",
+    renderTopToolbarCustomActions: () => (
+      <Typography
+        sx={{
+          color: "#343a40",
+          fontWeight: "900",
+          fontSize: "16px",
+          alignSelf: "center",
+        }}
+      >
+        Archive All
+      </Typography>
+    ),
   });
   return (
-    <Box>
-      <MaterialReactTable
-        sx={{ "& .MuiTable-root": { size: 130 } }}
-        table={table}
-      />
+    <>
+      <CustomTable table={table} />
       <ConfirmationDialog value={"reopenModule"} />
-    </Box>
+    </>
   );
 };
 

@@ -9,7 +9,7 @@ export default function UpdateProfile() {
   const theme = useTheme();
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <BasicBreadcrumbs currentPage="update" showBackButton={false} />
+      <BasicBreadcrumbs currentPage="update" showBackButton={true} />
       <Grid container spacing={2}>
         <Grid item xs={12} lg={9}>
           <ProfileCard />

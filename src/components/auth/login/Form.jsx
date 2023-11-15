@@ -15,13 +15,13 @@ export default function Form() {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  // const [isCaptchaVerified, setCaptchaVerified] = useState(false);
+   const [isCaptchaVerified, setCaptchaVerified] = useState(false);
 
-  // const handleCaptchaChange = (response) => {
-  //   if (response) {
-  //     setCaptchaVerified(true);
-  //   }
-  // };
+   const handleCaptchaChange = (response) => {
+     if (response) {
+       setCaptchaVerified(true);
+     }
+   };
   // const onSubmit = (data) => {
   //   if (isCaptchaVerified) {
   //     alert(JSON.stringify(data));
@@ -37,8 +37,13 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-      <Box sx={{ height: "65px"}}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
+      <Box sx={{ height: "65px" }}>
         <CustomTextField
           name="email"
           placeholder="Email Address"
@@ -48,7 +53,7 @@ export default function Form() {
         />
       </Box>
 
-      <Box sx={{ height: "65px"}}>
+      <Box sx={{ height: "65px" }}>
         <CustomPasswordField
           showTooltip={false}
           name="password"
@@ -58,17 +63,27 @@ export default function Form() {
           validation={authValidations.password} // Pass the validation rules as a prop
         />
       </Box>
-      {/* <ReCAPTCHA
-        sitekey="6LeGztMcAAAAAP6yPwVYpzxL2qPnmdK2nVgFb1Dp"
-        onChange={handleCaptchaChange}
-      /> */}
+      <Box mb={1}>
+        <ReCAPTCHA
+          sitekey="6LeGztMcAAAAAP6yPwVYpzxL2qPnmdK2nVgFb1Dp"
+          onChange={handleCaptchaChange}
+        />
+      </Box>
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <FormControlLabel control={<Checkbox value="remember" size="small" />} label="Remember me" />
+        <FormControlLabel
+          control={<Checkbox value="remember" size="small" />}
+          label="Remember me"
+        />
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ my: 2, borderRadius: "3px" }}
+      >
         Log In
       </Button>
     </Box>
