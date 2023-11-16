@@ -5,6 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
+import Pricing from "../components/pricing";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -16,25 +17,13 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() =>
-  import("../components/portfolio/viewporfolio/")
-);
-const CreateEditPortfolio = lazy(() =>
-  import("../components/portfolio/createEditPortfolio")
-);
-const PortfolioGoals = lazy(() =>
-  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
-);
-const GoalsOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/goals-overview")
-);
-const KPIOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/kpi-overview")
-);
+const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
+const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
+const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
 const Project = lazy(() => import("../components/project"));
-const ProjectOverview = lazy(() =>
-  import("../components/project/projects-overview/ProjectOverview")
-);
+const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
@@ -46,12 +35,20 @@ const RouteIndex = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/" element={<PrivateRoute />} >
+        <Route path="/" element={<PrivateRoute />}>
           <Route
             path="/dashboard"
             element={
               <DashboardLayout>
                 <Dashboard />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/pricing-packages"
+            element={
+              <DashboardLayout>
+                <Pricing />
               </DashboardLayout>
             }
           />
@@ -159,11 +156,11 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-              <Route
+          <Route
             path="/subtasks-overview"
             element={
               <DashboardLayout>
-                <SubtaskOverview/>
+                <SubtaskOverview />
               </DashboardLayout>
             }
           />
