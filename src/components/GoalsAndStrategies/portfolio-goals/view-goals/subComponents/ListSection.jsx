@@ -24,7 +24,7 @@ const tableData = {
   ],
 };
 
-const ListSection = ({ handleGoalOpen, value }) => {
+const ListSection = ({ handleGoalOpen,handlePendingGoalOpen, value }) => {
   const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2} mt={2}>
@@ -34,6 +34,7 @@ const ListSection = ({ handleGoalOpen, value }) => {
             <CustomTable
               title={table.title}
               handleOpen={handleGoalOpen}
+              handlePendingGoalOpen={handlePendingGoalOpen}
               data={table.data}
             />
           </Grid>

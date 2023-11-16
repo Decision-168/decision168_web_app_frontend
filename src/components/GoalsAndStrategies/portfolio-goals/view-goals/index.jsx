@@ -18,10 +18,12 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import CreateGoal from "../create-goals";
 import { openModal } from "../../../../redux/action/modalSlice";
 import CustomSearchField from "../../../common/CustomSearchField";
+import PendingPopup from "../../subComponents/PendingPopup";
 
 const ViewGoalsIndex = () => {
   const dispatch = useDispatch();
   const [openGoal, setOpenGoal] = useState(false);
+    const [openPendingGoal, setOpenPendingGoal] = useState(false);
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -36,7 +38,12 @@ const ViewGoalsIndex = () => {
   const handleGoalOpen = () => {
     setOpenGoal(true);
   };
-
+ const handlePendingGoalClose = () => {
+   setOpenPendingGoal(false);
+ };
+ const handlePendingGoalOpen = () => {
+   setOpenPendingGoal(true);
+ };
   const filterOption = [
     {
       value: "all",
@@ -130,9 +137,17 @@ const ViewGoalsIndex = () => {
 
         <Grid item xs={12}>
           {align ? (
-            <ListSection handleGoalOpen={handleGoalOpen} value={value} />
+            <ListSection
+              handleGoalOpen={handleGoalOpen}
+              handlePendingGoalOpen={handlePendingGoalOpen}
+              value={value}
+            />
           ) : (
-            <GridSection handleGoalOpen={handleGoalOpen} value={value} />
+            <GridSection
+              handleGoalOpen={handleGoalOpen}
+              handlePendingGoalOpen={handlePendingGoalOpen}
+              value={value}
+            />
           )}
         </Grid>
       </Grid>
@@ -145,7 +160,7 @@ const ViewGoalsIndex = () => {
       >
         <CreateGoal />
       </ReduxDialog>
-      
+
       <CustomDialog
         handleClose={handleGoalClose}
         open={openGoal}
@@ -155,6 +170,16 @@ const ViewGoalsIndex = () => {
         modalSize="md"
       >
         <ViewGoalsPopup />
+      </CustomDialog>
+      <CustomDialog
+        handleClose={handlePendingGoalClose}
+        open={openPendingGoal}
+        modalTitle="Nov Goal"
+        redirectPath={"/goal-overview-request"}
+        showModalButton={true}
+        modalSize="md"
+      >
+        <PendingPopup />
       </CustomDialog>
     </Box>
   );

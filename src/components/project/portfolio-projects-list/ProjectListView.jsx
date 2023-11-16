@@ -59,7 +59,7 @@ const tableData = {
   ],
 };
 
-const ProjectListView = ({ handleOpen, value }) => {
+const ProjectListView = ({ handleOpen, value,handlePendingOpen }) => {
   const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2} mt={2}>
@@ -70,6 +70,7 @@ const ProjectListView = ({ handleOpen, value }) => {
               title={table.title}
               handleOpen={handleOpen}
               data={table.data}
+              handlePendingOpen={handlePendingOpen}
             />
           </Grid>
         ))}

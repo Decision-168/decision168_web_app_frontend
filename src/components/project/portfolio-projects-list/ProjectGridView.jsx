@@ -29,7 +29,7 @@ const tableData = {
   ],
 };
 
-const ProjectGridView = ({ handleOpen, value }) => {
+const ProjectGridView = ({ handleOpen, value, handlePendingOpen }) => {
   const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -41,6 +41,7 @@ const ProjectGridView = ({ handleOpen, value }) => {
                 value={item.type}
                 item={item}
                 handleOpen={handleOpen}
+                handlePendingOpen={handlePendingOpen}
               />
             </Grid>
           );

@@ -14,7 +14,15 @@ import {
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
 
-const CustomCard = ({ item, handleOpen, value }) => {
+const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
+  const handleOpenCondition = (type) => {
+    if (["accepted-goals", "created-goals"].includes(type)) {
+      handleOpen();
+    } else {
+      handlePendingGoalOpen();
+    }
+  };
+
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -37,7 +45,7 @@ const CustomCard = ({ item, handleOpen, value }) => {
           flexDirection: "column",
           justifyContent: "start",
           alignItems: "start",
-          pb:1
+          pb: 1,
         }}
       >
         <CardHeader
@@ -107,7 +115,10 @@ const CustomCard = ({ item, handleOpen, value }) => {
           padding: "8px 4px",
         }}
       >
-        <IconButton aria-label="settings" onClick={handleOpen}>
+        <IconButton
+          aria-label="settings"
+          onClick={() => handleOpenCondition(value)}
+        >
           <VisibilityOutlined fontSize="small" />
         </IconButton>
       </CardActions>

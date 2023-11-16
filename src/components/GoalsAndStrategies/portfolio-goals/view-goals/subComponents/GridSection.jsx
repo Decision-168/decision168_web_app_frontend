@@ -17,7 +17,7 @@ const tableData = {
   "more-info-requests": [...moreInfoRequest],
 };
 
-const GridSection = ({ handleGoalOpen, value }) => {
+const GridSection = ({ handleGoalOpen, value, handlePendingGoalOpen }) => {
   const tablesToRender = tableData[value] || [];
 
   return (
@@ -30,6 +30,7 @@ const GridSection = ({ handleGoalOpen, value }) => {
                 value={item.type}
                 item={item}
                 handleOpen={handleGoalOpen}
+                handlePendingGoalOpen={handlePendingGoalOpen}
               />
             </Grid>
           );

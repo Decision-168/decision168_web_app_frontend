@@ -17,6 +17,7 @@ const MembersChildAccordion = ({
   handleChange,
   title,
   bgColor,
+  pending,
 }) => {
   const username = ["Alim Mohammad", "Arshad Khan", "Syed Jameel"];
   return (
@@ -47,25 +48,27 @@ const MembersChildAccordion = ({
           >
             {title}
           </Typography>
-          <Avatar
-            sx={{
-              width: 16,
-              height: 16,
-              background: "tomato",
-              p: 0.2,
-              fontSize: 10,
-              ml: 1,
-            }}
-          >
-            {username.length}
-          </Avatar>
+          {!pending && (
+            <Avatar
+              sx={{
+                width: 16,
+                height: 16,
+                background: "tomato",
+                p: 0.2,
+                fontSize: 10,
+                ml: 1,
+              }}
+            >
+              {username.length}
+            </Avatar>
+          )}
         </Box>
       </AccordionSummary>
       <AccordionDetails>
         {username.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList username={item} assignManagerFlag={value} />
+              <UserList username={item} assignManagerFlag={value} pending ={pending}/>
             </List>
           );
         })}

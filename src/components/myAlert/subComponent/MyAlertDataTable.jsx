@@ -1,10 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { stringAvatar } from "../../../helpers/stringAvatar";
+import CustomTable from "../../common/CustomTable";
+import TaskPreview from "../../Tasks/taskOverview/subComponents/TaskPreview";
+import CustomDialog from "../../common/CustomDialog";
 
 const MyAlertDataTable = () => {
   const data = useMemo(
@@ -28,26 +31,6 @@ const MyAlertDataTable = () => {
         },
         title: "Task",
         type: "Task Overdue",
-      },
-      {
-        isActive: true,
-        date: "2023-11-14",
-        info: {
-          title: "Dev Meet",
-          description: null,
-        },
-        title: "Meeting",
-        type: "Meeting Member Request",
-      },
-      {
-        isActive: true,
-        date: "2023-11-14",
-        info: {
-          title: "MY TEST EVENT",
-          description: null,
-        },
-        title: "Event",
-        type: "Event Member Request",
       },
       {
         isActive: true,
@@ -112,6 +95,15 @@ const MyAlertDataTable = () => {
     ],
     []
   );
+    const [filteredTask, setFilterTask] = useState([]);
+  const [open, setOpen] = useState(false)
+  const handleOpen = (type)=>{
+    console.log(type);
+    setOpen(true)
+  }
+    const handleClose = () => {
+      setOpen(false);
+    };
   const theme = useTheme();
   const columns = useMemo(
     () => [
@@ -153,6 +145,7 @@ const MyAlertDataTable = () => {
                   cursor: "pointer",
                 }}
                 textAlign={"start"}
+                onClick={() => handleOpen(row.original?.type)}
               >
                 {row.original?.info?.title}
               </Typography>
@@ -197,7 +190,22 @@ const MyAlertDataTable = () => {
     },
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <>
+      <CustomTable table={table} />
+      <CustomDialog
+        handleClose={handleClose}
+        open={open}
+        modalTitle="Task"
+        redirectPath={"/tasks-overview"}
+        showModalButton={true}
+        modalSize="lg"
+      >
+        <TaskPreview filteredRow={filteredTask} />
+
+      </CustomDialog>
+    </>
+  );
 };
 
 export default MyAlertDataTable;

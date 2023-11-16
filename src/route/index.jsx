@@ -6,6 +6,7 @@ import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -28,12 +29,18 @@ const PortfolioGoals = lazy(() =>
 const GoalsOverview = lazy(() =>
   import("../components/GoalsAndStrategies/goals-overview")
 );
+const GoalOverviewRequest = lazy(() =>
+  import("../components/GoalsAndStrategies/goal-overview-request")
+);
 const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
 const Project = lazy(() => import("../components/project"));
 const ProjectOverview = lazy(() =>
   import("../components/project/projects-overview/ProjectOverview")
+);
+const ProjectOverviewRequest = lazy(() =>
+  import("../components/project/projects-overview-request")
 );
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
@@ -128,6 +135,14 @@ const RouteIndex = () => {
             }
           />
           <Route
+            path="/goal-overview-request"
+            element={
+              <DashboardLayout>
+                <GoalOverviewRequest />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/project-tasks-list"
             element={
               <DashboardLayout>
@@ -135,7 +150,6 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-
           <Route
             path="/today-tasks"
             element={
@@ -224,6 +238,15 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+          <Route
+            path="/projects-overview-request"
+            element={
+              <DashboardLayout>
+                <ProjectOverviewRequest />
+              </DashboardLayout>
+            }
+          />
+
           <Route
             path="/archive"
             element={

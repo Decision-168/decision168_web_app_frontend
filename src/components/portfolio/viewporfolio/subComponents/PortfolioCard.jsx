@@ -20,19 +20,21 @@ import DeleteDailogContent from "./DeleteDailogContent";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateProject from "../../../project/Dialogs/CreateProject";
-
+import { useNavigate } from "react-router-dom";
 const items = [
-  {
-    count: 10,
-    label: "Portfolio",
-  },
+  // {
+  //   count: 10,
+  //   label: "Portfolio",
+  // },
   {
     count: 5,
     label: "Projects",
+    link: "/portfolio-projects-list",
   },
   {
     count: 28,
     label: "Tasks",
+    link: "/portfolio-tasks-list",
   },
 ];
 
@@ -113,7 +115,7 @@ export default function PortfolioCard() {
       })
     );
   };
-
+  const navigate = useNavigate();
   return (
     <Paper elevation={0}>
       <Grid container>
@@ -150,23 +152,37 @@ export default function PortfolioCard() {
           <Grid container>
             {items.map((item, index) => (
               <Grid item xs={12} sm={4} p={2} key={index}>
-                <Typography
-                  variant="caption"
-                  display="block"
-                  textAlign="left"
-                  gutterBottom
-                >
-                  {item.count}
-                </Typography>
-                <Typography variant="subtitle2" textAlign="left">
-                  {item.label}
-                </Typography>
+                <Stack alignItems="flex-start" flexDirection={"column"}>
+                  <Typography
+                    variant="caption"
+                    textAlign={"left"}
+                    display="block"
+                    gutterBottom
+                  >
+                    {item.count}
+                  </Typography>
+                  <Typography
+                    variant="text"
+                    sx={{
+                      cursor: "pointer",
+                      fontSize: 15,
+                      color: "#343a40",
+                      fontWeight: "900",
+                      ":hover": {
+                        color: "#c7df19",
+                      },
+                    }}
+                    onClick={() => navigate(item.link)}
+                  >
+                    {item.label}
+                  </Typography>
+                </Stack>
               </Grid>
             ))}
           </Grid>
         </Grid>
 
-        <Grid item xs={12} md={2} p={2} textAlign="left">
+        {/* <Grid item xs={12} md={2} p={2} textAlign="left">
           <Link to="/">
             <Button
               variant="contained"
@@ -176,7 +192,7 @@ export default function PortfolioCard() {
               Portfolio report
             </Button>
           </Link>
-        </Grid>
+        </Grid> */}
 
         <Grid
           item

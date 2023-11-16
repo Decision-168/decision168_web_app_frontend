@@ -18,6 +18,7 @@ import ReduxDialog from "../common/ReduxDialog";
 import CreateProject from "./Dialogs/CreateProject";
 import CustomDialog from "../common/CustomDialog";
 import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
+import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
  const filterOption = [
    {
      value: "all",
@@ -58,6 +59,8 @@ const ProjectIndex = () => {
     setValue(event.target.value);
   }, []);
   const [previewProject, setPreviewProject] = useState(false);
+      const [openPreviewPendingProj, setOpenPreviewPendingProj] =
+        useState(false);
  
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
@@ -65,7 +68,12 @@ const ProjectIndex = () => {
   const handleProjectPreviewOpen = () => {
     setPreviewProject(true);
   };
-
+ const handlePendingProjectClose = () => {
+   setOpenPreviewPendingProj(false);
+ };
+ const handlePendingProjectOpen = () => {
+   setOpenPreviewPendingProj(true);
+ };
   const dispatch = useDispatch();
   const align = alignment === "list";
   return (
@@ -140,11 +148,13 @@ const ProjectIndex = () => {
           {align ? (
             <ProjectListView
               handleOpen={handleProjectPreviewOpen}
+              handlePendingOpen={handlePendingProjectOpen}
               value={value}
             />
           ) : (
             <ProjectGridView
               handleOpen={handleProjectPreviewOpen}
+              handlePendingOpen={handlePendingProjectOpen}
               value={value}
             />
           )}
@@ -167,6 +177,16 @@ const ProjectIndex = () => {
         modalSize="md"
       >
         <ViewProjectPopup />
+      </CustomDialog>
+      <CustomDialog
+        handleClose={handlePendingProjectClose}
+        open={openPreviewPendingProj}
+        modalTitle="Test Project for developer"
+        redirectPath={"/projects-overview-request"}
+        showModalButton={true}
+        modalSize="md"
+      >
+        <PendingProjectPopup />
       </CustomDialog>
     </Box>
   );

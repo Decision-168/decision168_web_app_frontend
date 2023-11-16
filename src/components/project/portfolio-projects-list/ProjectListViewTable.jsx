@@ -15,7 +15,20 @@ import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 
-const ProjectListViewTable = ({ title, handleOpen, data }) => {
+const ProjectListViewTable = ({
+  title,
+  handleOpen,
+  data,
+  handlePendingOpen,
+}) => {
+
+  const handleOpenCondition = (type) => {
+    if (["Created Projects", "Accepted Projects"].includes(type)) {
+      handleOpen();
+    } else {
+      handlePendingOpen();
+    }
+  };
   const theme = useTheme();
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
@@ -85,7 +98,10 @@ const ProjectListViewTable = ({ title, handleOpen, data }) => {
               </Box>
             </Box>
 
-            <IconButton aria-label="settings" onClick={handleOpen}>
+            <IconButton
+              aria-label="settings"
+              onClick={() => handleOpenCondition(title)}
+            >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
           </Box>

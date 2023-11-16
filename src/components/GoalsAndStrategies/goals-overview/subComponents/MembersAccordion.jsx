@@ -17,7 +17,7 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import MembersChildAccordion from "./MembersChildAccordion";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 
-const BasicAccordion = ({}) => {
+const BasicAccordion = ({ pending }) => {
   const [expanded, setExpanded] = useState("acceptedBy");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -66,15 +66,17 @@ const BasicAccordion = ({}) => {
             >
               Team Members
             </Typography>
-            <Tooltip arrow title="Add Team Member" placement="right">
-              <IconButton
-                aria-label="add"
-                color="primary"
-                onClick={() => dispatch(openModal("add-team-members"))}
-              >
-                <Add />
-              </IconButton>
-            </Tooltip>
+            {!pending && (
+              <Tooltip arrow title="Add Team Member" placement="right">
+                <IconButton
+                  aria-label="add"
+                  color="primary"
+                  onClick={() => dispatch(openModal("add-team-members"))}
+                >
+                  <Add />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
           <Box
             sx={{
@@ -107,7 +109,7 @@ const BasicAccordion = ({}) => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent:'space-between'
+              justifyContent: "space-between",
             }}
           >
             <Box
@@ -133,17 +135,19 @@ const BasicAccordion = ({}) => {
                 Uzma Karjikar
               </Typography>
             </Box>
-            <Tooltip arrow title="Remove Manager" placement="left">
-              <IconButton
-                edge="end"
-                aria-label="remove"
-                onClick={() => handleRemoveManager("Uzma Karjikar")}
-              >
-                <PersonRemoveAlt1Rounded
-                  sx={{ color: "#c7df19", fontSize: 20 }}
-                />
-              </IconButton>
-            </Tooltip>
+            {!pending && (
+              <Tooltip arrow title="Remove Manager" placement="left">
+                <IconButton
+                  edge="end"
+                  aria-label="remove"
+                  onClick={() => handleRemoveManager("Uzma Karjikar")}
+                >
+                  <PersonRemoveAlt1Rounded
+                    sx={{ color: "#c7df19", fontSize: 20 }}
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
           </Box>
 
           <MembersChildAccordion
@@ -152,6 +156,7 @@ const BasicAccordion = ({}) => {
             handleChange={() => handleChange("acceptedBy")}
             title={"Request Accepted By:"}
             bgColor={"#d6f3e9"}
+            pending={pending}
           />
           <MembersChildAccordion
             value={"sentTo"}
@@ -159,6 +164,7 @@ const BasicAccordion = ({}) => {
             handleChange={() => handleChange("sentTo")}
             title={"Request Sent To:"}
             bgColor={"#fcf0db"}
+            pending={pending}
           />
           <MembersChildAccordion
             value={"invited"}
@@ -166,21 +172,26 @@ const BasicAccordion = ({}) => {
             handleChange={() => handleChange("invited")}
             title={"Invited Members:"}
             bgColor={"#fde1e1"}
+            pending={pending}
           />
-          <MembersChildAccordion
-            value={"suggested"}
-            expanded={expanded}
-            handleChange={() => handleChange("suggested")}
-            title={"Suggested Members:"}
-            bgColor={"#dde2fa"}
-          />
-          <MembersChildAccordion
-            value={"suggested-invite"}
-            expanded={expanded}
-            handleChange={() => handleChange("suggested-invite")}
-            title={"Suggested Invite Members:"}
-            bgColor={"lavenderblush"}
-          />
+          {!pending && (
+            <MembersChildAccordion
+              value={"suggested"}
+              expanded={expanded}
+              handleChange={() => handleChange("suggested")}
+              title={"Suggested Members:"}
+              bgColor={"#dde2fa"}
+            />
+          )}
+          {!pending && (
+            <MembersChildAccordion
+              value={"suggested-invite"}
+              expanded={expanded}
+              handleChange={() => handleChange("suggested-invite")}
+              title={"Suggested Invite Members:"}
+              bgColor={"lavenderblush"}
+            />
+          )}
         </AccordionDetails>
       </Accordion>
       <ConfirmationDialog value={"removeMember"} />

@@ -17,39 +17,49 @@ const KPIOverview = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
             <Typography
-              component="h6"
-              variant="subtitle2"
+              variant="h4"
               sx={{
                 color: theme.palette.secondary.dark,
                 textTransform: "uppercase",
-                fontWeight: "bold",
+                fontWeight: "600",
+                fontSize: "16px",
+                mx: 1,
               }}
             >
               OVERVIEW
             </Typography>
-            <Button
-              variant="contained"
-              startIcon={<ArrowBack />}
-              size="small"
-              sx={{ background: "#383838", color: "#fff", ml: 1 }}
-              onClick={() => navigate("/goal-overview")}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexDirection: "row",
+              }}
             >
-              Back
-            </Button>
+              <Button
+                variant="contained"
+                startIcon={<ArrowBack />}
+                size="small"
+                sx={{ background: "#383838", color: "#fff" }}
+                onClick={() => navigate("/goal-overview")}
+              >
+                Back
+              </Button>
+            </Box>
           </Box>
         </Grid>
         <Grid item xs={12} lg={8}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-               <ViewKpiPopup/>
+              <ViewKpiPopup />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <ProjectSection/>
+              <ProjectSection />
             </Grid>
           </Grid>
         </Grid>
@@ -59,7 +69,7 @@ const KPIOverview = () => {
               <Quote />
             </Grid>
             <Grid item xs={12} lg={12}>
-             <RecentHistory/>
+              <RecentHistory />
             </Grid>
           </Grid>
         </Grid>
