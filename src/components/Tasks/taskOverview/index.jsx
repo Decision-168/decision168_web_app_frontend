@@ -9,6 +9,7 @@ import { useTheme } from "@mui/material/styles";
 import TaskLinks from "./subComponents/TaskLinks";
 import TaskFiles from "./subComponents/TaskFiles";
 import CommentSection from "../../project/projects-overview/comment-section";
+import SubtaskRow from "../subComponents/SubtaskRow";
 
 export default function TaskOverview() {
   const theme = useTheme();
@@ -35,10 +36,14 @@ export default function TaskOverview() {
           <TaskFiles styles={styles} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          {/* <Paper elevation={0}> */}
-            <CommentSection />
-          {/* </Paper> */}
+          <CommentSection />
         </Grid>
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        <Paper elevation={0} sx={{ p: 2, mt: 2 }}>
+          <Typography sx={styles.label}>Subtaks:</Typography>
+          <SubtaskRow />
+        </Paper>
       </Grid>
     </Box>
   );

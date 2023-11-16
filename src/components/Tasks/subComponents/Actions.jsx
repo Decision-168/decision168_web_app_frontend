@@ -12,13 +12,37 @@ import DuplicateDialog from "./DuplicateDialog";
 import EditSubTasksForm from "../createEditSubtasks/EditSubTasksForm";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
-import MyDatePicker from "./MyDatePicker ";
+import CommentSection from "../../project/projects-overview/comment-section";
+import CustomFileInput from "../../common/CustomFileInput";
 
 export default function Actions({ rowId, isParentRow }) {
   const dispatch = useDispatch();
+  const [files, setFiles] = React.useState(null);
+
+  const handleFilesChange = (newValue, info) => {
+    setFiles(newValue); // Concatenate the new files with the existing ones
+  };
+
+  // const displayFilesInAlert = () => {
+  //   const fileNames = files.map((file) => file.name).join(", "); // Create a comma-separated list of file names
+  //   alert(`Selected files: ${fileNames}`);
+  // };
+
   // More Button Menu code
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const handleCommentsDialog = (rowId) => {
+    dispatch(openModal("send-comments"));
+  };
+
+  const handleAttachFileDialog = (rowId) => {
+    if (isParentRow) {
+      dispatch(openModal("task-attach-file"));
+    } else {
+      dispatch(openModal("subtask-attach-file"));
+    }
+  };
 
   const handleMoreClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,10 +50,6 @@ export default function Actions({ rowId, isParentRow }) {
 
   const handleMoreClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleAttachFileDialog = (rowId) => {
-    dispatch(openModal("attach-file"));
   };
 
   const handleEditTaskDialog = (rowId) => {
@@ -76,20 +96,39 @@ export default function Actions({ rowId, isParentRow }) {
 
   return (
     <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
-      <IconButton>
-        <CommentIcon />
-      </IconButton>
-      <IconButton onClick={() => handleAttachFileDialog(rowId)}>
-        <AttachmentIcon />
-      </IconButton>
+      <Tooltip arrow title="Comment" size="small" placement="top-end">
+        <IconButton onClick={() => handleCommentsDialog(rowId)}>
+          <CommentIcon />
+        </IconButton>
+      </Tooltip>
 
-      <ReduxDialog value="attach-file" modalTitle="Attach File(s)" showModalButton={true} redirectPath="/tasks-overview" modalSize="sm">
+      <ReduxDialog value="send-comments" modalTitle="Task" showModalButton={true} redirectPath="/tasks-overview" modalSize="sm">
         <DialogContent dividers>
-          <Box sx={{ p: 2 }}>
-            <MyDatePicker label="Attach File(s)" required={false} sizeWidth="100%" showBorder={true} />
-          </Box>
+          <CommentSection />
         </DialogContent>
       </ReduxDialog>
+      <Tooltip arrow title="Attach file" size="small" placement="top-end">
+        <IconButton onClick={() => handleAttachFileDialog(rowId)}>
+          <AttachmentIcon />
+        </IconButton>
+      </Tooltip>
+      {isParentRow ? (
+        <ReduxDialog value="task-attach-file" modalTitle="Attach File(s)" showModalButton={true} redirectPath="/tasks-overview" modalSize="sm">
+          <DialogContent dividers>
+            <Box sx={{ p: 2 }}>
+              <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
+            </Box>
+          </DialogContent>
+        </ReduxDialog>
+      ) : (
+        <ReduxDialog value="subtask-attach-file" modalTitle="Attach File(s)" showModalButton={true} redirectPath="/subtasks-overview" modalSize="sm">
+          <DialogContent dividers>
+            <Box sx={{ p: 2 }}>
+              <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
+            </Box>
+          </DialogContent>
+        </ReduxDialog>
+      )}
 
       {/* More icon */}
       <Tooltip arrow title="More" size="small" placement="top-end">

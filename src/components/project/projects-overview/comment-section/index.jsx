@@ -118,7 +118,7 @@ const CommentSection = ({ projectId }) => {
         borderRadius: 1,
       }}
       mb={2}>
-      <Typography sx={{ color: "#495057", fontSize: 15, fontWeight: "600", textAlign:"left" }}>Comment Section</Typography>
+      <Typography sx={{ color: "#495057", fontSize: 15, fontWeight: "600", textAlign: "left" }}>Comment Section</Typography>
       <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
         {messages.length > 0 ? (
           <ScrollBar>
