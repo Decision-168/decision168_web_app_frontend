@@ -19,7 +19,7 @@ import { useTheme } from "@mui/material/styles";
 export default function LogoutMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const theme = useTheme();
- const navigate = useNavigate();
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,6 +30,10 @@ export default function LogoutMenu() {
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
     navigate("/");
+  };
+  const handleRedirect = (path) => {
+    handleClose();
+    navigate(path);
   };
   return (
     <React.Fragment>
@@ -81,8 +85,21 @@ export default function LogoutMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <MenuItem onClick={() => handleRedirect("/profile")}>
+          <ListItemIcon>
+            <BadgeIcon fontSize="small" />
+          </ListItemIcon>
+          My Profile
+        </MenuItem>
+
+        <MenuItem onClick={() => handleRedirect("/update-profile")}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
         <Link
-          to="/profile"
+          to="https://support.app.decision168.com/supporter/open-tickets"
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.main,
@@ -90,27 +107,13 @@ export default function LogoutMenu() {
         >
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
-              <BadgeIcon fontSize="small" />
+              <SupportAgentIcon fontSize="small" />
             </ListItemIcon>
-            My Profile
+            Support
           </MenuItem>
         </Link>
 
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <SupportAgentIcon fontSize="small" />
-          </ListItemIcon>
-          Support
-        </MenuItem>
-
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <SettingsAccessibilityIcon fontSize="small" />
           </ListItemIcon>
@@ -122,7 +125,7 @@ export default function LogoutMenu() {
             <PlayCircleOutlineIcon fontSize="small" />
           </ListItemIcon>
           Get Started
-        </MenuItem>
+        </MenuItem> */}
 
         <Divider />
 

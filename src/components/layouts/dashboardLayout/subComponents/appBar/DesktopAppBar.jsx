@@ -162,7 +162,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
 
   return (
     <AppBar
-      elevation={3}
+      elevation={0}
       position="absolute"
       open={open}
       sx={{ backgroundColor: "white" }}
@@ -217,7 +217,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
 
           {/* <SelectMenu/> */}
 
-          <Hidden lgDown>
+          {/* <Hidden lgDown>
             <Typography
               component="h1"
               variant="h6"
@@ -227,7 +227,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             >
               Welcome Back !
             </Typography>
-          </Hidden>
+          </Hidden> */}
 
           <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} gap={2}>
             <Button component={Link} to="/pricing-packages" variant="contained" size="small">
