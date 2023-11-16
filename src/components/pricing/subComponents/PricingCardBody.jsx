@@ -6,20 +6,65 @@ import Price from "./Price";
 import Ribbon from "./Ribbon";
 import LetUsTalk from "./LetUsTalk";
 
-const PricingCardBody = ({ styles, features, price, validity, isSpecialOffer, name, buttonText }) => {
+const PricingCardBody = ({
+  styles,
+  features,
+  price,
+  validity,
+  isSpecialOffer,
+  name,
+  index,
+  btnIndex,
+}) => {
   const theme = useTheme();
   return (
     <>
-      {isSpecialOffer ? <Ribbon styles={styles} /> : <Box sx={{ height: "100px", margin: "-16px" }}>&nbsp;</Box>}
-      {name === "Enterprise" ? <LetUsTalk /> : <Price price={price} validity={validity} buttonText={buttonText} />}
+      {isSpecialOffer ? (
+        <Ribbon styles={styles} />
+      ) : (
+        <Box sx={{ height: "100px", margin: "-16px" }}>&nbsp;</Box>
+      )}
+      {name === "Enterprise" ? (
+        <LetUsTalk />
+      ) : (
+        <Price
+          price={price}
+          validity={validity}
+          index={index}
+          btnIndex={btnIndex}
+        />
+      )}
 
-      <Typography component="p" variant="subtitle2" textAlign="left" color="#BDBDBD">
+      <Typography
+        component="p"
+        variant="subtitle2"
+        textAlign="left"
+        color="#BDBDBD"
+      >
         What's Included:
       </Typography>
       {features.map((feature, index) => (
-        <Stack key={index} direction="row" justifyContent="start" alignItems="center" my={1}>
-          <VerifiedRoundedIcon sx={{ color: theme.palette.primary.dark, width: "15px", height: "15px" }} />
-          <Typography component="p" variant="caption" display="block" textAlign="left" ml={1}>
+        <Stack
+          key={index}
+          direction="row"
+          justifyContent="start"
+          alignItems="center"
+          my={1}
+        >
+          <VerifiedRoundedIcon
+            sx={{
+              color: theme.palette.primary.dark,
+              width: "15px",
+              height: "15px",
+            }}
+          />
+          <Typography
+            component="p"
+            variant="caption"
+            display="block"
+            textAlign="left"
+            ml={1}
+          >
             {feature}
           </Typography>
         </Stack>

@@ -13,7 +13,7 @@ import { DisabledByDefaultRounded, PersonAddAlt1 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
-const UserList = ({ username, assignManagerFlag }) => {
+const UserList = ({ username, assignManagerFlag, pending }) => {
   const dispatch = useDispatch();
 
   const handleRemoveUser = (name) => {
@@ -25,21 +25,21 @@ const UserList = ({ username, assignManagerFlag }) => {
       })
     );
   };
-    const handleAssignManager = (name) => {
-      dispatch(
-        openCnfModal({
-          modalName: "assignManager",
-          title: "Are you sure?",
-          description: `Assign ${name} as Goal Manager`,
-        })
-      );
-    };
+  const handleAssignManager = (name) => {
+    dispatch(
+      openCnfModal({
+        modalName: "assignManager",
+        title: "Are you sure?",
+        description: `Assign ${name} as Goal Manager`,
+      })
+    );
+  };
   return (
     <ListItem
       sx={{ m: 1, p: 0 }}
       secondaryAction={
         <Box>
-          {assignManagerFlag === "acceptedBy" && (
+          {assignManagerFlag === "acceptedBy" && !pending && (
             <Tooltip arrow title="Assign as Manager" placement="left">
               <IconButton
                 edge="end"
@@ -50,15 +50,17 @@ const UserList = ({ username, assignManagerFlag }) => {
               </IconButton>
             </Tooltip>
           )}
-          <Tooltip arrow title="Remove Member" placement="left">
-            <IconButton
-              edge="end"
-              aria-label="remove"
-              onClick={() => handleRemoveUser(username)}
-            >
-              <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
-            </IconButton>
-          </Tooltip>
+          {!pending && (
+            <Tooltip arrow title="Remove Member" placement="left">
+              <IconButton
+                edge="end"
+                aria-label="remove"
+                onClick={() => handleRemoveUser(username)}
+              >
+                <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
       }
     >

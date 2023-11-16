@@ -7,6 +7,7 @@ import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 
+
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -17,19 +18,37 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
-const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+const GoalOverviewRequest = lazy(() =>
+  import("../components/GoalsAndStrategies/goal-overview-request")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
-const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
+const ProjectOverviewRequest = lazy(() =>
+  import("../components/project/projects-overview-request")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
-
+const MyAlert = lazy(() => import("../components/myAlert"));
 const RouteIndex = () => {
   return (
     <Router>
@@ -125,7 +144,31 @@ const RouteIndex = () => {
             }
           />
           <Route
+            path="/goal-overview-request"
+            element={
+              <DashboardLayout>
+                <GoalOverviewRequest />
+              </DashboardLayout>
+            }
+          />
+          <Route
             path="/project-tasks-list"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/today-tasks"
+            element={
+              <DashboardLayout>
+                <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/week-tasks"
             element={
               <DashboardLayout>
                 <Tasks />
@@ -137,6 +180,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <Tasks />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/my-alerts"
+            element={
+              <DashboardLayout>
+                <MyAlert />
               </DashboardLayout>
             }
           />
@@ -196,6 +247,15 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+          <Route
+            path="/projects-overview-request"
+            element={
+              <DashboardLayout>
+                <ProjectOverviewRequest />
+              </DashboardLayout>
+            }
+          />
+
           <Route
             path="/archive"
             element={

@@ -64,7 +64,7 @@ export default function ViewCard() {
               <Typography variant="subtitle2">Change Password</Typography>
             </ButtonBase>
 
-            <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="xs">
+            <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} maxWidth="sm">
               <ChangePasswordForm handleClose={handleCloseChangePasswordDailog} />
             </CustomDialog>
           </Box>

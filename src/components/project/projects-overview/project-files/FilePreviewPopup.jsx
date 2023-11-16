@@ -11,31 +11,10 @@ import {
 } from "@mui/material";
 import DocViewer, {DocViewerRenderers,
 } from "@cyntler/react-doc-viewer";
-import pdfFile from "../../../../assets/test-files/ReactLazyLoading.pdf";
-import docxFile from "../../../../assets/test-files/test.docx";
-import pngFile from "../../../../assets/test-files/document.png";
-import xlsxFile from "../../../../assets/test-files/AllCalls.xlsx";
-import csvFile from "../../../../assets/test-files/credentials.csv";
-import txtFile from "../../../../assets/test-files/auth.txt";
-import gifFile from "../../../../assets/test-files/noInternet.gif";
-import jpgFile from "../../../../assets/test-files/testi-2.jpg";
-import pptxFile from "../../../../assets/test-files/AlimPresentation.pptx";
 const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
   const theme = useTheme();
 
  const docs = [
-   { uri: pdfFile },
-   {
-     uri: "https://docs.google.com/document/d/19BtbPtV8I2Hqfdq5CP85ovU87oWfLS3dVm5CMpc4iwE/edit?usp=drive_link",
-   },
-   { uri: pngFile },
-   {
-     uri: "https://docs.google.com/spreadsheets/d/1r1kup7PAq-MmFF96s3cWDF8yy6zYbdGQPVvjeMc3ykc/edit#gid=0",
-   },
-   { uri: csvFile },
-   { uri: txtFile },
-   { uri: gifFile },
-   { uri: jpgFile },
    {
      uri: "https://docs.google.com/presentation/d/1880vP6ofSnG0ADcb8IUKZCRs1xgEry2A/edit?usp=drive_link&ouid=111146504207628920971&rtpof=true&sd=true",
    },

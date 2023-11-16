@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, {  } from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -10,6 +10,7 @@ import { menuItems } from "./menuItems";
 import {
   Collapse,
   Link,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
@@ -43,14 +44,18 @@ export default function ListItems({ drawerOpen }) {
 const CustomButton = ({ menuItem }) => {
   return (
     <>
-      <ListItemIcon
-        sx={{
-          color:
-            window.location.pathname === menuItem?.link ? "#c7df19" : "#6a7187",
-        }}
-      >
-        {menuItem.icon}
-      </ListItemIcon>
+      <Tooltip title={menuItem.text} placement="right">
+        <ListItemIcon
+          sx={{
+            color:
+              window.location.pathname === menuItem?.link
+                ? "#c7df19"
+                : "#6a7187",
+          }}
+        >
+          {menuItem.icon}
+        </ListItemIcon>
+      </Tooltip>
       <ListItemText
         primary={
           <Typography

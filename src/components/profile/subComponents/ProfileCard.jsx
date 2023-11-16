@@ -11,18 +11,21 @@ const items = [
   {
     count: 1,
     label: "Portfolio",
+    link: "/portfolio-view",
   },
   {
     count: 8,
     label: "Projects",
+    link: "/portfolio-projects-list",
   },
-  {
-    count: 0,
-    label: "Planned Content",
-  },
+  // {
+  //   count: 0,
+  //   label: "Planned Content",
+  // },
   {
     count: 1,
     label: "Tasks",
+    link: "/portfolio-tasks-list",
   },
 ];
 

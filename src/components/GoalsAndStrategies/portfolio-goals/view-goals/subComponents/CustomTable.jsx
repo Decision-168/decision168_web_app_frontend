@@ -16,7 +16,8 @@ import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 
-const CustomTable = ({ title, handleOpen, data }) => {
+const CustomTable = ({ title, handleOpen,handlePendingGoalOpen, data }) => {
+  
   const theme = useTheme();
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
@@ -27,6 +28,14 @@ const CustomTable = ({ title, handleOpen, data }) => {
       setLoad(true);
     }
   }, []);
+  const handleOpenCondition =(type)=>{
+    if (["Created Goals", "Accepted Goals"].includes(type)) {
+      handleOpen()
+    } else {
+      handlePendingGoalOpen()
+    }
+  }
+ 
 
   const columns = useMemo(
     () => [
@@ -83,7 +92,7 @@ const CustomTable = ({ title, handleOpen, data }) => {
                 </Typography>
               </Box>
             </Box>
-            <IconButton aria-label="settings" onClick={handleOpen}>
+            <IconButton aria-label="settings" onClick={()=>handleOpenCondition(title)}>
               <VisibilityOutlined fontSize="small" />
             </IconButton>
           </Box>
@@ -201,7 +210,7 @@ const CustomTable = ({ title, handleOpen, data }) => {
           color: "#343a40",
           fontWeight: "900",
           fontSize: "16px",
-          alignSelf: "end",
+          alignSelf: "center",
         }}
       >
         {title}

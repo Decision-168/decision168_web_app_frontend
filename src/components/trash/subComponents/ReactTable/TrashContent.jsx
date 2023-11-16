@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { FacebookRounded, Twitter } from "@mui/icons-material";
+import CustomTable from "../../../common/CustomTable";
 
 const TrashContent = ({ value }) => {
   const dispatch = useDispatch();
@@ -177,18 +178,18 @@ const TrashContent = ({ value }) => {
     },
     columnFilterDisplayMode: "popover",
     renderTopToolbarCustomActions: () => (
-      <Typography sx={{ color: "tomato" }}>
+      <Typography sx={{ color: "tomato", alignSelf: "center" }}>
         ( If you do not restore deleted data within 30 days, then data will be
         deleted permanently ! )
       </Typography>
     ),
   });
   return (
-    <Box>
-      <MaterialReactTable table={table} />
+    <>
+      <CustomTable table={table} />
       <ConfirmationDialog value={"restoreModule"} />
       <ConfirmationDialog value={"deleteModule"} />
-    </Box>
+    </>
   );
 };
 

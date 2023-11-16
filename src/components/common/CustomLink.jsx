@@ -1,6 +1,6 @@
-import { Link } from "@mui/material";
+import { Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React from "react";
 
 export default function CustomLink({ children, path }) {
@@ -8,19 +8,24 @@ export default function CustomLink({ children, path }) {
   const navigate = useNavigate();
 
   return (
-    <Link
+    <Button
       sx={{
+        fontWeight:'100',
+        fontSize:12,
+        display: "inline",
         color: theme.palette.primary.main,
-        margin:'0px 2px',
+        margin: "0px",
+        padding:'0px 2px',
         textDecoration: "none",
         "&:hover": {
           textDecoration: "underline",
         },
       }}
-      component="button"
-      variant="caption"
-      onClick={() => navigate(path)}>
+      component={Link}
+      variant="text"
+      to={path}
+    >
       {children}
-    </Link>
+    </Button>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Paper, Box, Grid, Typography } from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Add, Edit } from "@mui/icons-material";
@@ -16,8 +16,9 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import SubtaskPreview from "../../subtaskOverview/subComponent/SubtaskPreview";
 import CustomDialog from "../../../common/CustomDialog";
 import CommentSection from "../../../project/projects-overview/comment-section";
-
-export default function TaskPreview({ styles, filteredRow }) {
+import { taskOverviewStyles } from "../styles";
+const TaskPreview=({filteredRow })=> {
+    const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const taskData = filteredRow[0];
 
@@ -27,7 +28,7 @@ export default function TaskPreview({ styles, filteredRow }) {
 
   const handleSubTaskPreviewDialog = (subrowId) => {
     console.log(subrowId);
-    const filteredSubTaskRow = filteredRow.reduce((result, row) => {
+    const filteredSubTaskRow = filteredRow?.reduce((result, row) => {
       const matchingSubrow = row.subRows.find((subrow) => subrow.id === subrowId);
       if (matchingSubrow) {
         result.push(matchingSubrow);
@@ -170,3 +171,5 @@ export default function TaskPreview({ styles, filteredRow }) {
     </>
   );
 }
+
+export default memo(TaskPreview)

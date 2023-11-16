@@ -58,9 +58,9 @@ export default function Register() {
             </Box>
 
             {/* Social Media platforms */}
-            <Box mt={2}>
+            {/* <Box mt={2}>
               <SocialMedia title="Sign up using" />
-            </Box>
+            </Box> */}
           </Box>
           {/* Navigation */}
           <Navigation

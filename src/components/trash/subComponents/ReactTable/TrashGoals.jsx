@@ -7,6 +7,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import CustomTable from "../../../common/CustomTable";
 
 const TrashGoals = ({ value }) => {
   const dispatch = useDispatch();
@@ -148,18 +149,18 @@ const TrashGoals = ({ value }) => {
     },
     columnFilterDisplayMode: "popover",
     renderTopToolbarCustomActions: () => (
-      <Typography sx={{ color: "tomato" }}>
+      <Typography sx={{ color: "tomato", alignSelf: "center" }}>
         ( If you do not restore deleted data within 30 days, then data will be
         deleted permanently ! )
       </Typography>
     ),
   });
   return (
-    <Box>
-      <MaterialReactTable table={table} />
+    <>
+      <CustomTable table={table} />
       <ConfirmationDialog value={"restoreModule"} />
       <ConfirmationDialog value={"deleteModule"} />
-    </Box>
+    </>
   );
 };
 

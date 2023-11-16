@@ -1,15 +1,43 @@
 import React, { useCallback, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
-import RadioSection from "./subComponents/RadioSection";
 import TrashAll from "./subComponents/ReactTable/TrashAll";
 import TrashGoals from "./subComponents/ReactTable/TrashGoals";
 import TrashKPIs from "./subComponents/ReactTable/TrashKPIs";
 import TrashProjects from "./subComponents/ReactTable/TrashProjects";
 import TrashTaskAndSubtask from "./subComponents/ReactTable/TrashTaskAndSubtask";
-import TrashContent from "./subComponents/ReactTable/TrashContent";
 import TrashFiles from "./subComponents/ReactTable/TrashFiles";
-
+import CustomFilter from "../common/CustomFilter";
+const filterOption = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "goals",
+    label: "Goals",
+  },
+  {
+    value: "kpis",
+    label: "KPIs",
+  },
+  {
+    value: "projects",
+    label: "Projects",
+  },
+  {
+    value: "tasks & subtasks",
+    label: "Tasks & Subtasks",
+  },
+  {
+    value: "files",
+    label: "Files",
+  },
+  //  {
+  //    value: "content",
+  //    label: "Content",
+  //  },
+];
 const index = () => {
   const [value, setValue] = useState("all");
   const handleChangeRadio = useCallback((event) => {
@@ -18,7 +46,7 @@ const index = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={12} lg={12}>
           <Box
             sx={{
               display: "flex",
@@ -28,19 +56,24 @@ const index = () => {
             }}
           >
             <BasicBreadcrumbs currentPage="trash" />
+            <CustomFilter
+              value={value}
+              handleChange={handleChangeRadio}
+              filterOption={filterOption}
+            />
           </Box>
         </Grid>
-        <Grid item xs={12} lg={9} alignSelf={"center"}>
-          <RadioSection value={value} handleChange={handleChangeRadio} />
-        </Grid>
+
         <Grid item xs={12} lg={12}>
           {value === "all" && <TrashAll />}
-          {value === "goal" && <TrashGoals value={value} />}
-          {value === "kpi" && <TrashKPIs value={value} />}
-          {value === "project" && <TrashProjects value={value} />}
-          {value === "task" && <TrashTaskAndSubtask value={value} />}
-          {value === "file" && <TrashFiles value={value} />}
-          {value === "content" && <TrashContent value={value} />}
+          {value === "goals" && <TrashGoals value={value} />}
+          {value === "kpis" && <TrashKPIs value={value} />}
+          {value === "projects" && <TrashProjects value={value} />}
+          {value === "tasks & subtasks" && (
+            <TrashTaskAndSubtask value={value} />
+          )}
+          {value === "files" && <TrashFiles value={value} />}
+          {/* {value === "content" && <TrashContent value={value} />} */}
         </Grid>
       </Grid>
     </Box>

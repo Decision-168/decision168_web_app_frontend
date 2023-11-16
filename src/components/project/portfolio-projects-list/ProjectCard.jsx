@@ -15,9 +15,19 @@ import {
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
 
-const ProjectCard = ({ item, handleOpen, value }) => {
+const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
+  const handleOpenCondition = (type) => {
+    if (
+      ["created-project", "accepted-project"].includes(type)
+    ) {
+      handleOpen();
+    } else {
+      handlePendingOpen();
+    }
+  };
+
   const theme = useTheme();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -114,7 +124,10 @@ const ProjectCard = ({ item, handleOpen, value }) => {
             );
           })}
         </AvatarGroup>
-        <IconButton aria-label="settings" onClick={handleOpen}>
+        <IconButton
+          aria-label="settings"
+          onClick={() => handleOpenCondition(value)}
+        >
           <VisibilityOutlined fontSize="small" />
         </IconButton>
       </CardActions>

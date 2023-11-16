@@ -1,10 +1,11 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomTextField from "../subComponents/CustomTextField";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import Navigation from "../subComponents/Navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Form() {
   const {
@@ -16,36 +17,64 @@ export default function Form() {
   const onSubmit = (data) => {
     alert(JSON.stringify(data));
   };
+  const [isCaptchaVerified, setCaptchaVerified] = useState(false);
 
+  const handleCaptchaChange = (response) => {
+    if (response) {
+      setCaptchaVerified(true);
+    }
+  };
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-      <CustomTextField
-        name="otp"
-        placeholder="Enter OTP"
-        register={register}
-        errors={errors}
-        validation={authValidations.otp} // Pass the validation rules as a prop
-      />
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
+      <Box sx={{ height: "65px" }}>
+        <CustomTextField
+          name="email"
+          placeholder="Email Address"
+          register={register}
+          errors={errors}
+          validation={authValidations.email} // Pass the validation rules as a prop
+        />
+      </Box>
 
-      <CustomPasswordField
-        showTooltip={false}
-        name="password"
-        placeholder="New Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.password} // Pass the validation rules as a prop
-      />
-
-      <CustomPasswordField
-        showTooltip={false}
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.confirmPassword} // Pass the validation rules as a prop
-      />
-
-      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
+      <Box sx={{ height: "65px" }}>
+        <CustomPasswordField
+          showTooltip={true}
+          name="password"
+          placeholder="Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.password} // Pass the validation rules as a prop
+        />
+      </Box>
+      <Box sx={{ height: "65px" }}>
+        <CustomPasswordField
+          showTooltip={false}
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.confirmPassword} // Pass the validation rules as a prop
+        />
+      </Box>
+      <Box
+        mb={1}
+      >
+        <ReCAPTCHA
+          sitekey="6LeGztMcAAAAAP6yPwVYpzxL2qPnmdK2nVgFb1Dp"
+          onChange={handleCaptchaChange}
+        />
+      </Box>
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ my: 2, borderRadius: "3px" }}
+      >
         Change Password
       </Button>
 

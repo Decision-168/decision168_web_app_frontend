@@ -184,42 +184,104 @@ export default function TaskTable() {
         <TableContainer component={Paper} sx={{ minHeight: "72vh" }}>
           <Table sx={{ minWidth: "650px" }} aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell align="center">&nbsp;</TableCell>
-                <TableCell align="center">Code</TableCell>
-                <TableCell align="center">Task</TableCell>
-                <TableCell align="center">Assignee</TableCell>
-                <TableCell align="center">Priority</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Due Date</TableCell>
-                <TableCell align="center">Actions</TableCell>
+              <TableRow sx={{ width: "100%" }}>
+                <TableCell align="left" sx={{ width: "10%" }}>
+                  &nbsp;
+                </TableCell>
+                <TableCell align="left" sx={{ width: "10%" }}>
+                  Code
+                </TableCell>
+                <TableCell align="left" sx={{ width: "30%" }}>
+                  Task
+                </TableCell>
+                <TableCell align="center" sx={{ width: "5%" }}>
+                  Assignee
+                </TableCell>
+                <TableCell align="center" sx={{ width: "5%" }}>
+                  Priority
+                </TableCell>
+                <TableCell align="center" sx={{ width: "5%" }}>
+                  Status
+                </TableCell>
+                <TableCell align="center" sx={{ width: "15%" }}>
+                  Due Date
+                </TableCell>
+                <TableCell align="center" sx={{ width: "20%" }}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <Droppable droppableId="droppable-1">
               {(provider) => (
                 <TableBody ref={provider.innerRef} {...provider.droppableProps}>
                   {rows.map((row, index) => (
-                    <Draggable key={row.code} draggableId={row.code} index={index}>
+                    <Draggable
+                      key={row.code}
+                      draggableId={row.code}
+                      index={index}
+                    >
                       {(provider) => (
                         <React.Fragment key={row.code}>
-                          <TableRow sx={{ " &:last-child th": { border: 0 }, width: "100%", bgcolor: "white", "&:hover": { backgroundColor: "#F7F7F7", "& .task-description": { color: theme.palette.primary.dark } } }} {...provider.draggableProps} ref={provider.innerRef}>
+                          <TableRow
+                            sx={{
+                              " &:last-child th": { border: 0 },
+                              width: "100%",
+                              bgcolor: "white",
+                              "&:hover": {
+                                backgroundColor: "#F7F7F7",
+                                "& .task-description": {
+                                  color: theme.palette.primary.dark,
+                                },
+                              },
+                            }}
+                            {...provider.draggableProps}
+                            ref={provider.innerRef}
+                          >
                             {/* Icons */}
                             <TableCell sx={{ width: "10%" }} align="center">
-                              <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                                <Tooltip title="Reorder row" arrow size="small" placement="top-start">
-                                  <IconButton size="small" component="span" {...provider.dragHandleProps}>
+                              <Stack
+                                direction="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                spacing={1}
+                              >
+                                <Tooltip
+                                  title="Reorder row"
+                                  arrow
+                                  size="small"
+                                  placement="top-start"
+                                >
+                                  <IconButton
+                                    size="small"
+                                    component="span"
+                                    {...provider.dragHandleProps}
+                                  >
                                     <ReorderIcon />
                                   </IconButton>
                                 </Tooltip>
 
                                 {row.subRows && row.subRows.length > 0 && (
-                                  <IconButton size="small" onClick={() => handleToggleSubrows(row.id)}>
-                                    {openSubrows && expandedTaskId === row.id ? (
-                                      <Tooltip title="Hide subrows" arrow size="small" placement="top-start">
+                                  <IconButton
+                                    size="small"
+                                    onClick={() => handleToggleSubrows(row.id)}
+                                  >
+                                    {openSubrows &&
+                                    expandedTaskId === row.id ? (
+                                      <Tooltip
+                                        title="Hide subrows"
+                                        arrow
+                                        size="small"
+                                        placement="top-start"
+                                      >
                                         <ExpandLessIcon />
                                       </Tooltip>
                                     ) : (
-                                      <Tooltip title="Show subrows" arrow size="small" placement="top-start">
+                                      <Tooltip
+                                        title="Show subrows"
+                                        arrow
+                                        size="small"
+                                        placement="top-start"
+                                      >
                                         <ExpandMoreIcon />
                                       </Tooltip>
                                     )}
@@ -237,30 +299,81 @@ export default function TaskTable() {
 
                             {/* Task Description */}
                             <TableCell sx={{ width: "30%" }} align="left">
-                              <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                              <Box
+                                component="form"
+                                noValidate
+                                onSubmit={handleSubmit(onSubmit)}
+                                sx={{ height: "100%" }}
+                              >
+                                <Stack
+                                  direction="row"
+                                  justifyContent="space-between"
+                                  alignItems="center"
+                                  spacing={1}
+                                >
                                   {editMode && rowId === row.id ? (
                                     <CustomTextField
                                       name="taskDescription"
                                       placeholder="Enter Task description..."
                                       register={register}
                                       errors={errors}
-                                      validation={globalValidations.taskDescription} // Pass the validation rules as a prop
+                                      validation={
+                                        globalValidations.taskDescription
+                                      } // Pass the validation rules as a prop
                                     />
                                   ) : (
                                     <>
-                                      <Typography onClick={() => handleOpenTaskPreviewDialog(row.id)} className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
+                                      <Typography
+                                        onClick={() =>
+                                          handleOpenTaskPreviewDialog(row.id)
+                                        }
+                                        className="task-description"
+                                        sx={{
+                                          textDecoration: "none",
+                                          color: theme.palette.secondary.dark,
+                                          fontSize: "13px",
+                                          fontWeight: "400",
+                                        }}
+                                      >
                                         {row.description}
                                       </Typography>
 
-                                      <CustomDialog handleClose={handleCloseTaskPreviewDialog} open={openTaskPreviewDialog} modalTitle="Task" redirectPath={"/tasks-overview"} showModalButton={true} modalSize="lg">
-                                        <TaskPreview styles={styles} filteredRow={filteredTask} />
+                                      <CustomDialog
+                                        handleClose={
+                                          handleCloseTaskPreviewDialog
+                                        }
+                                        open={openTaskPreviewDialog}
+                                        modalTitle="Task"
+                                        redirectPath={"/tasks-overview"}
+                                        showModalButton={true}
+                                        modalSize="lg"
+                                      >
+                                        <TaskPreview
+                                          styles={styles}
+                                          filteredRow={filteredTask}
+                                        />
                                       </CustomDialog>
                                     </>
                                   )}
-                                  <Tooltip title={editMode ? "Save task" : "Rename task"} arrow size="small" placement="top-start">
-                                    <IconButton size="small" onClick={() => handleTaskDescription(row.id)}>
-                                      {editMode && rowId === row.id ? <SaveIcon /> : <EditIcon />}
+                                  <Tooltip
+                                    title={
+                                      editMode ? "Save task" : "Rename task"
+                                    }
+                                    arrow
+                                    size="small"
+                                    placement="top-start"
+                                  >
+                                    <IconButton
+                                      size="small"
+                                      onClick={() =>
+                                        handleTaskDescription(row.id)
+                                      }
+                                    >
+                                      {editMode && rowId === row.id ? (
+                                        <SaveIcon />
+                                      ) : (
+                                        <EditIcon />
+                                      )}
                                     </IconButton>
                                   </Tooltip>
                                 </Stack>
@@ -268,14 +381,26 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Assignee */}
-                            <TableCell sx={{ width: "10%" }} align="center">
+                            <TableCell sx={{ width: "5%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
                                 {editAssignee && rowId === row.id ? (
                                   <FormControl fullWidth>
-                                    <Select value={selectedAssignee} onChange={(event) => handleAssignee(event, row.id)}>
+                                    <Select
+                                      value={selectedAssignee}
+                                      onChange={(event) =>
+                                        handleAssignee(event, row.id)
+                                      }
+                                    >
                                       {taskAssignees.map((assignee, index) => (
-                                        <MenuItem key={index} value={assignee.value}>
-                                          <Typography component="p" variant="caption" display="block">
+                                        <MenuItem
+                                          key={index}
+                                          value={assignee.value}
+                                        >
+                                          <Typography
+                                            component="p"
+                                            variant="caption"
+                                            display="block"
+                                          >
                                             {assignee.text}
                                           </Typography>
                                         </MenuItem>
@@ -284,8 +409,18 @@ export default function TaskTable() {
                                   </FormControl>
                                 ) : (
                                   <Box>
-                                    <Chip label={selectedAssignee} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px" }} />
-                                    <IconButton size="small" onClick={() => handleEditAssignee(row.id)}>
+                                    <Chip
+                                      label={selectedAssignee}
+                                      variant="contained"
+                                      sx={{
+                                        minWidth: "80px",
+                                        maxWidth: "85px",
+                                      }}
+                                    />
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => handleEditAssignee(row.id)}
+                                    >
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -294,14 +429,26 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Priority */}
-                            <TableCell sx={{ width: "10%" }} align="center">
+                            <TableCell sx={{ width: "5%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
                                 {editPriority && rowId === row.id ? (
                                   <FormControl fullWidth>
-                                    <Select value={selectedPriority} onChange={(event) => handlePriority(event, row.id)}>
+                                    <Select
+                                      value={selectedPriority}
+                                      onChange={(event) =>
+                                        handlePriority(event, row.id)
+                                      }
+                                    >
                                       {taskPriorities.map((priority, index) => (
-                                        <MenuItem key={index} value={priority.value}>
-                                          <Typography component="p" variant="caption" display="block">
+                                        <MenuItem
+                                          key={index}
+                                          value={priority.value}
+                                        >
+                                          <Typography
+                                            component="p"
+                                            variant="caption"
+                                            display="block"
+                                          >
                                             {priority.text}
                                           </Typography>
                                         </MenuItem>
@@ -310,8 +457,19 @@ export default function TaskTable() {
                                   </FormControl>
                                 ) : (
                                   <Box>
-                                    <Chip label={selectedPriority} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px", ...priorityBg }} />
-                                    <IconButton size="small" onClick={() => handleEditPriority(row.id)}>
+                                    <Chip
+                                      label={selectedPriority}
+                                      variant="contained"
+                                      sx={{
+                                        minWidth: "80px",
+                                        maxWidth: "85px",
+                                        ...priorityBg,
+                                      }}
+                                    />
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => handleEditPriority(row.id)}
+                                    >
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -320,14 +478,26 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Status */}
-                            <TableCell sx={{ width: "10%" }} align="center">
+                            <TableCell sx={{ width: "5%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
                                 {editStatus && rowId === row.id ? (
                                   <FormControl fullWidth>
-                                    <Select value={selectedStatus} onChange={(event) => handleStatus(event, row.id)}>
+                                    <Select
+                                      value={selectedStatus}
+                                      onChange={(event) =>
+                                        handleStatus(event, row.id)
+                                      }
+                                    >
                                       {taskStatuses.map((status, index) => (
-                                        <MenuItem key={index} value={status.value}>
-                                          <Typography component="p" variant="caption" display="block">
+                                        <MenuItem
+                                          key={index}
+                                          value={status.value}
+                                        >
+                                          <Typography
+                                            component="p"
+                                            variant="caption"
+                                            display="block"
+                                          >
                                             {status.text}
                                           </Typography>
                                         </MenuItem>
@@ -336,8 +506,19 @@ export default function TaskTable() {
                                   </FormControl>
                                 ) : (
                                   <Box>
-                                    <Chip label={selectedStatus} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px", ...statusBg }} />
-                                    <IconButton size="small" onClick={() => handleEditStatus(row.id)}>
+                                    <Chip
+                                      label={selectedStatus}
+                                      variant="contained"
+                                      sx={{
+                                        minWidth: "80px",
+                                        maxWidth: "85px",
+                                        ...statusBg,
+                                      }}
+                                    />
+                                    <IconButton
+                                      size="small"
+                                      onClick={() => handleEditStatus(row.id)}
+                                    >
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -346,20 +527,40 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Due Date */}
-                            <TableCell sx={{ width: "20%" }} align="center">
-                              <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false} />
+                            <TableCell sx={{ width: "15%" }} align="center">
+                              <MyDatePicker
+                                label=""
+                                required={false}
+                                sizeWidth="132px"
+                                showBorder={false}
+                              />
                             </TableCell>
 
                             {/* Actions */}
                             <TableCell sx={{ width: "20%" }} align="center">
-                              <Actions rowId={row.id} isParentRow={row.isParentRow} />
+                              <Actions
+                                rowId={row.id}
+                                isParentRow={row.isParentRow}
+                              />
                             </TableCell>
                           </TableRow>
 
                           {openSubrows &&
                             expandedTaskId === row.id &&
                             row.subRows.map((subrow, index) => (
-                              <TableRow sx={{ " &:last-child th": { border: 0 }, width: "100%", bgcolor: "white", "&:hover": { backgroundColor: "#F7F7F7", "& .task-description": { color: theme.palette.primary.dark } } }}>
+                              <TableRow
+                                sx={{
+                                  " &:last-child th": { border: 0 },
+                                  width: "100%",
+                                  bgcolor: "white",
+                                  "&:hover": {
+                                    backgroundColor: "#F7F7F7",
+                                    "& .task-description": {
+                                      color: theme.palette.primary.dark,
+                                    },
+                                  },
+                                }}
+                              >
                                 {/* Icons */}
                                 <TableCell align="right">
                                   <IconButton size="small">
@@ -370,36 +571,101 @@ export default function TaskTable() {
                                 {/* Code */}
                                 <TableCell align="center">
                                   <FormGroup sx={{ width: "100px" }}>
-                                    <FormControlLabel sx={{ color: "black" }} control={<Checkbox size="small" onChange={() => handleCodeCheckBoxDialog()} />} label={subrow.code} />
+                                    <FormControlLabel
+                                      sx={{ color: "black" }}
+                                      control={
+                                        <Checkbox
+                                          size="small"
+                                          onChange={() =>
+                                            handleCodeCheckBoxDialog()
+                                          }
+                                        />
+                                      }
+                                      label={subrow.code}
+                                    />
                                   </FormGroup>
                                 </TableCell>
 
                                 {/* Task Description */}
                                 <TableCell align="left">
-                                  <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
-                                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                                  <Box
+                                    component="form"
+                                    noValidate
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    sx={{ height: "100%" }}
+                                  >
+                                    <Stack
+                                      direction="row"
+                                      justifyContent="space-between"
+                                      alignItems="center"
+                                      spacing={1}
+                                    >
                                       {editMode && rowId === subrow.id ? (
                                         <CustomTextField
                                           name="taskDescription"
                                           placeholder="Enter Task description..."
                                           register={register}
                                           errors={errors}
-                                          validation={globalValidations.taskDescription} // Pass the validation rules as a prop
+                                          validation={
+                                            globalValidations.taskDescription
+                                          } // Pass the validation rules as a prop
                                         />
                                       ) : (
                                         <>
-                                          <Typography onClick={() => handleOpenSubTaskPreviewDialog(subrow.id)} className="task-description" sx={{ textDecoration: "none", color: theme.palette.secondary.dark, fontSize: "13px", fontWeight: "400" }}>
+                                          <Typography
+                                            onClick={() =>
+                                              handleOpenSubTaskPreviewDialog(
+                                                subrow.id
+                                              )
+                                            }
+                                            className="task-description"
+                                            sx={{
+                                              textDecoration: "none",
+                                              color:
+                                                theme.palette.secondary.dark,
+                                              fontSize: "13px",
+                                              fontWeight: "400",
+                                            }}
+                                          >
                                             {subrow.description}
                                           </Typography>
 
-                                          <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
-                                            <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
+                                          <CustomDialog
+                                            handleClose={
+                                              handleCloseSubTaskPreviewDialog
+                                            }
+                                            open={openSubTaskPreviewDialog}
+                                            modalTitle="Subtask"
+                                            redirectPath={"/subtasks-overview"}
+                                            showModalButton={true}
+                                            modalSize="lg"
+                                          >
+                                            <SubtaskPreview
+                                              styles={styles}
+                                              filteredRow={filteredSubTask}
+                                            />
                                           </CustomDialog>
                                         </>
                                       )}
-                                      <Tooltip title={editMode ? "Save task" : "Rename task"} arrow size="small" placement="top-start">
-                                        <IconButton size="small" onClick={() => handleTaskDescription(subrow.id)}>
-                                          {editMode && rowId === subrow.id ? <SaveIcon /> : <EditIcon />}
+                                      <Tooltip
+                                        title={
+                                          editMode ? "Save task" : "Rename task"
+                                        }
+                                        arrow
+                                        size="small"
+                                        placement="top-start"
+                                      >
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            handleTaskDescription(subrow.id)
+                                          }
+                                        >
+                                          {editMode && rowId === subrow.id ? (
+                                            <SaveIcon />
+                                          ) : (
+                                            <EditIcon />
+                                          )}
                                         </IconButton>
                                       </Tooltip>
                                     </Stack>
@@ -411,20 +677,46 @@ export default function TaskTable() {
                                   <Box sx={{ minWidth: 120 }}>
                                     {editAssignee && rowId === subrow.id ? (
                                       <FormControl fullWidth>
-                                        <Select value={selectedAssignee} onChange={(event) => handleAssignee(event, subrow.id)}>
-                                          {taskAssignees.map((assignee, index) => (
-                                            <MenuItem key={index} value={assignee.value}>
-                                              <Typography component="p" variant="caption" display="block">
-                                                {assignee.text}
-                                              </Typography>
-                                            </MenuItem>
-                                          ))}
+                                        <Select
+                                          value={selectedAssignee}
+                                          onChange={(event) =>
+                                            handleAssignee(event, subrow.id)
+                                          }
+                                        >
+                                          {taskAssignees.map(
+                                            (assignee, index) => (
+                                              <MenuItem
+                                                key={index}
+                                                value={assignee.value}
+                                              >
+                                                <Typography
+                                                  component="p"
+                                                  variant="caption"
+                                                  display="block"
+                                                >
+                                                  {assignee.text}
+                                                </Typography>
+                                              </MenuItem>
+                                            )
+                                          )}
                                         </Select>
                                       </FormControl>
                                     ) : (
                                       <Box>
-                                        <Chip label={selectedAssignee} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px" }} />
-                                        <IconButton size="small" onClick={() => handleEditAssignee(subrow.id)}>
+                                        <Chip
+                                          label={selectedAssignee}
+                                          variant="contained"
+                                          sx={{
+                                            minWidth: "80px",
+                                            maxWidth: "85px",
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            handleEditAssignee(subrow.id)
+                                          }
+                                        >
                                           <ExpandMoreIcon />
                                         </IconButton>
                                       </Box>
@@ -437,20 +729,47 @@ export default function TaskTable() {
                                   <Box sx={{ minWidth: 120 }}>
                                     {editPriority && rowId === subrow.id ? (
                                       <FormControl fullWidth>
-                                        <Select value={selectedPriority} onChange={(event) => handlePriority(event, subrow.id)}>
-                                          {taskPriorities.map((priority, index) => (
-                                            <MenuItem key={index} value={priority.value}>
-                                              <Typography component="p" variant="caption" display="block">
-                                                {priority.text}
-                                              </Typography>
-                                            </MenuItem>
-                                          ))}
+                                        <Select
+                                          value={selectedPriority}
+                                          onChange={(event) =>
+                                            handlePriority(event, subrow.id)
+                                          }
+                                        >
+                                          {taskPriorities.map(
+                                            (priority, index) => (
+                                              <MenuItem
+                                                key={index}
+                                                value={priority.value}
+                                              >
+                                                <Typography
+                                                  component="p"
+                                                  variant="caption"
+                                                  display="block"
+                                                >
+                                                  {priority.text}
+                                                </Typography>
+                                              </MenuItem>
+                                            )
+                                          )}
                                         </Select>
                                       </FormControl>
                                     ) : (
                                       <Box>
-                                        <Chip label={selectedPriority} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px", ...priorityBg }} />
-                                        <IconButton size="small" onClick={() => handleEditPriority(subrow.id)}>
+                                        <Chip
+                                          label={selectedPriority}
+                                          variant="contained"
+                                          sx={{
+                                            minWidth: "80px",
+                                            maxWidth: "85px",
+                                            ...priorityBg,
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            handleEditPriority(subrow.id)
+                                          }
+                                        >
                                           <ExpandMoreIcon />
                                         </IconButton>
                                       </Box>
@@ -463,10 +782,22 @@ export default function TaskTable() {
                                   <Box sx={{ minWidth: 120 }}>
                                     {editStatus && rowId === subrow.id ? (
                                       <FormControl fullWidth>
-                                        <Select value={selectedStatus} onChange={(event) => handleStatus(event, subrow.id)}>
+                                        <Select
+                                          value={selectedStatus}
+                                          onChange={(event) =>
+                                            handleStatus(event, subrow.id)
+                                          }
+                                        >
                                           {taskStatuses.map((status, index) => (
-                                            <MenuItem key={index} value={status.value}>
-                                              <Typography component="p" variant="caption" display="block">
+                                            <MenuItem
+                                              key={index}
+                                              value={status.value}
+                                            >
+                                              <Typography
+                                                component="p"
+                                                variant="caption"
+                                                display="block"
+                                              >
                                                 {status.text}
                                               </Typography>
                                             </MenuItem>
@@ -475,8 +806,21 @@ export default function TaskTable() {
                                       </FormControl>
                                     ) : (
                                       <Box>
-                                        <Chip label={selectedStatus} variant="contained" sx={{ minWidth: "80px", maxWidth: "85px", ...statusBg }} />
-                                        <IconButton size="small" onClick={() => handleEditStatus(subrow.id)}>
+                                        <Chip
+                                          label={selectedStatus}
+                                          variant="contained"
+                                          sx={{
+                                            minWidth: "80px",
+                                            maxWidth: "85px",
+                                            ...statusBg,
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() =>
+                                            handleEditStatus(subrow.id)
+                                          }
+                                        >
                                           <ExpandMoreIcon />
                                         </IconButton>
                                       </Box>
@@ -486,12 +830,20 @@ export default function TaskTable() {
 
                                 {/* Due Date */}
                                 <TableCell align="center">
-                                  <MyDatePicker label="" required={false} sizeWidth="132px" showBorder={false} />
+                                  <MyDatePicker
+                                    label=""
+                                    required={false}
+                                    sizeWidth="132px"
+                                    showBorder={false}
+                                  />
                                 </TableCell>
 
                                 {/* Actions */}
                                 <TableCell sx={{ width: "20%" }} align="center">
-                                  <Actions rowId={subrow.id} isParentRow={subrow.isParentRow} />
+                                  <Actions
+                                    rowId={subrow.id}
+                                    isParentRow={subrow.isParentRow}
+                                  />
                                 </TableCell>
                               </TableRow>
                             ))}

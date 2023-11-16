@@ -18,39 +18,56 @@ export default function ChangePasswordForm({ handleClose }) {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-      <CustomPasswordField
-        showTooltip={false}
-        name="currentPassword"
-        placeholder="Current Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.currentPassword} // Pass the validation rules as a prop
-      />
-
-      <CustomPasswordField
-        showTooltip={true}
-        name="newPassword"
-        placeholder="New Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.newPassword} // Pass the validation rules as a prop
-      />
-
-      <CustomPasswordField
-        showTooltip={false}
-        name="confirmPassword"
-        placeholder="Confirm Password"
-        register={register}
-        errors={errors}
-        validation={authValidations.confirmPassword} // Pass the validation rules as a prop
-      />
-
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
+      <Box sx={{ height: "65px" }}>
+        <CustomPasswordField
+          showTooltip={false}
+          name="currentPassword"
+          placeholder="Current Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.currentPassword} // Pass the validation rules as a prop
+        />
+      </Box>
+      <Box sx={{ height: "65px" }}>
+        <CustomPasswordField
+          showTooltip={true}
+          name="newPassword"
+          placeholder="New Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.newPassword} // Pass the validation rules as a prop
+        />
+      </Box>
+      <Box sx={{ height: "65px" }}>
+        <CustomPasswordField
+          showTooltip={false}
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          register={register}
+          errors={errors}
+          validation={authValidations.confirmPassword} // Pass the validation rules as a prop
+        />
+      </Box>
       <Grid item xs={12} sm={12} py={2} textAlign="end">
         <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
           Change Password
         </Button>
-        <Button onClick={handleClose} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+        <Button
+          onClick={handleClose}
+          size="small"
+          variant="contained"
+          sx={{
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.secondary.light,
+            "&:hover": { backgroundColor: theme.palette.secondary.dark },
+          }}
+        >
           Cancel
         </Button>
       </Grid>

@@ -17,9 +17,15 @@ export default function CustomAutocomplete({ label, options, placeholder, requir
     <Box sx={{ textAlign: "left" }}>
       <InputLabel sx={{ fontSize: "14px" }}>
         {label}
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        {required && (
+          <span style={{ color: theme.palette.error.main }}> *</span>
+        )}
       </InputLabel>
-      <Autocomplete sx={{ marginTop: "8px", width: "100%" }} options={options} renderInput={(params) => <TextField {...params} placeholder={placeholder} />} />
+      <Autocomplete
+        sx={{ marginTop: "8px", width: "100%" }}
+        options={options}
+        renderInput={(params) => <TextField {...params} placeholder={label} />}
+      />
     </Box>
   );
 }
