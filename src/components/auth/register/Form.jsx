@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import CustomTextField from "../../common/CustomTextField";
 import ReCAPTCHA from "react-google-recaptcha";
+import { Register } from "../../../api/modules/authModule";
 
 export default function Form() {
   const {
@@ -28,6 +29,20 @@ export default function Form() {
   const handleCaptchaChange = (response) => {
     if (response) {
       setCaptchaVerified(true);
+    }
+  };
+
+  const handleClick = async () => {
+    const FormData = {
+      full_name: "Mohammad Alim",
+      email_address: "mohdalim619@gmail.com",
+      password: "Alim@123",
+      agree_terms_privacy: "yes",
+    };
+    try {
+      const result = await Register(FormData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
   };
   return (
@@ -95,6 +110,7 @@ export default function Form() {
         fullWidth
         variant="contained"
         sx={{ my: 2, borderRadius: "3px" }}
+        onClick={handleClick}
       >
         Register
       </Button>

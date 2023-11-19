@@ -276,8 +276,13 @@ const RouteIndex = () => {
 
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
+          <Route
+            exact
+            path="/account-verification/:token"
+            element={<Register />}
+          />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/change-password" element={<ChangePassword />} />
+          <Route exact path="/change-password/:id" element={<ChangePassword />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
