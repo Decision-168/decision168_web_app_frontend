@@ -15,6 +15,7 @@ import SettingsAccessibilityIcon from "@mui/icons-material/SettingsAccessibility
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { toast } from "react-toastify";
 
 export default function LogoutMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,6 +31,7 @@ export default function LogoutMenu() {
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
     navigate("/");
+    toast.success("Logout successful. Have a great day!");
   };
   const handleRedirect = (path) => {
     handleClose();
@@ -39,13 +41,7 @@ export default function LogoutMenu() {
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip arrow title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
+          <IconButton onClick={handleClick} size="small" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
             <BackgroundLetterAvatars avatarBgColor="#B9B8B9" />
           </IconButton>
         </Tooltip>
@@ -83,8 +79,7 @@ export default function LogoutMenu() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-      >
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         <MenuItem onClick={() => handleRedirect("/profile")}>
           <ListItemIcon>
             <BadgeIcon fontSize="small" />
@@ -103,8 +98,7 @@ export default function LogoutMenu() {
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.main,
-          }}
-        >
+          }}>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <SupportAgentIcon fontSize="small" />
