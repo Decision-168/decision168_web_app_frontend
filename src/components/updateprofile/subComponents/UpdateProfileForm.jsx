@@ -15,6 +15,7 @@ import { selectUserDetails } from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import GenderRadioGroup from "../../common/GenderRadioGroup";
 import { getCountries } from "../../../api/modules/dashboardModule";
+import CustomDatePicker from "../../common/CustomDatePicker";
 
 // const countries = [{ label: "India" }, { label: "China" }, { label: "Pakistan" }, { label: "Afganistan" }, { label: "Russia" }, { label: "Bangladesh" }];
 
@@ -29,10 +30,21 @@ export default function UpdateProfileForm() {
   const navigate = useNavigate();
   const user = useSelector(selectUserDetails);
   const [selectedGender, setSelectedGender] = useState("prefer not to say");
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = React.useState([]);
+  const [selectedCountryCode, setSelectedCountryCode] = React.useState(null);
+  const [dob, setDob] = useState(null);
 
   const handleGenderChange = (event) => {
     setSelectedGender(event.target.value);
+  };
+
+  const handleCountryChange = (event, value) => {
+    setSelectedCountryCode(value ? value.country_code : null);
+  };
+
+  const handleDob = (date) => {
+    // Handle the date change in the parent component
+    console.log("Selected date:", date);
   };
 
   const onSubmit = (data) => {
@@ -62,12 +74,17 @@ export default function UpdateProfileForm() {
     setValue("designation", user?.designation);
     setValue("company", user?.company);
     setSelectedGender(user?.gender);
+    setSelectedCountryCode(user?.country); // not displaying
+    setValue("phone_number", user?.phone_number);
+    setDob(user?.dob);
   };
 
   useEffect(() => {
     prefillForm();
     fetchCountries();
   }, [user]);
+
+  console.log("DOB", user?.dob);
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
@@ -179,23 +196,23 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomAutocomplete label="Select a country" options={countries} />
+          <CustomAutocomplete label="Country" placeholder="Select a country" options={countries} getOptionLabelFn={(option) => option.country_name} required={false} handleOptionChange={handleCountryChange} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
           <CustomNumberField
             label="Phone Number (only numbers)"
-            name="phoneNo"
+            name="phone_number"
             required={false}
             placeholder="Enter phone no"
             register={register}
             errors={errors}
-            validation={globalValidations.phoneNo} // Pass the validation rules as a prop
+            validation={globalValidations.phone_number} // Pass the validation rules as a prop
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomDataPicker label="DOB" />
+          <CustomDatePicker label="DOB" required onChange={handleDob} defaultDate={user?.dob} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={4} px={2} py={2} textAlign="left">

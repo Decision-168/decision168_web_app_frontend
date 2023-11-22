@@ -39,6 +39,7 @@
     "jwt-decode": "^4.0.0",
     "material-react-table": "^2.0.2",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "mui-file-input": "^3.0.2",
     "react-beautiful-dnd": "^13.1.1",
     "react-datepicker": "^4.21.0",

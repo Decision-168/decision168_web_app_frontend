@@ -15,7 +15,6 @@ export default function Quote() {
     const motivator = async () => {
       try {
         const response = await getMotivator();
-        console.log("quote", response);
         setMotivationQuote(response);
       } catch (error) {
         console.error(error);
