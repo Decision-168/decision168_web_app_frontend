@@ -11,7 +11,7 @@ import CustomNumberField from "../../../common/CustomNumberField";
 import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
-import RowRadioButtonsGroup from "../../../common/RowRadioButtonsGroup";
+import GenderRadioGroup  from "../../../common/GenderRadioGroup ";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 
@@ -126,7 +126,7 @@ export default function IndividualForm({ isEditPath }) {
 
         <Grid item xs={12} sm={6} px={2} py={1}>
           <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-            <RowRadioButtonsGroup />
+            <GenderRadioGroup  />
           </Box>
         </Grid>
 

@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Grid, Link, Paper, Stack, Typography } from "@mui/material";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import { useTheme } from "@mui/material/styles";
 import QuoteDailog from "./QuoteDialog";
+import { getMotivator } from "../../../api/modules/dashboardModule";
 
 export default function Quote() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(true);
+  const [motivationQuote, setMotivationQuote] = useState({});
+
+  useEffect(() => {
+    const motivator = async () => {
+      try {
+        const response = await getMotivator();
+        console.log("quote", response);
+        setMotivationQuote(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    motivator();
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -21,7 +40,7 @@ export default function Quote() {
         <Box mb={4}>
           <FormatQuoteIcon sx={{ rotate: "180deg", color: theme.palette.primary.main, width: "30px", height: "30px", marginBottom: "-5px" }} />
           <Box component="span" sx={{ color: theme.palette.secondary.main, fontWeight: "900" }}>
-            Discipline makes today harder, but makes tomorrow easier
+            {motivationQuote.quote}
           </Box>
           <FormatQuoteIcon sx={{ color: theme.palette.primary.main, width: "30px", height: "30px", marginBottom: "-5px" }} />
         </Box>
@@ -40,12 +59,12 @@ export default function Quote() {
               noWrap
               display="block"
               gutterBottom>
-              Humza Shaikh
+              {motivationQuote.writer}
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography component="div" variant="caption" display="block" gutterBottom>
-              Submit a{" "}
+              Submit a
               <Box sx={{ cursor: "pointer", display: "inline", color: theme.palette.primary.main }} onClick={handleClickOpen}>
                 Quote
               </Box>

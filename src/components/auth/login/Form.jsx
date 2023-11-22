@@ -21,7 +21,6 @@ export default function Form() {
   const navigate = useNavigate();
   const [isCaptchaVerified, setCaptchaVerified] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  console.log(rememberMe);
   const [loading, setLoading] = useState(false);
 
   // Function to prefill form fields with remembered user data

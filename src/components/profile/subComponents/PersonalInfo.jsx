@@ -1,12 +1,17 @@
 import { Box, Paper, Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 export default function PersonalInfo() {
   const theme = useTheme();
-
+  const user = useSelector(selectUserDetails);
+  const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
   return (
     <Paper elevation={0}>
       <Box p={2}>
@@ -24,7 +29,7 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  Uzma A Karjikar
+                  {fullName}
                 </Typography>
               </Grid>
             </Grid>
@@ -37,7 +42,7 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  uzmakarjikar@gmail.com
+                  {user?.email_address}
                 </Typography>
               </Grid>
             </Grid>
@@ -50,7 +55,7 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  uzmakarjikar@gmail.com
+                  {user?.gender}
                 </Typography>
               </Grid>
             </Grid>
@@ -63,7 +68,7 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  27 Jul, 1996
+                  {moment(user?.dob).format("Do MMMM, YYYY ")}
                 </Typography>
               </Grid>
             </Grid>
@@ -76,13 +81,29 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                  <IconButton aria-label="facebook">
-                    <FacebookRoundedIcon sx={{ color: theme.palette.primary.main }} />
-                  </IconButton>
+                  {user?.social_media_icon?.includes("YouTube") && (
+                    <IconButton aria-label="youTube">
+                      <YouTubeIcon sx={{ color: theme.palette.primary.main }} />
+                    </IconButton>
+                  )}
 
-                  <IconButton aria-label="linkedIn">
-                    <LinkedInIcon sx={{ color: theme.palette.primary.main }} />
-                  </IconButton>
+                  {user?.social_media_icon?.includes("LinkedIn") && (
+                    <IconButton aria-label="linkedIn">
+                      <LinkedInIcon sx={{ color: theme.palette.primary.main }} />
+                    </IconButton>
+                  )}
+
+                  {user?.social_media_icon?.includes("Instagram") && (
+                    <IconButton aria-label="instagram">
+                      <InstagramIcon sx={{ color: theme.palette.primary.main }} />
+                    </IconButton>
+                  )}
+
+                  {user?.social_media_icon?.includes("Facebook") && (
+                    <IconButton aria-label="facebook">
+                      <FacebookIcon sx={{ color: theme.palette.primary.main }} />
+                    </IconButton>
+                  )}
                 </Stack>
               </Grid>
             </Grid>

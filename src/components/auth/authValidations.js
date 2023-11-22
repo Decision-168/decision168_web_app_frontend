@@ -23,10 +23,10 @@ export const authValidations = {
     },
     password: {
         required: "Password is required",
-        pattern: {
-            value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
-            message: "Invaid password",
-        },
+        // pattern: {
+        //     value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
+        //     message: "Invaid password",
+        // },
         maxLength: {
             value: 32,
             message: "Password must not exceed 32 characters",

@@ -1,33 +1,33 @@
 export const globalValidations = {
-    firstName: {
+    first_name: {
         required: "Fisrt Name is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
             message: "Invalid first name",
         },
     },
-    middleName: {
+    middle_name: {
         required: "Middle Name is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
             message: "Invalid middle name",
         },
     },
-    lastName: {
+    last_name: {
         required: "Last Name is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
             message: "Invalid last name",
         },
     },
-    aboutMe: {
+    about_me: {
         required: "About me description is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
             message: "Invalid description",
         },
     },
-    email: {
+    email_address: {
         required: "Email is required",
         pattern: {
             value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,

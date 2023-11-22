@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Link } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -16,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import SubtaskPreview from "../../Tasks/subtaskOverview/subComponent/SubtaskPreview";
 import { taskOverviewStyles } from "../../Tasks/taskOverview/styles";
 import CustomDialog from "../../common/CustomDialog";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { useSelector } from "react-redux";
+import { getRecentNotifications } from "../../../api/modules/dashboardModule";
 
 const items = [
   {
@@ -41,25 +44,43 @@ const Data = [1, 2, 3, 4, 5];
 export default function ResponsiveGrid() {
   const styles = taskOverviewStyles();
   const [filteredSubTask, setFilterSubTask] = useState(null);
-  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] =
-    useState(false);
+  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = useState(false);
   const theme = useTheme();
   const navigate = useNavigate();
-   const handleOpenSubTaskPreviewDialog = () => {
-     setOpenSubTaskPreviewDialog(true);
-   };
+
+  const user = useSelector(selectUserDetails);
+  const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
+  const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState({});
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const recentNotifications = async () => {
+      try {
+        const id = user?.reg_id;
+        const response = await getRecentNotifications(id);
+        setNotifications(response);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    recentNotifications();
+  }, [user?.reg_id]);
+
+  const handleOpenSubTaskPreviewDialog = () => {
+    setOpenSubTaskPreviewDialog(true);
+  };
   const handleCloseSubTaskPreviewDialog = () => {
     setOpenSubTaskPreviewDialog(false);
   };
-  const RenderViewAllButton = ({ path }) => {
-    if (Data.length > 0) {
+
+  const RenderViewAllButton = ({ path, items }) => {
+    if (items?.length > 0) {
       return (
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<ArrowForwardIcon />}
-          onClick={() => navigate(path)}
-        >
+        <Button variant="outlined" size="small" startIcon={<ArrowForwardIcon />} onClick={() => navigate(path)}>
           view all
         </Button>
       );
@@ -67,47 +88,22 @@ export default function ResponsiveGrid() {
       return null;
     }
   };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} md={6}>
           <Paper elevation={0}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="start"
-              spacing={2}
-              p={2}
-            >
+            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
               <Box component="span" flexGrow={1}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  spacing={2}
-                  py={2}
-                  sx={{ borderBottom: 1, borderColor: "divider" }}
-                >
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <Typography component="div" variant="subtitle2">
                     My Day
                   </Typography>
                   {/* Below button only visible if My Next 168 events are greater than 0 */}
-                  <RenderViewAllButton path={"/today-tasks"} />
+                  <RenderViewAllButton path={"/today-tasks"} items={notifications?.MyDayResult} />
                 </Stack>
-                <Box>
-                  {Data.length > 0 ? (
-                    Data.map((item, index) => (
-                      <OtherFeaturesData
-                        key={index}
-                        text={`My Day ${index + 1}`}
-                        type="My Day"
-                        handleOpen={handleOpenSubTaskPreviewDialog}
-                      />
-                    ))
-                  ) : (
-                    <NoDataFound message="No Event" />
-                  )}
-                </Box>
+                <Box>{notifications?.MyDayResult?.length > 0 ? notifications?.MyDayResult?.map((item, index) => <OtherFeaturesData key={item?.tid} text={item?.tname} type="My Day" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Event" />}</Box>
               </Box>
 
               <Box py={1}>
@@ -121,42 +117,16 @@ export default function ResponsiveGrid() {
 
         <Grid item xs={12} md={6}>
           <Paper elevation={0}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="start"
-              spacing={2}
-              p={2}
-            >
+            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
               <Box component="span" flexGrow={1}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="start"
-                  spacing={2}
-                  py={2}
-                  sx={{ borderBottom: 1, borderColor: "divider" }}
-                >
+                <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <Typography component="div" variant="subtitle2">
                     My Next 168
                   </Typography>
                   {/* Below button only visible if My Next 168 events are greater than 0 */}
-                  <RenderViewAllButton path={"/week-tasks"} />
+                  <RenderViewAllButton path={"/week-tasks"} items={notifications?.MyNext168Result} />
                 </Stack>
-                <Box>
-                  {Data.length > 0 ? (
-                    Data.map((item, index) => (
-                      <OtherFeaturesData
-                        key={index}
-                        text={`My Next 168 ${index + 1}`}
-                        type="My Next 168"
-                        handleOpen={handleOpenSubTaskPreviewDialog}
-                      />
-                    ))
-                  ) : (
-                    <NoDataFound message="No Event" />
-                  )}
-                </Box>
+                <Box>{notifications?.MyNext168Result?.length > 0 ? notifications?.MyNext168Result?.map((item, index) => <OtherFeaturesData key={item?.tid} text={item?.tname} type="My Next 168" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Event" />}</Box>
               </Box>
               <Box py={1}>
                 <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
@@ -190,42 +160,16 @@ export default function ResponsiveGrid() {
 
         <Grid item xs={12} md={6}>
           <Paper elevation={0}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="start"
-              spacing={2}
-              p={2}
-            >
+            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
               <Box component="span" flexGrow={1}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  spacing={2}
-                  py={2}
-                  sx={{ borderBottom: 1, borderColor: "divider" }}
-                >
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <Typography component="div" variant="subtitle2">
                     My Alerts
                   </Typography>
                   {/* Below button only visible if My Alerts events are greater than 0 */}
                   <RenderViewAllButton path={"/my-alerts"} />
                 </Stack>
-                <Box>
-                  {Data.length > 0 ? (
-                    Data.map((item, index) => (
-                      <OtherFeaturesData
-                        key={index}
-                        text={`My Alert ${index + 1}`}
-                        type="My Alerts"
-                        handleOpen={handleOpenSubTaskPreviewDialog}
-                      />
-                    ))
-                  ) : (
-                    <NoDataFound message="No Alert" />
-                  )}
-                </Box>
+                <Box>{Data.length > 0 ? Data.map((item, index) => <OtherFeaturesData key={index} text={`My Alert ${index + 1}`} type="My Alerts" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Alert" />}</Box>
               </Box>
 
               <Box py={1}>
@@ -237,14 +181,7 @@ export default function ResponsiveGrid() {
           </Paper>
         </Grid>
       </Grid>
-      <CustomDialog
-        handleClose={handleCloseSubTaskPreviewDialog}
-        open={openSubTaskPreviewDialog}
-        modalTitle="Subtask"
-        redirectPath={"/subtasks-overview"}
-        showModalButton={true}
-        modalSize="lg"
-      >
+      <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
         <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
       </CustomDialog>
     </Box>

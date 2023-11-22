@@ -1,38 +1,73 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
-import React from "react";
+import { Box, Button, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { globalValidations } from "../../../utils/GlobalValidation";
 import CustomLabelTextArea from "../../common/CustomLabelTextArea";
-import RowRadioButtonsGroup from "../../common/RowRadioButtonsGroup";
 import CustomDataPicker from "../../common/CustomDataPicker";
 import { useTheme } from "@mui/material/styles";
 import CustomAutocomplete from "../../common/CustomAutocomplete";
 import { useNavigate } from "react-router-dom";
-
 import AddSocialMediaLinks from "../../../components/common/AddSocialMediaLinks";
 import CustomNumberField from "../../common/CustomNumberField";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { useSelector } from "react-redux";
+import GenderRadioGroup from "../../common/GenderRadioGroup";
+import { getCountries } from "../../../api/modules/dashboardModule";
 
-const countries = [{ label: "India" }, { label: "China" }, { label: "Pakistan" }, { label: "Afganistan" }, { label: "Russia" }, { label: "Bangladesh" }];
+// const countries = [{ label: "India" }, { label: "China" }, { label: "Pakistan" }, { label: "Afganistan" }, { label: "Russia" }, { label: "Bangladesh" }];
 
 export default function UpdateProfileForm() {
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm();
   const theme = useTheme();
+  const navigate = useNavigate();
+  const user = useSelector(selectUserDetails);
+  const [selectedGender, setSelectedGender] = useState("prefer not to say");
+  const [countries, setCountries] = useState([]);
+
+  const handleGenderChange = (event) => {
+    setSelectedGender(event.target.value);
+  };
 
   const onSubmit = (data) => {
     alert(JSON.stringify(data));
   };
 
-  const navigate = useNavigate();
-
   function handleGoBack() {
     navigate(-1);
   }
+
+  const fetchCountries = async () => {
+    try {
+      const response = await getCountries();
+      setCountries(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function to prefill form fields with remembered user data
+  const prefillForm = () => {
+    setValue("first_name", user?.first_name);
+    setValue("middle_name", user?.middle_name);
+    setValue("last_name", user?.last_name);
+    setValue("about_me", user?.about_me);
+    setValue("email_address", user?.email_address);
+    setValue("designation", user?.designation);
+    setValue("company", user?.company);
+    setSelectedGender(user?.gender);
+  };
+
+  useEffect(() => {
+    prefillForm();
+    fetchCountries();
+  }, [user]);
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
@@ -40,60 +75,60 @@ export default function UpdateProfileForm() {
         <Grid item xs={12} sm={4} px={2} py={1}>
           <CustomLabelTextField
             label="First Name"
-            name="firstName"
+            name="first_name"
             required={true}
             placeholder="Enter first name"
             register={register}
             errors={errors}
-            validation={globalValidations.firstName} // Pass the validation rules as a prop
+            validation={globalValidations.first_name} // Pass the validation rules as a prop
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
           <CustomLabelTextField
             label="Middle Name"
-            name="middleName"
+            name="middle_name"
             required={false}
             placeholder="Enter middle name"
             register={register}
             errors={errors}
-            validation={globalValidations.middleName} // Pass the validation rules as a prop
+            validation={globalValidations.middle_name} // Pass the validation rules as a prop
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
           <CustomLabelTextField
             label="Last Name"
-            name="lastName"
+            name="last_name"
             required={true}
             placeholder="Enter last name"
             register={register}
             errors={errors}
-            validation={globalValidations.lastName} // Pass the validation rules as a prop
+            validation={globalValidations.last_name} // Pass the validation rules as a prop
           />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
           <CustomMultilineTextField
             label="About me"
-            name="AboutMe"
+            name="about_me"
             required={false}
             placeholder="About me"
             register={register}
             errors={errors}
-            validation={globalValidations.aboutMe} // Pass the validation rules as a prop
+            validation={globalValidations.about_me} // Pass the validation rules as a prop
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
           <CustomLabelTextField
             label="Email Address"
-            name="email"
+            name="email_address"
             required={true}
             placeholder="Enter email address"
             register={register}
             errors={errors}
-            validation={globalValidations.email} // Pass the validation rules as a prop
+            validation={globalValidations.email_address} // Pass the validation rules as a prop
           />
         </Grid>
 
@@ -123,7 +158,7 @@ export default function UpdateProfileForm() {
 
         <Grid item xs={12} sm={6} px={2} py={1}>
           <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-            <RowRadioButtonsGroup />
+            <GenderRadioGroup selectedValue={selectedGender} onChange={handleGenderChange} />
           </Box>
         </Grid>
 

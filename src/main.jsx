@@ -10,12 +10,16 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import GlobalThemeProvider from "./theme/GlobalThemeProvider";
+import { Provider } from "react-redux";
+import store from "./redux/store.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <GlobalThemeProvider>
-    <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
-    <App />
+    <Provider store={store}>
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      <App />
+    </Provider>
   </GlobalThemeProvider>
   // </React.StrictMode>
 );

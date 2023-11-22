@@ -1,10 +1,15 @@
+import React from "react";
 import { LinearProgress, useTheme } from "@mui/material";
 import { Suspense, lazy } from "react";
 const RouteIndex = lazy(() => import("./route"));
 import { Provider } from "react-redux";
 import store from "./redux/store";
+
+
 function App() {
   const theme = useTheme();
+
+ 
   return (
     <Suspense
       fallback={
@@ -15,8 +20,7 @@ function App() {
           }}
         />
       }
-      timeout={1000}
-    >
+      timeout={1000}>
       <Provider store={store}>
         <RouteIndex />
       </Provider>
