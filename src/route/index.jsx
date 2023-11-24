@@ -7,7 +7,6 @@ import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 
-
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -21,6 +20,8 @@ const FileCabinet = lazy(() => import("../components/filecabinet"));
 const PortfolioView = lazy(() =>
   import("../components/portfolio/viewporfolio/")
 );
+const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
+
 const CreateEditPortfolio = lazy(() =>
   import("../components/portfolio/createEditPortfolio")
 );
@@ -108,6 +109,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <PortfolioView />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio"
+            element={
+              <DashboardLayout>
+                <AllPortfolios />
               </DashboardLayout>
             }
           />
