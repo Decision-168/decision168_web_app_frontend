@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import {
-  MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import {
@@ -15,9 +14,14 @@ import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
+import CustomTable from "../../../../common/CustomTable";
 
-const CustomTable = ({ title, handleOpen,handlePendingGoalOpen, data }) => {
-  
+const GoalsAndStrategiesTable = ({
+  title,
+  handleOpen,
+  handlePendingGoalOpen,
+  data,
+}) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
@@ -28,14 +32,13 @@ const CustomTable = ({ title, handleOpen,handlePendingGoalOpen, data }) => {
       setLoad(true);
     }
   }, []);
-  const handleOpenCondition =(type)=>{
+  const handleOpenCondition = (type) => {
     if (["Created Goals", "Accepted Goals"].includes(type)) {
-      handleOpen()
+      handleOpen();
     } else {
-      handlePendingGoalOpen()
+      handlePendingGoalOpen();
     }
-  }
- 
+  };
 
   const columns = useMemo(
     () => [
@@ -92,7 +95,10 @@ const CustomTable = ({ title, handleOpen,handlePendingGoalOpen, data }) => {
                 </Typography>
               </Box>
             </Box>
-            <IconButton aria-label="settings" onClick={()=>handleOpenCondition(title)}>
+            <IconButton
+              aria-label="settings"
+              onClick={() => handleOpenCondition(title)}
+            >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
           </Box>
@@ -219,20 +225,10 @@ const CustomTable = ({ title, handleOpen,handlePendingGoalOpen, data }) => {
   });
 
   return (
-    <MaterialReactTable
-      table={table}
-      state={{ isLoading: load }}
-      muiCircularProgressProps={{
-        color: "secondary",
-        thickness: 5,
-        size: 55,
-      }}
-      muiSkeletonProps={{
-        animation: "pulse",
-        height: 28,
-      }}
-    />
+   <>
+    <CustomTable table={table}/>
+   </>
   );
 };
 
-export default memo(CustomTable);
+export default memo(GoalsAndStrategiesTable);

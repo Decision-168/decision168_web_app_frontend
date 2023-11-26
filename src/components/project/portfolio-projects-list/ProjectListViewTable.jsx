@@ -14,6 +14,7 @@ import {
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { stringAvatar } from "../../../helpers/stringAvatar";
+import CustomTable from "../../common/CustomTable";
 
 const ProjectListViewTable = ({
   title,
@@ -21,7 +22,6 @@ const ProjectListViewTable = ({
   data,
   handlePendingOpen,
 }) => {
-
   const handleOpenCondition = (type) => {
     if (["Created Projects", "Accepted Projects"].includes(type)) {
       handleOpen();
@@ -248,19 +248,9 @@ const ProjectListViewTable = ({
   });
 
   return (
-    <MaterialReactTable
-      table={table}
-      state={{ isLoading: load }}
-      muiCircularProgressProps={{
-        color: "secondary",
-        thickness: 5,
-        size: 55,
-      }}
-      muiSkeletonProps={{
-        animation: "pulse",
-        height: 28,
-      }}
-    />
+    <>
+      <CustomTable table={table} />
+    </>
   );
 };
 

@@ -16,7 +16,7 @@ const items = [
   {
     count: 1,
     label: "Portfolio",
-    link: "/portfolio-view",
+    link: "/portfolio",
   },
   {
     count: 8,

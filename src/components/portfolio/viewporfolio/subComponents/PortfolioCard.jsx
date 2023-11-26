@@ -1,5 +1,16 @@
 import React from "react";
-import { Avatar, Box, Button, Grid, Paper, Typography, Menu, MenuItem, useMediaQuery, Stack } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  Stack,
+} from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -84,7 +95,8 @@ export default function PortfolioCard() {
   };
 
   //View Department Dailog code
-  const [openViewDepartmentDialog, setOpenViewDepartmentDialog] = React.useState(false);
+  const [openViewDepartmentDialog, setOpenViewDepartmentDialog] =
+    React.useState(false);
 
   const handleOpenViewDepartmentDailog = () => {
     setOpenViewDepartmentDialog(true);

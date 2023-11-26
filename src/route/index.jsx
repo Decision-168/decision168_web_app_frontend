@@ -17,12 +17,26 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
-const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
-const GoalOverviewRequest = lazy(() => import("../components/GoalsAndStrategies/goal-overview-request"));
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
+const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
+
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+const GoalOverviewRequest = lazy(() =>
+  import("../components/GoalsAndStrategies/goal-overview-request")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
 const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
 const ProjectOverviewRequest = lazy(() => import("../components/project/projects-overview-request"));
@@ -93,6 +107,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <PortfolioView />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio"
+            element={
+              <DashboardLayout>
+                <AllPortfolios />
               </DashboardLayout>
             }
           />
