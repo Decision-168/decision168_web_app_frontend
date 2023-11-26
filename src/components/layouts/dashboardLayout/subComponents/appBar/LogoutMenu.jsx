@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
+import SmallAvatar from "../../../../common/SmallAvatar";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import SettingsAccessibilityIcon from "@mui/icons-material/SettingsAccessibility";
@@ -42,7 +42,7 @@ export default function LogoutMenu() {
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip arrow title="Account settings">
           <IconButton onClick={handleClick} size="small" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
-            <BackgroundLetterAvatars avatarBgColor="#B9B8B9" />
+            <SmallAvatar backColor="#B9B8B9" />
           </IconButton>
         </Tooltip>
       </Box>

@@ -18,15 +18,11 @@ import { useTheme } from "@mui/material/styles";
 import { Avatar, Button, Grid, Hidden, MenuList } from "@mui/material";
 import screenfull from "screenfull";
 import { Link } from "react-router-dom";
-// import SelectMenu from "./SelectMenu";
-
+import SelectMenu from "./SelectMenu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
-import CloseIcon from '@mui/icons-material/Close';
-import EventIcon from '@mui/icons-material/Event';
-import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../../common/ConfirmationDialog";
 import CustomDialog from "../../../../common/CustomDialog";
@@ -37,6 +33,13 @@ import ViewProjectPopup from "../../../../GoalsAndStrategies/subComponents/ViewP
 import TaskPreview from "../../../../Tasks/taskOverview/subComponents/TaskPreview";
 import { taskOverviewStyles } from "../../../../Tasks/taskOverview/styles";
 import SubtaskPreview from "../../../../Tasks/subtaskOverview/subComponent/SubtaskPreview";
+import { getAlertNotificationsAsync, selectAlertNotifications } from "../../../../../redux/action/dashboardSlice";
+import { updateAlertsAndNotifications } from "../../../../../api/modules/dashboardModule";
+import { useSelector } from "react-redux";
+import Notification from "./Notification";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import NoDataFound from "../../../../common/NoDataFound";
 
 const drawerWidth = 250;
 const AppBar = styled(MuiAppBar, {
@@ -78,21 +81,14 @@ const StyledMenu = styled((props) => (
     minWidth: 300,
     maxWidth: 320,
     maxHeight: 400,
-    color:
-      theme.palette.mode === "light"
-        ? "rgb(55, 65, 81)"
-        : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    color: theme.palette.mode === "light" ? "rgb(55, 65, 81)" : theme.palette.grey[300],
+    boxShadow: "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
     "& .MuiMenuItem-root": {
       "&:active": {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
+        backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
       },
     },
   },
@@ -100,6 +96,14 @@ const StyledMenu = styled((props) => (
 
 export default function DesktopAppBar({ open, toggleDrawer }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const data = useSelector(selectAlertNotifications);
+  const arrays = [data?.NewTasksResult, data?.NewSubtaskResult, data?.OverdueTasksResult, data?.OverdueSubtaskResult, data?.SentToReviewTasksResult, data?.ReviewDeniedTasksResult, data?.ReviewApprovedTasksResult, data?.SentToReviewSubtasksResult, data?.ReviewDeniedSubtasksResult, data?.ReviewApprovedSubtasksResult, data?.ReviewArriveTasksResult, data?.ReviewArriveSubtasksResult, data?.PendingProjectRequestResult, data?.PortfolioAcceptedResult, data?.ProjectAcceptedResult, data?.ProjectAcceptedInviteResult, data?.MembershipRequestedResult, data?.PendingGoalRequestResult, data?.ProjectFilesResult, data?.TasksFilesResult, data?.SubtasksFilesResult, data?.NewProjectCommentResult];
+  const areAllArraysEmpty = arrays.every((array) => array?.length === 0);
+
+  const totalLength = arrays.reduce((accumulator, array) => {
+    return accumulator + array?.length;
+  }, 0); // 0 is the initial value of the accumulator
 
   const [isFullscreen, setIsFullscreen] = useState(screenfull.isFullscreen);
 
@@ -140,7 +144,6 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
     setNotificationData(index);
   };
 
-  const dispatch = useDispatch();
   const handleClearAll = () => {
     dispatch(
       openCnfModal({
@@ -160,21 +163,23 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
     setAnchorEl(null);
   };
 
+  const handleRemove = async (id, userId, type) => {
+    const response = await updateAlertsAndNotifications(id, userId, type);
+    if (response.status === 200) {
+      toast.success(`${response?.data?.message}`);
+      dispatch(getAlertNotificationsAsync(userId));
+    }
+  };
+
   return (
-    <AppBar
-      elevation={0}
-      position="absolute"
-      open={open}
-      sx={{ backgroundColor: "white" }}
-    >
+    <AppBar elevation={0} position="absolute" open={open} sx={{ backgroundColor: "white" }}>
       <Toolbar
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           height: "10vh",
-        }}
-      >
+        }}>
         <IconButton
           edge="start"
           color="black"
@@ -185,8 +190,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             width: "40px",
             height: "40px",
             ...(open && { display: "block" }),
-          }}
-        >
+          }}>
           <MenuOpenIcon />
         </IconButton>
 
@@ -200,8 +204,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             width: "40px",
             height: "40px",
             ...(open && { display: "none" }),
-          }}
-        >
+          }}>
           <MenuIcon />
         </IconButton>
 
@@ -211,8 +214,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
-          }}
-        >
+          }}>
           <PortfolioMenu />
 
           {/* <SelectMenu/> */}
@@ -234,24 +236,12 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>
-              <IconButton
-                onClick={toggleFullScreen}
-                color="black"
-                sx={{ width: "50px", height: "50px" }}
-              >
+              <IconButton onClick={toggleFullScreen} color="black" sx={{ width: "50px", height: "50px" }}>
                 {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </IconButton>
 
-              <IconButton
-                id="demo-customized-button"
-                aria-controls={open_menu ? "demo-customized-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open_menu ? "true" : undefined}
-                onClick={handleClick}
-                color="black"
-                sx={{ width: "50px", height: "50px", cursor: "pointer" }}
-              >
-                <Badge badgeContent={4} color="primary">
+              <IconButton id="demo-customized-button" aria-controls={open_menu ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open_menu ? "true" : undefined} onClick={handleClick} color="black" sx={{ width: "50px", height: "50px", cursor: "pointer" }}>
+                <Badge badgeContent={totalLength ? totalLength : 0} color="primary">
                   <NotificationsNoneIcon />
                 </Badge>
               </IconButton>
@@ -264,9 +254,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                 open={open_menu}
                 onClose={handleClose}
                 sx={{
-                  '& .MuiMenuItem-root:last-child':{borderBottom: 0}
-                }}
-              >
+                  "& .MuiMenuItem-root:last-child": { borderBottom: 0 },
+                }}>
                 <MenuList sx={{ p: 2 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} lg={6}>
@@ -275,8 +264,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                           fontSize: "14px",
                           fontWeight: 700,
                           textAlign: "justify",
-                        }}
-                      >
+                        }}>
                         Notifications
                       </Typography>
                     </Grid>
@@ -287,76 +275,222 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                           fontWeight: 500,
                           textAlign: "right",
                           color: "#c7df19",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
-                        onClick={() => handleClearAll()}
-                      >
+                        onClick={() => handleClearAll()}>
                         Clear All
                       </Typography>
                     </Grid>
                   </Grid>
                 </MenuList>
                 <Divider sx={{ my: 0.5 }} />
-                {menu_data.map((index) => (
-                  <MenuItem
-                    key={index.id}
-                    sx={{ borderBottom: "1px solid #0000001f", p: 2 }}
-                  >
-                    <Grid container spacing={2}  onClick={() => handleModuleOpen(index)}>
-                      <Grid item xs={12} md={2} lg={2}>
-                            <Avatar
-                              sx={{
-                                bgcolor: index.color === "light" ? (theme.palette.primary.main) : (theme.palette.secondary.main),
-                                mr: 1,
-                                fontSize: 14,
-                                width: 30,
-                          height: 30,
-                              }}
-                              aria-label={index.type}
-                            >
-                              O{...stringAvatar(index.type.toUpperCase())}
-                            </Avatar>
-                      </Grid>
-                      <Grid item xs={12} md={8} lg={8} sx={{ textWrap: "wrap", color: "#74788d" }}>
-                        <Typography variant="body1"
-                          sx={{ fontSize: "12px", textAlign: "left" }}
-                        >
-                          {index.title}
-                        </Typography>
-                        <Typography variant="body1"
-                          sx={{ fontSize: "12px", textAlign: "left" }}
-                        >
-                          {index.description}
-                        </Typography>
-                        <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center"
-                        }}
-                        >
-                        <EventIcon sx={{ mr:1, fontSize: "12px" }}/>
-                        <Typography variant="body1"
-                          sx={{ fontSize: "12px", textAlign: "left" }}
-                        >
-                          {index.date}
-                        </Typography>
-                        </Box>                        
-                      </Grid>
-                      <Grid item xs={12} md={2} lg={2}>
-                        <Avatar
-                        sx={{
-                          width: 30,
-                          height: 30,
-                          bgcolor: "#eff2f7",
-                        }}
-                        aria-label="Remove"
-                        >
-                        <CloseIcon sx={{ mr:0, color: "#000", fontSize: "18px" }} />
-                        </Avatar>
-                      </Grid>
-                    </Grid>
-                  </MenuItem>
-                ))}
+
+                {areAllArraysEmpty ? (
+                  <NoDataFound message="No Notifications" />
+                ) : (
+                  <>
+                    {/* NewTasksResult */}
+                    <>
+                      {data?.NewTasksResult?.length > 0 &&
+                        data?.NewTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="New Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "newtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* NewSubtaskResult */}
+                    <>
+                      {data?.NewSubtaskResult?.length > 0 &&
+                        data?.NewSubtaskResult?.map((subTask) => (
+                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="New Subtask" taskCode={subTask?.stcode} TaskName={subTask?.stname} ProjectName={subTask?.pname} taskDueDate={subTask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "newsubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* OverdueTasksResult */}
+                    <>
+                      {data?.OverdueTasksResult?.length > 0 &&
+                        data?.OverdueTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Overdue Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "overduetasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* OverdueSubtaskResult */}
+                    <>
+                      {data?.OverdueSubtaskResult?.length > 0 &&
+                        data?.OverdueSubtaskResult?.map((subtask) => (
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Overdue Subtask" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "overduesubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* SentToReviewTasksResult */}
+                    <>
+                      {data?.SentToReviewTasksResult?.length > 0 &&
+                        data?.SentToReviewTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* SentToReviewSubtasksResult */}
+                    <>
+                      {data?.SentToReviewSubtasksResult?.length > 0 &&
+                        data?.SentToReviewSubtasksResult?.map((subtask) => (
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Subtask" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ReviewArriveTasksResult */}
+                    <>
+                      {data?.ReviewArriveTasksResult?.length > 0 &&
+                        data?.ReviewArriveTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Arrived" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.stid, 1, "reviewarrivetasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ReviewArriveSubtasksResult */}
+                    <>
+                      {data?.ReviewArriveSubtasksResult?.length > 0 &&
+                        data?.ReviewArriveSubtasksResult?.map((subtask) => (
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Arrived" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewarrivesubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* PendingProjectRequestResult */}
+                    <>
+                      {data?.PendingProjectRequestResult?.length > 0 &&
+                        data?.PendingProjectRequestResult?.map((p) => (
+                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Pending Project" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pm_id, 1, "pendingprojectrequest")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* PortfolioAcceptedResult */}
+                    <>
+                      {data?.PortfolioAcceptedResult?.length > 0 &&
+                        data?.PortfolioAcceptedResult?.map((p) => (
+                          <MenuItem key={p?.pim_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Accepted Portfolio" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pim_id, 1, "portfolioaccepted")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ProjectAcceptedResult */}
+                    <>
+                      {data?.PortfolioAcceptedResult?.length > 0 &&
+                        data?.PortfolioAcceptedResult?.map((p) => (
+                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Accepted Project" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pm_id, 1, "projectaccepted")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ProjectAcceptedInviteResult */}
+                    <>
+                      {data?.ProjectAcceptedInviteResult?.length > 0 &&
+                        data?.ProjectAcceptedInviteResult?.map((p) => (
+                          <MenuItem key={p?.im_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Accepted Invite" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.im_id, 1, "projectacceptedinvite")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* MembershipRequestedResult */}
+                    <>
+                      {data?.MembershipRequestedResult?.length > 0 &&
+                        data?.MembershipRequestedResult?.map((p) => (
+                          <MenuItem key={p?.req_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Membership Requeste" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.req_id, 1, "membershiprequested")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* PendingGoalRequestResult */}
+                    <>
+                      {data?.PendingGoalRequestResult?.length > 0 &&
+                        data?.PendingGoalRequestResult?.map((p) => (
+                          <MenuItem key={p?.gmid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Pending Goal" taskCode={p?.tcode} TaskName={p?.gname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.gmid, 1, "pendinggoalrequest")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ProjectFilesResult */}
+                    <>
+                      {data?.ProjectFilesResult?.length > 0 &&
+                        data?.ProjectFilesResult?.map((p) => (
+                          <MenuItem key={p?.pfile_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Project File" taskCode={p?.tcode} TaskName={p?.pfile} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pfile_id, 1, "projectfiles")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* TasksFilesResult */}
+                    <>
+                      {data?.TasksFilesResult?.length > 0 &&
+                        data?.TasksFilesResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Task File" taskCode={task?.tcode} TaskName={task?.tfile} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "tasksfiles")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* SubtasksFilesResult */}
+                    <>
+                      {data?.SubtasksFilesResult?.length > 0 &&
+                        data?.SubtasksFilesResult?.map((subTask) => (
+                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Subtask File" taskCode={subTask?.stcode} TaskName={subTask?.stfile} ProjectName={subTask?.pname} taskDueDate={subTask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "subtasksfiles")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* NewProjectCommentResult */}
+                    <>
+                      {data?.NewProjectCommentResult?.length > 0 &&
+                        data?.NewProjectCommentResult?.map((p) => (
+                          <MenuItem key={p?.cid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Project Comment" taskCode={p?.stcode} TaskName={p?.message} ProjectName={p?.pname} taskDueDate={p?.stdue_date} handleRemove={() => handleRemove(p?.cid, 1, "newprojectcomment")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ReviewDeniedTasksResult */}
+                    <>
+                      {data?.ReviewDeniedTasksResult?.length > 0 &&
+                        data?.ReviewDeniedTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Denied" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                    {/* ReviewDeniedSubtasksResult */}
+                    <>
+                      {data?.ReviewDeniedSubtasksResult?.length > 0 &&
+                        data?.ReviewDeniedSubtasksResult?.map((subtask) => (
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Denied" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "reviewsubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+
+                    {/* ReviewApprovedTasksResult */}
+                    <>
+                      {data?.ReviewApprovedTasksResult?.length > 0 &&
+                        data?.ReviewApprovedTasksResult?.map((task) => (
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Approved" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+
+                    {/* ReviewApprovedSubtasksResult */}
+                    <>
+                      {data?.ReviewApprovedSubtasksResult?.length > 0 &&
+                        data?.ReviewApprovedSubtasksResult?.map((subtask) => (
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification type="Review Approved" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")} />
+                          </MenuItem>
+                        ))}
+                    </>
+                  </>
+                )}
               </StyledMenu>
               <LogoutMenu />
             </Stack>
@@ -364,19 +498,12 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
         </Box>
       </Toolbar>
       <ConfirmationDialog value={"clearAll"} />
-      <CustomDialog
-        handleClose={handleModuleClose}
-        open={openModule}
-        modalTitle={notificationData.title}
-        redirectPath={notificationData.link}
-        showModalButton={true}
-        modalSize="md"
-      >
-        {(notificationData.type === 'goal') && (<ViewGoalsPopup />)}
-        {(notificationData.type === 'kpi') && (<ViewKpiPopup />)}
-        {(notificationData.type === 'project') && (<ViewProjectPopup />)}
-        {(notificationData.type === 'task') && (<TaskPreview styles={styles} filteredRow={filteredTask}/>)}
-        {(notificationData.type === 'subtask') && (<SubtaskPreview styles={styles} filteredRow={filteredSubTask} />)}
+      <CustomDialog handleClose={handleModuleClose} open={openModule} modalTitle={notificationData.title} redirectPath={notificationData.link} showModalButton={true} modalSize="md">
+        {notificationData.type === "goal" && <ViewGoalsPopup />}
+        {notificationData.type === "kpi" && <ViewKpiPopup />}
+        {notificationData.type === "project" && <ViewProjectPopup />}
+        {notificationData.type === "task" && <TaskPreview styles={styles} filteredRow={filteredTask} />}
+        {notificationData.type === "subtask" && <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />}
       </CustomDialog>
     </AppBar>
   );

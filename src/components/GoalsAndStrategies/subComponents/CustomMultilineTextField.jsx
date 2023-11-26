@@ -7,15 +7,11 @@ export default function CustomMultilineTextField({
   label,
   labelColor,
   placeholder,
-  register,
-  errors,
-  validation,
+
   required,
 }) {
   const theme = useTheme();
 
-  //to style placeholder
-  const inputProps = register(name, validation);
   // Define custom CSS styles for the placeholder
   const placeholderStyles = {
     fontSize: "14px",
@@ -27,9 +23,7 @@ export default function CustomMultilineTextField({
       <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
-          {required && (
-            <span style={{ color: theme.palette.error.main }}> *</span>
-          )}
+          {required && <span style={{ color: theme.palette.error.main }}> *</span>}
         </InputLabel>
       </Grid>
       <Grid item xs={10}>
@@ -49,7 +43,6 @@ export default function CustomMultilineTextField({
           fullWidth
           name={name}
           inputProps={{
-            ...inputProps,
             sx: {
               "&::placeholder": placeholderStyles,
               "&.MuiOutlinedInput-input": {
@@ -57,8 +50,6 @@ export default function CustomMultilineTextField({
               },
             },
           }}
-          error={!!errors[name]}
-          helperText={errors[name]?.message}
         />
       </Grid>
     </>

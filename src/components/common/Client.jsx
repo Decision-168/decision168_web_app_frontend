@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function Client({ clientName, clientPosition }) {
+export default function Client({ clientName, designation }) {
   const theme = useTheme();
   return (
     <Box>
@@ -9,7 +9,7 @@ export default function Client({ clientName, clientPosition }) {
         {clientName}
       </Typography>
       <Typography component="p" variant="caption" color={theme.palette.secondary.main} display="block" gutterBottom>
-        {clientPosition}
+        {designation}
       </Typography>
     </Box>
   );

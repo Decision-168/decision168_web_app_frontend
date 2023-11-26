@@ -38,6 +38,38 @@ export const getRecentNotifications = async (id) => {
   }
 };
 
+//update profile by user id
+export const updateUserProfile = async (userId, data) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.updateProfile}${userId}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAlertsAndNotifications = async (userId) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.userAlertsAndNotifications}${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//update dashboard + bell icon clear alert notifications by different id's, user id and type
+export const updateAlertsAndNotifications = async (id, userId, type) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.updateAlertsAndNotifications}${id}/${userId}`,
+      { type: type }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getPackageDetails = async (package_id) => {
   try {
     const response = await axios.get(`${apiUrl}${api.userPackage}${package_id}`);

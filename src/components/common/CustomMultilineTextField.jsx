@@ -2,11 +2,17 @@ import React from "react";
 import { TextField, InputLabel, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomMultilineTextField({ name, label, labelColor, placeholder, register, errors, validation, required }) {
+export default function CustomMultilineTextField({
+  name,
+  label,
+  labelColor,
+  placeholder,
+  required,
+  value,
+  onChange,
+}) {
   const theme = useTheme();
 
-  //to style placeholder
-  const inputProps = register(name, validation);
   // Define custom CSS styles for the placeholder
   const placeholderStyles = {
     fontSize: "14px",
@@ -23,7 +29,7 @@ export default function CustomMultilineTextField({ name, label, labelColor, plac
         id="outlined-multiline-static"
         sx={{
           "& .MuiOutlinedInput-root": {
-            padding:"6px 0",
+            padding: "6px 0",
           },
         }}
         multiline
@@ -35,13 +41,12 @@ export default function CustomMultilineTextField({ name, label, labelColor, plac
         fullWidth
         name={name}
         inputProps={{
-          ...inputProps,
           sx: {
             "&::placeholder": placeholderStyles,
           },
         }}
-        error={!!errors[name]}
-        helperText={errors[name]?.message}
+        value={value}
+        onChange={onChange}
       />
     </Box>
   );

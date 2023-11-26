@@ -5,9 +5,12 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import {  Typography } from "@mui/material";
-import BackgroundLetterAvatars from "../../../../common/BackgroundLetterAvatars";
+import { Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { selectUserDetails } from "../../../../../redux/action/userSlice";
+import { useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
+import SmallAvatar from "../../../../common/SmallAvatar";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -46,8 +49,12 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function CustomizedMenus() {
+  const user = useSelector(selectUserDetails);
+  const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const theme = useTheme();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -57,10 +64,10 @@ export default function CustomizedMenus() {
 
   return (
     <div>
-      <Button sx={{color: "#B9B8B9"}} id="demo-customized-button" aria-controls={open ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} variant="text" disableElevation onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
-        <BackgroundLetterAvatars avatarBgColor="#383838" />
+      <Button sx={{ color: "#B9B8B9" }} id="demo-customized-button" aria-controls={open ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} variant="text" disableElevation onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
+        <SmallAvatar backColor="#383838"/>
         <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
-          Arshad Khan
+          {fullName}
         </Typography>
       </Button>
       <StyledMenu
@@ -72,9 +79,9 @@ export default function CustomizedMenus() {
         open={open}
         onClose={handleClose}>
         <MenuItem onClick={handleClose} disableRipple>
-          <BackgroundLetterAvatars />
+          <SmallAvatar backColor="#383838"/>
           <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingX: "5px" }}>
-            Arshad Khan
+            {fullName}
           </Typography>
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />

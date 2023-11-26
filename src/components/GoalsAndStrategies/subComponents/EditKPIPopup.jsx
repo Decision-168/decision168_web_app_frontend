@@ -15,24 +15,8 @@ const EditKPIPopup = () => {
     <>
       <DialogContent dividers>
         <Grid container>
-          <CustomLabelTextField
-            label="KPI"
-            name="KPI"
-            required={true}
-            placeholder="Enter KPi..."
-            register={register}
-            errors={errors}
-            validation={globalValidations.KPI}
-          />
-          <CustomMultilineTextField
-            label="Description"
-            name="Description"
-            required={false}
-            placeholder="Enter Description..."
-            register={register}
-            errors={errors}
-            validation={globalValidations.Description}
-          />
+          <CustomLabelTextField label="KPI" name="KPI" required={true} placeholder="Enter KPi..." />
+          <CustomMultilineTextField label="Description" name="Description" required={false} placeholder="Enter Description..." />
         </Grid>
       </DialogContent>
       <DialogActions>

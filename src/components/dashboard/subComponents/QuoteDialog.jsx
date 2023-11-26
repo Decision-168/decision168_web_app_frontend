@@ -10,10 +10,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import CustomLabelTextField from "../../common/CustomLabelTextField";
-import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
-import CustomLabelTextArea from "../../common/CustomLabelTextArea";
 import QuoteForm from "./QuoteForm";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -21,11 +17,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function QuoteDialog({ handleClose, open }) {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Adjust breakpoint as needed
   return (

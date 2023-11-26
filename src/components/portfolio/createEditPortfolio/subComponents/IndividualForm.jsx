@@ -11,7 +11,7 @@ import CustomNumberField from "../../../common/CustomNumberField";
 import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
-import GenderRadioGroup  from "../../../common/GenderRadioGroup ";
+import GenderRadioGroup from "../../../common/GenderRadioGroup ";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 
@@ -41,153 +41,57 @@ export default function IndividualForm({ isEditPath }) {
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
       <Grid container>
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="First Name"
-            name="firstName"
-            required={true}
-            placeholder="Enter First Name"
-            register={register}
-            errors={errors}
-            validation={globalValidations.firstName} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="First Name" name="firstName" required={true} placeholder="Enter First Name" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Middle Name"
-            name="middleName"
-            required={false}
-            placeholder="Enter middle name"
-            register={register}
-            errors={errors}
-            validation={globalValidations.middleName} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Middle Name" name="middleName" required={false} placeholder="Enter middle name" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Last Name"
-            name="lastName"
-            required={true}
-            placeholder="Enter last name"
-            register={register}
-            errors={errors}
-            validation={globalValidations.lastName} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Last Name" name="lastName" required={true} placeholder="Enter last name" />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
-          <CustomMultilineTextField
-            label="About Individual"
-            name="AboutIndividual"
-            required={false}
-            placeholder="About Individual"
-            register={register}
-            errors={errors}
-            validation={globalValidations.aboutMe} // Pass the validation rules as a prop
-          />
+          <CustomMultilineTextField label="About Individual" name="AboutIndividual" required={false} placeholder="About Individual" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomNumberField
-            label="Phone Number"
-            name="phoneNo"
-            required={true}
-            placeholder="Enter phone no"
-            register={register}
-            errors={errors}
-            validation={globalValidations.phoneNo} // Pass the validation rules as a prop
-          />
+          <CustomNumberField label="Phone Number" name="phoneNo" required={true} placeholder="Enter phone no" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Email Address"
-            name="email"
-            required={true}
-            placeholder="Enter email address"
-            register={register}
-            errors={errors}
-            validation={globalValidations.email} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Email Address" name="email" required={true} placeholder="Enter email address" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Designation"
-            name="designation"
-            required={false}
-            placeholder="Enter designation"
-            register={register}
-            errors={errors}
-            validation={globalValidations.designation} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Designation" name="designation" required={false} placeholder="Enter designation" />
         </Grid>
 
         <Grid item xs={12} sm={6} px={2} py={1}>
           <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-            <GenderRadioGroup  />
+            <GenderRadioGroup />
           </Box>
         </Grid>
 
         <Grid item xs={12} sm={6} px={2} py={1}>
-          <CustomLabelTextField
-            label="Other Gender"
-            name="otherGender"
-            required={false}
-            placeholder="Enter other gender"
-            register={register}
-            errors={errors}
-            validation={globalValidations.otherGender} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Other Gender" name="otherGender" required={false} placeholder="Enter other gender" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Company Name"
-            name="companyName"
-            required={true}
-            placeholder="Enter Company Name"
-            register={register}
-            errors={errors}
-            validation={globalValidations.company} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Company Name" name="companyName" required={true} placeholder="Enter Company Name" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Street"
-            name="street"
-            required={false}
-            placeholder="Enter Street"
-            register={register}
-            errors={errors}
-            validation={globalValidations.company} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="Street" name="street" required={false} placeholder="Enter Street" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="City"
-            name="city"
-            required={false}
-            placeholder="Enter City"
-            register={register}
-            errors={errors}
-            validation={globalValidations.company} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="City" name="city" required={false} placeholder="Enter City" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="State"
-            name="state"
-            required={false}
-            placeholder="Enter State"
-            register={register}
-            errors={errors}
-            validation={globalValidations.company} // Pass the validation rules as a prop
-          />
+          <CustomLabelTextField label="State" name="state" required={false} placeholder="Enter State" />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>

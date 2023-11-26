@@ -2,16 +2,7 @@ import React from "react";
 import { TextField, InputLabel, Grid } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomLabelTextField({
-  name,
-  label,
-  labelColor,
-  placeholder,
-  register,
-  errors,
-  validation,
-  required,
-}) {
+export default function CustomLabelTextField({ name, label, labelColor, placeholder, required }) {
   const theme = useTheme();
 
   //to style placeholder
@@ -27,9 +18,7 @@ export default function CustomLabelTextField({
       <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
           {label}
-          {required && (
-            <span style={{ color: theme.palette.error.main }}> *</span>
-          )}
+          {required && <span style={{ color: theme.palette.error.main }}> *</span>}
         </InputLabel>
       </Grid>
       <Grid item xs={10}>
@@ -45,8 +34,6 @@ export default function CustomLabelTextField({
               "&::placeholder": placeholderStyles,
             },
           }}
-          error={!!errors[name]}
-          helperText={errors[name]?.message}
         />
       </Grid>
     </>

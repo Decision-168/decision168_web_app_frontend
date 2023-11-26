@@ -47,15 +47,7 @@ export default function CreateEditTaskForm({ editMode }) {
         {/* <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}> */}
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField
-              label="Task"
-              name="task"
-              required={true}
-              placeholder="Enter Task Name"
-              register={register}
-              errors={errors}
-              validation={globalValidations.task} // Pass the validation rules as a prop
-            />
+            <CustomLabelTextField label="Task" name="task" required={true} placeholder="Enter Task Name" />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
@@ -63,15 +55,7 @@ export default function CreateEditTaskForm({ editMode }) {
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField
-              label="Description"
-              name="taskDescription"
-              required={false}
-              placeholder="Enter Task Description..."
-              register={register}
-              errors={errors}
-              validation={globalValidations.taskDescription} // Pass the validation rules as a prop
-            />
+            <CustomMultilineTextField label="Description" name="taskDescription" required={false} placeholder="Enter Task Description..." />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2}>
@@ -113,7 +97,7 @@ export default function CreateEditTaskForm({ editMode }) {
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <MyDatePicker label="Due Date" required={true} sizeWidth="100%" showBorder={true}/>
+            <MyDatePicker label="Due Date" required={true} sizeWidth="100%" showBorder={true} />
           </Grid>
 
           <Grid item xs={12} sm={12} px={2} py={2}>

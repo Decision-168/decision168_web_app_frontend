@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Box, IconButton, InputLabel } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTheme } from "@mui/material/styles";
-import moment from "moment-timezone";
+import moment from "moment";
 
-function CustomDatePicker({ label, required, onChange, defaultDate }) {
+function CustomDatePicker({ label, required, value, onChange }) {
   const theme = useTheme();
 
   const [startDate, setStartDate] = useState(new Date());
+  useEffect(() => {
+    // console.log(value);
+    // Update startDate when the external value changes
+    // setStartDate(new Date(value));
+  }, [value]);
 
   const textFieldStyles = {
     "& .MuiInputBase-root": {
@@ -23,6 +28,7 @@ function CustomDatePicker({ label, required, onChange, defaultDate }) {
     if (onChange) {
       onChange(date);
     }
+    // console.log("selectedDate", startDate);
   };
 
   return (
@@ -50,7 +56,7 @@ function CustomDatePicker({ label, required, onChange, defaultDate }) {
           endAdornment: (
             <DatePicker
               selected={startDate}
-              onChange={handleDateChange} // Use the custom handler
+              onChange={handleDateChange}
               customInput={
                 <IconButton>
                   <CalendarMonthIcon />

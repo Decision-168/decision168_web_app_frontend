@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  Grid,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Box, Button, DialogActions, DialogContent, Grid, IconButton, Tooltip } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { globalValidations } from "../../../../../utils/GlobalValidation";
@@ -29,35 +21,18 @@ const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
   const CommonForm = ({}) => {
     return (
       <Grid container>
-        <CustomLabelTextField
-          label="KPI"
-          name="KPI"
-          required={true}
-          placeholder="Enter KPi..."
-          register={register}
-          errors={errors}
-          validation={globalValidations.KPI}
-        />
-        <CustomMultilineTextField
-          label="Description"
-          name="Description"
-          required={false}
-          placeholder="Enter Description..."
-          register={register}
-          errors={errors}
-          validation={globalValidations.Description}
-        />
+        <CustomLabelTextField label="KPI" name="KPI" required={true} placeholder="Enter KPi..." />
+        <CustomMultilineTextField label="Description" name="Description" required={false} placeholder="Enter Description..." />
 
         {inputFields.map((inputField, index) => (
-          <Grid container key={index} sx={{background:'#F5F5F5',p:1,my:1}}>
+          <Grid container key={index} sx={{ background: "#F5F5F5", p: 1, my: 1 }}>
             <Grid item xs={12} lg={12}>
               <Box
                 sx={{
                   width: "100%",
                   display: "flex",
                   justifyContent: "end",
-                }}
-              >
+                }}>
                 <Tooltip title="Remove KPI">
                   <IconButton onClick={() => handleRemoveClick(index)}>
                     <RemoveCircle sx={{ fontSize: "20px" }} />
@@ -65,24 +40,8 @@ const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
                 </Tooltip>
               </Box>
             </Grid>
-            <CustomLabelTextField
-              label="KPI"
-              name="KPI"
-              required={true}
-              placeholder="Enter KPi..."
-              register={register}
-              errors={errors}
-              validation={globalValidations.KPI}
-            />
-            <CustomMultilineTextField
-              label="Description"
-              name="Description"
-              required={false}
-              placeholder="Enter Description..."
-              register={register}
-              errors={errors}
-              validation={globalValidations.Description}
-            />
+            <CustomLabelTextField label="KPI" name="KPI" required={true} placeholder="Enter KPi..." />
+            <CustomMultilineTextField label="Description" name="Description" required={false} placeholder="Enter Description..." />
           </Grid>
         ))}
       </Grid>
