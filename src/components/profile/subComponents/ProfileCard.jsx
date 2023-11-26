@@ -1,37 +1,15 @@
-import { Avatar, Box, Button, Grid, Paper } from "@mui/material";
-import { stringAvatar } from "../../../helpers/stringAvatar";
-import { useTheme } from "@mui/material/styles";
+import { Button, Grid, Paper } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Client from "../../common/Client";
 import CardFeatures from "../../common/CardFeatures";
 import CoverImage from "../../common/CoverImage";
 import { Link } from "react-router-dom";
-
-const items = [
-  {
-    count: 1,
-    label: "Portfolio",
-    link: "/portfolio-view",
-  },
-  {
-    count: 8,
-    label: "Projects",
-    link: "/portfolio-projects-list",
-  },
-  // {
-  //   count: 0,
-  //   label: "Planned Content",
-  // },
-  {
-    count: 1,
-    label: "Tasks",
-    link: "/portfolio-tasks-list",
-  },
-];
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { useSelector } from "react-redux";
+import CardAvatar from "../../common/CardAvatar";
 
 export default function ProfileCard() {
-  const theme = useTheme();
-
+  const user = useSelector(selectUserDetails);
+  const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
   return (
     <Paper elevation={0}>
       <Grid container>
@@ -40,14 +18,11 @@ export default function ProfileCard() {
         </Grid>
 
         <Grid item xs={12} sm={4}>
-          <Box px={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "start", marginTop: "-50px" }}>
-            <Avatar {...stringAvatar("Arshad Khan")} sx={{ width: "100px", height: "100px", backgroundColor: theme.palette.primary.main, border: "5px solid white" }} />
-            <Client clientName="Arshad Khan" clientPosition="Project Manager" />
-          </Box>
+          <CardAvatar fullName={fullName} photo={user?.photo} designation={user?.designation} />
         </Grid>
 
         <Grid item xs={12} sm={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", alignItems: "center" }}>
-          <CardFeatures items={items} />
+          <CardFeatures />
 
           <Grid container>
             <Grid item xs={12} sm={6} p={2} textAlign="left">

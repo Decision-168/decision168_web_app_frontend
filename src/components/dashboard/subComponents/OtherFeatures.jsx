@@ -2,16 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Link } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import TimerIcon from "@mui/icons-material/Timer";
 import { Avatar, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import Notes from "./Notes";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import OtherFeaturesData from "./OtherFeaturesData";
-import NoDataFound from "./NoDataFound";
 import { useNavigate } from "react-router-dom";
 import SubtaskPreview from "../../Tasks/subtaskOverview/subComponent/SubtaskPreview";
 import { taskOverviewStyles } from "../../Tasks/taskOverview/styles";
@@ -19,6 +14,10 @@ import CustomDialog from "../../common/CustomDialog";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import { getRecentNotifications } from "../../../api/modules/dashboardModule";
+import MyDayCard from "./MyDayCard";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import MyNext168Card from "./MyNext168Card";
+import MyAlertsCard from "./MyAlertsCard";
 
 const items = [
   {
@@ -51,15 +50,15 @@ export default function ResponsiveGrid() {
   const user = useSelector(selectUserDetails);
   const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
   const [loading, setLoading] = useState(true);
-  const [notifications, setNotifications] = useState({});
-  const [error, setError] = useState(null);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     const recentNotifications = async () => {
       try {
-        const id = user?.reg_id;
+        // const id = user?.reg_id;
+        const id = 1;
         const response = await getRecentNotifications(id);
-        setNotifications(response);
+        setData(response);
       } catch (error) {
         console.error(error);
       } finally {
@@ -68,7 +67,7 @@ export default function ResponsiveGrid() {
     };
 
     recentNotifications();
-  }, [user?.reg_id]);
+  }, []);
 
   const handleOpenSubTaskPreviewDialog = () => {
     setOpenSubTaskPreviewDialog(true);
@@ -77,78 +76,28 @@ export default function ResponsiveGrid() {
     setOpenSubTaskPreviewDialog(false);
   };
 
-  const RenderViewAllButton = ({ path, items }) => {
-    if (items?.length > 0) {
-      return (
-        <Button variant="outlined" size="small" startIcon={<ArrowForwardIcon />} onClick={() => navigate(path)}>
-          view all
-        </Button>
-      );
-    } else {
-      return null;
-    }
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} md={6}>
-          <Paper elevation={0}>
-            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
-              <Box component="span" flexGrow={1}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <Typography component="div" variant="subtitle2">
-                    My Day
-                  </Typography>
-                  {/* Below button only visible if My Next 168 events are greater than 0 */}
-                  <RenderViewAllButton path={"/today-tasks"} items={notifications?.MyDayResult} />
-                </Stack>
-                <Box>{notifications?.MyDayResult?.length > 0 ? notifications?.MyDayResult?.map((item, index) => <OtherFeaturesData key={item?.tid} text={item?.tname} type="My Day" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Event" />}</Box>
-              </Box>
-
-              <Box py={1}>
-                <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
-                  <AssignmentTurnedInIcon />
-                </Avatar>
-              </Box>
-            </Stack>
-          </Paper>
+          <MyDayCard TodayTasksResult={data.TodayTasksResult} TodaySubtasksResult={data?.TodaySubtasksResult} />
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Paper elevation={0}>
-            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
-              <Box component="span" flexGrow={1}>
-                <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <Typography component="div" variant="subtitle2">
-                    My Next 168
-                  </Typography>
-                  {/* Below button only visible if My Next 168 events are greater than 0 */}
-                  <RenderViewAllButton path={"/week-tasks"} items={notifications?.MyNext168Result} />
-                </Stack>
-                <Box>{notifications?.MyNext168Result?.length > 0 ? notifications?.MyNext168Result?.map((item, index) => <OtherFeaturesData key={item?.tid} text={item?.tname} type="My Next 168" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Event" />}</Box>
-              </Box>
-              <Box py={1}>
-                <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
-                  <CalendarMonthIcon />
-                </Avatar>
-              </Box>
-            </Stack>
-          </Paper>
+          <MyNext168Card WeekTasksResult={data.WeekTasksResult} WeekSubtasksResult={data?.WeekSubtasksResult} />
         </Grid>
 
         {/* <Grid item xs={12} md={6}>
           <Paper elevation={0}>
-            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}> */}
-        {/* <Box component="span">
-                <Typography component="div" variant="subtitle2">My Notes</Typography>
-              </Box> */}
-
-        {/* below section is only visible if notes length > 0 */}
-        {/* <Box component="span" flexGrow={1}>
+            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
+              <Box component="span">
+                <Typography component="div" variant="subtitle2">
+                  My Notes
+                </Typography>
+              </Box>
+              <Box component="span" flexGrow={1}>
                 <Notes />
               </Box>
-
               <Box py={1}>
                 <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
                   <ListAltIcon />
@@ -159,26 +108,7 @@ export default function ResponsiveGrid() {
         </Grid> */}
 
         <Grid item xs={12} md={6}>
-          <Paper elevation={0}>
-            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
-              <Box component="span" flexGrow={1}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} py={2} sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <Typography component="div" variant="subtitle2">
-                    My Alerts
-                  </Typography>
-                  {/* Below button only visible if My Alerts events are greater than 0 */}
-                  <RenderViewAllButton path={"/my-alerts"} />
-                </Stack>
-                <Box>{Data.length > 0 ? Data.map((item, index) => <OtherFeaturesData key={index} text={`My Alert ${index + 1}`} type="My Alerts" handleOpen={handleOpenSubTaskPreviewDialog} />) : <NoDataFound message="No Alert" />}</Box>
-              </Box>
-
-              <Box py={1}>
-                <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
-                  <TimerIcon />
-                </Avatar>
-              </Box>
-            </Stack>
-          </Paper>
+          <MyAlertsCard />
         </Grid>
       </Grid>
       <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
@@ -187,3 +117,15 @@ export default function ResponsiveGrid() {
     </Box>
   );
 }
+
+// const RenderViewAllButton = ({ path, items }) => {
+//   if (items?.length > 0) {
+//     return (
+//       <Button variant="outlined" size="small" startIcon={<ArrowForwardIcon />} onClick={() => navigate(path)}>
+//         view all
+//       </Button>
+//     );
+//   } else {
+//     return null;
+//   }
+// };

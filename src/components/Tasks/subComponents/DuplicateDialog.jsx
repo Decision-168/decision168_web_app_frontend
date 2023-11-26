@@ -16,7 +16,7 @@ const DuplicateDialog = () => {
         <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <CustomLabelTextField label="Task Name" name="task" required={true} placeholder="Enter Task Name..." register={register} errors={errors} validation={globalValidations.task} />
+              <CustomLabelTextField label="Task Name" name="task" required={true} placeholder="Enter Task Name..." />
             </Grid>
 
             <Grid item xs={12}>

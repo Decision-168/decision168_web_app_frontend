@@ -62,7 +62,7 @@ export const globalValidations = {
             message: "Invalid country",
         },
     },
-    phoneNo: {
+    phone_number: {
         required: "Phone no is required",
         pattern: {
             value: /^[0-9]+$/,

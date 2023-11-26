@@ -1,4 +1,4 @@
-import { Box, Button, FormControlLabel, Checkbox, Stack } from "@mui/material";
+import { Box, FormControlLabel, Checkbox, Stack } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomLink from "../../common/CustomLink";
@@ -91,11 +91,23 @@ export default function Form() {
       </Box>
 
       <Box mb={1}>
-        <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={handleCaptchaChange} />
+        <ReCAPTCHA
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={handleCaptchaChange}
+        />
       </Box>
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <FormControlLabel control={<Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} size="small" />} label="Remember me" />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              size="small"
+            />
+          }
+          label="Remember me"
+        />
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 

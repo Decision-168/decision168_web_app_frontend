@@ -36,26 +36,10 @@ const ContactSaleForm = () => {
       <DialogContent dividers>
         <Grid container p={2}>
           <Grid item xs={12}>
-            <CustomLabelTextField
-              label="Email"
-              name="email"
-              required={true}
-              placeholder="Enter Email Address"
-              register={register}
-              errors={errors}
-              validation={globalValidations.email} // Pass the validation rules as a prop
-            />
+            <CustomLabelTextField label="Email" name="email" required={true} placeholder="Enter Email Address" />
           </Grid>
           <Grid item xs={12} pt={2}>
-            <CustomNumberField
-              label="Phone"
-              name="phoneNo"
-              required={true}
-              placeholder="Enter Phone No"
-              register={register}
-              errors={errors}
-              validation={globalValidations.phoneNo} // Pass the validation rules as a prop
-            />
+            <CustomNumberField label="Phone" name="phoneNo" required={true} placeholder="Enter Phone No" />
           </Grid>
           <Grid item xs={12} pt={2}>
             <CustomSelect items={items} label="How many users are you exploring DECISION 168 for?" labelColor="" required={true} handleChange={handleChange} value={value} />

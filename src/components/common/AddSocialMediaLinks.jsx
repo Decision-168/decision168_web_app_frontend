@@ -1,57 +1,85 @@
-import { Grid, Stack, Typography, IconButton, Box } from "@mui/material";
 import React from "react";
-import CustomAutocomplete from "./CustomAutocomplete";
-import CustomLabelTextField from "./CustomLabelTextField";
+import { Grid, Typography, IconButton, Box, TextField, InputLabel, Paper } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { globalValidations } from "../../utils/GlobalValidation";
-import { useForm } from "react-hook-form";
 import { useTheme } from "@mui/material/styles";
+import SelectIcon from "./SelectIcon";
 
-const icons = [{ label: "Facebook" }, { label: "Instagram" }, { label: "LinkedIn" }, { label: "Pinterest" }];
-
-export default function AddSocialMediaLinks() {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+export default function AddSocialMediaLinks({ fields, setFields }) {
   const theme = useTheme();
 
+  const handleAddClick = () => {
+    setFields([...fields, { social_media_icon: "", social_media: "" }]);
+  };
+
+  const handleRemoveClick = (index) => {
+    const updatedFields = [...fields];
+    if (updatedFields.length > 1) {
+      updatedFields.splice(index, 1);
+      setFields(updatedFields);
+    }
+  };
+
+  const handleLinkChange = (event, index) => {
+    const updatedLinks = [...fields];
+    updatedLinks[index].social_media = event.target.value;
+    setFields(updatedLinks);
+  };
+
   return (
-    <Grid container>
-      <Grid item xs={12} sm={12} px={2} py={1}>
-        <Stack direction="row" justifyContent="start" alignItems="center" color={theme.palette.secondary.main}>
-          <Typography>Add Social Media Links : </Typography>
-          <IconButton>
-            <AddCircleIcon />
-          </IconButton>
-        </Stack>
-      </Grid>
+    <Box>
+      <Box
+        display="flex"
+        justifyContent="start"
+        alignItems="center"
+        px={2}
+        color={theme.palette.secondary.main}>
+        <Typography>Add Social Media Links : </Typography>
+        <IconButton onClick={handleAddClick}>
+          <AddCircleIcon />
+        </IconButton>
+      </Box>
 
-      <Grid item xs={12} sm={5.5} px={2} py={1}>
-        <CustomAutocomplete label="Select Icon" options={icons} />
-      </Grid>
+      {fields?.map((field, index) => (
+        <Paper elevation={0} sx={{ width: "100%", my: 1, bgcolor: "#F7F7F7" }}>
+          <Grid container key={index}>
+            <Grid item xs={12} sm={5.5} px={2} py={1}>
+              <SelectIcon required={false} fields={fields} setFields={setFields} index={index} />
+            </Grid>
 
-      <Grid item xs={12} sm={5.5} px={2} py={1}>
-        <CustomLabelTextField
-          label="Link"
-          name="link"
-          required={false}
-          placeholder="Enter Link"
-          register={register}
-          errors={errors}
-          validation={globalValidations.link} // Pass the validation rules as a prop
-        />
-      </Grid>
+            <Grid item xs={12} sm={5.5} px={2} py={1}>
+              <Box sx={{ textAlign: "left" }}>
+                <InputLabel sx={{ fontSize: "14px", color: theme.palette.secondary.main }}>
+                  Link
+                </InputLabel>
+                <TextField
+                  sx={{ mt: 1 }}
+                  id={`link-${index}`}
+                  variant="outlined"
+                  fullWidth
+                  placeholder="Enter link"
+                  value={fields[index].social_media || ""}
+                  onChange={(event) => handleLinkChange(event, index)}
+                />
+              </Box>
+            </Grid>
 
-      <Grid item xs={12} sm={1} px={2} py={1}>
-        <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <IconButton>
-            <RemoveCircleIcon />
-          </IconButton>
-        </Box>
-      </Grid>
-    </Grid>
+            <Grid item xs={12} sm={1} px={2} py={1}>
+              <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "end",
+                }}>
+                <IconButton onClick={() => handleRemoveClick(index)}>
+                  <RemoveCircleIcon />
+                </IconButton>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      ))}
+    </Box>
   );
 }

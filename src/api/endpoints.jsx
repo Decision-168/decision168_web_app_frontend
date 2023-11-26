@@ -31,8 +31,17 @@ const api = {
   //get package details
   userPackage: "user/get-package/",
 
+  //update profile by user id
+  updateProfile: "user/update-profile/",
+
   //get dashboard(my day + my next168) recent 5 notifications by user id
   userRecentNotifications: "user/get-recent-notifications/",
+
+  //get My Alert and notifications
+  userAlertsAndNotifications: "user/get-alert-notifications/",
+
+  //update dashboard + bell icon clear alert notifications by different id's, user id and type
+  updateAlertsAndNotifications: "user/update-alert-notifications/",
 
   //get countries
   countries: "user/get-countries",

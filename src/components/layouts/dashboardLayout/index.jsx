@@ -10,6 +10,7 @@ import TabletMobileAppBar from "./subComponents/appBar/TabletMobileAppBar";
 import DesktopDrawer from "./subComponents/drawer/DesktopDrawer";
 import TabletMobileDrawer from "./subComponents/drawer/TabletMobileDrawer";
 import { getUserDetailsAsync, selectUserDetails } from "../../../redux/action/userSlice";
+import { getAlertNotificationsAsync } from "../../../redux/action/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 
@@ -41,6 +42,23 @@ export default function DashboardLayout({ children }) {
   }, [dispatch, decodedToken?.id]);
 
   // console.log("userInfo", user);
+
+  useEffect(() => {
+    const alerts = async () => {
+      try {
+        // const id = user?.reg_id;
+        const userId = 1;
+        dispatch(getAlertNotificationsAsync(userId));
+      } catch (error) {
+        console.error(error);
+        // } finally {
+        //   setLoading(false);
+        // }
+      }
+    };
+
+    alerts();
+  }, [dispatch]);
 
   const toggleDrawer = () => {
     setOpen(!open);
