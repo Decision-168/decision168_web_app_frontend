@@ -35,23 +35,9 @@ const PortfolioCard = ({ item }) => {
         sx={{
           alignItems: "flex-start", // Align items at the start (top)
           justifyContent: "center",
-          borderRight: `1px solid ${theme.palette.grey[200]}`,
           position: "relative",
-          "&:hover": {
-            "&:before": {
-              width: "100%", // Expand the line to full width on hover
-            },
-          },
-          "&:before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            width: "5px", // Initial width of the vertical line
-            background: theme.palette.primary.light,
-            transition: "width 0.3s ease", // Transition for width change
-          },
+          borderLeft: `7px solid ${theme.palette.primary.main}`,
+          borderRadius: "10px",
         }}
       >
         {/* Clickable area to navigate to the portfolio view */}
@@ -83,48 +69,7 @@ const PortfolioCard = ({ item }) => {
         <Grid
           container
           spacing={1}
-          sx={{
-            marginTop: 1,
-          }}
         >
-          {/* Circles and Line */}
-          <Grid item xs={2}>
-            {/* First Circle */}
-            <Box
-              sx={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                border: `2px solid ${theme.palette.primary.main}`,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: "5px",
-              }}
-            ></Box>
-            {/* Dashed Line */}
-            <Box
-              sx={{
-                borderLeft: "1px dashed gray",
-                height: "30px",
-                margin: "0 5px",
-              }}
-            />
-            {/* Second Circle */}
-            <Box
-              sx={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                border: `2px solid ${theme.palette.primary.main}`,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "5px",
-              }}
-            ></Box>
-          </Grid>
-
           {/* Company Name and Item Name */}
           <Grid item xs={10}>
             <Grid
@@ -150,9 +95,7 @@ const PortfolioCard = ({ item }) => {
                   </Typography>
                 </CardActionArea>
               </Grid>
-              <Grid item xs={12}>
-                <Divider sx={{ borderColor: theme.palette.grey[300] }} />
-              </Grid>
+
               <Grid item xs={12}>
                 <Typography
                   variant="subtitle2"

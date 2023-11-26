@@ -7,10 +7,10 @@ import {
   moreInfoRequest,
   pendingRequest,
 } from "./data";
-const CustomTable = lazy(() => import("./CustomTable"));
+const GoalsAndStrategiesTable = lazy(() => import("./GoalsAndStrategiesTable"));
 
 const tableData = {
-  "all": [
+  all: [
     { title: "Created Goals", data: createData },
     { title: "Accepted Goals", data: acceptedData },
     { title: "Pending Requests", data: pendingRequest },
@@ -24,14 +24,14 @@ const tableData = {
   ],
 };
 
-const ListSection = ({ handleGoalOpen,handlePendingGoalOpen, value }) => {
+const ListSection = ({ handleGoalOpen, handlePendingGoalOpen, value }) => {
   const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2} mt={2}>
       <Grid container spacing={4}>
         {tablesToRender.map((table, index) => (
           <Grid item xs={12} lg={12} key={index}>
-            <CustomTable
+            <GoalsAndStrategiesTable
               title={table.title}
               handleOpen={handleGoalOpen}
               handlePendingGoalOpen={handlePendingGoalOpen}
