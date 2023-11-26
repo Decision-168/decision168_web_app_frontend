@@ -14,6 +14,7 @@ import SelectCountry from "../../common/SelectCountry";
 import { updateUserProfile } from "../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
+import { parseISO } from "date-fns";
 
 export default function UpdateProfileForm() {
   const theme = useTheme();
@@ -45,9 +46,10 @@ export default function UpdateProfileForm() {
       country: user?.country,
       social_media_icon: user?.social_media_icon,
       social_media: user?.social_media,
-      dob: user?.dob ? new Date(user.dob) : null,
+      dob: user?.dob ? parseISO(user.dob) : null,
     });
   }, [user]);
+
 
   useEffect(() => {
     // Split the comma-separated strings into arrays
@@ -92,6 +94,7 @@ export default function UpdateProfileForm() {
   };
 
   const handleDob = (date) => {
+    console.log(date);
     setFormValues({
       ...formValues,
       dob: date,

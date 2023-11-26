@@ -9,33 +9,32 @@ import moment from "moment";
 
 function CustomDatePicker({ label, required, value, onChange }) {
   const theme = useTheme();
-
-  const [startDate, setStartDate] = useState(new Date());
-  useEffect(() => {
-    // console.log(value);
-    // Update startDate when the external value changes
-    // setStartDate(new Date(value));
-  }, [value]);
-
+  const [startDate, setStartDate] = useState(value);
   const textFieldStyles = {
     "& .MuiInputBase-root": {
       border: "none",
     },
   };
 
+  useEffect(() => {
+    setStartDate(value);
+  }, [value]);
+  
+
   const handleDateChange = (date) => {
     setStartDate(date);
     if (onChange) {
       onChange(date);
     }
-    // console.log("selectedDate", startDate);
   };
 
   return (
     <Box sx={{ textAlign: "left" }}>
       <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
         {label}
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        {required && (
+          <span style={{ color: theme.palette.error.main }}> *</span>
+        )}
       </InputLabel>
       <TextField
         variant="outlined"
@@ -57,6 +56,10 @@ function CustomDatePicker({ label, required, value, onChange }) {
             <DatePicker
               selected={startDate}
               onChange={handleDateChange}
+              peekNextMonth
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
               customInput={
                 <IconButton>
                   <CalendarMonthIcon />
