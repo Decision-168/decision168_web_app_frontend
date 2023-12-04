@@ -40,7 +40,7 @@ const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
         onClick={() => navigate("/goal-overview")}
         sx={{
           borderRadius: 0,
-          height: "120px",
+          height: "130px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",

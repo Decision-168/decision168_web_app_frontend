@@ -13,19 +13,10 @@ const CustomAutocomplete = ({
   options,
   labelColor,
   required,
-  validation,
-  register,
-  name,
-  errors,
   placeholder,
 }) => {
   const theme = useTheme();
-  const inputProps = register(name, validation);
-  // Define custom CSS styles for the placeholder
-  const placeholderStyles = {
-    fontSize: "12px",
-    color: theme.palette.secondary.dark,
-  };
+
   return (
     <>
       <Grid item xs={2} alignSelf={"center"}>
@@ -40,16 +31,7 @@ const CustomAutocomplete = ({
         <Autocomplete
           options={options}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder={placeholder}
-              InputProps={{
-                ...params.InputProps,
-                sx: {
-                  "&::placeholder": placeholderStyles,
-                },
-              }}
-            />
+            <TextField {...params} placeholder={placeholder} />
           )}
         />
       </Grid>

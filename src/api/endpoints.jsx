@@ -45,5 +45,6 @@ const api = {
 
   //get countries
   countries: "user/get-countries",
+  
 };
 export default api;

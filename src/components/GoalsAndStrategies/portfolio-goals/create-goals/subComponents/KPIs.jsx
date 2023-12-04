@@ -1,16 +1,9 @@
 import { Box, Button, DialogActions, DialogContent, Grid, IconButton, Tooltip } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../../../utils/GlobalValidation";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
 import { RemoveCircle } from "@mui/icons-material";
 const KPIs = ({ individual, handleAddClick, inputFields, setInputFields }) => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
 
   const handleRemoveClick = (index) => {
     const values = [...inputFields];
