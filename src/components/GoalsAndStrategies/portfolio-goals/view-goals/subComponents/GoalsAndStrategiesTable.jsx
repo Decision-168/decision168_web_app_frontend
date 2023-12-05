@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import {
+  MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import {
@@ -22,28 +23,29 @@ const GoalsAndStrategiesTable = ({
   handlePendingGoalOpen,
   data,
 }) => {
+  console.log(data);
   const theme = useTheme();
   const navigate = useNavigate();
-  const [load, setLoad] = useState(false);
-  useEffect(() => {
-    if (data.length > 0) {
-      setLoad(false);
-    } else {
-      setLoad(true);
-    }
-  }, []);
-  const handleOpenCondition = (type) => {
-    if (["Created Goals", "Accepted Goals"].includes(type)) {
-      handleOpen();
-    } else {
-      handlePendingGoalOpen();
-    }
-  };
+  // const [load, setLoad] = useState(false);
+  // useEffect(() => {
+  //   if (data.length > 0) {
+  //     setLoad(false);
+  //   } else {
+  //     setLoad(true);
+  //   }
+  // }, []);
+  // const handleOpenCondition = (type) => {
+  //   if (["Created Goals", "Accepted Goals"].includes(type)) {
+  //     handleOpen();
+  //   } else {
+  //     handlePendingGoalOpen();
+  //   }
+  // };
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "goals.name",
+        accessorKey: "gname",
         header: "Goals",
         size: 300,
         minSize: 200,
@@ -68,7 +70,7 @@ const GoalsAndStrategiesTable = ({
                 sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
                 aria-label="goal"
               >
-                {...stringAvatar(row.original.goals.name)}
+                {...stringAvatar(row.original.gname)}
               </Avatar>
               <Box>
                 <Typography
@@ -81,7 +83,7 @@ const GoalsAndStrategiesTable = ({
                   textAlign={"start"}
                   onClick={() => navigate("/goal-overview")}
                 >
-                  {row.original.goals.name}
+                  {row.original.gname}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -91,7 +93,7 @@ const GoalsAndStrategiesTable = ({
                   }}
                   textAlign={"start"}
                 >
-                  {row.original.goals.description}
+                  {row.original.gdes}
                 </Typography>
               </Box>
             </Box>
@@ -119,7 +121,7 @@ const GoalsAndStrategiesTable = ({
         },
       },
       {
-        accessorKey: "startDate",
+        accessorKey: "gstart_date",
         header: "Start Date",
         size: 75,
         minSize: 40,
@@ -134,12 +136,12 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.startDate}
+            label={row.original.gstart_date}
           />
         ),
       },
       {
-        accessorKey: "endDate",
+        accessorKey: "gend_date",
         header: "End Date",
         size: 75,
         minSize: 40,
@@ -153,7 +155,7 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.endDate}
+            label={row.original.gend_date}
           />
         ),
       },
@@ -169,9 +171,9 @@ const GoalsAndStrategiesTable = ({
     enableColumnFilters: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    state: {
-      showSkeletons: load,
-    },
+    // state: {
+    //   showSkeletons: load,
+    // },
     enableHiding: false,
     // enableEditing: true,
     // editDisplayMode: "cell",
@@ -223,11 +225,9 @@ const GoalsAndStrategiesTable = ({
       </Typography>
     ),
   });
-
+// console.log(table.getRowModel().rows);
   return (
-   <>
-    <CustomTable table={table}/>
-   </>
+    <MaterialReactTable table={table} />
   );
 };
 
