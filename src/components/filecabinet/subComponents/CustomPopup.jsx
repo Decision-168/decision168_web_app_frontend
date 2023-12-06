@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -9,8 +9,10 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, DialogActions } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
+import { reopenGoal, reopenKpi, reopenProject, reopenSubtask, reopenTask } from "../../../api/modules/FileCabinetModule";
+import { toast } from "react-toastify";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -27,13 +29,23 @@ const CustomPopup = ({
   open,
   modalTitle,
   modalType,
-  showModalButton,
+  modalId,
   modalSize,
-  redirectPath,
+  portfolioId,
+  regId,
+  fetchTreeData
 }) => {
+  const [modId, setModId] = useState(null);
+  const [modType, setModType] = useState(null);
+  const [portfolio, setPortfolio] = useState(null);
+  const [userId, setUserId] = useState(null);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const handleReopen = (module) => {
+  const handleReopen = (module, moduleId, moduleType, modulePort, moduleUser) => {
+    setModId(moduleId);
+    setModType(moduleType);
+    setPortfolio(modulePort);
+    setUserId(moduleUser);
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
@@ -41,6 +53,95 @@ const CustomPopup = ({
         description: `You want to Reopen this ${module}!`,
       })
     );
+  };
+
+  // Reopen Goal ----------------------------------------------
+  const fetchGoalData = async () => {
+    try {
+      const response = await reopenGoal(modId, portfolio, userId);
+      fetchTreeData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  // Reopen Kpi ----------------------------------------------
+  const fetchKpiData = async () => {
+    try {
+      const response = await reopenKpi(modId, portfolio, userId);
+      fetchTreeData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  // Reopen Project ----------------------------------------------
+  const fetchProjectData = async () => {
+    try {
+      const response = await reopenProject(modId, portfolio, userId);
+      fetchTreeData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  // Reopen Task ----------------------------------------------
+  const fetchTaskData = async () => {
+    try {
+      const response = await reopenTask(modId, portfolio, userId);
+      fetchTreeData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  // Reopen Subtask ----------------------------------------------
+  const fetchSubtaskData = async () => {
+    try {
+      const response = await reopenSubtask(modId, userId);
+      fetchTreeData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      handleClose()
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const handleYes = () => {
+    if(modType == 'goal-content') {
+      fetchGoalData()
+    }else if(modType == 'kpi-content') {
+      fetchKpiData()
+    }else if(modType == 'project-content') {
+      fetchProjectData()
+    }else if(modType == 'task-content') {
+      fetchTaskData()
+    }else if(modType == 'subtask-content') {
+      fetchSubtaskData()
+    }
   };
   return (
     <div>
@@ -72,7 +173,7 @@ const CustomPopup = ({
                 <Button
                   size="small"
                   variant="contained"
-                  onClick={() => handleReopen(modalTitle)}
+                  onClick={() => handleReopen(modalTitle, modalId, modalType, portfolioId, regId)}
                 >
                   Reopen
                 </Button>
@@ -111,7 +212,7 @@ const CustomPopup = ({
           </>
         )}
       </BootstrapDialog>
-      <ConfirmationDialog value={"reopenModule"} />
+      <ConfirmationDialog value={"reopenModule"} handleYes={handleYes} />
     </div>
   );
 };

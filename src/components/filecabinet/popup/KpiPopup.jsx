@@ -1,10 +1,80 @@
 import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { BusinessCenter, CalendarMonth, Person } from "@mui/icons-material";
 import GridList from "../../GoalsAndStrategies/subComponents/GridList";
 import ProgressBar from "../subComponents/ProgressBar";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-const KpiPopup = ({ nodes }) => {
+import { getDepartmentData, getKPIData, getKpiProjectData, getUserData } from "../../../api/modules/FileCabinetModule";
+const KpiPopup = ({ nodes, regId, portfolioId }) => {
+  const [kpiData, setKpiData] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
+
+  // KPI Data
+  const fetchKPIData = async () => {
+    try {
+      const response = await getKPIData(nodes?.table_id);
+      setKpiData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchKPIData();
+  }, [nodes]);
+
+  const kpiStartDate = new Date(kpiData.screated_date);
+  const formattedKpiStartDate = `${kpiStartDate.getDate()} ${kpiStartDate.toLocaleString('default', { month: 'short' })}, ${kpiStartDate.getFullYear()}`;
+
+  // Department Data ----------------------------------------------
+  const fetchDepartmentData = async () => {
+    try {
+      const response = await getDepartmentData(kpiData?.gdept_id);
+      setDepartmentData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartmentData();
+  }, [kpiData]);
+
+  const departmentName = departmentData?.department;
+
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(kpiData?.screated_by);
+      setUserData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [kpiData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+  // KPI Project Data ----------------------------------------------
+  const fetchKpiProjectData = async () => {
+    try {
+      const response = await getKpiProjectData(regId,kpiData?.sid,kpiData?.gdept_id,portfolioId);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchKpiProjectData();
+  }, [kpiData]);
+
+
   const data = [1, 2];
   const theme = useTheme();
   return (
@@ -30,7 +100,7 @@ const KpiPopup = ({ nodes }) => {
           >
             <Avatar
               sx={{ bgcolor: theme.palette.primary.main, mr: 1 }}
-              aria-label="goal"
+              aria-label="KPI"
             >
               {...stringAvatar(nodes.name)}
             </Avatar>
@@ -69,46 +139,30 @@ const KpiPopup = ({ nodes }) => {
               fontSize: 13,
             }}
           >
-            MANAGEMENT, ACCOUNTABILITY, & PRODUCTIVITY Use this platform to
-            reclaim time, gain brand exposure, and to focus on what’s important
-            for you to build an innovative business and manage your personal or
-            professional life – or both. The DECISION 168 team is on a mission
-            to Empower Small Businesses, Entrepreneurs, and Individuals. Through
-            the relationships and experience of our network, we will make a
-            difference together. Our goal is to help people across the world
-            perform and function at their highest levels and utilize their
-            unique talents, so that they may make an impact within their
-            communities and beyond.
+            {nodes.description}
           </Typography>
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={4} md={4} lg={4}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
-            title={"Start Date"}
-            info={"6 Nov, 2023"}
+            title={"Created Date"}
+            info={formattedKpiStartDate}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
-          <GridList
-            icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
-            title={"End Date"}
-            info={"31 Dec, 2023"}
-          />
-        </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={4} md={4} lg={4}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Department"}
-            info={"Research & Development"}
+            info={departmentName}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={4} md={4} lg={4}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={userName}
           />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -125,7 +179,7 @@ const KpiPopup = ({ nodes }) => {
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          {data.map((item, index) => {
+          {projectData.map((item, index) => {
             return (
               <Grid
                 container
@@ -151,7 +205,7 @@ const KpiPopup = ({ nodes }) => {
                         display: "inline",
                       }}
                     >
-                      Dashboard Module
+                      {item.pname}
                     </Typography>
                   </Typography>
                 </Grid>

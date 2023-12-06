@@ -1,11 +1,85 @@
 import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { BusinessCenter, CalendarMonth, Person } from "@mui/icons-material";
 import ProgressBar from "../subComponents/ProgressBar";
-const GoalPopup = ({ nodes }) => {
+import { getDepartmentData, getGoalData, getGoalKPIData, getUserData } from "../../../api/modules/FileCabinetModule";
+const GoalPopup = ({ nodes, regId, portfolioId }) => {
+  const [goalData, setGoalData] = useState([]);
+  const [departmentData, setDepartmentData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [kpiData, setKpiData] = useState([]);
+
+  // Goal Data ----------------------------------------------
+  const fetchGoalData = async () => {
+    try {
+      const response = await getGoalData(nodes?.table_id);
+      setGoalData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGoalData();
+  }, [nodes]);
+
+  const goalStartDate = new Date(goalData.gstart_date);
+  const formattedGoalStartDate = `${goalStartDate.getDate()} ${goalStartDate.toLocaleString('default', { month: 'short' })}, ${goalStartDate.getFullYear()}`;
+
+  const goalEndDate = new Date(goalData.gend_date);
+  const formattedGoalEndDate = `${goalEndDate.getDate()} ${goalEndDate.toLocaleString('default', { month: 'short' })}, ${goalEndDate.getFullYear()}`;
+
+  // Department Data ----------------------------------------------
+  const fetchDepartmentData = async () => {
+    try {
+      const response = await getDepartmentData(goalData?.gdept);
+      setDepartmentData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDepartmentData();
+  }, [goalData]);
+
+  const departmentName = departmentData?.department;
+
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(goalData?.gcreated_by);
+      setUserData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [goalData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+  // Goal Wise KPI data ----------------------------------------------
+  const fetchKPIData = async () => {
+    try {
+      const response = await getGoalKPIData(goalData?.gid,goalData?.gdept,portfolioId);
+      setKpiData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchKPIData();
+  }, [goalData]);
+
+  // --------------------------End -----------------------//
+
   const theme = useTheme();
-  const kpiData = [1, 2];
+  // const kpiData = [1, 2];
   const CommonList = ({ icon, title, info }) => {
     return (
       <Box
@@ -94,30 +168,21 @@ const GoalPopup = ({ nodes }) => {
               fontSize: 13,
             }}
           >
-            MANAGEMENT, ACCOUNTABILITY, & PRODUCTIVITY Use this platform to
-            reclaim time, gain brand exposure, and to focus on what’s important
-            for you to build an innovative business and manage your personal or
-            professional life – or both. The DECISION 168 team is on a mission
-            to Empower Small Businesses, Entrepreneurs, and Individuals. Through
-            the relationships and experience of our network, we will make a
-            difference together. Our goal is to help people across the world
-            perform and function at their highest levels and utilize their
-            unique talents, so that they may make an impact within their
-            communities and beyond.
+            {nodes.description}
           </Typography>
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <CommonList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
-            info={"6 Nov, 2023"}
+            info={formattedGoalStartDate}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <CommonList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
-            info={"31 Dec, 2023"}
+            info={formattedGoalEndDate}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -126,14 +191,14 @@ const GoalPopup = ({ nodes }) => {
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Department"}
-            info={"Research & Development"}
+            info={departmentName}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <CommonList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={userName}
           />
         </Grid>
 
@@ -177,7 +242,7 @@ const GoalPopup = ({ nodes }) => {
                         display: "inline",
                       }}
                     >
-                      ABC Strategy 3
+                      {item.sname}
                     </Typography>
                   </Typography>
                 </Grid>

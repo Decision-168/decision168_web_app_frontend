@@ -1,5 +1,5 @@
 import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   CalendarMonth,
   FolderOpenOutlined,
@@ -10,7 +10,47 @@ import { Link } from "react-router-dom";
 import GridList from "../../GoalsAndStrategies/subComponents/GridList";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import ProgressBar from "../subComponents/ProgressBar";
-const ProjectPopup = ({ nodes }) => {
+import { getDepartmentData, getProjectData, getUserData } from "../../../api/modules/FileCabinetModule";
+const ProjectPopup = ({ nodes, regId, portfolioId }) => {
+  const [projectData, setProjectData] = useState([]);
+  const [userData, setUserData] = useState([]);
+
+  // Project Data ----------------------------------------------
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectData(nodes?.table_id);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, [nodes]);
+
+  const projectStartDate = new Date(projectData.pcreated_date);
+  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
+  const projectType = projectData.ptype;
+  const links = projectData.plink;
+  const link_comments = projectData.plink_comment;
+
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(projectData?.pcreated_by);
+      setUserData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [projectData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+  
   const theme = useTheme();
   const CommonLinks = ({ link, linkName }) => {
     return (
@@ -110,12 +150,7 @@ const ProjectPopup = ({ nodes }) => {
               fontSize: 13,
             }}
           >
-            Account Creation Process such as 
-            - Registration 
-            - Registration through Social Media 
-            - Login 
-            - Login through Social Media 
-            - Forgot password
+            {nodes.description}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -125,14 +160,13 @@ const ProjectPopup = ({ nodes }) => {
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            <CommonLinks
-              link={"https://dev.decision168.com/register"}
-              linkName={"registration link"}
-            />
-            <CommonLinks
-              link={"https://dev.decision168.com/login"}
-              linkName={"login link"}
-            />
+            {links && links.split(',').map((link, index) => (
+              <CommonLinks
+              key={index}
+              link={link}
+              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
+            /> 
+            ))}
           </Grid>
         </Grid>
 
@@ -140,14 +174,14 @@ const ProjectPopup = ({ nodes }) => {
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created Date"}
-            info={"6 Nov, 2023"}
+            info={formattedProjectStartDate}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={userName}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -156,7 +190,11 @@ const ProjectPopup = ({ nodes }) => {
               <FolderOpenOutlined sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Type"}
-            info={"Goals & Strategies"}
+            info={
+              projectType === 'content' ? 'Content' :
+              projectType === 'goal_strategy' ? 'Goals & Strategies' :
+              'Project'
+            }
           />
         </Grid>
       </Grid>

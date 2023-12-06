@@ -10,12 +10,11 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-import { data } from "../../../helpers/treeData";
 import FolderCopyOutlinedIcon from "@mui/icons-material/FolderCopyOutlined";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { VisibilityOutlined } from "@mui/icons-material";
 
-const GridSection = ({ handleModuleOpen, handleFileOpen, value }) => {
+const GridSection = ({ handleModuleOpen, handleFileOpen, value, data }) => {
   const [activePath, setActivePath] = useState([]);
 
   const handleBreadcrumbClick = (id) => {
@@ -81,7 +80,7 @@ const GridSection = ({ handleModuleOpen, handleFileOpen, value }) => {
             <Box>
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography
-                  sx={{ fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                  sx={{ fontSize: "13px", fontWeight: 600, cursor: "pointer" }}
                   onClick={() => handleBreadcrumbClick(nodes.id)}
                 >
                   {nodes.name.length > 20

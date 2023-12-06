@@ -1,5 +1,5 @@
 import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
@@ -11,7 +11,116 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
-const SubtaskPopup = ({ nodes }) => {
+import { getPortfolioData, getProjectData, getSubtaskData, getTaskData, getUserData } from "../../../api/modules/FileCabinetModule";
+const SubtaskPopup = ({ nodes, regId, portfolioId }) => {
+  const [userData, setUserData] = useState([]);
+  const [subtaskData, setSubtaskData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
+  const [assigneeData, setAssigneeData] = useState([]);
+  const [portfolioData, setPortfolioData] = useState([]);
+  const [taskData, setTaskData] = useState([]);
+
+  // Subtask Data ----------------------------------------------
+  const fetchSubtaskData = async () => {
+    try {
+      const response = await getSubtaskData(nodes?.table_id);
+      setSubtaskData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSubtaskData();
+  }, [nodes]);
+
+  const subtaskStartDate = new Date(subtaskData.stcreated_date);
+  const formattedSubtaskStartDate = `${subtaskStartDate.getDate()} ${subtaskStartDate.toLocaleString('default', { month: 'short' })}, ${subtaskStartDate.getFullYear()}`;
+  const subtaskDueDate = new Date(subtaskData.stdue_date);
+  const formattedSubtaskDueDate = `${subtaskDueDate.getDate()} ${subtaskDueDate.toLocaleString('default', { month: 'short' })}, ${subtaskDueDate.getFullYear()}`;
+  const links = subtaskData?.stlink;
+  const link_comments = subtaskData?.stlink_comment;
+  const subtaskCode = subtaskData?.stcode;
+  const subtaskNote = subtaskData?.stnote;
+  const subtaskFiles = subtaskData?.stfile;
+  const subtaskStatus = subtaskData?.ststatus;
+  const subtaskPriority = subtaskData?.stpriority;
+
+  // Task Data ----------------------------------------------
+  const fetchTaskData = async () => {
+    try {
+      const response = await getTaskData(subtaskData?.tid);
+      setTaskData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTaskData();
+  }, [subtaskData]);
+
+  // Project Data ----------------------------------------------
+const fetchProjectData = async () => {
+  try {
+    const response = await getProjectData(subtaskData?.stproject_assign);
+    setProjectData(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  fetchProjectData();
+}, [subtaskData]);
+
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(subtaskData?.stcreated_by);
+      setUserData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [subtaskData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+  // Assignee (User) Data ----------------------------------------------
+  const fetchAssigneeData = async () => {
+    try {
+      const response = await getUserData(subtaskData?.stassignee);
+      setAssigneeData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAssigneeData();
+  }, [subtaskData]);
+
+  const assigneeName = `${assigneeData?.first_name} ${assigneeData?.last_name}`;
+
+  // Portfolio Data ----------------------------------------------
+const fetchPortfolioData = async () => {
+  try {
+    const response = await getPortfolioData(portfolioId);
+    setPortfolioData(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  fetchPortfolioData();
+}, [subtaskData]);
+
+
   const theme = useTheme();
   const CommonLinks = ({ link, linkName }) => {
     return (
@@ -72,7 +181,7 @@ const SubtaskPopup = ({ nodes }) => {
           >
             <Avatar
               sx={{ bgcolor: theme.palette.secondary.main, mr: 1 }}
-              aria-label="project"
+              aria-label="subtask"
             >
               {...stringAvatar(nodes.name)}
             </Avatar>
@@ -92,14 +201,14 @@ const SubtaskPopup = ({ nodes }) => {
           <Typography
             sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}
           >
-            Subtask Code : EM-6964
+            Subtask Code : {subtaskCode}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography
             sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}
           >
-            Task : In App Emails & Responses
+            Task : {taskData.tname}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -117,9 +226,7 @@ const SubtaskPopup = ({ nodes }) => {
               fontSize: 13,
             }}
           >
-            Account Creation Process such as - Registration - Registration
-            through Social Media - Login - Login through Social Media - Forgot
-            password
+            {nodes.description}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -136,7 +243,9 @@ const SubtaskPopup = ({ nodes }) => {
               p: 1,
               fontSize: 13,
             }}
-          ></Typography>
+          >
+            {subtaskNote}
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography sx={{ fontSize: 13, textAlign: "left" }}>
@@ -145,14 +254,13 @@ const SubtaskPopup = ({ nodes }) => {
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            <CommonLinks
-              link={"https://dev.decision168.com/register"}
-              linkName={"registration link"}
-            />
-            <CommonLinks
-              link={"https://dev.decision168.com/login"}
-              linkName={"login link"}
-            />
+          {links && links.split(',').map((link, index) => (
+              <CommonLinks
+              key={index}
+              link={link}
+              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
+            /> 
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -171,36 +279,24 @@ const SubtaskPopup = ({ nodes }) => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
+              {subtaskFiles && subtaskFiles.split(',').map((file, index) => (
                 <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "start",
-                  }}
-                >
-                  <KeyboardDoubleArrowRight
-                    sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                  />
-                  <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                    Decision_168_Platform_Auto-Emails_Responses_17_to_21.pdf
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "start",
-                  }}
-                >
-                  <KeyboardDoubleArrowRight
-                    sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                  />
-                  <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                    Decision_168_Platform.pdf
-                  </Typography>
-                </Box>
+                key={index}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "start",
+                }}
+              >
+                <KeyboardDoubleArrowRight
+                  sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
+                />
+                <Typography sx={{ fontSize: 13, color: "#212934" }}>
+                  {file}
+                </Typography>
+              </Box>
+            ))}
               </Grid>
             </Grid>
           </Typography>
@@ -243,7 +339,7 @@ const SubtaskPopup = ({ nodes }) => {
                     ml: 1,
                   }}
                 >
-                  Account Creation Module
+                  {projectData.pname}
                 </Typography>
               </Box>
             </Box>
@@ -266,7 +362,7 @@ const SubtaskPopup = ({ nodes }) => {
             >
               <BadgeIcon fontSize="small" sx={{ color: "#C7DF19", mr: 1 }} />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Portfolio : DECISION 168, Inc
+                {portfolioData.portfolio_name}
               </Typography>
             </Box>
           </Box>
@@ -291,7 +387,7 @@ const SubtaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Assigned To : Afrin Sayed
+                Assigned To : {assigneeName}
               </Typography>
             </Box>
           </Box>
@@ -316,7 +412,7 @@ const SubtaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Due Date : 19 Aug, 2022
+                Due Date : {formattedSubtaskDueDate}
               </Typography>
             </Box>
           </Box>
@@ -341,7 +437,7 @@ const SubtaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Created Date : 12 Jun, 2022
+                Created Date : {formattedSubtaskStartDate}
               </Typography>
             </Box>
           </Box>
@@ -366,7 +462,7 @@ const SubtaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Priority : medium
+                Priority : {subtaskPriority}
               </Typography>
             </Box>
           </Box>
@@ -388,7 +484,7 @@ const SubtaskPopup = ({ nodes }) => {
             >
               <PersonIcon fontSize="small" sx={{ color: "#C7DF19", mr: 1 }} />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Created By : Afrin Sayed
+                Created By : {userName}
               </Typography>
             </Box>
           </Box>
@@ -413,7 +509,7 @@ const SubtaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Status : Done
+                Status : {subtaskStatus}
               </Typography>
             </Box>
           </Box>

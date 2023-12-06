@@ -14,7 +14,7 @@ const api = {
   //user change-password api
   userChangePass: "user/change-password/",
 
-  //-----------------------------Dashboard Modlue Start----------------
+  //-----------------------------Dashboard Module Start----------------
 
   //user details by user id
   userDetails: "user/get-user/",
@@ -94,6 +94,63 @@ const api = {
   updatePortfolio: "portfolio/update-portfolio/",
 
   //get portfolio count by portfolioId
-  getPortfolioCount:"portfolio/get-portfolio-count/"
+  getPortfolioCount:"portfolio/get-portfolio-count/",
+
+    //-----------------------------File Cabinet Module Start----------------
+
+  // Get All portfolio departments wise modules
+  fileCabinetTreeData: "file-cabinet/data/",
+
+  // Get Goal Data
+  fileCabinetGoalData: "file-cabinet/goal-detail/",
+
+  // Get Department Data
+  fileCabinetDepartmentData: "file-cabinet/department-detail/",
+
+  // Get User Data
+  fileCabinetUserData: "file-cabinet/get-student-detail/",
+
+  // Get Goals KPI Data
+  fileCabinetGoalKPIData: "file-cabinet/goal-kpi-detail/",
+
+  // Get KPI Data
+  fileCabinetKPIData: "file-cabinet/kpi-detail/",
+
+  // Get KPI Project Data
+  fileCabinetKpiProjectData: "file-cabinet/kpi-project-detail/",
+
+  // Get Project Data
+  fileCabinetProjectData: "file-cabinet/project-detail/",
+
+  // Get Task Data
+  fileCabinetTaskData: "file-cabinet/task-detail/",
+
+  // Get Task Subtask Data
+  fileCabinetTaskSubtaskData: "file-cabinet/task-subtask-detail/",
+
+  // Get Subtask Data
+  fileCabinetSubtaskData: "file-cabinet/subtask-detail/",
+
+  // Get Portfolio Data
+  fileCabinetPortfolioData: "file-cabinet/portfolio-detail/",
+
+  // Get Recent files Data
+  fileCabinetRecentFilesData: "file-cabinet/recent-files/",
+
+  // Reopen Goal
+  fileCabinetReopenGoal: "file-cabinet/reopen/goal/",
+
+  // Reopen KPI
+  fileCabinetReopenKpi: "file-cabinet/reopen/kpi/",
+
+  // Reopen Project
+  fileCabinetReopenProject: "file-cabinet/reopen/project/",
+
+  // Reopen Task
+  fileCabinetReopenTask: "file-cabinet/reopen/task/",
+
+  // Reopen Subtask
+  fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
+
 };
 export default api;
