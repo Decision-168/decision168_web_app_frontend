@@ -34,8 +34,7 @@ export default function CustomDialog({
         maxWidth={modalSize}
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}
-      >
+        open={open}>
         <DialogTitle
           sx={{
             m: 0,
@@ -45,12 +44,11 @@ export default function CustomDialog({
             alignItems: "center",
             borderTop: `5px solid ${theme.palette.primary.main} `,
           }}
-          id="customized-dialog-title"
-        >
+          id="customized-dialog-title">
           <Typography component="h6" variant="subtitle2" mr={2}>
             {modalTitle}
           </Typography>
-          {showModalButton && ( <CustomLinkButton path={redirectPath} text="Open" /> )}
+          {showModalButton && <CustomLinkButton path={redirectPath} text="Open" />}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -60,8 +58,7 @@ export default function CustomDialog({
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
-          }}
-        >
+          }}>
           <CloseIcon />
         </IconButton>
 

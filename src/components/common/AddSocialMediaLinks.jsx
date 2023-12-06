@@ -64,12 +64,12 @@ export default function AddSocialMediaLinks({ fields, setFields }) {
               </Box>
             </Grid>
 
-            <Grid item xs={12} sm={1} px={2} py={1}>
+            <Grid item xs={12} sm={1} px={1} py={1}>
               <Box
                 sx={{
                   height: "100%",
                   display: "flex",
-                  justifyContent: "center",
+                  justifyContent: "end",
                   alignItems: "end",
                 }}>
                 <IconButton onClick={() => handleRemoveClick(index)}>

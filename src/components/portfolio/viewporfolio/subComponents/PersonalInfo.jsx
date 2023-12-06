@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Box, Paper, Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -6,6 +7,14 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
+import { useSelector } from "react-redux";
+import {
+  getPortfolioDetailsAsync,
+  selectPorfolioDetails,
+} from "../../../../redux/action/portfolioSlice";
+import { useDispatch } from "react-redux";
+import SocialMedia from "../../../common/SocialMedia";
+import useCountryName from "../../../../hooks/useCountryName";
 
 const PortfolioDetails = {
   contactPersonName: "John Doe",
@@ -45,142 +54,242 @@ const PortfolioDetails = {
 
 export default function PersonalInfo() {
   const theme = useTheme();
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const details = useSelector(selectPorfolioDetails);
+  const dispatch = useDispatch();
+  const countryName = useCountryName(details?.country);
+
+  const fetchPortfolioDetails = async () => {
+    try {
+      dispatch(getPortfolioDetailsAsync(storedPorfolioId));
+    } catch (fetchError) {
+      console.error("Error fetching portfolio details:", fetchError);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolioDetails();
+  }, [storedPorfolioId]);
 
   return (
     <Paper elevation={0}>
       <Box p={2} textAlign="left">
-        <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark, fontWeight: "700" }} textAlign="left">
+        <Typography
+          variant="subtitle1"
+          sx={{ color: theme.palette.secondary.dark, fontWeight: "700" }}
+          textAlign="left">
           Information
         </Typography>
 
-        <Box py={2}>
-          <Typography component="p" variant="body2" my={2}>
-            Visualize, Plan, Implement…Repeat! Reclaim your time, focus on what’s important, & make informed DECISIONS (24x7 = 168).
-          </Typography>
-          <Typography component="p" variant="body2" my={2}>
-            Use this platform to reclaim time, gain brand exposure, & focus on what’s important for you to build an innovative business and manage your personal or professional life – or both. (24×7=168)
-          </Typography>
-          <Typography component="p" variant="body2" my={2}>
-            DECISION 168 is on a mission to Empower Small Businesses, Entrepreneurs, and Individuals. Through the relationships and experience of our network, we will make a difference together.
-          </Typography>
-          <Typography component="p" variant="body2" my={2}>
-            Our goal is to help people across the world perform and function at their highest levels and utilize their unique talents, so that they may make an impact within their communities and beyond.
-          </Typography>
-        </Box>
+        {details?.about_portfolio && (
+          <Box pt={1}>
+            {details?.about_portfolio.split(".").map((sentence, index) => (
+              <Typography key={index} component="p" variant="body2" mb={1}>
+                {sentence?.trim()}.
+              </Typography>
+            ))}
+          </Box>
+        )}
 
         <Grid container mt={2}>
           <Grid xs={12} item>
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Contact Person Name :
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.contactPersonName}
-                </Typography>
-              </Grid>
-            </Grid>
+            {details?.portfolio_user === "company" && (
+              <>
+                {details?.contact_fname && details?.contact_lname && (
+                  <Grid
+                    container
+                    p={1}
+                    borderBottom={1}
+                    borderColor={theme.palette.secondary.light}
+                    color={theme.palette.secondary.main}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="subtitle2" textAlign="left">
+                        Contact Person Name :
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                        {details?.contact_fname}&nbsp;{details?.contact_lname}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Created By :
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.createdBy}
-                </Typography>
-              </Grid>
-            </Grid>
+                {details?.designation && (
+                  <Grid
+                    container
+                    p={1}
+                    borderBottom={1}
+                    borderColor={theme.palette.secondary.light}
+                    color={theme.palette.secondary.main}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography variant="subtitle2" textAlign="left">
+                        Designation :
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                        {details?.designation}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                )}
+              </>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Type :
-                </Typography>
+            {details?.portfolio_createdby && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Created By :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {details?.portfolio_createdby}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.type}
-                </Typography>
-              </Grid>
-            </Grid>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Email Address :
-                </Typography>
+            {details?.portfolio_user && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Type :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {details?.portfolio_user}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.email}
-                </Typography>
-              </Grid>
-            </Grid>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Company Website :
-                </Typography>
+            {details?.email_address && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Email Address :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {details?.email_address}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.website}
-                </Typography>
-              </Grid>
-            </Grid>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Country :
-                </Typography>
+            {details?.company_website && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Company Website :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {details?.company_website}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Typography variant="caption" display="block" gutterBottom textAlign="left">
-                  {PortfolioDetails.country}
-                </Typography>
-              </Grid>
-            </Grid>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Social Media Link(s) :
-                </Typography>
+            {countryName && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Country :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {countryName}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                  {PortfolioDetails.socialMedia.map((item, index) => (
-                    <IconButton aria-label="facebook" key={index}>
-                      {item.icon}
-                    </IconButton>
-                  ))}
-                </Stack>
-              </Grid>
-            </Grid>
+            )}
 
-            <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
-              <Grid item xs={12} sm={4}>
-                <Typography variant="subtitle2" textAlign="left">
-                  Department(s) :
-                </Typography>
+            {details?.social_media && details?.social_media_icon && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left">
+                    Social Media Link(s) :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
+                    <SocialMedia links={details?.social_media} icons={details?.social_media_icon} />
+                  </Stack>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Stack direction="row" spacing={2}>
-                  {PortfolioDetails.departments.map((item, index) => (
-                    <Box key={index} sx={{ bgcolor: "#DADBDD", color: "black" , fontSize:"12px" , padding:"3px 5px", borderRadius:"5px"}}>
-                      {item}
-                    </Box>
-                  ))}
-                </Stack>
+            )}
+
+            {details?.departments?.length > 0 && (
+              <Grid
+                container
+                p={1}
+                borderBottom={1}
+                borderColor={theme.palette.secondary.light}
+                color={theme.palette.secondary.main}>
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="subtitle2" textAlign="left" pb={1}>
+                    Department(s) :
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Stack direction="row" sx={{ flexWrap: "wrap" }}>
+                    {details?.departments?.map((department, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          bgcolor: "#DADBDD",
+                          color: "black",
+                          fontSize: "12px",
+                          padding: "3px 5px",
+                          borderRadius: "5px",
+                          mb: 1,
+                          mr: 1,
+                        }}>
+                        {department}
+                      </Box>
+                    ))}
+                  </Stack>
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Grid>
         </Grid>
       </Box>

@@ -4,6 +4,7 @@ import confirmModalReducer from './action/confirmationModalSlice';
 import popupReducer from './action/confirmationModalSlice';
 import userReducer from './action/userSlice';
 import dashboardReducer from './action/dashboardSlice';
+import portfolioReducer from './action/portfolioSlice';
 
 export default configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export default configureStore({
     confirmation_modal: confirmModalReducer,
     popup: popupReducer,
     user: userReducer,
-    dashboard: dashboardReducer
+    dashboard: dashboardReducer,
+    portfolio: portfolioReducer
   },
 });

@@ -7,9 +7,17 @@ import Client from "./Client";
 export default function CardAvatar({ fullName, photo, designation }) {
   const theme = useTheme();
   return (
-    <Box px={4} sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", marginTop: "-50px" }}>
+    <Box
+      px={4}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: "-50px",
+      }}>
       <Avatar
-        alt="photo"
+        alt={fullName?.toUpperCase()}
         src={photo}
         sx={{
           width: "100px",
@@ -17,7 +25,7 @@ export default function CardAvatar({ fullName, photo, designation }) {
           backgroundColor: theme.palette.primary.main,
           border: "5px solid white",
         }}>
-        {photo ? null : stringAvatar(fullName)}
+        {typeof photo === "string" && photo ? null : stringAvatar(fullName?.toUpperCase())}
       </Avatar>
       <Client clientName={fullName} designation={designation} />
     </Box>

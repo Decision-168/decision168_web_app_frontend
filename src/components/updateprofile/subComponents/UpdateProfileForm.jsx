@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import AddSocialMediaLinks from "../../../components/common/AddSocialMediaLinks";
 import CustomNumberField from "../../common/CustomNumberField";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
-import { selectUserDetails } from "../../../redux/action/userSlice";
+import { getUserDetailsAsync, selectUserDetails } from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import GenderRadioGroup from "../../common/GenderRadioGroup";
 import CustomDatePicker from "../../common/CustomDatePicker";
@@ -15,10 +15,12 @@ import { updateUserProfile } from "../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
 import { parseISO } from "date-fns";
+import { useDispatch } from "react-redux";
 
 export default function UpdateProfileForm() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
 
   const [formValues, setFormValues] = useState({});
@@ -50,7 +52,6 @@ export default function UpdateProfileForm() {
     });
   }, [user]);
 
-
   useEffect(() => {
     // Split the comma-separated strings into arrays
     const iconsArray = formValues.social_media_icon?.split(",");
@@ -79,9 +80,9 @@ export default function UpdateProfileForm() {
       const icons = fields.map((item) => item.social_media_icon).join(",");
       const links = fields.map((item) => item.social_media).join(",");
       const data = { ...formValues, social_media_icon: icons, social_media: links };
-
       const userId = user?.reg_id;
       const response = await updateUserProfile(userId, data);
+      dispatch(getUserDetailsAsync(userId));
       // Handling success
       toast.success(`${response.message}`);
     } catch (error) {

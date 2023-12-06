@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Box, InputLabel } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { getCountries } from "../../api/modules/dashboardModule";
 
 export default function SelectIcon({ required, index, fields, setFields }) {
   const theme = useTheme();
@@ -13,13 +12,9 @@ export default function SelectIcon({ required, index, fields, setFields }) {
     { icon: "Facebook", link: "https://www.facebook.com/" },
     { icon: "LinkedIn", link: "https://www.linkedin.com/" },
     { icon: "Instagram", link: "https://www.instagram.com/" },
+    { icon: "Pinterest", link: "https://www.pinterest.com/" },
+    { icon: "Twitter", link: "https://twitter.com/" },
   ];
-
-  // Define custom CSS styles for the placeholder
-  const placeholderStyles = {
-    fontSize: "14px",
-    color: theme.palette.secondary.dark,
-  };
 
   const handleChange = (fieldName, index) => (event, value) => {
     const updatedIcons = [...fields];

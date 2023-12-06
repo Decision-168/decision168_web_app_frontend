@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomSelect({ items, label, labelColor, required, handleChange, value }) {
+export default function CustomSelect({ items, label, labelColor, required, handleChange, value, disabled }) {
   const theme = useTheme();
 
   return (
@@ -14,9 +14,9 @@ export default function CustomSelect({ items, label, labelColor, required, handl
         {label}
         {required && <span style={{ color: theme.palette.error.main }}> *</span>}
       </InputLabel>
-      <Select fullWidth id="demo-simple-select" value={value} onChange={handleChange}>
+      <Select fullWidth id="demo-simple-select" value={value} onChange={handleChange} disabled={disabled}>
         {items.map((item, index) => (
-          <MenuItem key={index} value={item.value}  color="red" selected={true}>
+          <MenuItem key={index} value={item.value} color="red" selected={true}>
             {item.text}
           </MenuItem>
         ))}

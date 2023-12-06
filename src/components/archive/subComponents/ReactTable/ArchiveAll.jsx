@@ -11,6 +11,7 @@ import CustomTable from "../../../common/CustomTable";
 
 const ArchiveAll = () => {
   const dispatch = useDispatch();
+  
   const handleReopen = (type) => {
     dispatch(
       openCnfModal({

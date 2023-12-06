@@ -1,5 +1,5 @@
-import React from "react";
-import { Avatar, Box, Button, Grid, InputLabel } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Avatar, Box, Button, Grid, InputLabel, TextField, Stack, IconButton } from "@mui/material";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
 import { globalValidations } from "../../../../utils/GlobalValidation";
@@ -11,91 +11,316 @@ import CustomNumberField from "../../../common/CustomNumberField";
 import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
-import GenderRadioGroup from "../../../common/GenderRadioGroup ";
+import GenderRadioGroup from "../../../common/GenderRadioGroup";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
+import SelectCountry from "../../../common/SelectCountry";
+import CircularLoader from "../../../common/CircularLoader";
+import { updatePortfolio } from "../../../../api/modules/porfolioModule";
+import { useSelector } from "react-redux";
+import { selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
 
-const countries = [{ label: "India" }, { label: "China" }, { label: "Pakistan" }, { label: "Afganistan" }, { label: "Russia" }, { label: "Bangladesh" }];
+const countries = [
+  { label: "India" },
+  { label: "China" },
+  { label: "Pakistan" },
+  { label: "Afganistan" },
+  { label: "Russia" },
+  { label: "Bangladesh" },
+];
 
-const departments = [{ title: "Admnistration" }, { title: "Accounting & Finanace" }, { title: "Customer Service" }, { title: "Human Resources" }, { title: "Marketing" }, { title: "Sales" }, { title: "Research & Development" }];
+export default function IndividualForm({ isEditPath, depts }) {
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const details = useSelector(selectPorfolioDetails);
+  const [formValues, setFormValues] = useState({
+    portfolio_createdby:user?.reg_id,
+    portfolio_user: "individual",
+    portfolio_name: "",
+    portfolio_mname: "",
+    portfolio_lname: "",
+    about_portfolio: "",
+    phone_number: 0,
+    email_address: "",
+    designation: "",
+    gender: "",
+    gender_other: "",
+    company_individual: "",
+    street: "",
+    city: "",
+    state: "",
+    country: "",
+    social_media_icon: "",
+    social_media: "",
+    photo: "",
+    cover_photo: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [inputFields, setInputFields] = useState([
+    // {
+    //   cus_department: "",
+    //   error: false,
+    // },
+  ]);
+  const [fields, setFields] = useState([
+    {
+      social_media_icon: "",
+      social_media: "",
+    },
+  ]);
 
-export default function IndividualForm({ isEditPath }) {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-  const theme = useTheme();
+  useEffect(() => {
+    setFormValues({
+      ...formValues,
+      portfolio_createdby:user?.reg_id,
+      portfolio_user: details?.portfolio_user,
+      portfolio_name: details?.portfolio_name,
+      portfolio_mname: details?.portfolio_mname,
+      portfolio_lname: details?.portfolio_lname,
+      about_portfolio: details?.about_portfolio,
+      phone_number: details?.phone_number,
+      email_address: details?.email_address,
+      designation: details?.designation,
+      gender: details?.gender,
+      gender_other: details?.gender_other,
+      company_individual: details?.company_individual,
+      street: details?.street,
+      city: details?.city,
+      state: details?.state,
+      country: details?.country,
+      social_media_icon: details?.social_media_icon,
+      social_media: details?.social_media,
+      photo: "",
+      cover_photo: "",
+    });
+  }, [details]);
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+
+
+  useEffect(() => {
+    // Split the comma-separated strings into arrays
+    const iconsArray = formValues.social_media_icon?.split(",");
+    const linksArray = formValues.social_media?.split(",");
+
+    // Combine the arrays into an array of objects
+    const resultArray = iconsArray?.map((social_media_icon, index) => ({
+      social_media_icon,
+      social_media: linksArray[index],
+    }));
+    setFields(resultArray);
+  }, [formValues.social_media_icon, formValues.social_media]);
+
+  const handleChange = (fieldName) => (event) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
   };
 
-  const navigate = useNavigate();
+  const [departments, setDepartments] = React.useState([]);
+  const handleDepartmentChange = (selectedOptions) => {
+    console.log("Selected departments:", selectedOptions);
+    const departmentsArray = selectedOptions?.map((item) => item.department);
+    setDepartments(departmentsArray);
+  };
 
-  function handleGoBack() {
-    navigate(-1);
-  }
+  const handleInputChange = (event, index) => {
+    const values = [...inputFields];
+    values[index][event.target.name] = event.target.value;
+    setInputFields(values);
+  };
+
+  const handleAddClick = () => {
+    setInputFields([...inputFields, { cus_department: "", error: false }]);
+  };
+
+  const handleRemoveClick = (index) => {
+    const values = [...inputFields];
+
+    if (inputFields.length >= 1) {
+      values.splice(index, 1);
+      setInputFields(values);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    const updatedFields = inputFields.map((field) => ({
+      ...field,
+      error: !field.cus_department.trim()
+        ? "Department cannot be empty"
+        : !isDepartmentValid(field.cus_department)
+        ? "Invalid department"
+        : false,
+    }));
+
+    setInputFields(updatedFields);
+
+    if (updatedFields.some((field) => field.error)) {
+      setLoading(false);
+      return;
+    }
+
+    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
+    const departmentData = {
+      portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
+      departments: departments,
+      cus_departments: customDepartmentArray,
+      createdby: user?.reg_id,
+    };
+
+    try {
+      const icons = fields.map((item) => item.social_media_icon).join(",");
+      const links = fields.map((item) => item.social_media).join(",");
+      const data = { ...formValues, social_media_icon: icons, social_media: links };
+      if (isEditPath) {
+        const portfolioId = storedPortfolioId;
+        const response = await updatePortfolio(portfolioId, data);
+        toast.success(`${response.message}`);
+      } else {
+        const response = await insertPortfolio(data);
+        await insertProjectPortfolioDepartment(departmentData);
+        toast.success(`${response.message}`);
+      }
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error("Error in inserting new portfolio:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
       <Grid container>
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="First Name" name="firstName" required={true} placeholder="Enter First Name" />
+          <CustomLabelTextField
+            label="First Name"
+            required={true}
+            placeholder="Enter First Name"
+            name="portfolio_name"
+            value={formValues.portfolio_name}
+            onChange={handleChange("portfolio_name")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Middle Name" name="middleName" required={false} placeholder="Enter middle name" />
+          <CustomLabelTextField
+            label="Middle Name"
+            required={false}
+            placeholder="Enter middle name"
+            name="portfolio_mname"
+            value={formValues.portfolio_mname}
+            onChange={handleChange("portfolio_mname")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Last Name" name="lastName" required={true} placeholder="Enter last name" />
+          <CustomLabelTextField
+            label="Last Name"
+            required={true}
+            placeholder="Enter last name"
+            name="portfolio_lname"
+            value={formValues.portfolio_lname}
+            onChange={handleChange("portfolio_lname")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
-          <CustomMultilineTextField label="About Individual" name="AboutIndividual" required={false} placeholder="About Individual" />
+          <CustomMultilineTextField
+            label="About Individual"
+            required={false}
+            placeholder="About Individual"
+            name="about_portfolio"
+            value={formValues.about_portfolio}
+            onChange={handleChange("about_portfolio")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomNumberField label="Phone Number" name="phoneNo" required={true} placeholder="Enter phone no" />
+          <CustomNumberField
+            label="Phone Number"
+            required={true}
+            placeholder="Enter phone no"
+            name="phone_number"
+            value={formValues.phone_number}
+            onChange={handleChange("phone_number")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Email Address" name="email" required={true} placeholder="Enter email address" />
+          <CustomLabelTextField
+            label="Email Address"
+            required={true}
+            placeholder="Enter email address"
+            name="email_address"
+            value={formValues.email_address}
+            onChange={handleChange("email_address")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Designation" name="designation" required={false} placeholder="Enter designation" />
+          <CustomLabelTextField
+            label="Designation"
+            required={false}
+            placeholder="Enter designation"
+            name="designation"
+            value={formValues.designation}
+            onChange={handleChange("designation")}
+          />
         </Grid>
 
-        <Grid item xs={12} sm={6} px={2} py={1}>
-          <Box sx={{ display: "flex", justifyContent: "start", alignItems: "center", width: "100%" }}>
-            <GenderRadioGroup />
-          </Box>
-        </Grid>
-
-        <Grid item xs={12} sm={6} px={2} py={1}>
-          <CustomLabelTextField label="Other Gender" name="otherGender" required={false} placeholder="Enter other gender" />
-        </Grid>
-
-        <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Company Name" name="companyName" required={true} placeholder="Enter Company Name" />
+        <Grid item xs={12} sm={12} px={2} py={1}>
+          <GenderRadioGroup formValues={formValues} setFormValues={setFormValues} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Street" name="street" required={false} placeholder="Enter Street" />
+          <CustomLabelTextField
+            label="Company Name"
+            required={true}
+            placeholder="Enter Company Name"
+            name="company_individual"
+            value={formValues.company_individual}
+            onChange={handleChange("company_individual")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="City" name="city" required={false} placeholder="Enter City" />
+          <CustomLabelTextField
+            label="Street"
+            required={false}
+            placeholder="Enter Street"
+            name="street"
+            value={formValues.street}
+            onChange={handleChange("street")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="State" name="state" required={false} placeholder="Enter State" />
+          <CustomLabelTextField
+            label="City"
+            required={false}
+            placeholder="Enter City"
+            name="city"
+            value={formValues.city}
+            onChange={handleChange("city")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomAutocomplete label="Select a country" options={countries} />
+          <CustomLabelTextField
+            label="State"
+            required={false}
+            placeholder="Enter State"
+            name="state"
+            value={formValues.state}
+            onChange={handleChange("state")}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={4} px={2} py={1}>
+          <SelectCountry required={false} formValues={formValues} setFormValues={setFormValues} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -104,7 +329,12 @@ export default function IndividualForm({ isEditPath }) {
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
           <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Company Logo</InputLabel>
-          <Button fullWidth variant="outlined" startIcon={<CameraAltIcon />} size="medium" sx={{ mt: 1, backgroundColor: "white" }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            startIcon={<CameraAltIcon />}
+            size="medium"
+            sx={{ mt: 1, backgroundColor: "white" }}>
             {isEditPath ? "Add / Change Profile Picture" : " Add Company Logo"}
           </Button>
         </Grid>
@@ -112,7 +342,13 @@ export default function IndividualForm({ isEditPath }) {
         <Grid item xs={12} sm={8} px={2} py={1} textAlign="center">
           {/* For the preview during edit */}
           {isEditPath ? (
-            <Box sx={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
               <Avatar src="" sx={{ width: "100px", height: "100px" }} />
             </Box>
           ) : null}
@@ -120,7 +356,12 @@ export default function IndividualForm({ isEditPath }) {
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
           <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Cover Picture</InputLabel>
-          <Button fullWidth variant="outlined" startIcon={<CameraAltIcon />} size="medium" sx={{ mt: 1, backgroundColor: "white" }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            startIcon={<CameraAltIcon />}
+            size="medium"
+            sx={{ mt: 1, backgroundColor: "white" }}>
             {isEditPath ? "Add / Change Cover Picture" : " Add Cover Picture"}
           </Button>
         </Grid>
@@ -134,28 +375,75 @@ export default function IndividualForm({ isEditPath }) {
             </Box>
           ) : null}
         </Grid>
+
         <Grid item xs={12} sm={8} px={2} py={1}>
           &nbsp;
         </Grid>
 
-        <Grid item xs={12} sm={8} px={2} py={1}>
-          <FilterSelectedOptions label="Add Department" labelColor="" required={true} placeholder="Departments" items={departments} />
-        </Grid>
-
-        <Grid item xs={12} sm={4} px={2} py={1}>
-          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Custom Department</InputLabel>
-          <Button fullWidth variant="contained" startIcon={<DashboardCustomizeIcon />} size="medium" sx={{ mt: 1 }}>
-            Add Custom Department
-          </Button>
-        </Grid>
+        {!isEditPath && (
+          <>
+            {" "}
+            <Grid item xs={12} px={2} py={1}>
+              <FilterSelectedOptions
+                label="Add Department"
+                labelColor=""
+                required={false}
+                placeholder="Departments"
+                items={depts}
+                onSelectionChange={handleDepartmentChange}
+                getOptionLabelFn={(option) => option.department}
+              />
+            </Grid>
+            <Grid item xs={12} md={4} px={2} py={2}>
+              <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
+                Add Custom Department(s)
+              </InputLabel>
+              <Button
+                onClick={handleAddClick}
+                fullWidth
+                variant="contained"
+                startIcon={<DashboardCustomizeIcon />}
+                size="medium"
+                sx={{ mt: 1 }}>
+                Add Custom Department
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={8} pl={1} textAlign="start">
+              {inputFields.map((inputField, index) => (
+                <Grid container key={index} my={1} px={1} spacing={2} bgcolor="#F7F7F7">
+                  <Grid item xs={10} py={2} mt={2.5} textAlign="start">
+                    <TextField
+                      fullWidth
+                      name="cus_department"
+                      onChange={(event) => handleInputChange(event, index)}
+                      placeholder="Enter custom department"
+                      variant="outlined"
+                      error={inputField.error}
+                      helperText={inputField.error}
+                    />
+                  </Grid>
+                  <Grid item xs={2} py={2} mt={2.5}>
+                    <Stack direction="row" justifyContent="end" alignItems="center">
+                      {inputFields.length > 0 && (
+                        <IconButton onClick={() => handleRemoveClick(index)}>
+                          <RemoveCircleRoundedIcon />
+                        </IconButton>
+                      )}
+                    </Stack>
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+          </>
+        )}
 
         <Grid item xs={12} sm={12} py={1}>
-          <AddSocialMediaLinks />
+          <AddSocialMediaLinks fields={fields} setFields={setFields} />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={2} textAlign="left">
           <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
-            {isEditPath ? "Save Changes" : "Create"}
+            {loading ? <CircularLoader /> : isEditPath ? "Save Changes" : "Create"}
           </Button>
         </Grid>
       </Grid>
