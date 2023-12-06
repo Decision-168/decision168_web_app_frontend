@@ -1,16 +1,28 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Typography } from "@mui/material";
+import { Stack, Typography, Avatar, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
-import SmallAvatar from "../../../../common/SmallAvatar";
+import { useNavigate } from "react-router-dom";
+import { getPorfolioCount, getPortfolios } from "../../../../../api/modules/porfolioModule";
+import { stringAvatar } from "../../../../../helpers/stringAvatar";
+import portfolioImage from "../../../../../assets/images/person.png";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { useDispatch } from "react-redux";
+import {
+  getPortfolioDetailsAsync,
+  getPortfolioTeamMembersAsync,
+  getProjectAndTaskCountAsync,
+} from "../../../../../redux/action/portfolioSlice";
+import { getPackageDetails } from "../../../../../api/modules/dashboardModule";
+import { toast } from "react-toastify";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -29,9 +41,11 @@ const StyledMenu = styled((props) => (
   "& .MuiPaper-root": {
     borderRadius: 6,
     marginTop: theme.spacing(1),
-    minWidth: 180,
+    overflowX: "hidden",
+    minWidth: 200,
     color: theme.palette.mode === "light" ? "rgb(55, 65, 81)" : theme.palette.grey[300],
-    boxShadow: "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
@@ -41,6 +55,7 @@ const StyledMenu = styled((props) => (
         color: theme.palette.text.secondary,
         marginRight: theme.spacing(1.5),
       },
+
       "&:active": {
         backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
       },
@@ -48,12 +63,47 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenus() {
+export default function PortfolioMenu() {
   const user = useSelector(selectUserDetails);
-  const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
+  const packageId = user?.package_id;
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [portfolios, setPortfolios] = React.useState([]);
+  const [selectedPortfolio, setSelectedPortfolio] = React.useState("portfolio");
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const email = user?.email_address;
+  // const email = "uzmakarjikar@gmail.com";
+
   const open = Boolean(anchorEl);
-  const theme = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
+  const fetchPorfolios = async () => {
+    try {
+      const response = await getPortfolios(email);
+      setPortfolios(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchPorfolios();
+  }, [email]);
+
+  console.log("portfolios", portfolios);
+
+  useEffect(() => {
+    if (storedPortfolioId && portfolios) {
+      const portfolioIndex = portfolios?.findIndex((p) => p?.portfolio_id === storedPortfolioId);
+
+      if (portfolioIndex !== -1) {
+        setSelectedIndex(portfolioIndex);
+      } else {
+        console.log("Portfolio not found");
+      }
+    }
+  }, [storedPortfolioId, portfolios]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -62,14 +112,69 @@ export default function CustomizedMenus() {
     setAnchorEl(null);
   };
 
+  const isValidPortfolioCount = (count, packCount) => {
+    return typeof count === "number" && typeof packCount === "number" && count === packCount;
+  };
+
+  const handleCreatePortfolioClick = async (event) => {
+    const porfolioCountResponse = await getPorfolioCount(79);
+    const packageDetailsResponse = await getPackageDetails(packageId);
+    console.log("portfolio count", porfolioCountResponse?.portfolio_count_rows);
+    console.log("package details", packageDetailsResponse?.pack_portfolio);
+
+    if (
+      isValidPortfolioCount(
+        porfolioCountResponse?.portfolio_count_rows,
+        packageDetailsResponse?.pack_portfolio
+      )
+    ) {
+      navigate("/portfolio-create");
+      handleClose();
+    } else {
+      handleClose();
+      toast.warn("Please Upgrade your plan!");
+    }
+  };
+
+  const handleMenuItemClick = (event, index, protfolioId) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    // Save the new portfolioId to localStorage
+    localStorage.setItem("portfolioId", protfolioId);
+    dispatch(getProjectAndTaskCountAsync(protfolioId));
+    dispatch(getPortfolioDetailsAsync(protfolioId));
+    dispatch(getPortfolioTeamMembersAsync(protfolioId));
+  };
+
   return (
     <div>
-      <Button sx={{ color: "#B9B8B9" }} id="demo-customized-button" aria-controls={open ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined} variant="text" disableElevation onClick={handleClick} endIcon={<KeyboardArrowDownIcon />}>
-        <SmallAvatar backColor="#383838"/>
-        <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
-          {fullName}
+      <Button
+        sx={{ color: "#B9B8B9" }}
+        id="demo-customized-button"
+        aria-controls={open ? "demo-customized-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        variant="text"
+        disableElevation
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}>
+        <Avatar
+          alt="portfolio"
+          src={selectedIndex < 0 ? portfolioImage : portfolios[selectedIndex]?.photo}
+          sx={{ bgcolor: "black", height: "30px", width: "30px", fontSize: "0.7rem" }}>
+          {selectedIndex < 0 && portfolioImage}
+          {typeof portfolios[selectedIndex]?.photo === "string" && portfolios[selectedIndex]?.photo
+            ? null
+            : stringAvatar(portfolios[selectedIndex]?.portfolio_name?.toUpperCase())}
+        </Avatar>
+        <Typography
+          component="div"
+          variant="subtitle2"
+          sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
+          {selectedIndex < 0 ? "Portfolio" : portfolios[selectedIndex]?.portfolio_name}
         </Typography>
       </Button>
+
       <StyledMenu
         id="demo-customized-menu"
         MenuListProps={{
@@ -78,14 +183,56 @@ export default function CustomizedMenus() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}>
-        <MenuItem onClick={handleClose} disableRipple>
-          <SmallAvatar backColor="#383838"/>
-          <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingX: "5px" }}>
-            {fullName}
-          </Typography>
-        </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <PerfectScrollbar style={{ overflowX: "hidden" }}>
+          <Box sx={{ maxHeight: "300px", height: "100%" }}>
+            {portfolios && portfolios.length > 0 ? (
+              portfolios.map((p, index) => (
+                <MenuItem
+                  onClick={(event) => handleMenuItemClick(event, index, p?.portfolio_id)}
+                  value={p?.portfolio_name}
+                  key={index}
+                  sx={{
+                    color: selectedPortfolio === p?.portfolio_name && "#C7DF19",
+                    bgcolor: selectedPortfolio === p?.portfolio_name && "#F2F2F2",
+                  }}>
+                  <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
+                    <Avatar
+                      alt={p?.portfolio_name}
+                      src={p?.photo}
+                      sx={{
+                        bgcolor: "#383838",
+                        height: "30px",
+                        width: "30px",
+                        fontSize: "0.7rem",
+                      }}>
+                      {p?.photo ? null : stringAvatar(p?.portfolio_name?.toUpperCase())}
+                    </Avatar>
+                    <Typography
+                      component="h6"
+                      sx={{ textTransform: "capitalize", fontSize: "0.8rem" }}>
+                      {p?.portfolio_name}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))
+            ) : (
+              <Typography sx={{ fontSize: "12px", color: "gray", p: 1 }}>
+                No portfolios available
+              </Typography>
+            )}
+          </Box>
+        </PerfectScrollbar>
+
+        <Divider />
+
+        <MenuItem
+          onClick={handleCreatePortfolioClick}
+          disableRipple
+          sx={{
+            fontSize: "13px",
+            fontWeight: "700",
+            color: "#383838",
+          }}>
           <AddIcon />
           Create New Portfolio
         </MenuItem>

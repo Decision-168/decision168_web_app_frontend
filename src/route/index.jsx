@@ -6,6 +6,7 @@ import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
+import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -17,29 +18,25 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() =>
-  import("../components/portfolio/viewporfolio/")
-);
+const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
 const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
 
-const CreateEditPortfolio = lazy(() =>
-  import("../components/portfolio/createEditPortfolio")
-);
+const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
 const PortfolioGoals = lazy(() =>
   import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
 );
-const GoalsOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/goals-overview")
-);
+const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
 const GoalOverviewRequest = lazy(() =>
   import("../components/GoalsAndStrategies/goal-overview-request")
 );
-const KPIOverview = lazy(() =>
-  import("../components/GoalsAndStrategies/kpi-overview")
-);
+const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
 const Project = lazy(() => import("../components/project"));
-const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
-const ProjectOverviewRequest = lazy(() => import("../components/project/projects-overview-request"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
+const ProjectOverviewRequest = lazy(() =>
+  import("../components/project/projects-overview-request")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
@@ -127,7 +124,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/portfolio-edit"
+            path="/portfolio-edit/:id"
             element={
               <DashboardLayout>
                 <CreateEditPortfolio />
@@ -278,6 +275,11 @@ const RouteIndex = () => {
                 <Trash />
               </DashboardLayout>
             }
+          />
+          <Route
+            exact
+            path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
+            element={<VerifyInviteMember/>}
           />
         </Route>
 

@@ -46,8 +46,7 @@ export default function DashboardLayout({ children }) {
   useEffect(() => {
     const alerts = async () => {
       try {
-        // const id = user?.reg_id;
-        const userId = 1;
+        const userId = user?.reg_id;
         dispatch(getAlertNotificationsAsync(userId));
       } catch (error) {
         console.error(error);
@@ -89,7 +88,10 @@ export default function DashboardLayout({ children }) {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.secondary.light : theme.palette.secondary.dark),
+          backgroundColor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.secondary.light
+              : theme.palette.secondary.dark,
           flexGrow: 1,
         }}>
         <PerfectScrollbar>
