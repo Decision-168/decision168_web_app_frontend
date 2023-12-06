@@ -10,16 +10,31 @@ import {
   Avatar,
   IconButton,
   Typography,
+  Grid,
 } from "@mui/material";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
-  const handleOpenCondition = (type) => {
+  const formatDate = (timestamp) => {
+    const formattedDate = moment(timestamp).format("YYYY-MM-DD");
+    return formattedDate;
+  };
+
+  const handleOpenCondition = (type, gid, gname) => {
     if (["accepted-goals", "created-goals"].includes(type)) {
-      handleOpen();
+      handleOpen(gid, gname);
     } else {
-      handlePendingGoalOpen();
+      handlePendingGoalOpen(gid, gname);
+    }
+  };
+
+  const handleRedirectCondition = (type, gid) => {
+    if (["accepted-goals", "created-goals"].includes(type)) {
+      navigate(`/goal-overview/${gid}`);
+    } else {
+      navigate(`/goal-overview-request/${gid}`);
     }
   };
 
@@ -37,7 +52,7 @@ const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
       }}
     >
       <CardActionArea
-        onClick={() => navigate("/goal-overview")}
+        onClick={() => handleRedirectCondition(value, item?.gid)}
         sx={{
           borderRadius: 0,
           height: "130px",
@@ -60,7 +75,7 @@ const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
               sx={{ bgcolor: theme.palette.secondary.main }}
               aria-label="goal"
             >
-              {...stringAvatar(item?.goals?.name)}
+              {...stringAvatar(item?.gname)}
             </Avatar>
           }
           title={
@@ -72,7 +87,7 @@ const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
               }}
               textAlign={"start"}
             >
-              {item?.goals?.name}
+              {item?.gname}
             </Typography>
           }
         />
@@ -92,35 +107,43 @@ const CustomCard = ({ item, handleOpen, value, handlePendingGoalOpen }) => {
             }}
             textAlign={"start"}
           >
-            {item?.goals?.description
-              ? item?.goals?.description
-              : "No Description!"}
-          </Typography>
-          <Typography
-            sx={{
-              color: "#b5b5b5",
-              textTransform: "uppercase",
-              fontSize: "12px",
-              pl: 1,
-              textAlign: "end",
-            }}
-          >
-            END: 2023-04-30
+            {item?.gdes ? item?.gdes : "No Description!"}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions
         sx={{
-          justifyContent: "end",
+          justifyContent: "space-between",
           padding: "8px 4px",
         }}
       >
-        <IconButton
-          aria-label="settings"
-          onClick={() => handleOpenCondition(value)}
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <VisibilityOutlined fontSize="small" />
-        </IconButton>
+          <Grid item>
+            <Typography
+              sx={{
+                color: "#b5b5b5",
+                textTransform: "uppercase",
+                fontSize: "12px",
+                pl: 1,
+              }}
+            >
+              END: {formatDate(item?.gend_date)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton
+              aria-label="settings"
+              onClick={() => handleOpenCondition(value, item?.gid, item?.gname)}
+            >
+              <VisibilityOutlined fontSize="small" />
+            </IconButton>
+          </Grid>
+        </Grid>
       </CardActions>
     </Card>
   );

@@ -1,8 +1,48 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { memo } from "react";
-import { BusinessCenter, CalendarMonth, CheckCircleOutline, Person } from "@mui/icons-material";
+import React, { memo, useEffect, useState } from "react";
+import {
+  BusinessCenter,
+  CalendarMonth,
+  CheckCircleOutline,
+  Person,
+} from "@mui/icons-material";
 import GridList from "./GridList";
-const PendingPopup = ({}) => {
+import { getGoalOverviewRequest } from "../../../api/modules/goalkpiModule";
+import moment from "moment";
+
+const PendingPopup = ({ goalID, id }) => {
+  const gid = goalID;
+  const user_id = id;
+  
+  const formatDate = (timestamp) => {
+    // Check if the timestamp is valid
+    if (!timestamp) {
+      return "No Date";
+    }
+  
+    // Assuming your timestamp is in milliseconds
+    const formattedDate = moment(timestamp).format('D MMM, YYYY');
+    return formattedDate;
+  };
+
+  //get goal detail
+  const [gdetail, setgdetail] = useState([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await getGoalOverviewRequest("1", gid);
+
+        setgdetail(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+  //get goal detail
+
   return (
     <Box
       sx={{
@@ -35,7 +75,7 @@ const PendingPopup = ({}) => {
               }}
               textAlign={"start"}
             >
-              GOAL: Nov Goal
+              GOAL: {gdetail.gname}
             </Typography>
           </Box>
         </Grid>
@@ -66,21 +106,21 @@ const PendingPopup = ({}) => {
               fontSize: 13,
             }}
           >
-            No Description!
+            {gdetail?.gdes ? gdetail?.gdes : "No Description!"}
           </Typography>
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
-            info={"6 Nov, 2023"}
+            info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
-            info={"31 Dec, 2023"}
+            info={formatDate(gdetail.gend_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -89,14 +129,14 @@ const PendingPopup = ({}) => {
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Department"}
-            info={"Research & Development"}
+            info={gdetail.get_dept_name}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={gdetail.get_created_by_name}
           />
         </Grid>
       </Grid>

@@ -16,6 +16,7 @@ import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 import CustomTable from "../../../../common/CustomTable";
+import moment from "moment";
 
 const GoalsAndStrategiesTable = ({
   title,
@@ -23,24 +24,29 @@ const GoalsAndStrategiesTable = ({
   handlePendingGoalOpen,
   data,
 }) => {
-  console.log(data);
+  const formatDate = (timestamp) => {
+    const formattedDate = moment(timestamp).format("YYYY-MM-DD");
+    return formattedDate;
+  };
+
   const theme = useTheme();
   const navigate = useNavigate();
-  // const [load, setLoad] = useState(false);
-  // useEffect(() => {
-  //   if (data.length > 0) {
-  //     setLoad(false);
-  //   } else {
-  //     setLoad(true);
-  //   }
-  // }, []);
-  // const handleOpenCondition = (type) => {
-  //   if (["Created Goals", "Accepted Goals"].includes(type)) {
-  //     handleOpen();
-  //   } else {
-  //     handlePendingGoalOpen();
-  //   }
-  // };
+
+  const handleOpenCondition = (type, gid, gname) => {
+    if (["Created Goals", "Accepted Goals"].includes(type)) {
+      handleOpen(gid, gname);
+    } else {
+      handlePendingGoalOpen(gid, gname);
+    }
+  };
+
+  const handleRedirectCondition = (type, gid) => {
+    if (["Created Goals", "Accepted Goals"].includes(type)) {
+      navigate(`/goal-overview/${gid}`);
+    } else {
+      navigate(`/goal-overview-request/${gid}`);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -81,7 +87,9 @@ const GoalsAndStrategiesTable = ({
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  onClick={() => navigate("/goal-overview")}
+                  onClick={() =>
+                    handleRedirectCondition(title, row.original.gid)
+                  }
                 >
                   {row.original.gname}
                 </Typography>
@@ -99,7 +107,9 @@ const GoalsAndStrategiesTable = ({
             </Box>
             <IconButton
               aria-label="settings"
-              onClick={() => handleOpenCondition(title)}
+              onClick={() =>
+                handleOpenCondition(title, row.original.gid, row.original.gname)
+              }
             >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
@@ -113,11 +123,7 @@ const GoalsAndStrategiesTable = ({
         minSize: 75,
         maxSize: 150,
         Cell: ({ row }) => {
-          return (
-            title === "Created Goals" && (
-              <LinearProgressWithLabel value={row.original.progress} />
-            )
-          );
+          return <LinearProgressWithLabel value={row.original.progress} />;
         },
       },
       {
@@ -136,7 +142,7 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.gstart_date}
+            label={formatDate(row.original.gstart_date)}
           />
         ),
       },
@@ -155,7 +161,7 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.gend_date}
+            label={formatDate(row.original.gend_date)}
           />
         ),
       },
@@ -165,18 +171,15 @@ const GoalsAndStrategiesTable = ({
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: data ? data : [],
     enableColumnActions: false,
     enableRowActions: false,
     enableColumnFilters: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    // state: {
-    //   showSkeletons: load,
-    // },
+
     enableHiding: false,
-    // enableEditing: true,
-    // editDisplayMode: "cell",
+
     initialState: {
       pagination: { pageSize: 10, pageIndex: 0 },
       showGlobalFilter: true,
@@ -225,10 +228,8 @@ const GoalsAndStrategiesTable = ({
       </Typography>
     ),
   });
-// console.log(table.getRowModel().rows);
-  return (
-    <MaterialReactTable table={table} />
-  );
+  // console.log(table.getRowModel().rows);
+  return <MaterialReactTable table={table} />;
 };
 
 export default memo(GoalsAndStrategiesTable);

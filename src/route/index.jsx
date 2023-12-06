@@ -38,15 +38,21 @@ const KPIOverview = lazy(() =>
   import("../components/GoalsAndStrategies/kpi-overview")
 );
 const Project = lazy(() => import("../components/project"));
-const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
-const ProjectOverviewRequest = lazy(() => import("../components/project/projects-overview-request"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
+const ProjectOverviewRequest = lazy(() =>
+  import("../components/project/projects-overview-request")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
-const AccountVerification = lazy(() => import("../components/auth/accountVerification"));
+const AccountVerification = lazy(() =>
+  import("../components/auth/accountVerification")
+);
 
 const RouteIndex = () => {
   return (
@@ -143,7 +149,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/goal-overview"
+            path="/goal-overview/:gid"
             element={
               <DashboardLayout>
                 <GoalsOverview />
@@ -151,7 +157,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/goal-overview-request"
+            path="/goal-overview-request/:gid"
             element={
               <DashboardLayout>
                 <GoalOverviewRequest />
@@ -283,9 +289,17 @@ const RouteIndex = () => {
 
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
-          <Route exact path="/account-verification/:token" element={<AccountVerification />} />
+          <Route
+            exact
+            path="/account-verification/:token"
+            element={<AccountVerification />}
+          />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route exact path="/change-password/:id" element={<ChangePassword />} />
+          <Route
+            exact
+            path="/change-password/:id"
+            element={<ChangePassword />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -5,11 +5,11 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { memo, useState, useCallback } from "react";
+import { memo, useState, useCallback, useEffect } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../../../common/BasicBreadcrumbs";
-import ListSection from './subComponents/ListSection'
+import ListSection from "./subComponents/ListSection";
 import CustomDialog from "../../../common/CustomDialog";
 import ViewGoalsPopup from "../../subComponents/ViewGoalsPopup";
 import GridSection from "./subComponents/GridSection";
@@ -19,11 +19,39 @@ import CreateGoal from "../create-goals";
 import { openModal } from "../../../../redux/action/modalSlice";
 import CustomSearchField from "../../../common/CustomSearchField";
 import PendingPopup from "../../subComponents/PendingPopup";
+import { getAllGoalList } from "../../../../api/modules/goalkpiModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const ViewGoalsIndex = () => {
+  //get goal lists
+  const [AllGoalData, setAllGoalData] = useState([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await getAllGoalList("1", "2");
+        setAllGoalData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+  //get goal lists
+
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const id = user?.reg_id;
+  //get user id
+
+  const [goalID, setGoalID] = useState("");
+  const [goalName, setGoalName] = useState("");
+
   const dispatch = useDispatch();
   const [openGoal, setOpenGoal] = useState(false);
-    const [openPendingGoal, setOpenPendingGoal] = useState(false);
+  const [openPendingGoal, setOpenPendingGoal] = useState(false);
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -35,15 +63,19 @@ const ViewGoalsIndex = () => {
   const handleGoalClose = () => {
     setOpenGoal(false);
   };
-  const handleGoalOpen = () => {
+  const handleGoalOpen = (gid, gname) => {
+    setGoalID(gid);
+    setGoalName(gname);
     setOpenGoal(true);
   };
- const handlePendingGoalClose = () => {
-   setOpenPendingGoal(false);
- };
- const handlePendingGoalOpen = () => {
-   setOpenPendingGoal(true);
- };
+  const handlePendingGoalClose = () => {
+    setOpenPendingGoal(false);
+  };
+  const handlePendingGoalOpen = (gid, gname) => {
+    setGoalID(gid);
+    setGoalName(gname);
+    setOpenPendingGoal(true);
+  };
   const filterOption = [
     {
       value: "all",
@@ -141,12 +173,14 @@ const ViewGoalsIndex = () => {
               handleGoalOpen={handleGoalOpen}
               handlePendingGoalOpen={handlePendingGoalOpen}
               value={value}
+              AllGoalData={AllGoalData}
             />
           ) : (
             <GridSection
               handleGoalOpen={handleGoalOpen}
               handlePendingGoalOpen={handlePendingGoalOpen}
               value={value}
+              AllGoalData={AllGoalData}
             />
           )}
         </Grid>
@@ -164,22 +198,22 @@ const ViewGoalsIndex = () => {
       <CustomDialog
         handleClose={handleGoalClose}
         open={openGoal}
-        modalTitle="Demo Goal"
-        redirectPath={"/goal-overview"}
+        modalTitle={goalName}
+        redirectPath={`/goal-overview/${goalID}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewGoalsPopup />
+        <ViewGoalsPopup goalID={goalID} id={id}/>
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingGoalClose}
         open={openPendingGoal}
-        modalTitle="Nov Goal"
-        redirectPath={"/goal-overview-request"}
+        modalTitle={goalName}
+        redirectPath={`/goal-overview-request/${goalID}`}
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup />
+        <PendingPopup goalID={goalID} id={id}/>
       </CustomDialog>
     </Box>
   );

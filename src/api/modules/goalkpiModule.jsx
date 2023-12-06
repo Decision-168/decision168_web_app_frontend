@@ -297,44 +297,53 @@ export const getFileItStrategySubtasks = async (sid) => {
   }
 };
 
-export const getStrategyTasksProgressDone = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.StrategyTasksProgressDone}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getStrategyTasksProgressDone = async (sid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.StrategyTasksProgressDone}${sid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getStrategyTasksProgressTotal = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.StrategyTasksProgressTotal}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getStrategyTasksProgressTotal = async (sid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.StrategyTasksProgressTotal}${sid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getStrategySubtasksProgressDone = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.StrategySubtasksProgressDone}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getStrategySubtasksProgressDone = async (sid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.StrategySubtasksProgressDone}${sid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getStrategySubtasksProgressTotal = async (sid) => {
+// export const getStrategySubtasksProgressTotal = async (sid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.StrategySubtasksProgressTotal}${sid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+export const getStrategyProgress = async (sid) => {
   try {
-    const response = await axios.get(
-      `${apiUrl}${api.StrategySubtasksProgressTotal}${sid}`
-    );
+    const response = await axios.get(`${apiUrl}${api.StrategyProgress}${sid}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -370,44 +379,53 @@ export const getProjectSubtasks = async (pid) => {
   }
 };
 
-export const getProjectTasksProgressDone = async (pid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectTasksProgressDone}${pid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getProjectTasksProgressDone = async (pid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ProjectTasksProgressDone}${pid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getProjectTasksProgressTotal = async (pid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectTasksProgressTotal}${pid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getProjectTasksProgressTotal = async (pid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ProjectTasksProgressTotal}${pid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getProjectSubtasksProgressDone = async (pid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectSubtasksProgressDone}${pid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getProjectSubtasksProgressDone = async (pid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ProjectSubtasksProgressDone}${pid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getProjectSubtasksProgressTotal = async (pid) => {
+// export const getProjectSubtasksProgressTotal = async (pid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ProjectSubtasksProgressTotal}${pid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+export const getProjectProgress = async (pid) => {
   try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectSubtasksProgressTotal}${pid}`
-    );
+    const response = await axios.get(`${apiUrl}${api.ProjectProgress}${pid}`);
     return response.data;
   } catch (error) {
     throw error;

@@ -132,17 +132,20 @@ const api = {
   //file_itStrategy_subtasks
   FileItStrategySubtasks: "goal/file-it-strategy-subtasks/",
 
-  //Strategyprogress_done
-  StrategyTasksProgressDone: "goal/get-strategy-task-progress-done/",
+  // //Strategyprogress_done
+  // StrategyTasksProgressDone: "goal/get-strategy-task-progress-done/",
 
-  //Strategyprogress_total
-  StrategyTasksProgressTotal: "goal/get-strategy-task-progress-total/",
+  // //Strategyprogress_total
+  // StrategyTasksProgressTotal: "goal/get-strategy-task-progress-total/",
 
-  //Strategysub_progress_done
-  StrategySubtasksProgressDone: "goal/get-strategy-subtask-progress-done/",
+  // //Strategysub_progress_done
+  // StrategySubtasksProgressDone: "goal/get-strategy-subtask-progress-done/",
 
-  //Strategysub_progress_total
-  StrategySubtasksProgressTotal: "goal/get-strategy-subtask-progress-total/",
+  // //Strategysub_progress_total
+  // StrategySubtasksProgressTotal: "goal/get-strategy-subtask-progress-total/",
+
+  //StrategyProgress
+  StrategyProgress: "goal/get-strategy-progress/",
 
   //StrategyAllProjectsList
   StrategyAllProjectsList: "goal/get-strategy-all-projects-list/",
@@ -153,17 +156,20 @@ const api = {
   //p_subtasks
   ProjectSubtasks: "goal/get-project-subtasks/",
 
-  //progress_done
-  ProjectTasksProgressDone: "goal/get-project-task-progress-done/",
+  // //progress_done
+  // ProjectTasksProgressDone: "goal/get-project-task-progress-done/",
 
-  //progress_total
-  ProjectTasksProgressTotal: "goal/get-project-task-progress-total/",
+  // //progress_total
+  // ProjectTasksProgressTotal: "goal/get-project-task-progress-total/",
 
-  //sub_progress_done
-  ProjectSubtasksProgressDone: "goal/get-project-subtask-progress-done/",
+  // //sub_progress_done
+  // ProjectSubtasksProgressDone: "goal/get-project-subtask-progress-done/",
 
-  //sub_progress_total
-  ProjectSubtasksProgressTotal: "goal/get-project-subtask-progress-total/",
+  // //sub_progress_total
+  // ProjectSubtasksProgressTotal: "goal/get-project-subtask-progress-total/",
+
+  //ProjectProgress
+  ProjectProgress: "goal/get-project-progress/",
 
   //CheckProjectTeamMember
   ProjectTeamMember: "goal/check-project-team-member/",
