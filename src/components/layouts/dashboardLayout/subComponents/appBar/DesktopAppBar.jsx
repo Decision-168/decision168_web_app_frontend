@@ -33,7 +33,10 @@ import ViewProjectPopup from "../../../../GoalsAndStrategies/subComponents/ViewP
 import TaskPreview from "../../../../Tasks/taskOverview/subComponents/TaskPreview";
 import { taskOverviewStyles } from "../../../../Tasks/taskOverview/styles";
 import SubtaskPreview from "../../../../Tasks/subtaskOverview/subComponent/SubtaskPreview";
-import { getAlertNotificationsAsync, selectAlertNotifications } from "../../../../../redux/action/dashboardSlice";
+import {
+  getAlertNotificationsAsync,
+  selectAlertNotifications,
+} from "../../../../../redux/action/dashboardSlice";
 import { updateAlertsAndNotifications } from "../../../../../api/modules/dashboardModule";
 import { useSelector } from "react-redux";
 import Notification from "./Notification";
@@ -82,7 +85,8 @@ const StyledMenu = styled((props) => (
     maxWidth: 320,
     maxHeight: 400,
     color: theme.palette.mode === "light" ? "rgb(55, 65, 81)" : theme.palette.grey[300],
-    boxShadow: "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    boxShadow:
+      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
@@ -98,7 +102,30 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const data = useSelector(selectAlertNotifications);
-  const arrays = [data?.NewTasksResult, data?.NewSubtaskResult, data?.OverdueTasksResult, data?.OverdueSubtaskResult, data?.SentToReviewTasksResult, data?.ReviewDeniedTasksResult, data?.ReviewApprovedTasksResult, data?.SentToReviewSubtasksResult, data?.ReviewDeniedSubtasksResult, data?.ReviewApprovedSubtasksResult, data?.ReviewArriveTasksResult, data?.ReviewArriveSubtasksResult, data?.PendingProjectRequestResult, data?.PortfolioAcceptedResult, data?.ProjectAcceptedResult, data?.ProjectAcceptedInviteResult, data?.MembershipRequestedResult, data?.PendingGoalRequestResult, data?.ProjectFilesResult, data?.TasksFilesResult, data?.SubtasksFilesResult, data?.NewProjectCommentResult];
+  const arrays = [
+    data?.NewTasksResult,
+    data?.NewSubtaskResult,
+    data?.OverdueTasksResult,
+    data?.OverdueSubtaskResult,
+    data?.SentToReviewTasksResult,
+    data?.ReviewDeniedTasksResult,
+    data?.ReviewApprovedTasksResult,
+    data?.SentToReviewSubtasksResult,
+    data?.ReviewDeniedSubtasksResult,
+    data?.ReviewApprovedSubtasksResult,
+    data?.ReviewArriveTasksResult,
+    data?.ReviewArriveSubtasksResult,
+    data?.PendingProjectRequestResult,
+    data?.PortfolioAcceptedResult,
+    data?.ProjectAcceptedResult,
+    data?.ProjectAcceptedInviteResult,
+    data?.MembershipRequestedResult,
+    data?.PendingGoalRequestResult,
+    data?.ProjectFilesResult,
+    data?.TasksFilesResult,
+    data?.SubtasksFilesResult,
+    data?.NewProjectCommentResult,
+  ];
   const areAllArraysEmpty = arrays.every((array) => array?.length === 0);
 
   const totalLength = arrays.reduce((accumulator, array) => {
@@ -217,30 +244,32 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           }}>
           <PortfolioMenu />
 
-          {/* <SelectMenu/> */}
-
-          {/* <Hidden lgDown>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="black"
-              noWrap
-              sx={{ flexGrow: 0 }}
-            >
+          <Hidden lgDown>
+            <Typography component="h1" variant="h6" color="black" noWrap sx={{ flexGrow: 0 }}>
               Welcome Back !
             </Typography>
-          </Hidden> */}
+          </Hidden>
 
           <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center" }} gap={2}>
             <Button component={Link} to="/pricing-packages" variant="contained" size="small">
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>
-              <IconButton onClick={toggleFullScreen} color="black" sx={{ width: "50px", height: "50px" }}>
+              <IconButton
+                onClick={toggleFullScreen}
+                color="black"
+                sx={{ width: "50px", height: "50px" }}>
                 {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </IconButton>
 
-              <IconButton id="demo-customized-button" aria-controls={open_menu ? "demo-customized-menu" : undefined} aria-haspopup="true" aria-expanded={open_menu ? "true" : undefined} onClick={handleClick} color="black" sx={{ width: "50px", height: "50px", cursor: "pointer" }}>
+              <IconButton
+                id="demo-customized-button"
+                aria-controls={open_menu ? "demo-customized-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open_menu ? "true" : undefined}
+                onClick={handleClick}
+                color="black"
+                sx={{ width: "50px", height: "50px", cursor: "pointer" }}>
                 <Badge badgeContent={totalLength ? totalLength : 0} color="primary">
                   <NotificationsNoneIcon />
                 </Badge>
@@ -293,8 +322,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.NewTasksResult?.length > 0 &&
                         data?.NewTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="New Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "newtasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="New Task"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "newtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -302,8 +340,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.NewSubtaskResult?.length > 0 &&
                         data?.NewSubtaskResult?.map((subTask) => (
-                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="New Subtask" taskCode={subTask?.stcode} TaskName={subTask?.stname} ProjectName={subTask?.pname} taskDueDate={subTask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "newsubtasks")} />
+                          <MenuItem
+                            key={subTask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="New Subtask"
+                              taskCode={subTask?.stcode}
+                              TaskName={subTask?.stname}
+                              ProjectName={subTask?.pname}
+                              taskDueDate={subTask?.stdue_date}
+                              handleRemove={() => handleRemove(subTask?.stid, 1, "newsubtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -311,8 +358,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.OverdueTasksResult?.length > 0 &&
                         data?.OverdueTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Overdue Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "overduetasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Overdue Task"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "overduetasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -320,8 +376,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.OverdueSubtaskResult?.length > 0 &&
                         data?.OverdueSubtaskResult?.map((subtask) => (
-                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Overdue Subtask" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "overduesubtasks")} />
+                          <MenuItem
+                            key={subtask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Overdue Subtask"
+                              taskCode={subtask?.stcode}
+                              TaskName={subtask?.stname}
+                              ProjectName={subtask?.pname}
+                              taskDueDate={subtask?.stdue_date}
+                              handleRemove={() => handleRemove(subtask?.stid, 1, "overduesubtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -329,8 +394,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SentToReviewTasksResult?.length > 0 &&
                         data?.SentToReviewTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Task" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Task"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -338,8 +412,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SentToReviewSubtasksResult?.length > 0 &&
                         data?.SentToReviewSubtasksResult?.map((subtask) => (
-                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Subtask" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")} />
+                          <MenuItem
+                            key={subtask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Subtask"
+                              taskCode={subtask?.stcode}
+                              TaskName={subtask?.stname}
+                              ProjectName={subtask?.pname}
+                              taskDueDate={subtask?.stdue_date}
+                              handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -347,8 +430,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewArriveTasksResult?.length > 0 &&
                         data?.ReviewArriveTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Arrived" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.stid, 1, "reviewarrivetasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Arrived"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.stid, 1, "reviewarrivetasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -356,8 +448,19 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewArriveSubtasksResult?.length > 0 &&
                         data?.ReviewArriveSubtasksResult?.map((subtask) => (
-                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Arrived" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewarrivesubtasks")} />
+                          <MenuItem
+                            key={subtask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Arrived"
+                              taskCode={subtask?.stcode}
+                              TaskName={subtask?.stname}
+                              ProjectName={subtask?.pname}
+                              taskDueDate={subtask?.stdue_date}
+                              handleRemove={() =>
+                                handleRemove(subtask?.stid, 1, "reviewarrivesubtasks")
+                              }
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -365,8 +468,19 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PendingProjectRequestResult?.length > 0 &&
                         data?.PendingProjectRequestResult?.map((p) => (
-                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Pending Project" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pm_id, 1, "pendingprojectrequest")} />
+                          <MenuItem
+                            key={p?.pm_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Pending Project"
+                              taskCode={p?.tcode}
+                              TaskName={p?.tname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() =>
+                                handleRemove(p?.pm_id, 1, "pendingprojectrequest")
+                              }
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -374,8 +488,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PortfolioAcceptedResult?.length > 0 &&
                         data?.PortfolioAcceptedResult?.map((p) => (
-                          <MenuItem key={p?.pim_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Accepted Portfolio" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pim_id, 1, "portfolioaccepted")} />
+                          <MenuItem
+                            key={p?.pim_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Accepted Portfolio"
+                              taskCode={p?.tcode}
+                              TaskName={p?.tname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() => handleRemove(p?.pim_id, 1, "portfolioaccepted")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -383,8 +506,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PortfolioAcceptedResult?.length > 0 &&
                         data?.PortfolioAcceptedResult?.map((p) => (
-                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Accepted Project" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pm_id, 1, "projectaccepted")} />
+                          <MenuItem
+                            key={p?.pm_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Accepted Project"
+                              taskCode={p?.tcode}
+                              TaskName={p?.tname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() => handleRemove(p?.pm_id, 1, "projectaccepted")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -392,8 +524,19 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ProjectAcceptedInviteResult?.length > 0 &&
                         data?.ProjectAcceptedInviteResult?.map((p) => (
-                          <MenuItem key={p?.im_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Accepted Invite" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.im_id, 1, "projectacceptedinvite")} />
+                          <MenuItem
+                            key={p?.im_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Accepted Invite"
+                              taskCode={p?.tcode}
+                              TaskName={p?.tname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() =>
+                                handleRemove(p?.im_id, 1, "projectacceptedinvite")
+                              }
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -401,8 +544,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.MembershipRequestedResult?.length > 0 &&
                         data?.MembershipRequestedResult?.map((p) => (
-                          <MenuItem key={p?.req_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Membership Requeste" taskCode={p?.tcode} TaskName={p?.tname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.req_id, 1, "membershiprequested")} />
+                          <MenuItem
+                            key={p?.req_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Membership Requeste"
+                              taskCode={p?.tcode}
+                              TaskName={p?.tname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() => handleRemove(p?.req_id, 1, "membershiprequested")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -410,8 +562,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PendingGoalRequestResult?.length > 0 &&
                         data?.PendingGoalRequestResult?.map((p) => (
-                          <MenuItem key={p?.gmid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Pending Goal" taskCode={p?.tcode} TaskName={p?.gname} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.gmid, 1, "pendinggoalrequest")} />
+                          <MenuItem
+                            key={p?.gmid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Pending Goal"
+                              taskCode={p?.tcode}
+                              TaskName={p?.gname}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() => handleRemove(p?.gmid, 1, "pendinggoalrequest")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -419,8 +580,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ProjectFilesResult?.length > 0 &&
                         data?.ProjectFilesResult?.map((p) => (
-                          <MenuItem key={p?.pfile_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Project File" taskCode={p?.tcode} TaskName={p?.pfile} ProjectName={p?.pname} taskDueDate={p?.tdue_date} handleRemove={() => handleRemove(p?.pfile_id, 1, "projectfiles")} />
+                          <MenuItem
+                            key={p?.pfile_id}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Project File"
+                              taskCode={p?.tcode}
+                              TaskName={p?.pfile}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.tdue_date}
+                              handleRemove={() => handleRemove(p?.pfile_id, 1, "projectfiles")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -428,8 +598,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.TasksFilesResult?.length > 0 &&
                         data?.TasksFilesResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Task File" taskCode={task?.tcode} TaskName={task?.tfile} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "tasksfiles")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Task File"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tfile}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "tasksfiles")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -437,8 +616,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SubtasksFilesResult?.length > 0 &&
                         data?.SubtasksFilesResult?.map((subTask) => (
-                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Subtask File" taskCode={subTask?.stcode} TaskName={subTask?.stfile} ProjectName={subTask?.pname} taskDueDate={subTask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "subtasksfiles")} />
+                          <MenuItem
+                            key={subTask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Subtask File"
+                              taskCode={subTask?.stcode}
+                              TaskName={subTask?.stfile}
+                              ProjectName={subTask?.pname}
+                              taskDueDate={subTask?.stdue_date}
+                              handleRemove={() => handleRemove(subTask?.stid, 1, "subtasksfiles")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -447,7 +635,14 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                       {data?.NewProjectCommentResult?.length > 0 &&
                         data?.NewProjectCommentResult?.map((p) => (
                           <MenuItem key={p?.cid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Project Comment" taskCode={p?.stcode} TaskName={p?.message} ProjectName={p?.pname} taskDueDate={p?.stdue_date} handleRemove={() => handleRemove(p?.cid, 1, "newprojectcomment")} />
+                            <Notification
+                              type="Project Comment"
+                              taskCode={p?.stcode}
+                              TaskName={p?.message}
+                              ProjectName={p?.pname}
+                              taskDueDate={p?.stdue_date}
+                              handleRemove={() => handleRemove(p?.cid, 1, "newprojectcomment")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -455,8 +650,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewDeniedTasksResult?.length > 0 &&
                         data?.ReviewDeniedTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Denied" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Denied"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -464,8 +668,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewDeniedSubtasksResult?.length > 0 &&
                         data?.ReviewDeniedSubtasksResult?.map((subtask) => (
-                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Denied" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subTask?.stid, 1, "reviewsubtasks")} />
+                          <MenuItem
+                            key={subtask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Denied"
+                              taskCode={subtask?.stcode}
+                              TaskName={subtask?.stname}
+                              ProjectName={subtask?.pname}
+                              taskDueDate={subtask?.stdue_date}
+                              handleRemove={() => handleRemove(subTask?.stid, 1, "reviewsubtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -474,8 +687,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewApprovedTasksResult?.length > 0 &&
                         data?.ReviewApprovedTasksResult?.map((task) => (
-                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Approved" taskCode={task?.tcode} TaskName={task?.tname} ProjectName={task?.pname} taskDueDate={task?.tdue_date} handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")} />
+                          <MenuItem
+                            key={task?.tid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Approved"
+                              taskCode={task?.tcode}
+                              TaskName={task?.tname}
+                              ProjectName={task?.pname}
+                              taskDueDate={task?.tdue_date}
+                              handleRemove={() => handleRemove(task?.tid, 1, "reviewtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -484,8 +706,17 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewApprovedSubtasksResult?.length > 0 &&
                         data?.ReviewApprovedSubtasksResult?.map((subtask) => (
-                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
-                            <Notification type="Review Approved" taskCode={subtask?.stcode} TaskName={subtask?.stname} ProjectName={subtask?.pname} taskDueDate={subtask?.stdue_date} handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")} />
+                          <MenuItem
+                            key={subtask?.stid}
+                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                            <Notification
+                              type="Review Approved"
+                              taskCode={subtask?.stcode}
+                              TaskName={subtask?.stname}
+                              ProjectName={subtask?.pname}
+                              taskDueDate={subtask?.stdue_date}
+                              handleRemove={() => handleRemove(subtask?.stid, 1, "reviewsubtasks")}
+                            />
                           </MenuItem>
                         ))}
                     </>
@@ -498,12 +729,22 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
         </Box>
       </Toolbar>
       <ConfirmationDialog value={"clearAll"} />
-      <CustomDialog handleClose={handleModuleClose} open={openModule} modalTitle={notificationData.title} redirectPath={notificationData.link} showModalButton={true} modalSize="md">
+      <CustomDialog
+        handleClose={handleModuleClose}
+        open={openModule}
+        modalTitle={notificationData.title}
+        redirectPath={notificationData.link}
+        showModalButton={true}
+        modalSize="md">
         {notificationData.type === "goal" && <ViewGoalsPopup />}
         {notificationData.type === "kpi" && <ViewKpiPopup />}
         {notificationData.type === "project" && <ViewProjectPopup />}
-        {notificationData.type === "task" && <TaskPreview styles={styles} filteredRow={filteredTask} />}
-        {notificationData.type === "subtask" && <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />}
+        {notificationData.type === "task" && (
+          <TaskPreview styles={styles} filteredRow={filteredTask} />
+        )}
+        {notificationData.type === "subtask" && (
+          <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
+        )}
       </CustomDialog>
     </AppBar>
   );

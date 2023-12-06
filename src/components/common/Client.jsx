@@ -5,7 +5,7 @@ export default function Client({ clientName, designation }) {
   const theme = useTheme();
   return (
     <Box>
-      <Typography component="h6" variant="h6">
+      <Typography component="h6" variant="h6" >
         {clientName}
       </Typography>
       <Typography component="p" variant="caption" color={theme.palette.secondary.main} display="block" gutterBottom>

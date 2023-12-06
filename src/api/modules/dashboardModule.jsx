@@ -88,6 +88,15 @@ export const getCountries = async () => {
   }
 };
 
+export const getCountry = async (code) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.country}${code}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // export const loginUser = async (formData) => {
 //   try {
 //     const response = await axios.post(`${apiUrl}${api.userLogin}`, formData);

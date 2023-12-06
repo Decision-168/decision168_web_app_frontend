@@ -152,6 +152,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           marginTop: "8px",
+          height: "37px",
         },
       },
     },
