@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ConfirmationDialog = ({ value }) => {
+const ConfirmationDialog = ({ value, handleOk }) => {
   const activeModal = useSelector(selectCnfModal);
   const modal = activeModal[value];
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ const ConfirmationDialog = ({ value }) => {
             <Button
               variant="contained"
               size="small"
-              onClick={handleClose}
+              onClick={handleOk}
               sx={{ color: "#fff" }}
             >
               Yes

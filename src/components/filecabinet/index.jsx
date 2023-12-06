@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import { Box, Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { FormatListBulleted, GridView } from "@mui/icons-material";
@@ -15,8 +15,31 @@ import SubtaskPopup from "./popup/SubtaskPopup";
 import CustomFilter from "../common/CustomFilter";
 import CustomSearchField from "../common/CustomSearchField";
 import FilePopup from "./popup/FilePopup";
+import { getTreeData } from "../../api/modules/FileCabinetModule";
+import { selectUserDetails } from "../../redux/action/userSlice";
+import { useSelector } from "react-redux";
 
 const FileCabinet = () => {
+  const [treeData, setTreeData] = useState([]);
+  
+  const user = useSelector(selectUserDetails);
+  // const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+  const storedPortfolioId = 3;
+  const userID = user?.reg_id;
+
+  const fetchTreeData = async () => {
+    try {
+      const response = await getTreeData(storedPortfolioId,userID);
+      setTreeData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTreeData();
+  }, [userID]);
+
   const [openModule, setOpenModule] = useState(false);
   const [nodesData, setNodesData] = useState([]);
   const [alignment, setAlignment] = useState("list");
@@ -127,17 +150,19 @@ const FileCabinet = () => {
               handleModuleOpen={handleModuleOpen}
               handleFileOpen={handleFileOpen}
               value={value}
+              data={treeData}
             />
           ) : (
             <GridSection
               handleModuleOpen={handleModuleOpen}
               handleFileOpen={handleFileOpen}
               value={value}
+              data={treeData}
             />
           )}
         </Grid>
         <Grid item xs={12} lg={3}>
-          <RecentFiles handleFileOpen={handleFileOpen} />
+          <RecentFiles handleFileOpen={handleFileOpen} regId={userID} portfolioId={storedPortfolioId} />
         </Grid>
       </Grid>
       <CustomPopup
@@ -145,14 +170,17 @@ const FileCabinet = () => {
         open={openModule}
         modalTitle={nodesData.name}
         modalType={nodesData.type}
+        modalId={nodesData.table_id}
+        portfolioId={storedPortfolioId}
+        regId={userID}
+        fetchTreeData={fetchTreeData}
         modalSize="md"
       >
-        {nodesData.type === "goal-content" && ( <GoalPopup nodes={nodesData} /> )}
-        {nodesData.type === "kpi-content" && ( <KpiPopup nodes={nodesData} /> )}
-        {nodesData.type === "project-content" && ( <ProjectPopup nodes={nodesData} /> )}
-        {nodesData.type === "task-content" && ( <TaskPopup nodes={nodesData} /> )}
-        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} /> )}
-        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} /> )}
+        {nodesData.type === "goal-content" && ( <GoalPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
+        {nodesData.type === "kpi-content" && ( <KpiPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
+        {nodesData.type === "project-content" && ( <ProjectPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
+        {nodesData.type === "task-content" && ( <TaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
+        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
         {(nodesData.type == "project-file" ||
             nodesData.type == "task-file" ||
             nodesData.type == "subtask-file" ||

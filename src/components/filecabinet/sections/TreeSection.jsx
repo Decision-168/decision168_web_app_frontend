@@ -8,9 +8,8 @@ import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { VisibilityOutlined } from "@mui/icons-material";
 import { Paper, Typography } from "@mui/material";
-import { data } from "../../../helpers/treeData";
 
-const TreeSection = ({ handleModuleOpen, handleFileOpen, value }) => {
+const TreeSection = ({ handleModuleOpen, handleFileOpen, value, data }) => {
   const renderTreeItem = (nodes, renderChildren) => (
     <TreeItem
       sx={{
