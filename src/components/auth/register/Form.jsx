@@ -34,7 +34,7 @@ export default function Form() {
     try {
       setLoading(true);
       const response = await registerUser(formData);
-      toast.success(response.message);
+      toast.success(`${response?.message}`);
     } catch (error) {
       console.error(error);
       toast.error(`${error.response?.data?.error}`);
@@ -76,16 +76,28 @@ export default function Form() {
         />
       </Box>
 
-       <Box mb={1}>
-        <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={handleCaptchaChange} />
-      </Box> 
+      <Box mb={1}>
+        <ReCAPTCHA
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={handleCaptchaChange}
+        />
+      </Box>
 
       <FormControlLabel
-        control={<Checkbox value={agreeTermsPrivacy === "yes"} onChange={handleCheckboxChange} size="small" />}
+        control={
+          <Checkbox
+            value={agreeTermsPrivacy === "yes"}
+            onChange={handleCheckboxChange}
+            size="small"
+          />
+        }
         label={
           <Typography component="p" variant="caption" textAlign="left">
             By signing up you agree to Decision 168's
-            <CustomLink path={"https://www.decision168.com/terms-conditions/"}>Terms </CustomLink>&<CustomLink path={"https://www.decision168.com/privacy-policy/"}>Privacy Policy.</CustomLink>
+            <CustomLink path={"https://www.decision168.com/terms-conditions/"}>Terms </CustomLink>&
+            <CustomLink path={"https://www.decision168.com/privacy-policy/"}>
+              Privacy Policy.
+            </CustomLink>
           </Typography>
         }
       />

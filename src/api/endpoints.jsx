@@ -45,7 +45,7 @@ const api = {
 
   //get countries
   countries: "user/get-countries",
-  
+
   //get country by country code
   country: "user/get-country/",
 
@@ -94,6 +94,30 @@ const api = {
   updatePortfolio: "portfolio/update-portfolio/",
 
   //get portfolio count by portfolioId
-  getPortfolioCount:"portfolio/get-portfolio-count/"
+  getPortfolioCount: "portfolio/get-portfolio-count/",
+
+  //-----------------------------Task Modlue Start----------------
+
+  //(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
+  getAlltasksAndSubtasks: "task/all-tasks-subtasks/",
+
+  //Task and subtask Editable fields by portfolio id
+
+  editTaskAndSubtask :"task/table-editable/",
+
+  // Change task Status by user id
+  changeTaskStatus: "task/change-status/",
+
+  //get Portfolio Task list by portfolio_id and reg_id
+  getTaskslist: "task/portfolio-tasks-list/",
+
+  //get Task Details by task_id
+  getTaskDetails: "task/task-detail/",
+
+  // Insert Task by user id and portfolio id
+  insertTask: "task/insert-task/",
+
+  // Change task Status on checkbox by user id
+  changeTaskStatusCheckox: "task/checkbox-change-status/",
 };
 export default api;

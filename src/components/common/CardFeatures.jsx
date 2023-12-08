@@ -32,17 +32,17 @@ export default function CardFeatures() {
     {
       count: counts?.portfolioResult,
       label: "Portfolio",
-      link: "/portfolio-view",
+      link: "/portfolio",
     },
     {
       count: counts?.projectResult,
       label: "Projects",
-      link: "/portfolio-projects-list",
+      link: "/projects-list",
     },
     {
       count: counts?.tasksResult,
       label: "Tasks",
-      link: "/portfolio-tasks-list",
+      link: "/all-tasks",
     },
   ];
 

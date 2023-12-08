@@ -5,6 +5,7 @@ import popupReducer from './action/confirmationModalSlice';
 import userReducer from './action/userSlice';
 import dashboardReducer from './action/dashboardSlice';
 import portfolioReducer from './action/portfolioSlice';
+import tasksReducer from './action/tasksSlice';
 
 export default configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export default configureStore({
     popup: popupReducer,
     user: userReducer,
     dashboard: dashboardReducer,
-    portfolio: portfolioReducer
+    portfolio: portfolioReducer,
+    tasks: tasksReducer
   },
 });

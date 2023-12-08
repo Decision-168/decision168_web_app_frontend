@@ -21,32 +21,37 @@ export default function DashboardLayout({ children }) {
   const [decodedToken, setDecodedToken] = useState(null);
   const [open, setOpen] = React.useState(true);
 
-  useEffect(() => {
-    // Check if a valid token exists
-    if (token) {
-      try {
-        // Attempt to decode the token
-        const decoded = jwtDecode(token);
-        setDecodedToken(decoded); // Set the decoded token in state
-      } catch (error) {
-        console.error("Invalid token:", error);
-        // Handle the error or provide feedback to the user as needed
-      }
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   // Check if a valid token exists
+  //   if (token) {
+  //     try {
+  //       // Attempt to decode the token
+  //       const decoded = jwtDecode(token);
+  //       setDecodedToken(decoded); // Set the decoded token in state
+  //     } catch (error) {
+  //       console.error("Invalid token:", error);
+  //       // Handle the error or provide feedback to the user as needed
+  //     }
+  //   }
+  // }, [token]);
 
+  // useEffect(() => {
+  //   if (decodedToken) {
+  //     dispatch(getUserDetailsAsync(decodedToken?.id));
+  //   }
+  // }, [dispatch, decodedToken?.id]);
+
+  const userId = 1;
   useEffect(() => {
-    if (decodedToken) {
-      dispatch(getUserDetailsAsync(decodedToken?.id));
-    }
-  }, [dispatch, decodedToken?.id]);
+    dispatch(getUserDetailsAsync(userId));
+  }, [dispatch, userId]);
 
   // console.log("userInfo", user);
 
   useEffect(() => {
     const alerts = async () => {
       try {
-        const userId = user?.reg_id;
+        // const userId = user?.reg_id;
         dispatch(getAlertNotificationsAsync(userId));
       } catch (error) {
         console.error(error);

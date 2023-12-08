@@ -4,7 +4,7 @@ import TaskTable from "./TaskTable";
 
 const ListSection = () => {
   return (
-    <Grid container mt={2} >
+    <Grid container mt={2}>
       <Grid item xs={12}>
         <TaskTable />
       </Grid>

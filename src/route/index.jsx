@@ -40,6 +40,7 @@ const ProjectOverviewRequest = lazy(() =>
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 const Tasks = lazy(() => import("../components/Tasks"));
+const AllTasks = lazy(() => import("../components/Tasks/AllTasks"));
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
@@ -163,6 +164,15 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+
+          <Route
+            path="/all-tasks"
+            element={
+              <DashboardLayout>
+                <AllTasks />
+              </DashboardLayout>
+            }
+          />
           <Route
             path="/today-tasks"
             element={
@@ -279,7 +289,7 @@ const RouteIndex = () => {
           <Route
             exact
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
-            element={<VerifyInviteMember/>}
+            element={<VerifyInviteMember />}
           />
         </Route>
 

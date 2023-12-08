@@ -23,6 +23,7 @@ import {
 } from "../../../../../redux/action/portfolioSlice";
 import { getPackageDetails } from "../../../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
+import { getTaskslistAsync } from "../../../../../redux/action/tasksSlice";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -70,12 +71,13 @@ export default function PortfolioMenu() {
   const [portfolios, setPortfolios] = React.useState([]);
   const [selectedPortfolio, setSelectedPortfolio] = React.useState("portfolio");
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  const email = user?.email_address;
-  // const email = "uzmakarjikar@gmail.com";
+  // const email = user?.email_address;
+  const email = "uzmakarjikar@gmail.com";
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const fetchPorfolios = async () => {
@@ -90,8 +92,6 @@ export default function PortfolioMenu() {
   React.useEffect(() => {
     fetchPorfolios();
   }, [email]);
-
-  console.log("portfolios", portfolios);
 
   useEffect(() => {
     if (storedPortfolioId && portfolios) {
@@ -119,8 +119,8 @@ export default function PortfolioMenu() {
   const handleCreatePortfolioClick = async (event) => {
     const porfolioCountResponse = await getPorfolioCount(79);
     const packageDetailsResponse = await getPackageDetails(packageId);
-    console.log("portfolio count", porfolioCountResponse?.portfolio_count_rows);
-    console.log("package details", packageDetailsResponse?.pack_portfolio);
+    // console.log("portfolio count", porfolioCountResponse?.portfolio_count_rows);
+    // console.log("package details", packageDetailsResponse?.pack_portfolio);
 
     if (
       isValidPortfolioCount(
@@ -135,15 +135,17 @@ export default function PortfolioMenu() {
       toast.warn("Please Upgrade your plan!");
     }
   };
-
-  const handleMenuItemClick = (event, index, protfolioId) => {
+  const regId = user?.reg_id;
+  const handleMenuItemClick = (event, index, portfolioId) => {
+    navigate("/portfolio-view");
     setSelectedIndex(index);
     setAnchorEl(null);
     // Save the new portfolioId to localStorage
-    localStorage.setItem("portfolioId", protfolioId);
-    dispatch(getProjectAndTaskCountAsync(protfolioId));
-    dispatch(getPortfolioDetailsAsync(protfolioId));
-    dispatch(getPortfolioTeamMembersAsync(protfolioId));
+    localStorage.setItem("portfolioId", portfolioId);
+    dispatch(getProjectAndTaskCountAsync(portfolioId));
+    dispatch(getPortfolioDetailsAsync(portfolioId));
+    dispatch(getPortfolioTeamMembersAsync(portfolioId)); // we have to remove from here
+    dispatch(getTaskslistAsync({ portfolioId, regId }));
   };
 
   return (

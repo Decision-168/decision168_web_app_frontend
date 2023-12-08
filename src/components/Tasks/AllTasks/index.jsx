@@ -1,22 +1,22 @@
 import React from "react";
 import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
 import { memo, useState, useCallback } from "react";
-import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
+import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../redux/action/modalSlice";
+import { openModal } from "../../../redux/action/modalSlice";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import CustomSearchField from "../common/CustomSearchField";
-import ListSection from "./subComponents/ListSection";
-import GridSection from "./subComponents/GridSection";
-import ReduxDialog from "../common/ReduxDialog";
-import CreateEditTaskForm from "./createEditTask/CreateEditTaskForm";
-import CustomFilter from "../common/CustomFilter";
-import { getTaskslistAsync } from "../../redux/action/tasksSlice";
+import CustomSearchField from "../../common/CustomSearchField";
+import ListSection from "../subComponents/ListSection";
+import GridSection from "../subComponents/GridSection";
+import ReduxDialog from "../../common/ReduxDialog";
+import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
+import CustomFilter from "../../common/CustomFilter";
 import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../redux/action/userSlice";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
 
 const filterOption = [
   {
@@ -49,32 +49,17 @@ const filterOption = [
   },
 ];
 
-const Tasks = () => {
+const AllTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
-  const [inputFields, setInputFields] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-
-  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const regId = user?.reg_id;
 
-  const dispatchGetTasks = useCallback(() => {
-    dispatch(getTaskslistAsync({ portfolioId, regId }));
-  }, [dispatch, portfolioId, regId]);
-  
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatchGetTasks();
-      } catch (error) {
-        console.error(error);
-        // Handle the error or display an error message to the user
-      }
-    };
-  
-    fetchData();
-  }, [dispatchGetTasks]);
+
+
+
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -172,4 +157,4 @@ const Tasks = () => {
   );
 };
 
-export default memo(Tasks);
+export default memo(AllTasks);
