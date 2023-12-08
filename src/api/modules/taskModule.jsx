@@ -71,3 +71,13 @@ export const changeTaskStatusCheckox = async (regId, data) => {
     throw error;
   }
 };
+
+// Change Subtask Status on checkbox by user id
+export const changeSubTaskStatusCheckox = async (regId, data) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.changeSubTaskStatusCheckox}${regId}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -11,7 +11,7 @@ export const formatAssigneeText = (assigneeId , regId) => {
 
 // Utility function to format priority text
 export const formatPriority = (priority) => {
-    return priority.replace(/\b\w/g, (char) => char.toUpperCase());
+    return priority?.replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 // Utility function to convert status with underscores to user-friendly format

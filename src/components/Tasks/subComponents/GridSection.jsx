@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Box, Paper } from "@mui/material";
 import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
@@ -6,10 +6,30 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { kanbanColumns } from "./KanbanData";
 import { useNavigate } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
 
 const GridSection = () => {
   const navigate = useNavigate();
   const [columns, setColumns] = React.useState(kanbanColumns);
+  const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
+
+  const fetchData = async () => {
+    try {
+      const response = await getAlltasksAndSubtasks(regId)
+      setRows(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, [user?.reg_id]);
+
+
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;

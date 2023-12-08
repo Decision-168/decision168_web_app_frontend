@@ -12,7 +12,7 @@ import Stack from "@mui/material/Stack";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { tasks, taskAssignees, taskPriorities, taskStatuses } from "../subComponents/TasksData";
+import { tasks, taskAssignees,taskPriorities, taskStatuses } from "../subComponents/TasksData";
 import Actions from "./Actions";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
