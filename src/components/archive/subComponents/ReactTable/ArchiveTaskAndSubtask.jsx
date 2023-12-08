@@ -1,75 +1,81 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { gettaskArchiveData, patchUnArchiveSubtask, patchUnArchiveTask } from "../../../../api/modules/ArchiveModule";
+import { toast } from "react-toastify";
 
-const ArchiveTaskAndSubtask = ({ value }) => {
+const ArchiveTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  const handleReopen = () => {
+  
+  const [archiveData, setArchiveData] = useState([]);
+  const [archiveType, setArchiveType] = useState(null);
+  const [archiveId, setArchiveId] = useState(null);
+
+  const fetchArchiveData = async () => {
+    try {
+      const response = await gettaskArchiveData(regId,portfolioId);
+      setArchiveData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArchiveData();
+  }, [regId]);
+  
+  const handleReopen = (type, id) => {
+    setArchiveType(type);
+    setArchiveId(id);
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
         title: "Are you sure?",
-        description: `You want to Reopen this ${value.toUpperCase()}`,
+        description: `You want to Reopen this ${type}`,
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        task_code: "T-12345",
-        task_portfolio: "Uzma K",
-        task_project: "Project 1",
-        task_task: "Task 1",
-        task_assignee: "Afrin Sayed",
-        task_type: "Task",
-        task_date: "2023-04-30",
-      },
-      {
-        task_code: "T-64565",
-        task_portfolio: "Uzma K",
-        task_project: "Project 1",
-        task_task: "Task 2",
-        task_assignee: "Alim Mohd",
-        task_type: "Subtask",
-        task_date: "2023-04-30",
-      },
-      {
-        task_code: "T-54566",
-        task_portfolio: "Uzma K",
-        task_project: "Project 2",
-        task_task: "Task 4",
-        task_assignee: "Uzma Karjikar",
-        task_type: "Task",
-        task_date: "2023-04-30",
-      },
-      {
-        task_code: "T-56454",
-        task_portfolio: "Uzma K",
-        task_project: "Project 6",
-        task_task: "Task 1",
-        task_assignee: "Afrin Sayed",
-        task_type: "Task",
-        task_date: "2023-04-30",
-      },
-      {
-        task_code: "T-45546",
-        task_portfolio: "Uzma K",
-        task_project: "Project 3",
-        task_task: "Task 1",
-        task_assignee: "Afrin Sayed",
-        task_type: "Task",
-        task_date: "2023-04-30",
-      },
-    ],
-    []
-  );
+
+  const fetchUnarchiveTask = async () => {
+    try {
+      const response = await patchUnArchiveTask(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchUnarchiveSubtask = async () => {
+    try {
+      const response = await patchUnArchiveSubtask(archiveId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const handleYes = async () => {
+    if(archiveType == 'Task') {
+      fetchUnarchiveTask()
+    }else if(archiveType == 'Subtask') {
+      fetchUnarchiveSubtask()
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -131,7 +137,7 @@ const ArchiveTaskAndSubtask = ({ value }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen()}
+              onClick={() => handleReopen(row.original.task_type,row.original.table_id)}
             >
               Reopen
             </Button>
@@ -144,7 +150,7 @@ const ArchiveTaskAndSubtask = ({ value }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -190,8 +196,19 @@ const ArchiveTaskAndSubtask = ({ value }) => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"reopenModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"reopenModule"} handleYes={handleYes} />
     </>
   );
 };

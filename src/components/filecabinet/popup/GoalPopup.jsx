@@ -1,14 +1,23 @@
-import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-import { BusinessCenter, CalendarMonth, Person } from "@mui/icons-material";
+import { BusinessCenter, CalendarMonth, Delete, Person } from "@mui/icons-material";
+import ArchiveIcon from '@mui/icons-material/Archive';
 import ProgressBar from "../subComponents/ProgressBar";
 import { getDepartmentData, getGoalData, getGoalKPIData, getUserData } from "../../../api/modules/FileCabinetModule";
-const GoalPopup = ({ nodes, regId, portfolioId }) => {
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../common/ConfirmationDialog";
+import { toast } from "react-toastify";
+import { patchArchiveGoal } from "../../../api/modules/ArchiveModule";
+const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [goalData, setGoalData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [kpiData, setKpiData] = useState([]);
+
+  const [module, setModule] = useState(null);
+  const dispatch = useDispatch();
 
   // Goal Data ----------------------------------------------
   const fetchGoalData = async () => {
@@ -75,6 +84,55 @@ const GoalPopup = ({ nodes, regId, portfolioId }) => {
   useEffect(() => {
     fetchKPIData();
   }, [goalData]);
+
+  const handleArchive = () => {
+    setModule('archive');
+    dispatch(
+      openCnfModal({
+        modalName: "archiveGoal",
+        title: "Are you sure?",
+        description: "You want to Archive!",
+      })
+    );
+  };
+  const handleDelete = () => {
+    setModule('delete');
+    dispatch(
+      openCnfModal({
+        modalName: "deleteGoal",
+        title: "Are you sure?",
+        description: "You want to Delete!",
+      })
+    );
+  };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchiveGoal(goalData?.gid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'archiveGoal' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archiveGoal' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await deleteGoal(goalData?.gid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'deleteGoal' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deleteGoal' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }
+  };
 
   // --------------------------End -----------------------//
 
@@ -143,6 +201,29 @@ const GoalPopup = ({ nodes, regId, portfolioId }) => {
             >
               GOAL: {nodes.name}
             </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={12} lg={8}>
+        </Grid>
+        <Grid item xs={12} md={12} lg={4}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "bottom",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <Tooltip arrow title="Archive">
+              <IconButton onClick={() => handleArchive()}>
+                <ArchiveIcon sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title="Delete">
+              <IconButton onClick={() => handleDelete()}>
+                <Delete sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -254,6 +335,8 @@ const GoalPopup = ({ nodes, regId, portfolioId }) => {
           })}
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"archiveGoal"} handleYes={handleYes} />
+      <ConfirmationDialog value={"deleteGoal"} handleYes={handleYes} />
     </Box>
   );
 };

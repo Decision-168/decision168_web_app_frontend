@@ -1,6 +1,7 @@
-import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
-import { KeyboardDoubleArrowRight } from "@mui/icons-material";
+import { Delete, KeyboardDoubleArrowRight } from "@mui/icons-material";
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
@@ -13,13 +14,21 @@ import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import { getPortfolioData, getProjectData, getTaskData, getTaskSubtaskData, getUserData } from "../../../api/modules/FileCabinetModule";
-const TaskPopup = ({ nodes, regId, portfolioId }) => {
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../common/ConfirmationDialog";
+import { toast } from "react-toastify";
+import { patchArchiveTask } from "../../../api/modules/ArchiveModule";
+const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [taskData, setTaskData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
   const [projectData, setProjectData] = useState([]);
   const [assigneeData, setAssigneeData] = useState([]);
   const [portfolioData, setPortfolioData] = useState([]);
+
+  const [module, setModule] = useState(null);
+  const dispatch = useDispatch();
 
     // Task Data ----------------------------------------------
     const fetchTaskData = async () => {
@@ -121,6 +130,57 @@ const TaskPopup = ({ nodes, regId, portfolioId }) => {
     fetchPortfolioData();
   }, [taskData]);
 
+  const handleArchive = () => {
+    setModule('archive');
+    dispatch(
+      openCnfModal({
+        modalName: "archiveTask",
+        title: "Are you sure?",
+        description: "You want to Archive!",
+      })
+    );
+  };
+  const handleDelete = () => {
+    setModule('delete');
+    dispatch(
+      openCnfModal({
+        modalName: "deleteTask",
+        title: "Are you sure?",
+        description: "You want to Delete!",
+      })
+    );
+  };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchiveTask(taskData?.tid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+        console.log(error)
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await deleteTask(taskData?.tid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }
+  };
+
+  // ---- End -----------------------------
 
   const theme = useTheme();
   // const subtaskData = [1, 2];
@@ -197,6 +257,29 @@ const TaskPopup = ({ nodes, regId, portfolioId }) => {
             >
               TASK: {nodes.name}
             </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={12} lg={8}>
+        </Grid>
+        <Grid item xs={12} md={12} lg={4}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "bottom",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <Tooltip arrow title="Archive">
+              <IconButton onClick={() => handleArchive()}>
+                <ArchiveIcon sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title="Delete">
+              <IconButton onClick={() => handleDelete()}>
+                <Delete sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -551,6 +634,8 @@ const TaskPopup = ({ nodes, regId, portfolioId }) => {
           </Box>
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"archiveTask"} handleYes={handleYes} />
+      <ConfirmationDialog value={"deleteTask"} handleYes={handleYes} />
     </Box>
   );
 };

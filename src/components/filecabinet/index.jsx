@@ -23,8 +23,8 @@ const FileCabinet = () => {
   const [treeData, setTreeData] = useState([]);
   
   const user = useSelector(selectUserDetails);
-  // const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
-  const storedPortfolioId = 3;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+  // const storedPortfolioId = 3;
   const userID = user?.reg_id;
 
   const fetchTreeData = async () => {
@@ -176,11 +176,21 @@ const FileCabinet = () => {
         fetchTreeData={fetchTreeData}
         modalSize="md"
       >
-        {nodesData.type === "goal-content" && ( <GoalPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
-        {nodesData.type === "kpi-content" && ( <KpiPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
-        {nodesData.type === "project-content" && ( <ProjectPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
-        {nodesData.type === "task-content" && ( <TaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
-        {nodesData.type === "subtask-content" && ( <SubtaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} /> )}
+        {nodesData.type === "goal-content" && ( 
+          <GoalPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} /> 
+        )}
+        {nodesData.type === "kpi-content" && ( 
+          <KpiPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        )}
+        {nodesData.type === "project-content" && ( 
+          <ProjectPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        )}
+        {nodesData.type === "task-content" && ( 
+          <TaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        )}
+        {nodesData.type === "subtask-content" && ( 
+          <SubtaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        )}
         {(nodesData.type == "project-file" ||
             nodesData.type == "task-file" ||
             nodesData.type == "subtask-file" ||

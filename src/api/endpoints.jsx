@@ -152,5 +152,78 @@ const api = {
   // Reopen Subtask
   fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
 
+  //-----------------------------Archive Module Start----------------
+
+  // Archive Portfolio
+  archivePortfolio: "archive/portfolio/",
+
+  // Archive Goal
+  archiveGoal: "archive/goal/",
+
+  // Archive KPI
+  archiveKpi: "archive/kpi/",
+
+  // Archive Project
+  archiveProject: "archive/project/",
+
+  // Archive Task
+  archiveTask: "archive/task/",
+
+  // Archive Subtask
+  archiveSubtask: "archive/subtask/",
+
+  // All Archive Data
+  allArchiveData: "archive/all-data/",
+
+  // Goal Archive Data
+  goalArchiveData: "archive/goal-data/",
+
+  // Kpi Archive Data
+  kpiArchiveData: "archive/kpi-data/",
+
+  // Project Archive Data
+  projectArchiveData: "archive/project-data/",
+
+  // Task Archive Data
+  taskArchiveData: "archive/task-data/",
+
+  // UnArchive Portfolio
+  unarchivePortfolio: "archive/reopen/portfolio/",
+
+  // UnArchive Goal
+  unarchiveGoal: "archive/reopen/goal/",
+
+  // UnArchive KPI
+  unarchiveKpi: "archive/reopen/kpi/",
+
+  // UnArchive Project
+  unarchiveProject: "archive/reopen/project/",
+
+  // UnArchive Task
+  unarchiveTask: "archive/reopen/task/",
+
+  // UnArchive Subtask
+  unarchiveSubtask: "archive/reopen/subtask/",
+
+  //-----------------------------Trash Module Start----------------
+
+  // Delete Portfolio
+  deletePortfolio: "trash/delete/portfolio/",
+
+  // Delete Goal
+  deleteGoal: "trash/delete/goal/",
+
+  // Delete KPI
+  deleteKpi: "trash/delete/kpi/",
+
+  // Delete Project
+  deleteProject: "trash/delete/project/",
+
+  // Delete Task
+  deleteTask: "trash/delete/task/",
+
+  // Delete Subtask
+  deleteSubtask: "trash/delete/subtask/",
+
 };
 export default api;

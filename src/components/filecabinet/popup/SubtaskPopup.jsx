@@ -1,6 +1,7 @@
-import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
-import { KeyboardDoubleArrowRight } from "@mui/icons-material";
+import { Delete, KeyboardDoubleArrowRight } from "@mui/icons-material";
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
@@ -12,13 +13,21 @@ import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import { getPortfolioData, getProjectData, getSubtaskData, getTaskData, getUserData } from "../../../api/modules/FileCabinetModule";
-const SubtaskPopup = ({ nodes, regId, portfolioId }) => {
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../common/ConfirmationDialog";
+import { toast } from "react-toastify";
+import { patchArchiveSubtask } from "../../../api/modules/ArchiveModule";
+const SubtaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [userData, setUserData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
   const [projectData, setProjectData] = useState([]);
   const [assigneeData, setAssigneeData] = useState([]);
   const [portfolioData, setPortfolioData] = useState([]);
   const [taskData, setTaskData] = useState([]);
+
+  const [module, setModule] = useState(null);
+  const dispatch = useDispatch();
 
   // Subtask Data ----------------------------------------------
   const fetchSubtaskData = async () => {
@@ -107,19 +116,69 @@ useEffect(() => {
   const assigneeName = `${assigneeData?.first_name} ${assigneeData?.last_name}`;
 
   // Portfolio Data ----------------------------------------------
-const fetchPortfolioData = async () => {
-  try {
-    const response = await getPortfolioData(portfolioId);
-    setPortfolioData(response);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await getPortfolioData(portfolioId);
+      setPortfolioData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-useEffect(() => {
-  fetchPortfolioData();
-}, [subtaskData]);
+  useEffect(() => {
+    fetchPortfolioData();
+  }, [subtaskData]);
 
+  const handleArchive = () => {
+    setModule('archive');
+    dispatch(
+      openCnfModal({
+        modalName: "archiveSubtask",
+        title: "Are you sure?",
+        description: "You want to Archive!",
+      })
+    );
+  };
+  const handleDelete = () => {
+    setModule('delete');
+    dispatch(
+      openCnfModal({
+        modalName: "deleteSubtask",
+        title: "Are you sure?",
+        description: "You want to Delete!",
+      })
+    );
+  };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchiveSubtask(subtaskData?.stid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'archiveSubtask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archiveSubtask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await deleteSubtask(subtaskData?.stid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }
+  };
+
+  // ----End ------------------------------------
 
   const theme = useTheme();
   const CommonLinks = ({ link, linkName }) => {
@@ -195,6 +254,29 @@ useEffect(() => {
             >
               SUBTASK: {nodes.name}
             </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={12} lg={8}>
+        </Grid>
+        <Grid item xs={12} md={12} lg={4}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "bottom",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <Tooltip arrow title="Archive">
+              <IconButton onClick={() => handleArchive()}>
+                <ArchiveIcon sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title="Delete">
+              <IconButton onClick={() => handleDelete()}>
+                <Delete sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -515,6 +597,8 @@ useEffect(() => {
           </Box>
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"archiveSubtask"} handleYes={handleYes} />
+      <ConfirmationDialog value={"deleteSubtask"} handleYes={handleYes} />
     </Box>
   );
 };
