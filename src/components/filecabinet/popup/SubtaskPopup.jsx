@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveSubtask } from "../../../api/modules/ArchiveModule";
+import { patchDeleteSubtask } from "../../../api/modules/TrashModule";
 const SubtaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [userData, setUserData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
@@ -165,13 +166,14 @@ useEffect(() => {
       };
     }else if(module == 'delete') {
       try {
-        const response = await deleteSubtask(subtaskData?.stid, regId);
+        const response = await patchDeleteSubtask(subtaskData?.stid, regId);
         fetchTreeData()
         dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
         handleClose()
         toast.success(`${response.message}`);
       } catch (error) {
         dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
+        console.log(error)
         handleClose()
         toast.error(`${error.response?.error}`);
       };

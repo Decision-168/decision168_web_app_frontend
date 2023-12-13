@@ -108,7 +108,6 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   
 
   const handleYes = () => {
-    console.log(archiveType)
     if(archiveType == 'Goal'){
       fetchUnarchiveGoal()
     }else if(archiveType == 'KPI') {

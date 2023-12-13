@@ -25,7 +25,7 @@ import AddDepartmentForm from "./AddDepartmentForm";
 import ViewDepartmentTable from "./ViewDepartmentTable";
 import AllMembersTable from "./AllMembersTable";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import DeleteDailogContent from "./DeleteDailogContent";
 import { openModal } from "../../../../redux/action/modalSlice";
@@ -44,8 +44,11 @@ import {
 import { useSelector } from "react-redux";
 import CardAvatar from "../../../common/CardAvatar";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { toast } from "react-toastify";
+import { patchArchivePortfolio } from "../../../../api/modules/ArchiveModule";
+import { patchDeleteGoal } from "../../../../api/modules/TrashModule";
 
-export default function PortfolioCard() {
+export default function PortfolioCard({ regId }) {
   const theme = useTheme();
   const user = useSelector(selectUserDetails);
   const count = useSelector(selectProjectAndTaskCount);
@@ -55,6 +58,8 @@ export default function PortfolioCard() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const dispatch = useDispatch();
+  const [module, setModule] = React.useState(null);
+  const userID = user?.reg_id;
 
   useEffect(() => {
     if (storedPortfolioId) {
@@ -142,6 +147,7 @@ export default function PortfolioCard() {
   };
 
   const handleArchive = () => {
+    setModule('archive');
     dispatch(
       openCnfModal({
         modalName: "archivePortfolio",
@@ -150,6 +156,30 @@ export default function PortfolioCard() {
       })
     );
   };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchivePortfolio(storedPortfolioId, userID);
+        dispatch(closeCnfModal({ modalName: 'archivePortfolio' }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archivePortfolio' }));
+        console.log(error.response.data)
+        toast.error(`${error.response.data?.error}`);
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await patchDeleteGoal(storedPortfolioId, userID);
+        dispatch(closeCnfModal({ modalName: 'deletePortfolio' }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deletePortfolio' }));
+        toast.error(`${error.response?.error}`);
+      };
+    }
+  };
+
   const navigate = useNavigate();
   return (
     <Paper elevation={0}>
@@ -327,7 +357,7 @@ export default function PortfolioCard() {
           <CustomAvatarGroup data={members} />
         </Grid>
       </Grid>
-      <ConfirmationDialog value={"archivePortfolio"} />
+      <ConfirmationDialog value={"archivePortfolio"} handleYes={handleYes} />
     </Paper>
   );
 }

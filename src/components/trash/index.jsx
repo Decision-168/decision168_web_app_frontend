@@ -8,6 +8,8 @@ import TrashProjects from "./subComponents/ReactTable/TrashProjects";
 import TrashTaskAndSubtask from "./subComponents/ReactTable/TrashTaskAndSubtask";
 import TrashFiles from "./subComponents/ReactTable/TrashFiles";
 import CustomFilter from "../common/CustomFilter";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../redux/action/userSlice";
 const filterOption = [
   {
     value: "all",
@@ -39,6 +41,10 @@ const filterOption = [
   //  },
 ];
 const index = () => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+
   const [value, setValue] = useState("all");
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -65,14 +71,14 @@ const index = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {value === "all" && <TrashAll />}
-          {value === "goals" && <TrashGoals value={value} />}
-          {value === "kpis" && <TrashKPIs value={value} />}
-          {value === "projects" && <TrashProjects value={value} />}
+          {value === "all" && <TrashAll regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "goals" && <TrashGoals value={value} regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "kpis" && <TrashKPIs value={value} regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "projects" && <TrashProjects value={value} regId={userID} portfolioId={storedPortfolioId} />}
           {value === "tasks & subtasks" && (
-            <TrashTaskAndSubtask value={value} />
+            <TrashTaskAndSubtask value={value} regId={userID} portfolioId={storedPortfolioId} />
           )}
-          {value === "files" && <TrashFiles value={value} />}
+          {value === "files" && <TrashFiles value={value} regId={userID} portfolioId={storedPortfolioId} />}
           {/* {value === "content" && <TrashContent value={value} />} */}
         </Grid>
       </Grid>

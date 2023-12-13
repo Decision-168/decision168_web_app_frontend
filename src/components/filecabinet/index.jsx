@@ -24,7 +24,6 @@ const FileCabinet = () => {
   
   const user = useSelector(selectUserDetails);
   const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
-  // const storedPortfolioId = 3;
   const userID = user?.reg_id;
 
   const fetchTreeData = async () => {

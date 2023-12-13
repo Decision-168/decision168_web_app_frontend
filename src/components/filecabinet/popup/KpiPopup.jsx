@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveKpi } from "../../../api/modules/ArchiveModule";
+import { patchDeleteKpi } from "../../../api/modules/TrashModule";
 const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [kpiData, setKpiData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
@@ -122,7 +123,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
       };
     }else if(module == 'delete') {
       try {
-        const response = await deleteKpi(kpiData?.sid, regId);
+        const response = await patchDeleteKpi(kpiData?.sid, regId);
         fetchTreeData()
         dispatch(closeCnfModal({ modalName: 'deleteKpi' }));
         handleClose()

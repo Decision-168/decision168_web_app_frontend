@@ -1,49 +1,82 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { getkpiDeleteData, patchDeleteForeverKpi, patchRetrieveKpi } from "../../../../api/modules/TrashModule";
+import { toast } from "react-toastify";
 
-const TrashKPIs = ({ value }) => {
+const TrashKPIs = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  const handleRestore = () => {
+  const [deleteData, setDeleteData] = useState([]);
+  const [deleteId, setDeleteId] = useState(null);
+  const [module, setModule] = useState(null);
+
+  const fetchDeleteData = async () => {
+    try {
+      const response = await getkpiDeleteData(regId,portfolioId);
+      setDeleteData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeleteData();
+  }, [regId]);
+
+  const handleRestore = (type, id) => {
+    setDeleteId(id);
     dispatch(
       openCnfModal({
         modalName: "restoreModule",
         title: "Are you sure?",
-        description: `You want to Restore this ${value.toUpperCase()}`,
+        description: `You want to Restore this ${type}`,
       })
     );
   };
-  const handleDelete = () => {
+
+  const handleDelete = (type, id) => {
+    setDeleteId(id);
     dispatch(
       openCnfModal({
         modalName: "deleteModule",
         title: "Are you sure?",
-        description: `You want to Delete ${value.toUpperCase()} Permanently`,
+        description: `You want to Delete ${type} Permanently`,
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 1",
-        kpi_date: "2023-04-30",
-      },
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 2",
-        kpi_date: "2023-04-30",
-      },
-    ],
-    []
-  );
+
+  const handleRestoreYes = async () => {
+    try {
+      const response = await patchRetrieveKpi(deleteId, portfolioId, regId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const handleDeleteYes = async () => {
+    try {
+      const response = await patchDeleteForeverKpi(deleteId, regId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -81,7 +114,7 @@ const TrashKPIs = ({ value }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleRestore()}
+              onClick={() => handleRestore(row.original.kpi_type, row.original.table_id)}
             >
               Restore
             </Button>
@@ -104,7 +137,7 @@ const TrashKPIs = ({ value }) => {
               size="small"
               variant="contained"
               sx={{ backgroundColor: "#383838", color: "#ffffff" }}
-              onClick={() => handleDelete()}
+              onClick={() => handleDelete(row.original.kpi_type, row.original.table_id)}
             >
               Delete
             </Button>
@@ -117,7 +150,7 @@ const TrashKPIs = ({ value }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: deleteData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -157,9 +190,20 @@ const TrashKPIs = ({ value }) => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"restoreModule"} />
-      <ConfirmationDialog value={"deleteModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"restoreModule"} handleYes={handleRestoreYes} />
+      <ConfirmationDialog value={"deleteModule"}  handleYes={handleDeleteYes}/>
     </>
   );
 };

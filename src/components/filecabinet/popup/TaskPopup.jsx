@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveTask } from "../../../api/modules/ArchiveModule";
+import { patchDeleteTask } from "../../../api/modules/TrashModule";
 const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [taskData, setTaskData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -167,7 +168,7 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
       };
     }else if(module == 'delete') {
       try {
-        const response = await deleteTask(taskData?.tid, regId);
+        const response = await patchDeleteTask(taskData?.tid, regId);
         fetchTreeData()
         dispatch(closeCnfModal({ modalName: 'deleteTask' }));
         handleClose()

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveGoal } from "../../../api/modules/ArchiveModule";
+import { patchDeleteGoal } from "../../../api/modules/TrashModule";
 const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [goalData, setGoalData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
@@ -121,7 +122,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
       };
     }else if(module == 'delete') {
       try {
-        const response = await deleteGoal(goalData?.gid, regId);
+        const response = await patchDeleteGoal(goalData?.gid, regId);
         fetchTreeData()
         dispatch(closeCnfModal({ modalName: 'deleteGoal' }));
         handleClose()

@@ -225,5 +225,83 @@ const api = {
   // Delete Subtask
   deleteSubtask: "trash/delete/subtask/",
 
+  // Delete Project File
+  deleteProjectFile: "trash/delete/project-file/",
+
+  // Delete Task File
+  deleteTaskFile: "trash/delete/task-file/",
+
+  // Delete Subtask File
+  deleteSubtaskFile: "trash/delete/subtask-file/",
+
+  // All Delete Data
+  allDeleteData: "trash/all-data/",
+
+  // Goal Delete Data
+  goalDeleteData: "trash/goal-data/",
+
+  // Kpi Delete Data
+  kpiDeleteData: "trash/kpi-data/",
+
+  // Project Delete Data
+  projectDeleteData: "trash/project-data/",
+
+  // Task Delete Data
+  taskDeleteData: "trash/task-data/",
+
+  // Files Delete Data
+  filesDeleteData: "trash/files-data/",
+
+  // Retrieve Portfolio
+  retrievePortfolio: "trash/retrieve/portfolio/",
+
+  // Retrieve Goal
+  retrieveGoal: "trash/retrieve/goal/",
+
+  // Retrieve KPI
+  retrieveKpi: "trash/retrieve/kpi/",
+
+  // Retrieve Project
+  retrieveProject: "trash/retrieve/project/",
+
+  // Retrieve Task
+  retrieveTask: "trash/retrieve/task/",
+
+  // Retrieve Subtask
+  retrieveSubtask: "trash/retrieve/subtask/",
+
+  // Retrieve Project File
+  retrieveProjectFile: "trash/retrieve/project-file/",
+
+  // Retrieve Task File
+  retrieveTaskFile: "trash/retrieve/task-file/",
+
+  // Retrieve Subtask File
+  retrieveSubtaskFile: "trash/retrieve/subtask-file/",
+
+  // Delete forever Goal
+  deleteForeverGoal: "trash/delete-forever/goal/",
+
+  // Delete forever KPI
+  deleteForeverKpi: "trash/delete-forever/kpi/",
+
+  // Delete forever Project
+  deleteForeverProject: "trash/delete-forever/project/",
+
+  // Delete forever Task
+  deleteForeverTask: "trash/delete-forever/task/",
+
+  // Delete forever Subtask
+  deleteForeverSubtask: "trash/delete-forever/subtask/",
+
+  // Delete forever Project File
+  deleteForeverProjectFile: "trash/delete-forever/project-file/",
+
+  // Delete forever Task File
+  deleteForeverTaskFile: "trash/delete-forever/task-file/",
+
+  // Delete forever Subtask File
+  deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
+
 };
 export default api;

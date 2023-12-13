@@ -18,6 +18,7 @@ import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveProject } from "../../../api/modules/ArchiveModule";
+import { patchDeleteProject } from "../../../api/modules/TrashModule";
 const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
   const [projectData, setProjectData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -97,7 +98,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
       };
     }else if(module == 'delete') {
       try {
-        const response = await deleteProject(projectData?.pid, regId);
+        const response = await patchDeleteProject(projectData?.pid, regId);
         fetchTreeData()
         dispatch(closeCnfModal({ modalName: 'deleteProject' }));
         handleClose()

@@ -96,7 +96,8 @@ const CustomPopup = ({
     } catch (error) {
       dispatch(closeCnfModal({ modalName: 'reopenModule' }));
       handleClose()
-      toast.error(`${error.response?.error}`);
+      console.log(error)
+      toast.error(`${error.response.data?.error}`);
     }
   };
 
