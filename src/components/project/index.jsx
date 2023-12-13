@@ -5,7 +5,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
@@ -19,6 +19,9 @@ import CreateProject from "./Dialogs/CreateProject";
 import CustomDialog from "../common/CustomDialog";
 import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
 import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../redux/action/userSlice";
+import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
  const filterOption = [
    {
      value: "all",
@@ -50,6 +53,37 @@ import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
    },
  ];
 const ProjectIndex = () => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+
+  const [projectData, setProjectData] = useState([]);
+  const [projectDetail, setProjectDetail] = useState([]);
+  const [projectId, setProjectId] = useState();
+  const [projectTitle, setProjectTitle] = useState();
+
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectList(userID, storedPortfolioId);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, [userID]);
+
+  const specificProjectData = async (pid) => {
+    try {
+      const response = await getProjectDetail(pid);
+      setProjectDetail(response);
+      setProjectTitle(response?.pname);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -65,14 +99,19 @@ const ProjectIndex = () => {
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
-  const handleProjectPreviewOpen = () => {
+  const handleProjectPreviewOpen = (pid) => {
+    console.log(pid)
+    specificProjectData(pid);
+    setProjectId(pid);
     setPreviewProject(true);
   };
  const handlePendingProjectClose = () => {
    setOpenPreviewPendingProj(false);
  };
- const handlePendingProjectOpen = () => {
-   setOpenPreviewPendingProj(true);
+ const handlePendingProjectOpen = (pid) => {
+    specificProjectData(pid);
+    setProjectId(pid);
+    setOpenPreviewPendingProj(true);
  };
   const dispatch = useDispatch();
   const align = alignment === "list";
@@ -150,12 +189,14 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
+              projectData={projectData}
             />
           ) : (
             <ProjectGridView
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
+              projectData={projectData}
             />
           )}
         </Grid>
@@ -171,7 +212,8 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle="Dashboard Module"
+        modalTitle={projectTitle}
+        modalData={projectDetail}
         redirectPath={"/projects-overview"}
         showModalButton={true}
         modalSize="md"
@@ -181,7 +223,8 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handlePendingProjectClose}
         open={openPreviewPendingProj}
-        modalTitle="Test Project for developer"
+        modalTitle={projectTitle}
+        modalData={projectDetail}
         redirectPath={"/projects-overview-request"}
         showModalButton={true}
         modalSize="md"

@@ -119,7 +119,7 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
                   fontSize: 15,
                 }}
               >
-                {...stringAvatar(it)}
+                {...stringAvatar(Object.values(it)[0])}
               </Avatar>
             );
           })}

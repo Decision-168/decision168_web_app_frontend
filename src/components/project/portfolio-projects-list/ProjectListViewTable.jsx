@@ -7,6 +7,7 @@ import {
   Avatar,
   AvatarGroup,
   Box,
+  Container,
   IconButton,
   Typography,
   useTheme,
@@ -14,7 +15,6 @@ import {
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-import CustomTable from "../../common/CustomTable";
 
 const ProjectListViewTable = ({
   title,
@@ -22,23 +22,16 @@ const ProjectListViewTable = ({
   data,
   handlePendingOpen,
 }) => {
-  const handleOpenCondition = (type) => {
+  const handleOpenCondition = (type, pid) => {
+    console.log(pid)
     if (["Created Projects", "Accepted Projects"].includes(type)) {
-      handleOpen();
+      handleOpen(pid);
     } else {
-      handlePendingOpen();
+      handlePendingOpen(pid);
     }
   };
   const theme = useTheme();
   const navigate = useNavigate();
-  const [load, setLoad] = useState(false);
-  useEffect(() => {
-    if (data.length > 0) {
-      setLoad(false);
-    } else {
-      setLoad(true);
-    }
-  }, []);
 
   const columns = useMemo(
     () => [
@@ -48,6 +41,7 @@ const ProjectListViewTable = ({
         size: 300,
         minSize: 200,
         maxSize: 300,
+        rowLength: 100,
         Cell: ({ row }) => (
           <Box
             sx={{
@@ -100,7 +94,7 @@ const ProjectListViewTable = ({
 
             <IconButton
               aria-label="settings"
-              onClick={() => handleOpenCondition(title)}
+              onClick={() => handleOpenCondition(title,row?.original?.project?.id)}
             >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
@@ -136,7 +130,7 @@ const ProjectListViewTable = ({
                       fontSize: 15,
                     }}
                   >
-                    {...stringAvatar(item)}
+                    {...stringAvatar(Object.values(item)[0])}
                   </Avatar>
                 );
               })}
@@ -172,7 +166,7 @@ const ProjectListViewTable = ({
                       fontSize: 15,
                     }}
                   >
-                    {...stringAvatar(item)}
+                    {...stringAvatar(Object.values(item)[0])}
                   </Avatar>
                 );
               })}
@@ -186,18 +180,13 @@ const ProjectListViewTable = ({
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data:data?data:[],
     enableColumnActions: false,
     enableRowActions: false,
     enableColumnFilters: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    state: {
-      showSkeletons: load,
-    },
     enableHiding: false,
-    // enableEditing: true,
-    // editDisplayMode: "cell",
     initialState: {
       pagination: { pageSize: 10, pageIndex: 0 },
       showGlobalFilter: true,
@@ -249,7 +238,18 @@ const ProjectListViewTable = ({
 
   return (
     <>
-      <CustomTable table={table} />
+      <Container
+      maxWidth="xl"
+      fixed
+      sx={{
+        "&.MuiContainer-root": {
+          paddingLeft: "0px",
+          paddingRight: "0px",
+        },
+      }}
+    >
+      <MaterialReactTable table={table} />
+    </Container>
     </>
   );
 };

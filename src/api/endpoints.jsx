@@ -303,5 +303,14 @@ const api = {
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
 
+
+  //-----------------------------Project Module Start----------------
+
+  // Project List / Grid
+  getProjectList: "project/get-project-list/",
+
+  // Project Detail
+  getProjectById: "project/get-project-by-id/",
+
 };
 export default api;

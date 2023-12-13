@@ -23,6 +23,7 @@ export default function CustomDialog({
   handleClose,
   open,
   modalTitle,
+  modalData,
   showModalButton,
   modalSize,
   redirectPath,
