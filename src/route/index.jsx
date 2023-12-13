@@ -222,7 +222,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/kpi-overview"
+            path="/kpi-overview/:sid"
             element={
               <DashboardLayout>
                 <KPIOverview />

@@ -8,8 +8,17 @@ export default function CustomMultilineTextField({
   labelColor,
   placeholder,
   required,
+  value,
+  onChange
 }) {
   const theme = useTheme();
+
+  const handleChange = (event) => {
+    // Forward the event to the parent component
+    if (onChange) {
+      onChange(event);
+    }
+  };
 
   return (
     <>
@@ -37,6 +46,8 @@ export default function CustomMultilineTextField({
           required
           fullWidth
           name={name}
+          value={value} 
+          onChange={handleChange}
         />
       </Grid>
     </>

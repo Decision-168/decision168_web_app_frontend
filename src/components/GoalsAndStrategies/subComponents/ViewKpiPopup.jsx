@@ -1,11 +1,12 @@
 import { Box, Grid, IconButton, Tooltip, useTheme } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Add,
   AssignmentTurnedInOutlined,
   BusinessCenter,
   CalendarMonth,
   Edit,
+  FolderOpenOutlined,
   Person,
   VisibilityOutlined,
 } from "@mui/icons-material";
@@ -25,7 +26,90 @@ import TitleWithActions from "./TitleWithActions";
 import { description1 } from "./style-functions";
 import CreateProject from "../../project/Dialogs/CreateProject";
 import { useNavigate } from "react-router";
-const ViewKpiPopup = ({}) => {
+import moment from "moment";
+import {
+  getStrategyDetail,
+  getViewHistoryDateStrategy,
+} from "../../../api/modules/goalkpiModule";
+import ProjectListOfDialog from "./ProjectListOfDialog";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+const ViewKpiPopup = ({ kpi_id }) => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const [kpiDetail, setkpiDetail] = useState([]);
+  const [kpiProDetails, setkpiProDetails] = useState([]);
+
+  const fetchAllKPIData = async () => {
+    try {
+      const response = await getStrategyDetail(kpi_id);
+      setkpiDetail(response.kpiRes);
+      setkpiProDetails(response.projectRes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllKPIData();
+  }, []);
+
+  //Check Button Visibility
+  const [displayBtns, setdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayTitleWithActions = async () => {
+      try {
+        if (kpiDetail.screated_by == user_id) {
+          setdisplayBtns("all");
+        } else if (
+          kpiDetail.get_goal_owner == user_id ||
+          kpiDetail.get_portfolio_createdby_id == user_id ||
+          kpiDetail.get_goal_manager == user_id
+        ) {
+          setdisplayBtns("some");
+        } else {
+          setdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setdisplayBtns("no");
+      }
+    };
+
+    DisplayTitleWithActions();
+  }, []);
+  //Check Button Visibility
+
+  const [allKPIHist, setallKPIHist] = useState([]);
+
+  useEffect(() => {
+    const fetchKPIAllHistoryData = async () => {
+      try {
+        const hresponse = await getViewHistoryDateStrategy(kpi_id);
+        setallKPIHist(hresponse.history_dates);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchKPIAllHistoryData();
+  }, []);
+
+  const formatDate = (timestamp) => {
+    // Check if the timestamp is valid
+    if (!timestamp) {
+      return "No Date";
+    }
+
+    // Assuming your timestamp is in milliseconds
+    const formattedDate = moment(timestamp).format("D MMM, YYYY");
+    return formattedDate;
+  };
+
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,9 +153,7 @@ const ViewKpiPopup = ({}) => {
   const handleAddProject = () => {
     dispatch(openModal("create-project"));
   };
-  const handleViewTasks = () => {
-    navigate("/project-tasks-list");
-  };
+
   return (
     <Box
       sx={{
@@ -85,7 +167,7 @@ const ViewKpiPopup = ({}) => {
     >
       <Grid container spacing={2}>
         <TitleWithActions
-          title={"KPI: ABC Strategy 3"}
+          title={`KPI: ${kpiDetail.sname}`}
           handleClick1={handleEditKPI}
           handleClick2={handleAddProject}
           handleDelete={handleDelete}
@@ -96,59 +178,50 @@ const ViewKpiPopup = ({}) => {
           btn2Text={"Add Project"}
           btn1Icon={<Edit />}
           btn2Icon={<Add />}
-          description={description1}
-          progressHeading={"Status : Done: 4 Total: 18"}
+          description={kpiDetail?.sdes ? kpiDetail?.sdes : "No Description!"}
+          progressHeading={`Status : Done: ${kpiDetail.kpi_total_pro_progress_done} Total: ${kpiDetail.kpi_total_pro_progress}`}
+          progressPercentage={kpiDetail.kpi_progress}
+          displayBtns={displayBtns}
         />
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created Date"}
-            info={"6 Nov, 2023"}
+            info={formatDate(kpiDetail?.screated_date)}
           />
         </Grid>
-
+        <Grid item xs={3} md={3} lg={3}>
+          <GridList
+            icon={
+              <FolderOpenOutlined sx={{ color: "#c7df19", fontSize: "14px" }} />
+            }
+            title={"Goal"}
+            info={kpiDetail?.get_goal_name}
+          />
+        </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
-            title={"Progress"}
-            info={"In Progress"}
+            title={"Department"}
+            info={kpiDetail?.get_dept_name}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={kpiDetail?.get_created_by_name}
           />
         </Grid>
-        {window.location.pathname !== "/kpi-overview" && (
-          <HiddenListOfDialog
+        {!window.location.pathname.startsWith("/kpi-overview/") && (
+          <ProjectListOfDialog
             heading={"Projects"}
             title={"PROJECT"}
-            value={"Dashboard Module"}
-          >
-            <Tooltip title="View All Tasks" placement="top">
-              <IconButton
-                aria-label="view"
-                size="small"
-                onClick={handleViewTasks}
-              >
-                <AssignmentTurnedInOutlined fontSize="small" />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="Preview Project" placement="top">
-              <IconButton
-                aria-label="view"
-                size="small"
-                onClick={handleProjectOpen}
-              >
-                <VisibilityOutlined fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </HiddenListOfDialog>
+            data={kpiProDetails}
+            handleOpen={handleProjectOpen}
+          />
         )}
       </Grid>
       <ConfirmationDialog value={"fileItKPI"} />
@@ -159,7 +232,7 @@ const ViewKpiPopup = ({}) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <EditKPIPopup />
+        <EditKPIPopup kpiData={kpiDetail} fetchAllKPIDataFun={fetchAllKPIData}/>
       </ReduxDialog>
       <ReduxDialog
         value="duplicate-kpi"
@@ -167,7 +240,7 @@ const ViewKpiPopup = ({}) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateKPI />
+        <DuplicateKPI kpiData={kpiDetail}/>
       </ReduxDialog>
       <ReduxDialog
         value="view-all-kpi-history"
@@ -175,7 +248,12 @@ const ViewKpiPopup = ({}) => {
         showModalButton={false}
         modalSize="md"
       >
-        <OverallHistory />
+        <OverallHistory
+          allHist={allKPIHist}
+          name={kpiDetail?.sname}
+          type={"kpi"}
+          id={kpiDetail?.sid}
+        />
       </ReduxDialog>
       <CustomDialog
         handleClose={handleProjectClose}

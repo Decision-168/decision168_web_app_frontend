@@ -9,14 +9,52 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { DisabledByDefaultRounded, PersonAddAlt1 } from "@mui/icons-material";
+import {
+  AddBox,
+  DisabledByDefaultRounded,
+  PersonAddAlt1,
+} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
-const UserList = ({ username, assignManagerFlag, pending }) => {
+const UserList = ({
+  assignManagerFlag,
+  pending,
+  data,
+  passhandleYesChange,
+}) => {
   const dispatch = useDispatch();
+  let username = "";
+  let pass_table_id = "";
+  let pass_member_id = "";
 
-  const handleRemoveUser = (name) => {
+  if (assignManagerFlag === "acceptedBy" || assignManagerFlag === "sentTo") {
+    username = data.first_name + " " + data.last_name;
+    pass_table_id = data.gmid;
+    pass_member_id = data.reg_id;
+  } else if (assignManagerFlag === "invited") {
+    username = data.sent_to;
+    pass_table_id = data.igm_id;
+  } else if (assignManagerFlag === "suggested") {
+    username = data.first_name + " " + data.last_name;
+    pass_table_id = data.suggest_id;
+  } else {
+    username = data.suggest_id;
+    pass_table_id = data.suggest_id;
+  }
+
+  const handleAddUser = (type, name, pass_id) => {
+    passhandleYesChange(type, pass_id,name);
+    dispatch(
+      openCnfModal({
+        modalName: "addMember",
+        title: "Are you sure?",
+        description: `You want to Add Member : ${name}`,
+      })
+    );
+  };
+  const handleRemoveUser = (type, name, pass_id) => {
+    passhandleYesChange(type, pass_id,name);
     dispatch(
       openCnfModal({
         modalName: "removeMember",
@@ -25,7 +63,8 @@ const UserList = ({ username, assignManagerFlag, pending }) => {
       })
     );
   };
-  const handleAssignManager = (name) => {
+  const handleAssignManager = (name, pass_id) => {
+    passhandleYesChange("assign_manager", pass_id,name);
     dispatch(
       openCnfModal({
         modalName: "assignManager",
@@ -44,23 +83,39 @@ const UserList = ({ username, assignManagerFlag, pending }) => {
               <IconButton
                 edge="end"
                 aria-label="add"
-                onClick={() => handleAssignManager(username)}
+                onClick={() => handleAssignManager(username, pass_member_id)}
               >
                 <PersonAddAlt1 sx={{ color: "#c7df19", fontSize: 20 }} />
               </IconButton>
             </Tooltip>
           )}
-          {!pending && (
-            <Tooltip arrow title="Remove Member" placement="left">
-              <IconButton
-                edge="end"
-                aria-label="remove"
-                onClick={() => handleRemoveUser(username)}
-              >
-                <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
-              </IconButton>
-            </Tooltip>
-          )}
+          {(assignManagerFlag === "acceptedBy" ||
+            assignManagerFlag === "sentTo" ||
+            assignManagerFlag === "invited") &&
+            !pending && (
+              <Tooltip arrow title="Remove Member" placement="left">
+                <IconButton
+                  edge="end"
+                  aria-label="remove"
+                  onClick={() => handleRemoveUser(assignManagerFlag, username, pass_table_id)}
+                >
+                  <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
+                </IconButton>
+              </Tooltip>
+            )}
+          {(assignManagerFlag === "suggested" ||
+            assignManagerFlag === "suggested-invite") &&
+            !pending && (
+              <Tooltip arrow title="Add Member" placement="left">
+                <IconButton
+                  edge="end"
+                  aria-label="add"
+                  onClick={() => handleAddUser(assignManagerFlag, username, pass_table_id)}
+                >
+                  <AddBox sx={{ color: "#c7df19", fontSize: 20 }} />
+                </IconButton>
+              </Tooltip>
+            )}
         </Box>
       }
     >

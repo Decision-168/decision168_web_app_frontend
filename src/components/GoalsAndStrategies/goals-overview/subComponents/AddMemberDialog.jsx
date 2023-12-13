@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CustomAutocomplete from "../../../common/CustomAutocomplete";
 import { useForm } from "react-hook-form";
 import {
@@ -15,17 +15,43 @@ import { RemoveCircleOutlineRounded } from "@mui/icons-material";
 import { useTheme } from "@emotion/react";
 import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import {
+  getAccepted_PortTM_GoalList,
+} from "../../../../api/modules/goalkpiModule";
 
-const AddMemberDialog = ({}) => {
+const AddMemberDialog = ({ id, type }) => {
   const {
     register,
     formState: { errors },
   } = useForm();
-  const assignee = [
-    { label: "Afrin Syed" },
-    { label: "Amin Syed" },
-    { label: "Don Mehmood" },
-  ];
+
+  const [assignee, setAssignee] = useState([]);
+
+  if (type === "goal") {
+    useEffect(() => {
+      const fetchAllHistoryData = async () => {
+        try {
+          const response = await getAccepted_PortTM_GoalList("2",id); //portfolio_id
+          if (response) {
+            setAssignee(response);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchAllHistoryData();
+    }, []);
+  }
+
+  // const assignee = [
+  //   { label: "Afrin Syed", member_reg_id: 1, sent_to: "abc" },
+  //   { label: "Amin Syed" , member_reg_id: 2, sent_to: "pqr" },
+  //   { label: "Don Mehmood", member_reg_id: 3, sent_to: "xyz" },
+  // ];
+
+console.log(assignee);
+
   const [inputFields, setInputFields] = useState([]);
   const theme = useTheme();
   const dispatch = useDispatch();

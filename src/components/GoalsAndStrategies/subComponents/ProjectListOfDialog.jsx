@@ -1,9 +1,15 @@
-import { Grid, IconButton, Typography } from "@mui/material";
+import { Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { memo } from "react";
 import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
-import { VisibilityOutlined } from "@mui/icons-material";
+import { AssignmentTurnedInOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-const HiddenListOfDialog = ({ heading, title, data, children, handleOpen }) => {
+const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
+  const navigate = useNavigate();
+  const handleViewTasks = () => {
+    navigate("/project-tasks-list");
+  };
+
   return (
     <>
       <Grid item xs={12} md={12} lg={12}>
@@ -46,21 +52,29 @@ const HiddenListOfDialog = ({ heading, title, data, children, handleOpen }) => {
                       display: "inline",
                     }}
                   >
-                    {item.sname}
+                    {item.pname}
                   </Typography>
                 </Typography>
               </Grid>
               <Grid xs={4} alignSelf={"center"}>
-                <LinearProgressWithLabel value={item.kpi_progress} />
+                <LinearProgressWithLabel value={item.progressRes} />
               </Grid>
               <Grid xs={1}>
-                <IconButton
-                  aria-label="view"
-                  size="small"
-                  onClick={() => handleOpen(item.sid, item.sname)}
-                >
-                  <VisibilityOutlined fontSize="small" />
-                </IconButton>
+                <Tooltip title="View All Tasks" placement="top">
+                  <IconButton
+                    aria-label="view"
+                    size="small"
+                    onClick={handleViewTasks}
+                  >
+                    <AssignmentTurnedInOutlined fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Preview Project" placement="top">
+                  <IconButton aria-label="view" size="small">
+                    <VisibilityOutlined fontSize="small" onClick={() => handleOpen()}/>
+                  </IconButton>
+                </Tooltip>
               </Grid>
             </Grid>
           );
@@ -70,4 +84,4 @@ const HiddenListOfDialog = ({ heading, title, data, children, handleOpen }) => {
   );
 };
 
-export default memo(HiddenListOfDialog);
+export default memo(ProjectListOfDialog);

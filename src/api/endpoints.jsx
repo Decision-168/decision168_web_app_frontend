@@ -87,8 +87,8 @@ const api = {
   // //Goalsub_progress_total
   // GoalSubtasksProgressTotal: "goal/get-goal-subtask-progress-total/",
 
-  //GoalProgress
-  GoalProgress: "goal/get-goal-progress/",
+  // //GoalProgress
+  // GoalProgress: "goal/get-goal-progress/",
 
   //getStrategiesCount
   StrategiesCount: "goal/get-strategies-count/",
@@ -108,11 +108,11 @@ const api = {
   //get_PDepartment
   PDepartment: "goal/get-department-name/",
 
-  //GoalTeamMember
-  GoalTeamMember: "goal/goal-team-member/",
+  // //GoalTeamMember
+  // GoalTeamMember: "goal/goal-team-member/",
 
-  //InvitedGoalMember
-  InvitedGoalMember: "goal/goal-invited-member/",
+  // //InvitedGoalMember
+  // InvitedGoalMember: "goal/goal-invited-member/",
 
   //GoalsAllStrategiesList
   GoalsAllStrategiesList: "goal/goal-all-strategies-list/",
@@ -144,8 +144,8 @@ const api = {
   // //Strategysub_progress_total
   // StrategySubtasksProgressTotal: "goal/get-strategy-subtask-progress-total/",
 
-  //StrategyProgress
-  StrategyProgress: "goal/get-strategy-progress/",
+  // //StrategyProgress
+  // StrategyProgress: "goal/get-strategy-progress/",
 
   //StrategyAllProjectsList
   StrategyAllProjectsList: "goal/get-strategy-all-projects-list/",
@@ -168,8 +168,8 @@ const api = {
   // //sub_progress_total
   // ProjectSubtasksProgressTotal: "goal/get-project-subtask-progress-total/",
 
-  //ProjectProgress
-  ProjectProgress: "goal/get-project-progress/",
+  // //ProjectProgress
+  // ProjectProgress: "goal/get-project-progress/",
 
   //CheckProjectTeamMember
   ProjectTeamMember: "goal/check-project-team-member/",
@@ -180,14 +180,17 @@ const api = {
   //check_notify_goal_suggested
   NotifyGoalSuggested: "goal/check-notify-goal-suggested/",
 
-  //SuggestedGoalMember
-  SuggestedGoalMember: "goal/goal-suggested-member/",
+  // //SuggestedGoalMember
+  // SuggestedGoalMember: "goal/goal-suggested-member/",
 
-  //SuggestedInviteGoalMember
-  SuggestedInviteGoalMember: "goal/goal-suggested-invite-member/",
+  // //SuggestedInviteGoalMember
+  // SuggestedInviteGoalMember: "goal/goal-suggested-invite-member/",
 
-  //check_gm
-  CheckGM: "goal/check-gm/",
+  // //check_gm
+  // CheckGM: "goal/check-gm/",
+
+  //getAccepted_PortTM_GoalList
+  Accepted_PortTM_GoalList: "goal/get-all-accepted-portfolio-team-member-goal-list/",
 
   //getProjectById
   ProjectById: "goal/get-project-by-id/",
@@ -272,6 +275,9 @@ const api = {
   
   //get country by country code
   country: "user/get-country/",
+
+  //getGoalCreateDD
+  GoalCreateDD: "goal/get-goal-create-dd/",
 
   //-----------------------------Porfolio Modlue Start----------------
 

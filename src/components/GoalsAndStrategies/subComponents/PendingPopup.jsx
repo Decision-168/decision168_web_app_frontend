@@ -7,21 +7,51 @@ import {
   Person,
 } from "@mui/icons-material";
 import GridList from "./GridList";
-import { getGoalOverviewRequest } from "../../../api/modules/goalkpiModule";
+import {
+  checkPortfolioMemberActive,
+  getGoalMemberDetailbyGID,
+  getGoalOverviewRequest,
+  getGoalRequest,
+} from "../../../api/modules/goalkpiModule";
 import moment from "moment";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const PendingPopup = ({ goalID, id }) => {
+const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
+  const [gmid, set_gmid] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkMemberToDisplay = async () => {
+      try {
+        const response = await checkPortfolioMemberActive(
+          "uzmakarjikar@gmail.com",
+          "2"
+        ); //useremail,portid
+        if (response) {
+          const response2 = await getGoalMemberDetailbyGID("1", gid); //userid
+          if (response2) {
+            set_gmid(response2.gmid);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkMemberToDisplay();
+  }, []);
+
   const gid = goalID;
-  const user_id = id;
-  
+
   const formatDate = (timestamp) => {
     // Check if the timestamp is valid
     if (!timestamp) {
       return "No Date";
     }
-  
+
     // Assuming your timestamp is in milliseconds
-    const formattedDate = moment(timestamp).format('D MMM, YYYY');
+    const formattedDate = moment(timestamp).format("D MMM, YYYY");
     return formattedDate;
   };
 
@@ -29,9 +59,9 @@ const PendingPopup = ({ goalID, id }) => {
   const [gdetail, setgdetail] = useState([]);
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    const fetchOverviewReqData = async () => {
       try {
-        const response = await getGoalOverviewRequest("1", gid);
+        const response = await getGoalOverviewRequest("1", gid); //userid
 
         setgdetail(response);
       } catch (error) {
@@ -39,9 +69,36 @@ const PendingPopup = ({ goalID, id }) => {
       }
     };
 
-    fetchAllData();
+    fetchOverviewReqData();
   }, []);
   //get goal detail
+
+  const handleRequestPerform = (flag) => {
+    const RequestPerformAction = async () => {
+      try {
+        const response = await getGoalRequest(gid, gmid, flag);
+        if (response?.user_status === "pages-404") {
+          return navigate("/portfolio-goals", { replace: true });
+        }
+        if (response?.user_status === "accepted") {
+          toast.success("Goal Request Successfully Accepted!");
+        } else {
+          toast.success("Read More Goal Request Sent!");
+        }
+        if (["/portfolio-goals"].includes(window.location.pathname)) {
+          handleClose();
+        } else {
+          navigate("/portfolio-goals");
+        }
+        fetchAllData();
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    };
+
+    RequestPerformAction();
+  };
 
   return (
     <Box
@@ -80,13 +137,19 @@ const PendingPopup = ({ goalID, id }) => {
           </Box>
         </Grid>
         <Grid item xs={6} md={6} lg={6} alignSelf={"center"}>
-          <Button variant="contained" size="small" sx={{ mr: 1 }}>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mr: 1 }}
+            onClick={() => handleRequestPerform("1")}
+          >
             Accept Request
           </Button>
           <Button
             variant="contained"
             size="small"
             sx={{ background: "#383838", color: "#fff" }}
+            onClick={() => handleRequestPerform("2")}
           >
             Request More Info
           </Button>

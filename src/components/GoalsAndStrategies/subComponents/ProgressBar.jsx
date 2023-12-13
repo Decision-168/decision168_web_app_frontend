@@ -2,7 +2,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { LinearProgressWithLabel } from "./style-functions";
 
-export default function ProgressBar() {
+export default function ProgressBar(percentage) {
+  //console.log(percentage);
   const [progress, setProgress] = React.useState(10);
 
   React.useEffect(() => {

@@ -16,11 +16,32 @@ import {
   a11yProps,
 } from "../../../subComponents/style-functions";
 
-const GoalTabSection = ({}) => {
+const KpiTabSection = ({ formValues, setFormValues }) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    let copy_detail_val = "everything";
+    let cust_strategy_val = "";
+    if(newValue === 1)
+    {
+      copy_detail_val = "custom";
+    }
+    setFormValues({
+      ...formValues,
+      copy_detail: copy_detail_val,
+      cust_strategy: cust_strategy_val,
+    });
+  };
+
+  const handleRadioChange = (event) => {
+    if (event && event.target && event.target.value) {
+      const newRadioValue = event.target.value;
+      setFormValues({
+        ...formValues,
+        cust_strategy: newRadioValue,
+      });
+    }
   };
 
   const info = [
@@ -126,7 +147,7 @@ const GoalTabSection = ({}) => {
             name="radio-buttons-group"
           >
             <FormControlLabel
-              value="importKpiProject"
+              value="1"
               control={<Radio />}
               label="Import KPI with Projects Only"
               sx={{
@@ -134,9 +155,10 @@ const GoalTabSection = ({}) => {
                 fontSize: 13,
                 fontWeight: "500",
               }}
+              onChange={(event) => handleRadioChange(event)}
             />
             <FormControlLabel
-              value="importAll"
+              value="2"
               control={<Radio />}
               label=" Import KPI with Projects, Planned Content, Task & Its Subtask"
               sx={{
@@ -144,6 +166,7 @@ const GoalTabSection = ({}) => {
                 fontSize: 13,
                 fontWeight: "500",
               }}
+              onChange={(event) => handleRadioChange(event)}
             />
           </RadioGroup>
         </FormControl>
@@ -155,4 +178,4 @@ const GoalTabSection = ({}) => {
     </Box>
   );
 };
-export default memo(GoalTabSection);
+export default memo(KpiTabSection);

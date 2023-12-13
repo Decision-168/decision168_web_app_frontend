@@ -26,17 +26,16 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 const ViewGoalsIndex = () => {
   //get goal lists
   const [AllGoalData, setAllGoalData] = useState([]);
+  const fetchAllData = async () => {
+    try {
+      const response = await getAllGoalList("1", "2"); //userid,portid
+      setAllGoalData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const response = await getAllGoalList("1", "2");
-        setAllGoalData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
+  useEffect(() => {  
     fetchAllData();
   }, []);
   //get goal lists
@@ -213,7 +212,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup goalID={goalID} id={id}/>
+        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllData} goalID={goalID} id={id}/>
       </CustomDialog>
     </Box>
   );

@@ -1,20 +1,25 @@
 import { RemoveCircleRounded } from "@mui/icons-material";
-import {
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-} from "@mui/material";
+import { Button, Grid, IconButton, TextField } from "@mui/material";
 import React, { Fragment, memo, useState } from "react";
 
-const InviteMembers = ({}) => {
+const InviteMembers = ({ formValues, setFormValues }) => {
   const [inputFields, setInputFields] = useState([]);
 
+  // const updateInviteEmails = (emails) => {
+  //   setFormValues({
+  //     ...formValues,
+  //     imemail: emails,
+  //   });
+  // };
 
   const handleInputChange = (event, index) => {
     const values = [...inputFields];
     values[index][event.target.name] = event.target.value;
     setInputFields(values);
+    setFormValues({
+      ...formValues,
+      imemail: values,
+    });
   };
 
   const handleAddClick = () => {
@@ -35,7 +40,7 @@ const InviteMembers = ({}) => {
           variant="contained"
           size="medium"
           onClick={handleAddClick}
-          sx={{width:'100%',fontSize:12}}
+          sx={{ width: "100%", fontSize: 12 }}
         >
           Invite More Member
         </Button>
@@ -54,9 +59,9 @@ const InviteMembers = ({}) => {
             />
           </Grid>
           <Grid item xs={3} alignSelf={"top"}>
-              <IconButton onClick={() => handleRemoveClick(index)}>
-                <RemoveCircleRounded />
-              </IconButton>
+            <IconButton onClick={() => handleRemoveClick(index)}>
+              <RemoveCircleRounded />
+            </IconButton>
           </Grid>
         </Fragment>
       ))}
