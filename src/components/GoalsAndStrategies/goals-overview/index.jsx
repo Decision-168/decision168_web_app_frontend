@@ -200,7 +200,7 @@ const GoalsOverview = () => {
           showModalButton={false}
           modalSize="sm"
         >
-          <DuplicateDialog />
+          <DuplicateDialog goalData = {getName} />
         </ReduxDialog>
       </Box>
     )

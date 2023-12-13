@@ -47,20 +47,29 @@ const DuplicateKPI = ({ kpiData }) => {
 
   const handleCopyKpi = async (event) => {
     event.preventDefault();
-    setLoading(true);
-    try {
-      const response = await CopyStrategy(formValues);
-      console.log(response.sid);
-      navigate(`/kpi-overview/${response.sid}`);
-      dispatch(closeModal("duplicate-kpi"));
-      // Handling success
-      toast.success(`${response.message}`);
-    } catch (error) {
-      // Handling error
-      toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
-    } finally {
-      setLoading(false);
+    if (formValues.sname.trim() !== "") {
+      setLoading(true);
+      try {
+        const response = await CopyStrategy(formValues);
+        //return navigate(`/kpi-overview/${response.sid}`, { replace: true });
+        // Handling success
+        toast.success(`${response.message}`);
+        navigate(`/kpi-overview/${response.sid}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+
+        dispatch(closeModal("duplicate-kpi"));
+      } catch (error) {
+        // Handling error
+        toast.error(`${error.response?.error}`);
+        console.error("Error updating:", error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      // Show an error because gname is empty
+      toast.error("KPI name cannot be empty");
     }
   };
 

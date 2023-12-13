@@ -375,7 +375,7 @@ const BasicAccordion = ({ goalID, pending }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <AddMemberDialog id={gid} type={"goal"} />
+        <AddMemberDialog id={gid} type={"goal"} refreshData={fetchAllGMembersData}/>
       </ReduxDialog>
     </Box>
   );

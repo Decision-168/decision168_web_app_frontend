@@ -264,7 +264,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateDialog />
+        <DuplicateDialog goalData = {gdetail} />
       </ReduxDialog>
       <ReduxDialog
         value="edit-goals"
