@@ -12,7 +12,7 @@ import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
 import DuplicateDialog from "../../subComponents/DuplicateDialog";
 
-const TaskOverviewCard = ({ styles }) => {
+const TaskOverviewCard = ({ styles, task }) => {
   const dispatch = useDispatch();
 
   const handleAddTasksDialog = () => {
@@ -54,8 +54,8 @@ const TaskOverviewCard = ({ styles }) => {
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <OverviewCardHeader title={"TASK: Task"} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
-        <OverviewCardBody styles={styles} />
+        <OverviewCardHeader title={`Task: ${task?.tname}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <OverviewCardBody styles={styles} task={task} />
       </Grid>
 
       <ReduxDialog value="add-task" modalTitle="Add Task" showModalButton={false} modalSize="md">

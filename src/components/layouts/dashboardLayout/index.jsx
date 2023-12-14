@@ -30,7 +30,6 @@ export default function DashboardLayout({ children }) {
         setDecodedToken(decoded); // Set the decoded token in state
       } catch (error) {
         console.error("Invalid token:", error);
-        // Handle the error or provide feedback to the user as needed
       }
     }
   }, [token]);
@@ -41,7 +40,9 @@ export default function DashboardLayout({ children }) {
     }
   }, [dispatch, decodedToken?.id]);
 
-  // console.log("userInfo", user);
+  useEffect(() => {
+    dispatch(getUserDetailsAsync(decodedToken?.id));
+  }, [dispatch, decodedToken?.id]);
 
   useEffect(() => {
     const alerts = async () => {
@@ -49,10 +50,7 @@ export default function DashboardLayout({ children }) {
         const userId = user?.reg_id;
         dispatch(getAlertNotificationsAsync(userId));
       } catch (error) {
-        console.error(error);
-        // } finally {
-        //   setLoading(false);
-        // }
+        console.error(error)
       }
     };
 

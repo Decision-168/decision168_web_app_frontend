@@ -23,6 +23,8 @@ export default function SelectDepartment({
       ...formValues,
       [fieldName]: value.portfolio_dept_id,
     });
+    // console.log(value);
+    // setSelectedDepartment(value.depId);
   };
 
   return (

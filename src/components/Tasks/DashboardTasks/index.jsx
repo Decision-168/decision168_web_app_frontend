@@ -1,18 +1,23 @@
 import React from "react";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
 import { memo, useState, useCallback } from "react";
-import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
+import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../redux/action/modalSlice";
-import CustomSearchField from "../common/CustomSearchField";
-import ReduxDialog from "../common/ReduxDialog";
-import CreateEditTaskForm from "./createEditTask/CreateEditTaskForm";
-import CustomFilter from "../common/CustomFilter";
-import PortfolioListSection from "./subComponents/PortfolioListSection";
-import PortfolioGridSection from "./subComponents/PortfolioGridSection";
+import { openModal } from "../../../redux/action/modalSlice";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import CustomSearchField from "../../common/CustomSearchField";
+import ListSection from "../subComponents/ListSection";
+import GridSection from "../subComponents/GridSection";
+import ReduxDialog from "../../common/ReduxDialog";
+import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
+import CustomFilter from "../../common/CustomFilter";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
+import Loader from "../../common/Loader";
 
 const filterOption = [
   {
@@ -45,10 +50,30 @@ const filterOption = [
   },
 ];
 
-const PortfolioTasks = () => {
+const DashboardTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await getAlltasksAndSubtasks(regId);
+      setRows(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false)
+    }
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, [regId]);
 
 
   const handleChange = (event, newAlignment) => {
@@ -71,9 +96,7 @@ const PortfolioTasks = () => {
               justifyContent: "space-between",
               flexDirection: "row",
             }}>
-
             <BasicBreadcrumbs currentPage="Tasks" />
-
             <ToggleButtonGroup
               color="primary"
               value={alignment}
@@ -116,6 +139,10 @@ const PortfolioTasks = () => {
               flexDirection: "row",
               padding: "5px",
             }}>
+            {/* <IconButton>
+              <FilterAltIcon />
+            </IconButton> */}
+
             <CustomFilter
               value={value}
               handleChange={handleChangeRadio}
@@ -138,11 +165,12 @@ const PortfolioTasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <PortfolioListSection /> : <PortfolioGridSection />}
+          {alignment === "list" ? <ListSection rows={rows} setRows={setRows} fetchData={fetchData} loading={loading} /> : <GridSection rows={rows} loading={loading}/>}
         </Grid>
       </Grid>
+
     </Box>
   );
 };
 
-export default memo(PortfolioTasks);
+export default memo(DashboardTasks);

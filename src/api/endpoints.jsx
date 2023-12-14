@@ -1,4 +1,9 @@
 const api = {
+
+
+  //-----------------------------User Module Start----------------
+
+
   //user register api
   userRegister: "user/register",
 
@@ -13,6 +18,8 @@ const api = {
 
   //user change-password api
   userChangePass: "user/change-password/",
+
+
 
   //-----------------------------Dashboard Module Start----------------
 
@@ -324,9 +331,46 @@ const api = {
   updatePortfolio: "portfolio/update-portfolio/",
 
   //get portfolio count by portfolioId
-  getPortfolioCount:"portfolio/get-portfolio-count/",
+  getPortfolioCount: "portfolio/get-portfolio-count/",
 
-    //-----------------------------File Cabinet Module Start----------------
+
+
+  //-----------------------------Task Modlue Start----------------
+
+  //(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
+  getAlltasksAndSubtasks: "task/all-tasks-subtasks/",
+
+  //Task and subtask Editable fields by portfolio id
+  editTaskAndSubtask: "task/table-editable/",
+
+  // Change task Status by user id
+  changeTaskStatus: "task/change-status/",
+
+  // Change task Status by user id
+  changeSubTaskStatus: "subtask/change-status/",
+
+  // Change task Status on checkbox by user id
+  changeTaskStatusCheckox: "task/checkbox-change-status/",
+
+  // Change Subtask Status on checkbox by user id
+  changeSubTaskStatusCheckox: "subtask/checkbox-change-status/",
+
+  //get Task Details by task_id
+  getTaskDetails: "task/task-detail/",
+
+  //get SubTask Details by subtask_id
+  getSubTaskDetails: "subtask/subtask-detail/",
+
+  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (LIST VIEW)
+  getPortfolioTasksSubtasksListView: "task/portfolio-tasks-subtasks-list-view/",
+
+  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (GRID VIEW)
+  getPortfolioTasksSubtasksGridView: "task/portfolio-tasks-subtasks-grid-view/",
+
+  // Insert Task by user id and portfolio id
+  insertTask: "task/insert-task/",
+
+  //-----------------------------File Cabinet Module Start----------------
 
   // Get All portfolio departments wise modules
   fileCabinetTreeData: "file-cabinet/data/",
@@ -382,6 +426,8 @@ const api = {
   // Reopen Subtask
   fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
 
+
+
   //-----------------------------Archive Module Start----------------
 
   // Archive Portfolio
@@ -434,6 +480,7 @@ const api = {
 
   // UnArchive Subtask
   unarchiveSubtask: "archive/reopen/subtask/",
+
 
   //-----------------------------Trash Module Start----------------
 

@@ -9,6 +9,8 @@ import { selectUserDetails } from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import CardAvatar from "../../common/CardAvatar";
 
+
+
 export default function DashboardProfileCard() {
   const user = useSelector(selectUserDetails);
   const fullName = `${user?.first_name} ${user?.middle_name} ${user?.last_name} `;
@@ -47,11 +49,21 @@ export default function DashboardProfileCard() {
 
           <Grid container>
             <Grid item xs={12} sm={6} p={2} textAlign="left">
-              <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" onClick={handleOpenDailog}>
+              <Button
+                variant="contained"
+                endIcon={<ArrowForwardIcon />}
+                size="small"
+                onClick={handleOpenDailog}>
                 View Profile
               </Button>
 
-              <CustomDialog handleClose={handleClose} open={open} modalTitle="Profile" redirectPath={"/profile"} showModalButton={true} modalSize="md">
+              <CustomDialog
+                handleClose={handleClose}
+                open={open}
+                modalTitle="Profile"
+                redirectPath={"/profile"}
+                showModalButton={true}
+                modalSize="md">
                 <ViewProfileDialogContent />
               </CustomDialog>
             </Grid>

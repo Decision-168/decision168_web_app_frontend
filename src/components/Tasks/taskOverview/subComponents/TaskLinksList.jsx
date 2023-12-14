@@ -24,7 +24,7 @@ const TaskLinksList = ({ item }) => {
         </Box>
       </Grid>
       <Grid item xs={6} lg={6} alignSelf={"center"}>
-        <Typography sx={{ fontSize: 14, color: "#343a40", textAlign: "center" }}>{item.linkComment}</Typography>
+        <Typography sx={{ fontSize: 14, color: "#343a40", textAlign: "center" }}>{item.comment}</Typography>
       </Grid>
     </Grid>
   );

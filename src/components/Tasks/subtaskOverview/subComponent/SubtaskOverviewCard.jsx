@@ -11,7 +11,7 @@ import SubtakOverviewCardBody from "./SubtakOverviewCardBody";
 import DuplicateDialog from "../../subComponents/DuplicateDialog";
 import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 
-const SubtaskOverviewCard = ({ styles }) => {
+const SubtaskOverviewCard = ({ styles, subtask }) => {
   const dispatch = useDispatch();
 
   const handleEditSubTasksDialog = () => {
@@ -45,8 +45,8 @@ const SubtaskOverviewCard = ({ styles }) => {
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <SubTaskOverviewCardHeader title={"SUBTASK: Subtaks"} btn1Text={"Edit Task"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
-        <SubtakOverviewCardBody styles={styles} />
+        <SubTaskOverviewCardHeader title={`SubTask: ${subtask?.stname}`}  btn1Text={"Edit Task"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <SubtakOverviewCardBody styles={styles} subtask={subtask}/>
       </Grid>
 
       <ReduxDialog value="edit-subtask" modalTitle="Edit Subtask" showModalButton={false} modalSize="md">
