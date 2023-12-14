@@ -12,12 +12,9 @@ export default function CustomMultilineTextField({
   onChange
 }) {
   const theme = useTheme();
-
-  const handleChange = (event) => {
-    // Forward the event to the parent component
-    if (onChange) {
-      onChange(event);
-    }
+  const placeholderStyles = {
+    fontSize: "14px",
+    color: theme.palette.secondary.dark,
   };
 
   return (
@@ -32,22 +29,27 @@ export default function CustomMultilineTextField({
       </Grid>
       <Grid item xs={10}>
         <TextField
+          id="outlined-multiline-static"
           sx={{
-            "& .MuiOutlinedInput-input": {
-              padding: "0px !important",
+            "& .MuiOutlinedInput-root": {
+              padding: "6px 0",
             },
           }}
-          id="outlined-multiline-static"
           multiline
-          rows={3}
+          rows={4}
           defaultValue=""
           placeholder={placeholder}
           margin="dense"
           required
           fullWidth
           name={name}
-          value={value} 
-          onChange={handleChange}
+          inputProps={{
+            sx: {
+              "&::placeholder": placeholderStyles,
+            },
+          }}
+          value={value}
+          onChange={onChange}
         />
       </Grid>
     </>

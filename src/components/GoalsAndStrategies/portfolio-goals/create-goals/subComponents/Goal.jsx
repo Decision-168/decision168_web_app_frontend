@@ -49,8 +49,11 @@ const Goal = ({ individual, onUpdate }) => {
 
   useEffect(() => {
     // Callback to parent component with updated form values
+    if(!individual){
     onUpdate(formValues);
-  }, [formValues, onUpdate]);
+    }
+  
+  }, [formValues])
 
   useEffect(() => {
     const fetchAllHistoryData = async () => {
@@ -101,113 +104,212 @@ const Goal = ({ individual, onUpdate }) => {
     });
   };
 
-  const CommonForm = ({}) => {
-    return (
-      <Grid container spacing={2} px={individual && 2}>
-        <CustomLabelTextField
-          label="Objective/Goal"
-          name="gname"
-          required={true}
-          placeholder="Enter Objective/Goal..."
-          value={formValues.gname}
-          onChange={handleChange}
-        />
-        <SelectDepartment
-          required={true}
-          departments={departments}
-          formValues={formValues}
-          setFormValues={setFormValues}
-        />
+  // const CommonForm = ({}) => {
+  //   return (
 
-        <SelectGoalManager
-          required={false}
-          managers={assignee}
-          formValues={formValues}
-          setFormValues={setFormValues}
-        />
-        <Grid item xs={2} alignSelf={"center"}>
-          <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
-        </Grid>
-        <Grid item xs={7}>
-          <Autocomplete
-            multiple
-            value={selectedMembers}
-            fullWidth
-            options={availableMembers}
-            getOptionLabel={(option) => option.name}
-            getOptionSelected={(option, value) => option.id === value.id}
-            onChange={(event, newMembers) => {
-              setSelectedMembers(newMembers);
-              const members = newMembers?.map((member) => member.id);
-              setAvailableMembers(
-                memberData.filter((member) => !newMembers.includes(member))
-              );
-              setFormValues({
-                ...formValues,
-                team_member: members,
-              });
-            }}
-            inputValue={memberInputValue}
-            onInputChange={(event, newMemberInputValue) => {
-              setMemberInputValue(newMemberInputValue);
-            }}
-            renderInput={(params) => {
-              return <TextField {...params} />;
-            }}
-          />
-        </Grid>
-        <InviteMembers formValues={formValues} setFormValues={setFormValues} />
-        <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
-          <Grid item xs={2}>
-            <InputLabel sx={{ fontSize: "14px" }}>
-              Duration
-              <span style={{ color: theme.palette.error.main }}> *</span>
-            </InputLabel>
-          </Grid>
-          <Grid item xs={10} container spacing={1}>
-            <Grid item xs={5}>
-              <CustomDatePicker
-                label=""
-                value={formValues.gstart_date}
-                onChange={handleStartDateChange}
+  //   );
+  // };
+
+  return (
+    <>
+      {individual ? (
+        <DialogContent dividers>
+          <Grid container spacing={2} px={individual && 2}>
+            <CustomLabelTextField
+              label="Objective/Goal"
+              name="gname"
+              required={true}
+              placeholder="Enter Objective/Goal..."
+              value={formValues.gname}
+              onChange={handleChange("gname")}
+            />
+            <SelectDepartment
+              required={true}
+              departments={departments}
+              formValues={formValues}
+              setFormValues={setFormValues}
+            />
+
+            <SelectGoalManager
+              required={false}
+              managers={assignee}
+              formValues={formValues}
+              setFormValues={setFormValues}
+            />
+            <Grid item xs={2} alignSelf={"center"}>
+              <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
+            </Grid>
+            <Grid item xs={7}>
+              <Autocomplete
+                multiple
+                value={selectedMembers}
+                fullWidth
+                options={availableMembers}
+                getOptionLabel={(option) => option.name}
+                getOptionSelected={(option, value) => option.id === value.id}
+                onChange={(event, newMembers) => {
+                  setSelectedMembers(newMembers);
+                  const members = newMembers?.map((member) => member.id);
+                  setAvailableMembers(
+                    memberData.filter((member) => !newMembers.includes(member))
+                  );
+                  setFormValues({
+                    ...formValues,
+                    team_member: members,
+                  });
+                }}
+                inputValue={memberInputValue}
+                onInputChange={(event, newMemberInputValue) => {
+                  setMemberInputValue(newMemberInputValue);
+                }}
+                renderInput={(params) => {
+                  return <TextField {...params} />;
+                }}
               />
             </Grid>
-            <Grid item xs={5}>
-              <CustomDatePicker
-                label=""
-                value={formValues.gend_date}
-                onChange={handleEndDateChange}
-              />
+            <InviteMembers
+              formValues={formValues}
+              setFormValues={setFormValues}
+            />
+            <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
+              <Grid item xs={2}>
+                <InputLabel sx={{ fontSize: "14px" }}>
+                  Duration
+                  <span style={{ color: theme.palette.error.main }}> *</span>
+                </InputLabel>
+              </Grid>
+              <Grid item xs={10} container spacing={1}>
+                <Grid item xs={5}>
+                  <CustomDatePicker
+                    label=""
+                    value={formValues.gstart_date}
+                    onChange={handleStartDateChange}
+                  />
+                </Grid>
+                <Grid item xs={5}>
+                  <CustomDatePicker
+                    label=""
+                    value={formValues.gend_date}
+                    onChange={handleEndDateChange}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-        {/* <Duration
+            {/* <Duration
           label="Duration "
           labelColor=""
           individual={individual}
           required={true}
           onDateChange={handleDateChange}
         /> */}
-        <CustomMultilineTextField
-          label="Description"
-          name="gdes"
-          required={false}
-          placeholder="Enter Description..."
-          value={formValues.gdes}
-          onChange={handleChange}
-        />
-      </Grid>
-    );
-  };
-
-  return (
-    <>
-      {individual ? (
-        <DialogContent dividers>
-          <CommonForm />
+            <CustomMultilineTextField
+              label="Description"
+              name="gdes"
+              required={false}
+              placeholder="Enter Description..."
+              value={formValues.gdes}
+              onChange={handleChange("gdes")}
+            />
+          </Grid>
         </DialogContent>
       ) : (
-        <CommonForm />
+        <Grid container spacing={2} px={individual && 2}>
+          <CustomLabelTextField
+            label="Objective/Goal"
+            name="gname"
+            required={true}
+            placeholder="Enter Objective/Goal..."
+            value={formValues.gname}
+            onChange={handleChange("gname")}
+          />
+          <SelectDepartment
+            required={true}
+            departments={departments}
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
+
+          <SelectGoalManager
+            required={false}
+            managers={assignee}
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
+          <Grid item xs={2} alignSelf={"center"}>
+            <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
+          </Grid>
+          <Grid item xs={7}>
+            <Autocomplete
+              multiple
+              value={selectedMembers}
+              fullWidth
+              options={availableMembers}
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) => option.id === value.id}
+              onChange={(event, newMembers) => {
+                setSelectedMembers(newMembers);
+                const members = newMembers?.map((member) => member.id);
+                setAvailableMembers(
+                  memberData.filter((member) => !newMembers.includes(member))
+                );
+                setFormValues({
+                  ...formValues,
+                  team_member: members,
+                });
+              }}
+              inputValue={memberInputValue}
+              onInputChange={(event, newMemberInputValue) => {
+                setMemberInputValue(newMemberInputValue);
+              }}
+              renderInput={(params) => {
+                return <TextField {...params} />;
+              }}
+            />
+          </Grid>
+          <InviteMembers
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
+          <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
+            <Grid item xs={2}>
+              <InputLabel sx={{ fontSize: "14px" }}>
+                Duration
+                <span style={{ color: theme.palette.error.main }}> *</span>
+              </InputLabel>
+            </Grid>
+            <Grid item xs={10} container spacing={1}>
+              <Grid item xs={5}>
+                <CustomDatePicker
+                  label=""
+                  value={formValues.gstart_date}
+                  onChange={handleStartDateChange}
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <CustomDatePicker
+                  label=""
+                  value={formValues.gend_date}
+                  onChange={handleEndDateChange}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          {/* <Duration
+          label="Duration "
+          labelColor=""
+          individual={individual}
+          required={true}
+          onDateChange={handleDateChange}
+        /> */}
+          <CustomMultilineTextField
+            label="Description"
+            name="gdes"
+            required={false}
+            placeholder="Enter Description..."
+            value={formValues.gdes}
+            onChange={handleChange("gdes")}
+          />
+        </Grid>
       )}
 
       {individual && (
