@@ -7,6 +7,8 @@ import ArchiveKPIs from "./subComponents/ReactTable/ArchiveKPIs";
 import ArchiveProjects from "./subComponents/ReactTable/ArchiveProjects";
 import ArchiveTaskAndSubtask from "./subComponents/ReactTable/ArchiveTaskAndSubtask";
 import CustomFilter from "../common/CustomFilter";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../redux/action/userSlice";
  const filterOption = [
    {
      value: "all",
@@ -34,6 +36,10 @@ import CustomFilter from "../common/CustomFilter";
   //  },
  ];
 const index = () => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+
   const [value, setValue] = useState("all");
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -59,12 +65,12 @@ const index = () => {
           </Box>
         </Grid>
         <Grid item xs={12} lg={12}>
-          {value === "all" && <ArchiveAll />}
-          {value === "goals" && <ArchiveGoals value={value} />}
-          {value === "kpis" && <ArchiveKPIs value={value} />}
-          {value === "projects" && <ArchiveProjects value={value} />}
+          {value === "all" && <ArchiveAll regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "goals" && <ArchiveGoals value={value} regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "kpis" && <ArchiveKPIs value={value} regId={userID} portfolioId={storedPortfolioId} />}
+          {value === "projects" && <ArchiveProjects value={value} regId={userID} portfolioId={storedPortfolioId} />}
           {value === "tasks & subtasks" && (
-            <ArchiveTaskAndSubtask value={value} />
+            <ArchiveTaskAndSubtask value={value} regId={userID} portfolioId={storedPortfolioId} />
           )}
           {/* {value === "content" && <ArchiveContent value={value} />} */}
         </Grid>

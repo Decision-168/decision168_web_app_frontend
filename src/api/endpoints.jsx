@@ -1,4 +1,9 @@
 const api = {
+
+
+  //-----------------------------User Module Start----------------
+
+
   //user register api
   userRegister: "user/register",
 
@@ -14,7 +19,9 @@ const api = {
   //user change-password api
   userChangePass: "user/change-password/",
 
-  //-----------------------------Dashboard Modlue Start----------------
+
+
+  //-----------------------------Dashboard Module Start----------------
 
   //user details by user id
   userDetails: "user/get-user/",
@@ -48,6 +55,8 @@ const api = {
 
   //get country by country code
   country: "user/get-country/",
+
+
 
   //-----------------------------Porfolio Modlue Start----------------
 
@@ -96,6 +105,8 @@ const api = {
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
 
+
+
   //-----------------------------Task Modlue Start----------------
 
   //(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
@@ -128,9 +139,218 @@ const api = {
   //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (GRID VIEW)
   getPortfolioTasksSubtasksGridView: "task/portfolio-tasks-subtasks-grid-view/",
 
-
-
   // Insert Task by user id and portfolio id
   insertTask: "task/insert-task/",
+
+  //-----------------------------File Cabinet Module Start----------------
+
+  // Get All portfolio departments wise modules
+  fileCabinetTreeData: "file-cabinet/data/",
+
+  // Get Goal Data
+  fileCabinetGoalData: "file-cabinet/goal-detail/",
+
+  // Get Department Data
+  fileCabinetDepartmentData: "file-cabinet/department-detail/",
+
+  // Get User Data
+  fileCabinetUserData: "file-cabinet/get-student-detail/",
+
+  // Get Goals KPI Data
+  fileCabinetGoalKPIData: "file-cabinet/goal-kpi-detail/",
+
+  // Get KPI Data
+  fileCabinetKPIData: "file-cabinet/kpi-detail/",
+
+  // Get KPI Project Data
+  fileCabinetKpiProjectData: "file-cabinet/kpi-project-detail/",
+
+  // Get Project Data
+  fileCabinetProjectData: "file-cabinet/project-detail/",
+
+  // Get Task Data
+  fileCabinetTaskData: "file-cabinet/task-detail/",
+
+  // Get Task Subtask Data
+  fileCabinetTaskSubtaskData: "file-cabinet/task-subtask-detail/",
+
+  // Get Subtask Data
+  fileCabinetSubtaskData: "file-cabinet/subtask-detail/",
+
+  // Get Portfolio Data
+  fileCabinetPortfolioData: "file-cabinet/portfolio-detail/",
+
+  // Get Recent files Data
+  fileCabinetRecentFilesData: "file-cabinet/recent-files/",
+
+  // Reopen Goal
+  fileCabinetReopenGoal: "file-cabinet/reopen/goal/",
+
+  // Reopen KPI
+  fileCabinetReopenKpi: "file-cabinet/reopen/kpi/",
+
+  // Reopen Project
+  fileCabinetReopenProject: "file-cabinet/reopen/project/",
+
+  // Reopen Task
+  fileCabinetReopenTask: "file-cabinet/reopen/task/",
+
+  // Reopen Subtask
+  fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
+
+
+
+  //-----------------------------Archive Module Start----------------
+
+  // Archive Portfolio
+  archivePortfolio: "archive/portfolio/",
+
+  // Archive Goal
+  archiveGoal: "archive/goal/",
+
+  // Archive KPI
+  archiveKpi: "archive/kpi/",
+
+  // Archive Project
+  archiveProject: "archive/project/",
+
+  // Archive Task
+  archiveTask: "archive/task/",
+
+  // Archive Subtask
+  archiveSubtask: "archive/subtask/",
+
+  // All Archive Data
+  allArchiveData: "archive/all-data/",
+
+  // Goal Archive Data
+  goalArchiveData: "archive/goal-data/",
+
+  // Kpi Archive Data
+  kpiArchiveData: "archive/kpi-data/",
+
+  // Project Archive Data
+  projectArchiveData: "archive/project-data/",
+
+  // Task Archive Data
+  taskArchiveData: "archive/task-data/",
+
+  // UnArchive Portfolio
+  unarchivePortfolio: "archive/reopen/portfolio/",
+
+  // UnArchive Goal
+  unarchiveGoal: "archive/reopen/goal/",
+
+  // UnArchive KPI
+  unarchiveKpi: "archive/reopen/kpi/",
+
+  // UnArchive Project
+  unarchiveProject: "archive/reopen/project/",
+
+  // UnArchive Task
+  unarchiveTask: "archive/reopen/task/",
+
+  // UnArchive Subtask
+  unarchiveSubtask: "archive/reopen/subtask/",
+
+
+  //-----------------------------Trash Module Start----------------
+
+  // Delete Portfolio
+  deletePortfolio: "trash/delete/portfolio/",
+
+  // Delete Goal
+  deleteGoal: "trash/delete/goal/",
+
+  // Delete KPI
+  deleteKpi: "trash/delete/kpi/",
+
+  // Delete Project
+  deleteProject: "trash/delete/project/",
+
+  // Delete Task
+  deleteTask: "trash/delete/task/",
+
+  // Delete Subtask
+  deleteSubtask: "trash/delete/subtask/",
+
+  // Delete Project File
+  deleteProjectFile: "trash/delete/project-file/",
+
+  // Delete Task File
+  deleteTaskFile: "trash/delete/task-file/",
+
+  // Delete Subtask File
+  deleteSubtaskFile: "trash/delete/subtask-file/",
+
+  // All Delete Data
+  allDeleteData: "trash/all-data/",
+
+  // Goal Delete Data
+  goalDeleteData: "trash/goal-data/",
+
+  // Kpi Delete Data
+  kpiDeleteData: "trash/kpi-data/",
+
+  // Project Delete Data
+  projectDeleteData: "trash/project-data/",
+
+  // Task Delete Data
+  taskDeleteData: "trash/task-data/",
+
+  // Files Delete Data
+  filesDeleteData: "trash/files-data/",
+
+  // Retrieve Portfolio
+  retrievePortfolio: "trash/retrieve/portfolio/",
+
+  // Retrieve Goal
+  retrieveGoal: "trash/retrieve/goal/",
+
+  // Retrieve KPI
+  retrieveKpi: "trash/retrieve/kpi/",
+
+  // Retrieve Project
+  retrieveProject: "trash/retrieve/project/",
+
+  // Retrieve Task
+  retrieveTask: "trash/retrieve/task/",
+
+  // Retrieve Subtask
+  retrieveSubtask: "trash/retrieve/subtask/",
+
+  // Retrieve Project File
+  retrieveProjectFile: "trash/retrieve/project-file/",
+
+  // Retrieve Task File
+  retrieveTaskFile: "trash/retrieve/task-file/",
+
+  // Retrieve Subtask File
+  retrieveSubtaskFile: "trash/retrieve/subtask-file/",
+
+  // Delete forever Goal
+  deleteForeverGoal: "trash/delete-forever/goal/",
+
+  // Delete forever KPI
+  deleteForeverKpi: "trash/delete-forever/kpi/",
+
+  // Delete forever Project
+  deleteForeverProject: "trash/delete-forever/project/",
+
+  // Delete forever Task
+  deleteForeverTask: "trash/delete-forever/task/",
+
+  // Delete forever Subtask
+  deleteForeverSubtask: "trash/delete-forever/subtask/",
+
+  // Delete forever Project File
+  deleteForeverProjectFile: "trash/delete-forever/project-file/",
+
+  // Delete forever Task File
+  deleteForeverTaskFile: "trash/delete-forever/task-file/",
+
+  // Delete forever Subtask File
+  deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
+
 };
 export default api;

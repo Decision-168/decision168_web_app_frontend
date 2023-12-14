@@ -1,55 +1,58 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { getkpiArchiveData, patchUnArchiveKpi } from "../../../../api/modules/ArchiveModule";
+import { toast } from "react-toastify";
 
-const ArchiveKPIs = ({ value }) => {
+const ArchiveKPIs = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  const handleReopen = () => {
+
+  const [archiveData, setArchiveData] = useState([]);
+  const [archiveId, setArchiveId] = useState(null);
+  
+  const fetchArchiveData = async () => {
+    try {
+      const response = await getkpiArchiveData(regId,portfolioId);
+      setArchiveData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArchiveData();
+  }, [regId]);
+  
+  const handleReopen = (type, id) => {
+    setArchiveId(id);
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
         title: "Are you sure?",
-        description: `You want to Reopen this ${value.toUpperCase()}`,
+        description: `You want to Reopen this ${type}`,
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 1",
-        kpi_date: "2023-04-30",
-      },
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 2",
-        kpi_date: "2023-04-30",
-      },
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 3",
-        kpi_date: "2023-04-30",
-      },
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 4",
-        kpi_date: "2023-04-30",
-      },
-      {
-        kpi_portfolio: "Uzma K",
-        kpi_kpi: "kpi 5",
-        kpi_date: "2023-04-30",
-      },
-    ],
-    []
-  );
+
+  const handleYes = async () => {
+    try {
+      const response = await patchUnArchiveKpi(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -84,7 +87,7 @@ const ArchiveKPIs = ({ value }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen()}
+              onClick={() => handleReopen(row.original.kpi_type,row.original.table_id)}
             >
               Reopen
             </Button>
@@ -97,7 +100,7 @@ const ArchiveKPIs = ({ value }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -143,8 +146,19 @@ const ArchiveKPIs = ({ value }) => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"reopenModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"reopenModule"} handleYes={handleYes} />
     </>
   );
 };
