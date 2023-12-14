@@ -1,6 +1,7 @@
-import { Avatar, Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
-import { KeyboardDoubleArrowRight } from "@mui/icons-material";
+import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import React, { memo, useEffect, useState } from "react";
+import { Delete, KeyboardDoubleArrowRight } from "@mui/icons-material";
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
@@ -12,13 +13,182 @@ import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-const TaskPopup = ({ nodes }) => {
+import { getPortfolioData, getProjectData, getTaskData, getTaskSubtaskData, getUserData } from "../../../api/modules/FileCabinetModule";
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { useDispatch } from "react-redux";
+import ConfirmationDialog from "../../common/ConfirmationDialog";
+import { toast } from "react-toastify";
+import { patchArchiveTask } from "../../../api/modules/ArchiveModule";
+import { patchDeleteTask } from "../../../api/modules/TrashModule";
+const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+  const [taskData, setTaskData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [subtaskData, setSubtaskData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
+  const [assigneeData, setAssigneeData] = useState([]);
+  const [portfolioData, setPortfolioData] = useState([]);
+
+  const [module, setModule] = useState(null);
+  const dispatch = useDispatch();
+
+    // Task Data ----------------------------------------------
+    const fetchTaskData = async () => {
+      try {
+        const response = await getTaskData(nodes?.table_id);
+        setTaskData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTaskData();
+    }, [nodes]);
+  
+    const taskStartDate = new Date(taskData.tcreated_date);
+    const formattedTaskStartDate = `${taskStartDate.getDate()} ${taskStartDate.toLocaleString('default', { month: 'short' })}, ${taskStartDate.getFullYear()}`;
+    const taskDueDate = new Date(taskData.tdue_date);
+    const formattedTaskDueDate = `${taskDueDate.getDate()} ${taskDueDate.toLocaleString('default', { month: 'short' })}, ${taskDueDate.getFullYear()}`;
+    const links = taskData?.tlink;
+    const link_comments = taskData?.tlink_comment;
+    const taskCode = taskData?.tcode;
+    const taskNote = taskData?.tnote;
+    const taskFiles = taskData?.tfile;
+    const taskStatus = taskData?.tstatus;
+    const taskPriority = taskData?.tpriority;
+
+    // Subtask Data ----------------------------------------------
+    const fetchTaskSubtaskData = async () => {
+      try {
+        const response = await getTaskSubtaskData(regId,taskData?.tid,taskData?.dept_id,portfolioId);
+        setSubtaskData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTaskSubtaskData();
+    }, [taskData]);
+
+    // Project Data ----------------------------------------------
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectData(taskData?.tproject_assign);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, [taskData]);
+  
+    // Creater (User) Data ----------------------------------------------
+    const fetchUserData = async () => {
+      try {
+        const response = await getUserData(taskData?.tcreated_by);
+        setUserData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchUserData();
+    }, [taskData]);
+  
+    const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+    // Assignee (User) Data ----------------------------------------------
+    const fetchAssigneeData = async () => {
+      try {
+        const response = await getUserData(taskData?.tassignee);
+        setAssigneeData(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchAssigneeData();
+    }, [taskData]);
+  
+    const assigneeName = `${assigneeData?.first_name} ${assigneeData?.last_name}`;
+
+    // Portfolio Data ----------------------------------------------
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await getPortfolioData(portfolioId);
+      setPortfolioData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolioData();
+  }, [taskData]);
+
+  const handleArchive = () => {
+    setModule('archive');
+    dispatch(
+      openCnfModal({
+        modalName: "archiveTask",
+        title: "Are you sure?",
+        description: "You want to Archive!",
+      })
+    );
+  };
+  const handleDelete = () => {
+    setModule('delete');
+    dispatch(
+      openCnfModal({
+        modalName: "deleteTask",
+        title: "Are you sure?",
+        description: "You want to Delete!",
+      })
+    );
+  };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchiveTask(taskData?.tid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+        console.log(error)
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await patchDeleteTask(taskData?.tid, regId);
+        fetchTreeData()
+        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
+        handleClose()
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
+        handleClose()
+        toast.error(`${error.response?.error}`);
+      };
+    }
+  };
+
+  // ---- End -----------------------------
+
   const theme = useTheme();
-  const subtaskData = [1, 2];
+  // const subtaskData = [1, 2];
   const CommonLinks = ({ link, linkName }) => {
     return (
       <>
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <Box
             sx={{
               display: "flex",
@@ -39,7 +209,7 @@ const TaskPopup = ({ nodes }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={6} textAlign={"initial"}>
+        <Grid item xs={5} textAlign={"initial"}>
           <Typography
             sx={{
               fontSize: 13,
@@ -74,7 +244,7 @@ const TaskPopup = ({ nodes }) => {
           >
             <Avatar
               sx={{ bgcolor: theme.palette.secondary.main, mr: 1 }}
-              aria-label="project"
+              aria-label="task"
             >
               {...stringAvatar(nodes.name)}
             </Avatar>
@@ -90,11 +260,34 @@ const TaskPopup = ({ nodes }) => {
             </Typography>
           </Box>
         </Grid>
+        <Grid item xs={12} md={12} lg={8}>
+        </Grid>
+        <Grid item xs={12} md={12} lg={4}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "bottom",
+              justifyContent: "end",
+              flexDirection: "row",
+            }}
+          >
+            <Tooltip arrow title="Archive">
+              <IconButton onClick={() => handleArchive()}>
+                <ArchiveIcon sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title="Delete">
+              <IconButton onClick={() => handleDelete()}>
+                <Delete sx={{ fontSize: "20px" }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography
             sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}
           >
-            Task Code : EM-6964
+            Task Code : {taskCode}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -112,9 +305,7 @@ const TaskPopup = ({ nodes }) => {
               fontSize: 13,
             }}
           >
-            Account Creation Process such as - Registration - Registration
-            through Social Media - Login - Login through Social Media - Forgot
-            password
+            {nodes.description}
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -131,7 +322,9 @@ const TaskPopup = ({ nodes }) => {
               p: 1,
               fontSize: 13,
             }}
-          ></Typography>
+          >
+            {nodes.taskNote}
+          </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography sx={{ fontSize: 13, textAlign: "left" }}>
@@ -140,14 +333,13 @@ const TaskPopup = ({ nodes }) => {
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            <CommonLinks
-              link={"https://dev.decision168.com/register"}
-              linkName={"registration link"}
-            />
-            <CommonLinks
-              link={"https://dev.decision168.com/login"}
-              linkName={"login link"}
-            />
+          {links && links.split(',').map((link, index) => (
+              <CommonLinks
+              key={index}
+              link={link}
+              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
+            /> 
+            ))}
           </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -166,36 +358,24 @@ const TaskPopup = ({ nodes }) => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
+              {taskFiles && taskFiles.split(',').map((file, index) => (
                 <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "start",
-                  }}
-                >
-                  <KeyboardDoubleArrowRight
-                    sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                  />
-                  <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                    Decision_168_Platform_Auto-Emails_Responses_17_to_21.pdf
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "start",
-                  }}
-                >
-                  <KeyboardDoubleArrowRight
-                    sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                  />
-                  <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                    Decision_168_Platform.pdf
-                  </Typography>
-                </Box>
+                key={index}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "start",
+                }}
+              >
+                <KeyboardDoubleArrowRight
+                  sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
+                />
+                <Typography sx={{ fontSize: 13, color: "#212934" }}>
+                  {file}
+                </Typography>
+              </Box>
+            ))}
               </Grid>
             </Grid>
           </Typography>
@@ -225,7 +405,7 @@ const TaskPopup = ({ nodes }) => {
                       fontSize="small"
                       sx={{ color: "#C7DF19", mr: 1 }}
                     />
-                    EM-245 :
+                    {item.stcode} :
                     <Typography
                       sx={{
                         fontSize: 13,
@@ -233,7 +413,7 @@ const TaskPopup = ({ nodes }) => {
                         display: "inline",
                       }}
                     >
-                      Implement Account Deactivated Notification
+                      {item.stname}
                     </Typography>
                   </Typography>
                 </Grid>
@@ -279,7 +459,7 @@ const TaskPopup = ({ nodes }) => {
                     ml: 1,
                   }}
                 >
-                  Account Creation Module
+                  {projectData.pname}
                 </Typography>
               </Box>
             </Box>
@@ -302,7 +482,7 @@ const TaskPopup = ({ nodes }) => {
             >
               <BadgeIcon fontSize="small" sx={{ color: "#C7DF19", mr: 1 }} />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Portfolio : DECISION 168, Inc
+                {portfolioData.portfolio_name}
               </Typography>
             </Box>
           </Box>
@@ -327,7 +507,7 @@ const TaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Assigned To : Afrin Sayed
+                Assigned To : {assigneeName}
               </Typography>
             </Box>
           </Box>
@@ -352,7 +532,7 @@ const TaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Due Date : 19 Aug, 2022
+                Due Date : {formattedTaskDueDate}
               </Typography>
             </Box>
           </Box>
@@ -377,7 +557,7 @@ const TaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Created Date : 12 Jun, 2022
+                Created Date : {formattedTaskStartDate}
               </Typography>
             </Box>
           </Box>
@@ -402,7 +582,7 @@ const TaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Priority : medium
+                Priority : {taskPriority}
               </Typography>
             </Box>
           </Box>
@@ -424,7 +604,7 @@ const TaskPopup = ({ nodes }) => {
             >
               <PersonIcon fontSize="small" sx={{ color: "#C7DF19", mr: 1 }} />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Created By : Afrin Sayed
+                Created By : {userName}
               </Typography>
             </Box>
           </Box>
@@ -449,12 +629,14 @@ const TaskPopup = ({ nodes }) => {
                 sx={{ color: "#C7DF19", mr: 1 }}
               />
               <Typography sx={{ fontSize: 13, color: "#74788d", ml: 1 }}>
-                Status : Done
+                Status : {taskStatus}
               </Typography>
             </Box>
           </Box>
         </Grid>
       </Grid>
+      <ConfirmationDialog value={"archiveTask"} handleYes={handleYes} />
+      <ConfirmationDialog value={"deleteTask"} handleYes={handleYes} />
     </Box>
   );
 };

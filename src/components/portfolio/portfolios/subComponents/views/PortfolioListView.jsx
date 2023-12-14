@@ -5,20 +5,30 @@ import { Box, Button } from "@mui/material";
 import CustomTable from "../../../../common/CustomTable";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../../common/ConfirmationDialog";
 import DeleteDailogContent from "../../../viewporfolio/subComponents/DeleteDailogContent";
 import CustomDialog from "../../../../common/CustomDialog";
+import { patchArchivePortfolio } from "../../../../../api/modules/ArchiveModule";
+import { toast } from "react-toastify";
+import { patchDeleteGoal } from "../../../../../api/modules/TrashModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../../redux/action/userSlice";
 
 // Define the main component - PortfolioListView
 const PortfolioListView = () => {
   // React Router hook for navigation
   const navigate = useNavigate();
   // Redux hook for dispatching actions
+  const user = useSelector(selectUserDetails);
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const dispatch = useDispatch();
+  const [module, setModule] = React.useState(null);
+  const userID = user?.reg_id;
+
   // Handler for clicking the "Archive" button
   const handleArchive = () => {
-    // Dispatch action to open a confirmation modal
+    setModule('archive');
     dispatch(
       openCnfModal({
         modalName: "archivePortfolio",
@@ -26,6 +36,29 @@ const PortfolioListView = () => {
         description: "You want to Archive Portfolio",
       })
     );
+  };
+
+  const handleYes = async () => {
+    if(module == 'archive') {
+      try {
+        const response = await patchArchivePortfolio(storedPortfolioId, userID);
+        dispatch(closeCnfModal({ modalName: 'archivePortfolio' }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'archivePortfolio' }));
+        console.log(error.response.data)
+        toast.error(`${error.response.data?.error}`);
+      };
+    }else if(module == 'delete') {
+      try {
+        const response = await patchDeleteGoal(storedPortfolioId, userID);
+        dispatch(closeCnfModal({ modalName: 'deletePortfolio' }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        dispatch(closeCnfModal({ modalName: 'deletePortfolio' }));
+        toast.error(`${error.response?.error}`);
+      };
+    }
   };
 
   // State for controlling the visibility of the delete dialog
@@ -224,7 +257,7 @@ const PortfolioListView = () => {
       {/* Render a custom table component */}
       <CustomTable table={table} />
       {/* Render a confirmation dialog for archiving */}
-      <ConfirmationDialog value={"archivePortfolio"} />
+      <ConfirmationDialog value={"archivePortfolio"} handleYes={handleYes} />
       {/* Render a custom dialog for delete confirmation */}
       <CustomDialog
         handleClose={handleCloseDeleteDialog}

@@ -1,57 +1,127 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { gettaskDeleteData, patchDeleteForeverSubtask, patchDeleteForeverTask, patchRetrieveSubtask, patchRetrieveTask } from "../../../../api/modules/TrashModule";
+import { toast } from "react-toastify";
 
-const TrashTaskAndSubtask = ({ value }) => {
+const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  const handleRestore = () => {
+  const [deleteData, setDeleteData] = useState([]);
+  const [deleteType, setDeleteType] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
+  const [module, setModule] = useState(null);
+
+  const fetchDeleteData = async () => {
+    try {
+      const response = await gettaskDeleteData(regId,portfolioId);
+      setDeleteData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeleteData();
+  }, [regId]);
+  
+  const handleRestore = (type, id) => {
+    setDeleteType(type);
+    setDeleteId(id);
     dispatch(
       openCnfModal({
         modalName: "restoreModule",
         title: "Are you sure?",
-        description: `You want to Restore this ${value.toUpperCase()}`,
+        description: `You want to Restore this ${type}`,
       })
     );
   };
-  const handleDelete = () => {
+
+  const handleDelete = (type, id) => {
+    setDeleteType(type);
+    setDeleteId(id);
     dispatch(
       openCnfModal({
         modalName: "deleteModule",
         title: "Are you sure?",
-        description: `You want to Delete ${value.toUpperCase()} Permanently`,
+        description: `You want to Delete ${type} Permanently`,
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        task_code: "T-12345",
-        task_portfolio: "Uzma K",
-        task_project: "Project 1",
-        task_task: "Task 1",
-        task_assignee: "Afrin Sayed",
-        task_type: "Task",
-        task_date: "2023-04-30",
-      },
-      {
-        task_code: "T-64565",
-        task_portfolio: "Uzma K",
-        task_project: "Project 1",
-        task_task: "Task 2",
-        task_assignee: "Alim Mohd",
-        task_type: "Subtask",
-        task_date: "2023-04-30",
-      },
-    ],
-    []
-  );
+
+  const fetchRetrieveTask = async () => {
+    try {
+      const response = await patchRetrieveTask(deleteId, portfolioId, regId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchRetrieveSubtask = async () => {
+    try {
+      const response = await patchRetrieveSubtask(deleteId, regId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchDeleteForeverTask = async () => {
+    try {
+      const response = await patchDeleteForeverTask(deleteId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+  
+  const fetchDeleteForeverSubtask = async () => {
+    try {
+      const response = await patchDeleteForeverSubtask(deleteId);
+      fetchDeleteData()
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const handleRestoreYes = () => {
+    if(deleteType == 'Task') {
+      fetchRetrieveTask()
+    }else if(deleteType == 'Subtask') {
+      fetchRetrieveSubtask()
+    }
+  };  
+
+  const handleDeleteYes = () => {
+    if(deleteType == 'Task') {
+      fetchDeleteForeverTask()
+    }else if(deleteType == 'Subtask') {
+      fetchDeleteForeverSubtask()
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -113,7 +183,7 @@ const TrashTaskAndSubtask = ({ value }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleRestore()}
+              onClick={() => handleRestore(row.original.task_type, row.original.table_id)}
             >
               Restore
             </Button>
@@ -136,7 +206,7 @@ const TrashTaskAndSubtask = ({ value }) => {
               size="small"
               variant="contained"
               sx={{ backgroundColor: "#383838", color: "#ffffff" }}
-              onClick={() => handleDelete()}
+              onClick={() => handleDelete(row.original.task_type, row.original.table_id)}
             >
               Delete
             </Button>
@@ -149,7 +219,7 @@ const TrashTaskAndSubtask = ({ value }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: deleteData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -189,9 +259,20 @@ const TrashTaskAndSubtask = ({ value }) => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"restoreModule"} />
-      <ConfirmationDialog value={"deleteModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"restoreModule"} handleYes={handleRestoreYes}/>
+      <ConfirmationDialog value={"deleteModule"}  handleYes={handleDeleteYes}/>
     </>
   );
 };

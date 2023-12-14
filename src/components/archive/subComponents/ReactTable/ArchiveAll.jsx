@@ -1,4 +1,4 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -6,13 +6,32 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { getAllArchiveData, patchUnArchiveGoal, patchUnArchiveKpi, patchUnArchiveProject, patchUnArchiveSubtask, patchUnArchiveTask } from "../../../../api/modules/ArchiveModule";
+import { toast } from "react-toastify";
 
-const ArchiveAll = () => {
+const ArchiveAll = ({ regId, portfolioId }) => {
   const dispatch = useDispatch();
+  const [archiveData, setArchiveData] = useState([]);
+  const [archiveType, setArchiveType] = useState(null);
+  const [archiveId, setArchiveId] = useState(null);
+  const fetchArchiveData = async () => {
+    try {
+      const response = await getAllArchiveData(regId,portfolioId);
+      setArchiveData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArchiveData();
+  }, [regId]);
   
-  const handleReopen = (type) => {
+  const handleReopen = (type, id) => {
+    setArchiveType(type);
+    setArchiveId(id);
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
@@ -21,46 +40,86 @@ const ArchiveAll = () => {
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        all_portfolio: "Uzma Karjikar",
-        all_archived: "Task 1",
-        all_title: "Task 1 title",
-        all_type: "Project",
-        all_date: "2023-04-30",
-      },
-      {
-        all_portfolio: "Uzma K",
-        all_archived: "Task 2",
-        all_title: "Task 2 title",
-        all_type: "Goal",
-        all_date: "2023-04-30",
-      },
-      {
-        all_portfolio: "Uzma K",
-        all_archived: "Task 3",
-        all_title: "Task 3 title",
-        all_type: "KPI",
-        all_date: "2023-04-30",
-      },
-      {
-        all_portfolio: "Uzma K",
-        all_archived: "Task 4",
-        all_title: "Task 4 title",
-        all_type: "Task",
-        all_date: "2023-04-30",
-      },
-      {
-        all_portfolio: "Uzma K",
-        all_archived: "Task 5",
-        all_title: "Task 5 title",
-        all_type: "Subtask",
-        all_date: "2023-04-30",
-      },
-    ],
-    []
-  );
+
+  const fetchUnarchiveGoal = async () => {
+    try {
+      const response = await patchUnArchiveGoal(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchUnarchiveKpi = async () => {
+    try {
+      const response = await patchUnArchiveKpi(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchUnarchiveProject = async () => {
+    try {
+      const response = await patchUnArchiveProject(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchUnarchiveTask = async () => {
+    try {
+      const response = await patchUnArchiveTask(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const fetchUnarchiveSubtask = async () => {
+    try {
+      const response = await patchUnArchiveSubtask(archiveId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+  
+
+  const handleYes = () => {
+    if(archiveType == 'Goal'){
+      fetchUnarchiveGoal()
+    }else if(archiveType == 'KPI') {
+      fetchUnarchiveKpi()
+    }else if(archiveType == 'Project') {
+      fetchUnarchiveProject()
+    }else if(archiveType == 'Task') {
+      fetchUnarchiveTask()
+    }else if(archiveType == 'Subtask') {
+      fetchUnarchiveSubtask()
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -105,7 +164,7 @@ const ArchiveAll = () => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.all_type)}
+              onClick={() => handleReopen(row.original.all_type,row.original.table_id)}
             >
               Reopen
             </Button>
@@ -118,7 +177,7 @@ const ArchiveAll = () => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data:archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -164,8 +223,19 @@ const ArchiveAll = () => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"reopenModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"reopenModule"} handleYes={handleYes} />
     </>
   );
 };

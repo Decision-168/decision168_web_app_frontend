@@ -1,56 +1,58 @@
-import { useMemo, memo } from "react";
+import { useMemo, memo, useState, useEffect } from "react";
 import {
   MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
+import { getprojectArchiveData, patchUnArchiveProject } from "../../../../api/modules/ArchiveModule";
+import { toast } from "react-toastify";
 
-const ArchiveProjects = ({ value }) => {
+const ArchiveProjects = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  const handleReopen = () => {
+  
+  const [archiveData, setArchiveData] = useState([]);
+  const [archiveId, setArchiveId] = useState(null);
+
+  const fetchArchiveData = async () => {
+    try {
+      const response = await getprojectArchiveData(regId,portfolioId);
+      setArchiveData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArchiveData();
+  }, [regId]);
+  
+  const handleReopen = (type, id) => {
+    setArchiveId(id);
     dispatch(
       openCnfModal({
         modalName: "reopenModule",
         title: "Are you sure?",
-        description: `You want to Reopen this ${value.toUpperCase()}`,
+        description: `You want to Reopen this ${type}`,
       })
     );
   };
-  const data = useMemo(
-    () => [
-      {
-        project_portfolio: "Uzma K",
-        project_project: "Project 1",
-        project_date: "2023-04-30",
-      },
-      {
-        project_portfolio: "Uzma K",
-        project_project: "Project 2",
-        project_date: "2023-04-30",
-      },
-      {
-        project_portfolio: "Uzma K",
-        project_project: "Project 3",
-        project_date: "2023-04-30",
-      },
-      {
-        project_portfolio: "Uzma K",
-        project_project: "Project 4",
-        project_date: "2023-04-30",
-      },
-      {
-        project_portfolio: "Uzma K",
-        project_project: "Project 5",
-        project_date: "2023-04-30",
-      },
-    ],
-    []
-  );
 
+  const handleYes = async () => {
+    try {
+      const response = await patchUnArchiveProject(archiveId, portfolioId, regId);
+      fetchArchiveData()
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
   const columns = useMemo(
     () => [
       {
@@ -84,7 +86,7 @@ const ArchiveProjects = ({ value }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen()}
+              onClick={() => handleReopen(row.original.project_type,row.original.table_id)}
             >
               Reopen
             </Button>
@@ -97,7 +99,7 @@ const ArchiveProjects = ({ value }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
@@ -143,8 +145,19 @@ const ArchiveProjects = ({ value }) => {
   });
   return (
     <>
-      <CustomTable table={table} />
-      <ConfirmationDialog value={"reopenModule"} />
+      <Container
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
+      <ConfirmationDialog value={"reopenModule"} handleYes={handleYes} />
     </>
   );
 };
