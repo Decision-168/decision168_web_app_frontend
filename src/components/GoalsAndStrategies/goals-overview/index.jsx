@@ -26,7 +26,7 @@ const GoalsOverview = () => {
 
   //get user id
   const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
+  const user_id = user?.reg_id;
   const email = user?.email_address;
   //get user id
 
@@ -80,6 +80,32 @@ const GoalsOverview = () => {
 
     fetchAllHistoryData();
   }, []);
+
+  //Check Button Visibility
+  const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayTitleWithActions = async () => {
+      try {
+        if (getName.gcreated_by == user_id) {
+          setAccdisplayBtns("all");
+        } else if (
+          getName.get_portfolio_createdby_id == user_id ||
+          getName.gmanager == user_id
+        ) {
+          setAccdisplayBtns("some");
+        } else {
+          setAccdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setAccdisplayBtns("no");
+      }
+    };
+
+    DisplayTitleWithActions();
+  }, []);
+  //Check Button Visibility
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -137,7 +163,7 @@ const GoalsOverview = () => {
           <Grid item xs={12} lg={8}>
             <Grid container>
               <Grid item xs={12} lg={12}>
-                <ViewGoalsPopup goalID={gid} id={id} />
+                <ViewGoalsPopup goalID={gid} id={user_id} />
               </Grid>
               <Grid item xs={12} lg={12}>
                 <KPISection goalID={gid} />
@@ -147,7 +173,7 @@ const GoalsOverview = () => {
           <Grid item xs={12} lg={4}>
             <Grid container>
               <Grid item xs={12} lg={12}>
-                <MembersAccordion goalID={gid} />
+                <MembersAccordion goalID={gid} displayBtns={AccdisplayBtns} />
               </Grid>
               <Grid item xs={12} lg={12}>
                 <RecentHistory id={gid} type={"goal"}/>

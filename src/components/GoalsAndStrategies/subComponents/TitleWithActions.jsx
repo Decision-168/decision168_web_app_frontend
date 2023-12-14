@@ -24,7 +24,9 @@ const TitleWithActions = ({
   progressPercentage,
   displayBtns
 }) => {
-  console.log(displayBtns);
+
+  console.log('displayBtns',displayBtns);
+
   const theme = useTheme();
   const splitString = title.split(" ");
   const splitTitle = splitString[1];

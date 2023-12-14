@@ -35,7 +35,8 @@ import {
 } from "../../../../api/modules/goalkpiModule";
 import { toast } from "react-toastify";
 
-const BasicAccordion = ({ goalID, pending }) => {
+const BasicAccordion = ({ goalID, pending, displayBtns }) => {
+  console.log('displayBtns',displayBtns);
   const gid = goalID;
   //get goal detail
   const [gAllDetails, setgoaldetail] = useState([]);
