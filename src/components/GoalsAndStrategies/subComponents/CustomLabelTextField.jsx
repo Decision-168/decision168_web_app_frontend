@@ -9,17 +9,17 @@ export default function CustomLabelTextField({
   placeholder,
   required,
   value,
-  onChange
+  onChange,
 }) {
-  const theme = useTheme();
+   const theme = useTheme();
 
-  const handleChange = (event) => {
-    // Forward the event to the parent component
-    if (onChange) {
-      onChange(event);
-    }
-  };
-
+   // //to style placeholder
+   // const inputProps = register(name, validation);
+   // Define custom CSS styles for the placeholder
+   const placeholderStyles = {
+     fontSize: "14px",
+     color: theme.palette.secondary.dark,
+   };
   return (
     <>
       <Grid item xs={2} alignSelf={"center"}>
@@ -37,8 +37,13 @@ export default function CustomLabelTextField({
           required
           fullWidth
           name={name}
-          value={value} 
-          onChange={handleChange}
+          inputProps={{
+            sx: {
+              "&::placeholder": placeholderStyles,
+            },
+          }}
+          value={value}
+          onChange={onChange}
         />
       </Grid>
     </>
