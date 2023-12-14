@@ -122,7 +122,7 @@ const DuplicateDialog = ({ goalData }) => {
             <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
               <Grid item xs={2}>
                 <InputLabel sx={{ fontSize: "14px" }}>
-                  Duration{" "}
+                  Duration
                   <span style={{ color: theme.palette.error.main }}> *</span>
                 </InputLabel>
               </Grid>
@@ -144,12 +144,6 @@ const DuplicateDialog = ({ goalData }) => {
               </Grid>
             </Grid>
 
-            {/* <Duration
-              label="Duration "
-              labelColor=""
-              required={true}
-              onDateChange={handleDateChange}
-            /> */}
             <Grid item xs={12}>
               <Box p={2} sx={{ background: "#f5f5f5" }}>
                 <Typography

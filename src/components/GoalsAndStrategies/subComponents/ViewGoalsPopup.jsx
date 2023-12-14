@@ -30,7 +30,6 @@ import {
 } from "../../../api/modules/goalkpiModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import AddKPIs from "../portfolio-goals/create-goals/subComponents/AddKPIs";
 import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
 const ViewGoalsPopup = ({ goalID, id }) => {
   const gid = goalID;
@@ -286,13 +285,6 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           setInputFields={setInputFields}
           handleAddClick={handleAddClick}
         />
-        {/* <AddKPIs
-          // individual={true}
-          // inputFields={inputFields}
-          // setInputFields={setInputFields}
-          // handleAddClick={handleAddClick}
-          goalID={gdetail.gid}
-        /> */}
       </ReduxDialog>
     </Box>
   );

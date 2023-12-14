@@ -36,12 +36,14 @@ import {
 import { toast } from "react-toastify";
 
 const BasicAccordion = ({ goalID, pending, displayBtns }) => {
-  console.log('displayBtns',displayBtns);
+  
+  console.log("displayBtns", displayBtns);
+
   const gid = goalID;
   //get goal detail
   const [gAllDetails, setgoaldetail] = useState([]);
   const [getgoalRes, setgoalRes] = useState([]);
-  
+
   const [get_id, set_id] = useState("");
   const [gettype, settype] = useState("");
   const [getpassname, setpassname] = useState("");
@@ -67,7 +69,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
   };
   const dispatch = useDispatch();
 
-  const handleRemoveManager = (name,pass_id) => {
+  const handleRemoveManager = (name, pass_id) => {
     set_id(pass_id);
     dispatch(
       openCnfModal({
@@ -77,7 +79,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
       })
     );
   };
-
 
   const gethandleDataYes = (type, pass_id, name) => {
     settype(type);
@@ -288,7 +289,10 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
                     edge="end"
                     aria-label="remove"
                     onClick={() =>
-                      handleRemoveManager(getgoalRes.get_gmanager_name,getgoalRes.gmanager)
+                      handleRemoveManager(
+                        getgoalRes.get_gmanager_name,
+                        getgoalRes.gmanager
+                      )
                     }
                   >
                     <PersonRemoveAlt1Rounded
@@ -376,7 +380,11 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <AddMemberDialog id={gid} type={"goal"} refreshData={fetchAllGMembersData}/>
+        <AddMemberDialog
+          id={gid}
+          type={"goal"}
+          refreshData={fetchAllGMembersData}
+        />
       </ReduxDialog>
     </Box>
   );

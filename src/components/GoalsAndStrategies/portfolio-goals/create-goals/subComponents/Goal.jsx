@@ -7,6 +7,7 @@ import {
   Grid,
   InputLabel,
   TextField,
+  useTheme,
 } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
@@ -20,8 +21,10 @@ import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import moment from "moment";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
+import CustomDatePicker from "../../../../common/CustomDatePicker";
 
 const Goal = ({ individual, onUpdate }) => {
+  const theme = useTheme();
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -36,8 +39,6 @@ const Goal = ({ individual, onUpdate }) => {
   const [formValues, setFormValues] = useState({
     gname: "",
     gdept: "",
-    gstart_date: "",
-    gend_date: "",
     gdes: "",
     gcreated_by: "1", //user_id
     portfolio_id: "2", //portfolio_id
@@ -79,20 +80,17 @@ const Goal = ({ individual, onUpdate }) => {
     });
   };
 
-  const handleDateChange = ({ startDate, endDate }) => {
-    console.log("startDate", startDate);
-    console.log("endDate", endDate);
-    const parsedstartDate = moment(startDate);
-    const parsedendDate = moment(endDate);
-    const PassformattedstartDate = parsedstartDate.format("YYYY-MM-DD");
-    const PassformattedendDate = parsedendDate.format("YYYY-MM-DD");
-    console.log("PassformattedstartDate", PassformattedstartDate);
-    console.log("PassformattedendDate", PassformattedendDate);
-
+  const handleStartDateChange = (date) => {
     setFormValues({
       ...formValues,
-      gstart_date: PassformattedstartDate,
-      gend_date: PassformattedendDate,
+      gstart_date: date,
+    });
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormValues({
+      ...formValues,
+      gend_date: date,
     });
   };
 
@@ -152,13 +150,37 @@ const Goal = ({ individual, onUpdate }) => {
           />
         </Grid>
         <InviteMembers formValues={formValues} setFormValues={setFormValues} />
-        <Duration
+        <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
+          <Grid item xs={2}>
+            <InputLabel sx={{ fontSize: "14px" }}>
+              Duration
+              <span style={{ color: theme.palette.error.main }}> *</span>
+            </InputLabel>
+          </Grid>
+          <Grid item xs={10} container spacing={1}>
+            <Grid item xs={5}>
+              <CustomDatePicker
+                label=""
+                value={formValues.gstart_date}
+                onChange={handleStartDateChange}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <CustomDatePicker
+                label=""
+                value={formValues.gend_date}
+                onChange={handleEndDateChange}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* <Duration
           label="Duration "
           labelColor=""
           individual={individual}
           required={true}
           onDateChange={handleDateChange}
-        />
+        /> */}
         <CustomMultilineTextField
           label="Description"
           name="gdes"
