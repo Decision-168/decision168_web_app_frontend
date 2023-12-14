@@ -20,7 +20,7 @@ export default function SelectDepartment({
 
   const handleChange = (fieldName) => (event, value) => {
     console.log(value);
-    setSelectedDepartment(value.department);
+    setSelectedDepartment(value.depId);
   };
 
   return (

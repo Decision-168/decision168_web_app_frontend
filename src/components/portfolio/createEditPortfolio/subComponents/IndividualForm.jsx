@@ -19,6 +19,7 @@ import CircularLoader from "../../../common/CircularLoader";
 import { updatePortfolio } from "../../../../api/modules/porfolioModule";
 import { useSelector } from "react-redux";
 import { selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const countries = [
   { label: "India" },
@@ -32,8 +33,9 @@ const countries = [
 export default function IndividualForm({ isEditPath, depts }) {
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const details = useSelector(selectPorfolioDetails);
+  const user = useSelector(selectUserDetails);
   const [formValues, setFormValues] = useState({
-    portfolio_createdby:user?.reg_id,
+    portfolio_createdby: user?.reg_id,
     portfolio_user: "individual",
     portfolio_name: "",
     portfolio_mname: "",
@@ -71,7 +73,7 @@ export default function IndividualForm({ isEditPath, depts }) {
   useEffect(() => {
     setFormValues({
       ...formValues,
-      portfolio_createdby:user?.reg_id,
+      portfolio_createdby: user?.reg_id,
       portfolio_user: details?.portfolio_user,
       portfolio_name: details?.portfolio_name,
       portfolio_mname: details?.portfolio_mname,
@@ -151,8 +153,8 @@ export default function IndividualForm({ isEditPath, depts }) {
       error: !field.cus_department.trim()
         ? "Department cannot be empty"
         : !isDepartmentValid(field.cus_department)
-        ? "Invalid department"
-        : false,
+          ? "Invalid department"
+          : false,
     }));
 
     setInputFields(updatedFields);

@@ -9,7 +9,6 @@ import { Stack, Typography, Avatar, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
-import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { getPorfolioCount, getPortfolios } from "../../../../../api/modules/porfolioModule";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
@@ -23,7 +22,7 @@ import {
 } from "../../../../../redux/action/portfolioSlice";
 import { getPackageDetails } from "../../../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
-import { getTaskslistAsync } from "../../../../../redux/action/tasksSlice";
+
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -71,13 +70,12 @@ export default function PortfolioMenu() {
   const [portfolios, setPortfolios] = React.useState([]);
   const [selectedPortfolio, setSelectedPortfolio] = React.useState("portfolio");
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  // const email = user?.email_address;
-  const email = "uzmakarjikar@gmail.com";
+  const email = user?.email_address;
+  // const email = "uzmakarjikar@gmail.com";
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const fetchPorfolios = async () => {
@@ -119,8 +117,6 @@ export default function PortfolioMenu() {
   const handleCreatePortfolioClick = async (event) => {
     const porfolioCountResponse = await getPorfolioCount(79);
     const packageDetailsResponse = await getPackageDetails(packageId);
-    // console.log("portfolio count", porfolioCountResponse?.portfolio_count_rows);
-    // console.log("package details", packageDetailsResponse?.pack_portfolio);
 
     if (
       isValidPortfolioCount(
@@ -135,7 +131,7 @@ export default function PortfolioMenu() {
       toast.warn("Please Upgrade your plan!");
     }
   };
-  const regId = user?.reg_id;
+
   const handleMenuItemClick = (event, index, portfolioId) => {
     navigate("/portfolio-view");
     setSelectedIndex(index);
@@ -145,7 +141,7 @@ export default function PortfolioMenu() {
     dispatch(getProjectAndTaskCountAsync(portfolioId));
     dispatch(getPortfolioDetailsAsync(portfolioId));
     dispatch(getPortfolioTeamMembersAsync(portfolioId)); // we have to remove from here
-    dispatch(getTaskslistAsync({ portfolioId, regId }));
+
   };
 
   return (
@@ -185,8 +181,8 @@ export default function PortfolioMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}>
-        <PerfectScrollbar style={{ overflowX: "hidden" }}>
-          <Box sx={{ maxHeight: "300px", height: "100%" }}>
+        {/* <PerfectScrollbar style={{ overflowX: "hidden" }}> */}
+          <Box sx={{ height: "100%" }}>
             {portfolios && portfolios.length > 0 ? (
               portfolios.map((p, index) => (
                 <MenuItem
@@ -223,7 +219,7 @@ export default function PortfolioMenu() {
               </Typography>
             )}
           </Box>
-        </PerfectScrollbar>
+        {/* </PerfectScrollbar> */}
 
         <Divider />
 

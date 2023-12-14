@@ -17,6 +17,7 @@ import CustomFilter from "../../common/CustomFilter";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
+import Loader from "../../common/Loader";
 
 const filterOption = [
   {
@@ -49,16 +50,30 @@ const filterOption = [
   },
 ];
 
-const AllTasks = () => {
+const DashboardTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
-  const [tasks, setTasks] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   const regId = user?.reg_id;
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await getAlltasksAndSubtasks(regId);
+      setRows(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false)
+    }
+  };
 
-
+  React.useEffect(() => {
+    fetchData();
+  }, [regId]);
 
 
   const handleChange = (event, newAlignment) => {
@@ -150,11 +165,12 @@ const AllTasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection /> : <GridSection />}
+          {alignment === "list" ? <ListSection rows={rows} setRows={setRows} fetchData={fetchData} loading={loading} /> : <GridSection rows={rows} loading={loading}/>}
         </Grid>
       </Grid>
+
     </Box>
   );
 };
 
-export default memo(AllTasks);
+export default memo(DashboardTasks);

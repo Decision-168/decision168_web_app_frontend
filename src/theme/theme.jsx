@@ -170,5 +170,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+          padding: '8px', // Adjust border-radius and padding as needed
+          // Add other style overrides for the unselected state here
+          '&.Mui-selected': {
+            backgroundColor: '#C7DF19', // Change the background color as needed
+            color: 'white', // Change the text color as needed
+          },
+        },
+      },
+    },
   },
 });

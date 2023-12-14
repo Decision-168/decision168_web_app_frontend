@@ -1,28 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getTaskDetails, getTaskslist } from "../../api/modules/taskModule";
+import { getPortfolioTasksSubtasksListView } from "../../api/modules/taskModule";
 
 
 const initialState = {
-    tasksList: null,
-    taskDetails: null,
+    listViewTasks: null,
     status: "idle",
     error: null,
 };
 
-export const getTaskslistAsync = createAsyncThunk("tasks/getTaskslist", async ({ portfolioId, regId }) => {
-    try {
-        const response = await getTaskslist(portfolioId, regId);
-        return response;  // Return the response data directly
-    } catch (error) {
-        throw error;
-    }
-});
-
-export const getTaskDetailsAsync = createAsyncThunk("tasks/getTaskDetails", async (taskId) => {
-    const response = await getTaskDetails(taskId)
+export const getPortfolioTasksSubtasksListViewAsync = createAsyncThunk("tasks/getPortfolioTasksSubtasksListView", async ({ portfolioId, regId }) => {
+    const response = await getPortfolioTasksSubtasksListView(portfolioId, regId)
     return response;
 });
-
 
 export const tasksSlice = createSlice({
     name: "tasks",
@@ -30,32 +19,20 @@ export const tasksSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getTaskslistAsync.pending, (state) => {
+            .addCase(getPortfolioTasksSubtasksListViewAsync.pending, (state) => {
                 state.status = "loading";
             })
-            .addCase(getTaskslistAsync.fulfilled, (state, action) => {
+            .addCase(getPortfolioTasksSubtasksListViewAsync.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.tasksList = action.payload;
+                state.listViewTasks = action.payload;
             })
-            .addCase(getTaskslistAsync.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error;
-            })
-            .addCase(getTaskDetailsAsync.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(getTaskDetailsAsync.fulfilled, (state, action) => {
-                state.status = "succeeded";
-                state.taskDetails = action.payload;
-            })
-            .addCase(getTaskDetailsAsync.rejected, (state, action) => {
+            .addCase(getPortfolioTasksSubtasksListViewAsync.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error;
             })
     },
 });
 
-export const selectTasksList = (state) => state.tasks.tasksList;
-export const selectTaskDetails = (state) => state.tasks.taskDetails;
+export const selectListViewTasks = (state) => state.tasks.listViewTasks;
 
 export default tasksSlice.reducer;

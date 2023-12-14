@@ -24,7 +24,7 @@ export default function FilterSelectedOptions({
   };
 
 // Check if items is not null and is an array with at least one element
-const defaultValues = Array.isArray(items) && items?.length > 1 ? [items[1]] : [];
+// const defaultValues = Array.isArray(items) && items?.length > 1 ? [items[1]] : [];
 
   return (
     <Stack spacing={1} sx={{ width: "100%", height: "100%", textAlign: "left" }}>
@@ -37,11 +37,12 @@ const defaultValues = Array.isArray(items) && items?.length > 1 ? [items[1]] : [
         id="tags-outlined"
         options={items}
         getOptionLabel={getOptionLabelFn}
-        defaultValue={defaultValues}
-        filterSelectedOptions
+        // defaultValue={defaultValues}
+        // filterSelectedOptions
         onChange={handleSelectionChange}
         renderInput={(params) => <TextField {...params} placeholder={placeholder} />}
       />
     </Stack>
+   
   );
 }

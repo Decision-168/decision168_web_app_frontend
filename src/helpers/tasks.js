@@ -1,5 +1,5 @@
 // Utility function to format assignee text
-export const formatAssigneeText = (assigneeId , regId) => {
+export const formatAssigneeText = (assigneeId , regId, taskAssignees) => {
     // Replace this logic with your actual logic for displaying the assignee text
     if (assigneeId === regId) {
         return "To Me";

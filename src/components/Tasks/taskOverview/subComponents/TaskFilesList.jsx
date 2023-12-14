@@ -6,7 +6,7 @@ import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 
-const TaskFilesList = ({ item, selectedFile }) => {
+const TaskFilesList = ({ item }) => {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -18,8 +18,8 @@ const TaskFilesList = ({ item, selectedFile }) => {
   const handleDownload = () => {
     if (selectedFile) {
       const downloadLink = document.createElement("a");
-      downloadLink.href = URL.createObjectURL(selectedFile);
-      downloadLink.download = selectedFile.name;
+      downloadLink.href = URL.createObjectURL(item);
+      downloadLink.download = item;
       downloadLink.click();
     }
   };
@@ -34,7 +34,6 @@ const TaskFilesList = ({ item, selectedFile }) => {
     );
   };
 
-  console.log(selectedFile);
   const handlePreview = () => {
     setOpen(true);
   };
@@ -55,7 +54,7 @@ const TaskFilesList = ({ item, selectedFile }) => {
             </Avatar>
 
             <Typography component={Button} sx={{ fontSize: 14, ml: 2, color: "#343a40" }} onClick={handlePreview}>
-              {item.fileName}
+              {item}
             </Typography>
           </Box>
         </Grid>

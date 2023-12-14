@@ -107,17 +107,28 @@ const api = {
   // Change task Status by user id
   changeTaskStatus: "task/change-status/",
 
+  // Change task Status by user id
+  changeSubTaskStatus: "subtask/change-status/",
+
   // Change task Status on checkbox by user id
   changeTaskStatusCheckox: "task/checkbox-change-status/",
 
   // Change Subtask Status on checkbox by user id
   changeSubTaskStatusCheckox: "subtask/checkbox-change-status/",
 
-  //get Portfolio Task list by portfolio_id and reg_id
-  getTaskslist: "task/portfolio-tasks-list/",
-
   //get Task Details by task_id
   getTaskDetails: "task/task-detail/",
+
+  //get SubTask Details by subtask_id
+  getSubTaskDetails: "subtask/subtask-detail/",
+
+  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (LIST VIEW)
+  getPortfolioTasksSubtasksListView: "task/portfolio-tasks-subtasks-list-view/",
+
+  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (GRID VIEW)
+  getPortfolioTasksSubtasksGridView: "task/portfolio-tasks-subtasks-grid-view/",
+
+
 
   // Insert Task by user id and portfolio id
   insertTask: "task/insert-task/",
