@@ -7,6 +7,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { v4 as uuidv4 } from "uuid";
 import Loader from "../../common/Loader";
 import { filterDataByStatus } from "../../../helpers/filterDataByStatus"
+import NoGridTaskFound from "./NoGridTaskFound";
 
 
 const GridSection = ({ rows, loading }) => {
@@ -86,7 +87,7 @@ const GridSection = ({ rows, loading }) => {
 
   return (
     <>
-      {loading ? <Loader /> : <Box sx={{ mt: 2, display: "grid", gap: 2, gridTemplateColumns: "repeat(4, 1fr)" }}>
+      {loading ? <Loader /> : <Box sx={{ mt: 2, display: "grid", gap: 2, gridTemplateColumns: "repeat(4, 1fr)", overflowX: "auto" }}>
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
           {Object.entries(columns).map(([columnId, column], index) => {
             return (
@@ -111,7 +112,7 @@ const GridSection = ({ rows, loading }) => {
                       <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
                         <PerfectScrollbar>
                           <Box sx={{ mr: 2 }}>
-                            {column?.items?.map((item, index) => {
+                            {column?.items?.length > 0 ? column?.items?.map((item, index) => {
                               return (
                                 <Draggable key={item.id} draggableId={item.id} index={index}>
                                   {(provided) => {
@@ -134,7 +135,7 @@ const GridSection = ({ rows, loading }) => {
                                   }}
                                 </Draggable>
                               );
-                            })}
+                            }) : <NoGridTaskFound status={column?.name} />}
                             {provided.placeholder}
                           </Box>
                         </PerfectScrollbar>

@@ -57,7 +57,8 @@ const DashboardTasks = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  const regId = user?.reg_id;
+  // const regId = user?.reg_id;
+  const regId = 1; // for testing
 
   const fetchData = async () => {
     setLoading(true);

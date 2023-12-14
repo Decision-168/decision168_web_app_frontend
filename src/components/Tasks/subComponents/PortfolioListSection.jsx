@@ -11,10 +11,10 @@ const PortfolioListSection = () => {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails)
-  // const regId = user?.reg_id;
-  // const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
-  const regId = 1;
-  const portfolioId = 2
+  const regId = user?.reg_id;
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  // const regId = 1;
+  // const portfolioId = 2
 
   const fetchData = async () => {
     setLoading(true);

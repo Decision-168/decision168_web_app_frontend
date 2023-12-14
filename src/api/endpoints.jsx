@@ -1,8 +1,5 @@
 const api = {
-
-
   //-----------------------------User Module Start----------------
-
 
   //user register api
   userRegister: "user/register",
@@ -18,8 +15,6 @@ const api = {
 
   //user change-password api
   userChangePass: "user/change-password/",
-
-
 
   //-----------------------------Dashboard Module Start----------------
 
@@ -279,7 +274,7 @@ const api = {
 
   //UpdateStrategies
   UpdateStrategy: "goal/update-strategies",
-  
+
   //get country by country code
   country: "user/get-country/",
 
@@ -333,8 +328,6 @@ const api = {
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
 
-
-
   //-----------------------------Task Modlue Start----------------
 
   //(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
@@ -366,6 +359,12 @@ const api = {
 
   //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (GRID VIEW)
   getPortfolioTasksSubtasksGridView: "task/portfolio-tasks-subtasks-grid-view/",
+
+  //File It Task by  task_id  and user_id
+  fileItTask: "file-cabinet/file-it/task/",
+
+  //File It Task by  subtask_id  and user_id
+  fileItSubTask: "file-cabinet/file-it/subtask/",
 
   // Insert Task by user id and portfolio id
   insertTask: "task/insert-task/",
@@ -426,8 +425,6 @@ const api = {
   // Reopen Subtask
   fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
 
-
-
   //-----------------------------Archive Module Start----------------
 
   // Archive Portfolio
@@ -480,7 +477,6 @@ const api = {
 
   // UnArchive Subtask
   unarchiveSubtask: "archive/reopen/subtask/",
-
 
   //-----------------------------Trash Module Start----------------
 
@@ -579,6 +575,5 @@ const api = {
 
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
-
 };
 export default api;

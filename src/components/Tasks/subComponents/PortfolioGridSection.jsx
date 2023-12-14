@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Card, CardContent, Paper } from "@mui/material";
 import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -10,6 +10,7 @@ import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPortfolioTasksSubtasksGridView } from "../../../api/modules/taskModule";
 import { filterDataByStatus } from "../../../helpers/filterDataByStatus"
 import Loader from "../../common/Loader";
+import NoGridTaskFound from "./NoGridTaskFound";
 
 const PortfolioGridSection = () => {
 
@@ -17,10 +18,10 @@ const PortfolioGridSection = () => {
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = React.useState({});
   const user = useSelector(selectUserDetails);
-  // const regId = user?.reg_id;
-  // const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
-  const regId = 1;
-  const portfolioId = 2
+  const regId = user?.reg_id;
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  // const regId = 1;
+  // const portfolioId = 2
 
   const fetchData = async () => {
     setLoading(true);
@@ -138,7 +139,7 @@ const PortfolioGridSection = () => {
                         <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
                           <PerfectScrollbar>
                             <Box sx={{ mr: 2 }}>
-                              {column?.items?.map((item, index) => {
+                              {column?.items?.length > 0 ? column?.items?.map((item, index) => {
                                 return (
                                   <Draggable key={item.id} draggableId={item.id} index={index}>
                                     {(provided) => {
@@ -161,7 +162,7 @@ const PortfolioGridSection = () => {
                                     }}
                                   </Draggable>
                                 );
-                              })}
+                              }) : <NoGridTaskFound status={column?.name} />}
                               {provided.placeholder}
                             </Box>
                           </PerfectScrollbar>

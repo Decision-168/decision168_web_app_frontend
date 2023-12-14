@@ -40,7 +40,7 @@ export default function AddAnotherLink() {
       <Grid container>
         <Grid item xs={12} py={1} textAlign="start">
           {inputFields.map((inputField, index) => (
-            <Grid container key={index} spacing={4}>
+            <Grid container key={index} spacing={2} sx={{ my: 1, p:2, bgcolor: "#F7F7F7" }}>
               <Grid item xs={12} sm={6} py={2} textAlign="start">
                 <TextField fullWidth name="taskLink" onChange={(event) => handleInputChange(event, index)} placeholder="Enter Task Link" variant="outlined" />
               </Grid>

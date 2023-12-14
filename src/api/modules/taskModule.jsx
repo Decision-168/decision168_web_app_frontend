@@ -82,7 +82,6 @@ export const getSubTaskDetails = async (subtaskId) => {
   }
 };
 
-
 //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (LIST VIEW)
 export const getPortfolioTasksSubtasksListView = async (portfolioId, regId) => {
   try {
@@ -103,6 +102,26 @@ export const getPortfolioTasksSubtasksGridView = async (portfolioId, regId) => {
   }
 };
 
+//File it task by task_id and user_id
+export const fileItTask = async (task_id, user_id) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.fileItTask}${task_id}/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//File it Subtask by subtask_id and user_id
+export const fileItSubTask = async (subtask_id, user_id) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.fileItSubTask}${subtask_id}/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Insert Task by user id and portfolio id
 export const insertTask = async (regId, portfolioId, data) => {
   try {
@@ -112,5 +131,3 @@ export const insertTask = async (regId, portfolioId, data) => {
     throw error;
   }
 };
-
-
