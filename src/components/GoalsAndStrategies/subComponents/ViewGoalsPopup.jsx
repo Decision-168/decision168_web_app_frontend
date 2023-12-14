@@ -280,7 +280,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         modalSize="sm"
       >
         <KPIs
-          individual={false}
+          individual={true}
           inputFields={inputFields}
           setInputFields={setInputFields}
           handleAddClick={handleAddClick}

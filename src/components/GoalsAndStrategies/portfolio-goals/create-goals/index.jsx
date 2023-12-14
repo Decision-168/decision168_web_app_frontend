@@ -13,6 +13,7 @@ import KPIs from "./subComponents/KPIs";
 const steps = ["Goal", "KPIs"];
 const CreateGoal = () => {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [inputFields, setInputFields] = useState([]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -40,7 +41,6 @@ const CreateGoal = () => {
     console.log("KPIs created!");
     console.log(inputFields);
   };
-  const [inputFields, setInputFields] = useState([]);
 
   const handleAddClick = () => {
     setInputFields([...inputFields, { KPI: "", Description: "" }]);

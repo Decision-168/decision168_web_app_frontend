@@ -37,9 +37,9 @@ const Goal = ({ individual, onUpdate }) => {
   const [availableMembers, setAvailableMembers] = useState([]);
 
   const [formValues, setFormValues] = useState({
-    gname: "",
+    gname: null,
     gdept: "",
-    gdes: "",
+    gdes: null,
     gcreated_by: "1", //user_id
     portfolio_id: "2", //portfolio_id
     gmanager: "",
@@ -73,12 +73,19 @@ const Goal = ({ individual, onUpdate }) => {
     setAvailableMembers(memberData);
   }, [memberData]);
 
-  const handleChange = (fieldName) => (event) => {
-    setFormValues({
-      ...formValues,
-      [fieldName]: event.target.value,
-    });
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    console.log (value);
+    setFormValues((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
+
+  useEffect(() => {
+    setAvailableMembers(memberData);
+  }, [memberData]);
 
   const handleStartDateChange = (date) => {
     setFormValues({
@@ -103,7 +110,7 @@ const Goal = ({ individual, onUpdate }) => {
           required={true}
           placeholder="Enter Objective/Goal..."
           value={formValues.gname}
-          onChange={handleChange("gname")}
+          onChange={handleChange}
         />
         <SelectDepartment
           required={true}
@@ -187,7 +194,7 @@ const Goal = ({ individual, onUpdate }) => {
           required={false}
           placeholder="Enter Description..."
           value={formValues.gdes}
-          onChange={handleChange("gdes")}
+          onChange={handleChange}
         />
       </Grid>
     );
