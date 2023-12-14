@@ -1,9 +1,8 @@
 import { Box, Button, DialogContent, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import HistoryList from "./HistoryList";
 
-const OverallHistory = () => {
-  const data = [0, 1, 2, 3, 4, 5];
+const OverallHistory = ({ allHist, name, type, id }) => {
   return (
     <DialogContent dividers>
       <Box
@@ -21,16 +20,16 @@ const OverallHistory = () => {
           <Typography
             sx={{ fontSize: 15, fontWeight: "600", color: "#212934" }}
           >
-            KPI: ABC Strategy 3
+            {name}
           </Typography>
           <Button variant="contained" size="small">
             Export To Excel
           </Button>
         </Box>
-        {data.map((item, index) => {
+        {allHist?.map((item, index) => {
           return (
             <Fragment key={index}>
-              <HistoryList />
+              <HistoryList allhdata={item} type={type} id={id}/>
             </Fragment>
           );
         })}

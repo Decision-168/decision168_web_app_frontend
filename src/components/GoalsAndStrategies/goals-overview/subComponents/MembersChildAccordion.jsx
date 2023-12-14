@@ -15,11 +15,12 @@ const MembersChildAccordion = ({
   value,
   expanded,
   handleChange,
+  handleYesChange,
   title,
   bgColor,
   pending,
+  data
 }) => {
-  const username = ["Alim Mohammad", "Arshad Khan", "Syed Jameel"];
   return (
     <Accordion expanded={expanded === value} onChange={handleChange(value)}>
       <AccordionSummary
@@ -59,16 +60,16 @@ const MembersChildAccordion = ({
                 ml: 1,
               }}
             >
-              {username.length}
+              {data?.length}
             </Avatar>
           )}
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        {username.map((item, index) => {
+        {data?.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList username={item} assignManagerFlag={value} pending ={pending}/>
+              <UserList data={item} assignManagerFlag={value} pending ={pending} passhandleYesChange={handleYesChange}/>
             </List>
           );
         })}

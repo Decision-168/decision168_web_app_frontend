@@ -1,64 +1,193 @@
-import { Box, Button, DialogActions, DialogContent, Grid } from "@mui/material";
-import React, { memo } from "react";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  InputLabel,
+  TextField,
+  useTheme,
+} from "@mui/material";
+import React, { memo, useEffect, useState } from "react";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
-import CustomAutocomplete from "../../../subComponents/CustomAutocomplete";
-import FilterSelectedOptions from "../../../subComponents/FilterSelectedOptions";
 import InviteMembers from "../../../subComponents/InviteMembers";
 import Duration from "../../../subComponents/Duration";
+
+import { getGoalCreateDD } from "../../../../../api/modules/goalkpiModule";
+import SelectDepartment from "../../../../common/SelectDepartment";
+import SelectGoalManager from "../../../../common/SelectGoalManager";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../../redux/action/userSlice";
+import moment from "moment";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
-const departments = [
-  { label: "Marketing" },
-  { label: "Implementation" },
-  { label: "Marketing & Sales" },
-];
-const assignee = [
-  { label: "Afrin Syed" },
-  { label: "Amin Syed" },
-  { label: "Don Mehmood" },
-];
-const member = [
-  { title: "Afrin Syed" },
-  { title: "Amin Syed" },
-  { title: "Don Mehmood" },
-];
-const Goal = ({ individual }) => {
+import CustomDatePicker from "../../../../common/CustomDatePicker";
+
+const Goal = ({ individual, onUpdate }) => {
+  const theme = useTheme();
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+  const [departments, setdepartments] = useState([]);
+  const [assignee, setassignee] = useState([]);
+  const [memberData, setmemberData] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [memberInputValue, setMemberInputValue] = useState("");
+  const [availableMembers, setAvailableMembers] = useState([]);
+
+  const [formValues, setFormValues] = useState({
+    gname: "",
+    gdept: "",
+    gdes: "",
+    gcreated_by: "1", //user_id
+    portfolio_id: "2", //portfolio_id
+    gmanager: "",
+    team_member: [],
+    imemail: [],
+  });
+
+  useEffect(() => {
+    // Callback to parent component with updated form values
+    onUpdate(formValues);
+  }, [formValues, onUpdate]);
+
+  useEffect(() => {
+    const fetchAllHistoryData = async () => {
+      try {
+        const response = await getGoalCreateDD("2", "1"); //portfolio_id,user_id
+        if (response) {
+          setdepartments(response.PortfolioDepartmentRes);
+          setassignee(response.AssignManagerListRes);
+          setmemberData(response.AssignMemberListRes);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllHistoryData();
+  }, []);
+
+  useEffect(() => {
+    setAvailableMembers(memberData);
+  }, [memberData]);
+
+  const handleChange = (fieldName) => (event) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
+  };
+
+  const handleStartDateChange = (date) => {
+    setFormValues({
+      ...formValues,
+      gstart_date: date,
+    });
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormValues({
+      ...formValues,
+      gend_date: date,
+    });
+  };
+
   const CommonForm = ({}) => {
     return (
       <Grid container spacing={2} px={individual && 2}>
         <CustomLabelTextField
           label="Objective/Goal"
-          name="Objective"
+          name="gname"
           required={true}
           placeholder="Enter Objective/Goal..."
+          value={formValues.gname}
+          onChange={handleChange("gname")}
         />
-        <CustomAutocomplete
-          label="Identify Department "
-          options={departments}
-          name="department"
+        <SelectDepartment
           required={true}
-          placeholder="Select Department"
+          departments={departments}
+          formValues={formValues}
+          setFormValues={setFormValues}
         />
-        <CustomAutocomplete
-          label="Assign Goal Manager"
-          options={assignee}
-          name="goalManager"
+
+        <SelectGoalManager
           required={false}
-          placeholder="Assign To Me"
+          managers={assignee}
+          formValues={formValues}
+          setFormValues={setFormValues}
         />
-        <FilterSelectedOptions
-          label="Add Team Members"
+        <Grid item xs={2} alignSelf={"center"}>
+          <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
+        </Grid>
+        <Grid item xs={7}>
+          <Autocomplete
+            multiple
+            value={selectedMembers}
+            fullWidth
+            options={availableMembers}
+            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option.id === value.id}
+            onChange={(event, newMembers) => {
+              setSelectedMembers(newMembers);
+              const members = newMembers?.map((member) => member.id);
+              setAvailableMembers(
+                memberData.filter((member) => !newMembers.includes(member))
+              );
+              setFormValues({
+                ...formValues,
+                team_member: members,
+              });
+            }}
+            inputValue={memberInputValue}
+            onInputChange={(event, newMemberInputValue) => {
+              setMemberInputValue(newMemberInputValue);
+            }}
+            renderInput={(params) => {
+              return <TextField {...params} />;
+            }}
+          />
+        </Grid>
+        <InviteMembers formValues={formValues} setFormValues={setFormValues} />
+        <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
+          <Grid item xs={2}>
+            <InputLabel sx={{ fontSize: "14px" }}>
+              Duration
+              <span style={{ color: theme.palette.error.main }}> *</span>
+            </InputLabel>
+          </Grid>
+          <Grid item xs={10} container spacing={1}>
+            <Grid item xs={5}>
+              <CustomDatePicker
+                label=""
+                value={formValues.gstart_date}
+                onChange={handleStartDateChange}
+              />
+            </Grid>
+            <Grid item xs={5}>
+              <CustomDatePicker
+                label=""
+                value={formValues.gend_date}
+                onChange={handleEndDateChange}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* <Duration
+          label="Duration "
           labelColor=""
-          required={false}
-          placeholder="Add Team Members..."
-          items={member}
-        />
-        <InviteMembers />
-        <Duration label="Duration " labelColor="" required={true} />
+          individual={individual}
+          required={true}
+          onDateChange={handleDateChange}
+        /> */}
         <CustomMultilineTextField
           label="Description"
-          name="Description"
+          name="gdes"
           required={false}
           placeholder="Enter Description..."
+          value={formValues.gdes}
+          onChange={handleChange("gdes")}
         />
       </Grid>
     );

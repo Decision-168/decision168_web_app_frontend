@@ -13,11 +13,32 @@ import {
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import { CustomTabPanel, a11yProps } from "../../subComponents/style-functions";
 
-const GoalTabSection = ({}) => {
+const GoalTabSection = ({ formValues, setFormValues }) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    let copy_detail_val = "everything";
+    let cust_goal_val = "";
+    if(newValue === 1)
+    {
+      copy_detail_val = "custom";
+    }
+    setFormValues({
+      ...formValues,
+      copy_detail: copy_detail_val,
+      cust_goal: cust_goal_val,
+    });
+  };
+
+  const handleRadioChange = (event) => {
+    if (event && event.target && event.target.value) {
+      const newRadioValue = event.target.value;
+      setFormValues({
+        ...formValues,
+        cust_goal: newRadioValue,
+      });
+    }
   };
 
   const info = [
@@ -140,7 +161,7 @@ const GoalTabSection = ({}) => {
             name="radio-buttons-group"
           >
             <FormControlLabel
-              value="importKpi"
+              value="1"
               control={<Radio />}
               label="Import Only KPIs"
               sx={{
@@ -148,9 +169,10 @@ const GoalTabSection = ({}) => {
                 fontSize: 13,
                 fontWeight: "500",
               }}
+              onChange={(event) => handleRadioChange(event)}
             />
             <FormControlLabel
-              value="importKpiProject"
+              value="2"
               control={<Radio />}
               label="Import KPIs with Projects Only"
               sx={{
@@ -158,16 +180,18 @@ const GoalTabSection = ({}) => {
                 fontSize: 13,
                 fontWeight: "500",
               }}
+              onChange={(event) => handleRadioChange(event)}
             />
             <FormControlLabel
-              value="importAll"
+              value="3"
               control={<Radio />}
-              label="Import KPIs with Projects, Planned Content, Task & Its Subtask"
+              label="Import KPIs with Projects, Task & Its Subtask"
               sx={{
                 color: theme.palette.secondary.main,
                 fontSize: 13,
                 fontWeight: "500",
               }}
+              onChange={(event) => handleRadioChange(event)}
             />
           </RadioGroup>
         </FormControl>

@@ -1,8 +1,8 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { Paper, Box, Grid, Typography } from "@mui/material";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { Add, Edit } from "@mui/icons-material";
-import TaskInfo from "../../subComponents/TaskInfo";
+import TaskInfo from "./TaskInfo";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
@@ -16,30 +16,39 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import SubtaskPreview from "../../subtaskOverview/subComponent/SubtaskPreview";
 import CustomDialog from "../../../common/CustomDialog";
 import CommentSection from "../../../project/projects-overview/comment-section";
-import { taskOverviewStyles } from "../styles";
-const TaskPreview=({filteredRow })=> {
-    const styles = taskOverviewStyles();
+import { getTaskDetails } from "../../../../api/modules/taskModule";
+
+const TaskPreview = ({ styles, taskId }) => {
   const dispatch = useDispatch();
-  const taskData = filteredRow[0];
 
   //Dailog code
   const [openSubTaskPreviewDailog, setOpenSubTaskPreviewDailog] = React.useState(false);
-  const [filteredSubTask, setFilterSubTask] = React.useState(null);
+  const [task, setTask] = React.useState({});
+  const [subTaskId, setSubTaskId] = React.useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubTaskPreviewDialog = (subrowId) => {
-    console.log(subrowId);
-    const filteredSubTaskRow = filteredRow?.reduce((result, row) => {
-      const matchingSubrow = row.subRows.find((subrow) => subrow.id === subrowId);
-      if (matchingSubrow) {
-        result.push(matchingSubrow);
-      }
-      return result;
-    }, []);
+  const fetchTaskDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await getTaskDetails(taskId);
+      setTask(response);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    console.log(filteredSubTaskRow);
-    setFilterSubTask(filteredSubTaskRow);
+  React.useEffect(() => {
+    fetchTaskDetails();
+  }, [taskId]);
+
+
+  const handleSubTaskPreviewDialog = (subtaskId) => {
+    setSubTaskId(subtaskId)
     setOpenSubTaskPreviewDailog(true);
   };
+
   const handleCloseTaskPreviewDailog = () => {
     setOpenSubTaskPreviewDailog(false);
   };
@@ -86,43 +95,89 @@ const TaskPreview=({filteredRow })=> {
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} >
         <Grid item xs={12} lg={8}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7" }}>
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
-                <OverviewCardHeader title={`TASK:${taskData?.title}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+                <OverviewCardHeader
+                  title={`TASK:${task?.tname}`}
+                  btn1Text={"Add Task"}
+                  btn2Text={"Add Subtask"}
+                  btn3Text={"Edit Task"}
+                  btn1Icon={<Add />}
+                  btn2Icon={<Add />}
+                  btn3Icon={<Edit />}
+                  handleClick1={handleAddTasksDialog}
+                  handleClick2={handleAddSubTasksDialog}
+                  handleClick3={handleEditTaskDialog}
+                  handleDuplicate={handleDuplicateDialog}
+                  handleFileIt={handleFileItDialog}
+                  handleDelete={handleDeleteDialog}
+                />
                 <Grid container>
                   <Grid item xs={12}>
-                    <Typography sx={styles.label}>Task Code:</Typography>
-                    <Typography sx={styles.labelText}>{taskData?.code}</Typography>
+                    {task?.tcode && (
+                      <>
+                        <Typography sx={styles.label}>Task Code:</Typography>
+                        <Typography sx={styles.labelText}>{task?.tcode}</Typography>
+                      </>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography sx={styles.label}>Task Description :</Typography>
-                    <Typography sx={styles.labelText}>{taskData?.description}</Typography>
+                    {task?.tdes && (
+                      <>
+                        <Typography sx={styles.label}>Task Description :</Typography>
+                        <Typography sx={styles.labelText}>{task?.tdes}</Typography>
+                      </>
+                    )}
+
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography sx={styles.label}>Task Notes:</Typography>
-                    <Typography sx={styles.labelText}>{taskData?.note}</Typography>
+                    {task?.tnote && (
+                      <>
+                        <Typography sx={styles.label}>Task Notes:</Typography>
+                        <Typography sx={styles.labelText}>{task?.tnote}</Typography>
+                      </>
+                    )}
                   </Grid>
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Tasks Links:</Typography>
-                    <Typography sx={styles.labelText}>No Task Links!</Typography>
+                    {task?.tlink?.length > 0 ? (
+                      task?.tlink?.split(",")?.map((link, index) => (
+                        <Typography key={index} sx={styles.labelText}>
+                          {link}
+                        </Typography>
+                      ))
+                    ) : (
+                      <Typography sx={styles.labelText}>No Task Links!</Typography>
+                    )}
                   </Grid>
+
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Tasks Files:</Typography>
-                    <Typography sx={styles.labelText}>No Task Files!</Typography>
+                    {task?.tfile?.length > 0 ? (
+                      task?.tfile?.split(",")?.map((file, index) => (
+                        <Typography key={index} sx={styles.labelText}>
+                          {file}
+                        </Typography>
+                      ))
+                    ) : (
+                      <Typography sx={styles.labelText}>No Task Files!</Typography>
+                    )}
                   </Grid>
+
                   <Grid item xs={12}>
                     <Typography sx={styles.label}>Subtasks:</Typography>
-                    {/*  */}
                     <Box>
-                      {taskData?.subRows?.length > 0 ? (
-                        taskData?.subRows.map((subrow, index) => (
+                      {task?.subTasks?.length > 0 ? (
+                        task?.subTasks?.map((subTask, index) => (
                           <Box key={index} sx={styles.subtaskLinkWrapper}>
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
-                            <Typography onClick={() => handleSubTaskPreviewDialog(subrow.id)} sx={styles.subtaskLinkText}>
-                              {subrow.code} : {subrow.description}
+                            <Typography
+                              onClick={() => handleSubTaskPreviewDialog(subTask?.stid)}
+                              sx={styles.subtaskLinkText}>
+                              {subTask?.stcode} : {subTask?.stname}
                             </Typography>
                           </Box>
                         ))
@@ -132,14 +187,13 @@ const TaskPreview=({filteredRow })=> {
                     </Box>
                   </Grid>
                 </Grid>
-                <TaskInfo styles={styles} />
+                <TaskInfo styles={styles} info={task} />
               </PerfectScrollbar>
             </Box>
           </Paper>
         </Grid>
-
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7" }}>
+          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
             <CommentSection />
           </Paper>
         </Grid>
@@ -153,11 +207,19 @@ const TaskPreview=({filteredRow })=> {
         <CreateEditTaskForm editMode={true} />
       </ReduxDialog>
 
-      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
+      <ReduxDialog
+        value="add-sub-tasks"
+        modalTitle="Add Sub Task"
+        showModalButton={false}
+        modalSize="md">
         <CreateSubTasksForm />
       </ReduxDialog>
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+      <ReduxDialog
+        value="duplicate-task"
+        modalTitle="Copy Task"
+        showModalButton={false}
+        modalSize="sm">
         <DuplicateDialog />
       </ReduxDialog>
 
@@ -165,11 +227,17 @@ const TaskPreview=({filteredRow })=> {
 
       <ConfirmationDialog value={"deleteTask"} />
 
-      <CustomDialog handleClose={handleCloseTaskPreviewDailog} open={openSubTaskPreviewDailog} modalTitle="Subtask" redirectPath={"/subtasks-overview"} showModalButton={true} modalSize="lg">
-        <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
+      <CustomDialog
+        handleClose={handleCloseTaskPreviewDailog}
+        open={openSubTaskPreviewDailog}
+        modalTitle="Subtask"
+        redirectPath={`/subtasks-overview/${subTaskId}`}
+        showModalButton={true}
+        modalSize="lg">
+        <SubtaskPreview styles={styles} subtaskId={subTaskId} parentTaskName={task?.tname} />
       </CustomDialog>
     </>
   );
-}
+};
 
-export default memo(TaskPreview)
+export default memo(TaskPreview);

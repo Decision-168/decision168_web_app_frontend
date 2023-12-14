@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import {
   Avatar,
   DialogActions,
@@ -22,8 +22,15 @@ const CreateGoal = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const [childFormValues, setChildFormValues] = useState({});
+
+  const handleChildUpdate = (formValues) => {
+    setChildFormValues(formValues);
+  };
+
   const handleSave = () => {
-    // Logic to save the Goal data
+    // Logic to save the Goal data    
+    console.log("formValues",childFormValues);
     console.log("Goal data saved!");
     handleNext(); // Proceed to the next step (KPIs)
   };
@@ -31,6 +38,7 @@ const CreateGoal = () => {
   const handleCreate = () => {
     // Logic to create KPIs
     console.log("KPIs created!");
+    console.log(inputFields);
   };
   const [inputFields, setInputFields] = useState([]);
 
@@ -103,7 +111,7 @@ const CreateGoal = () => {
           </Box>
           {activeStep === 0 ? (
             <Box>
-              <Goal />
+              <Goal onUpdate={handleChildUpdate}/>
             </Box>
           ) : (
             <Box sx={{ pt: 1 }}>
@@ -149,4 +157,4 @@ const CreateGoal = () => {
   );
 };
 
-export default CreateGoal;
+export default memo(CreateGoal);

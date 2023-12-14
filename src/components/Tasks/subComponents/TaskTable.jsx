@@ -1,74 +1,166 @@
-import React, { useState, useSyncExternalStore } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import Tooltip from "@mui/material/Tooltip";
-import Stack from "@mui/material/Stack";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import React, { useEffect, useState } from "react";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Tooltip,
+  Stack,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  TextField,
+  IconButton,
+} from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { tasks, taskAssignees, taskPriorities, taskStatuses } from "../subComponents/TasksData";
+import {
+  taskPriorities,
+  priorityColors,
+  taskStatuses,
+  statusColors,
+} from "../subComponents/TasksData";
 import Actions from "./Actions";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReorderIcon from "@mui/icons-material/Reorder";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import SubdirectoryArrowRightRoundedIcon from "@mui/icons-material/SubdirectoryArrowRightRounded";
-import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@mui/material";
-import CustomTextField from "../../common/CustomTextField";
-import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
+import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
-import { getStatusStyle } from "../../../helpers/getStatusStyle";
-import { getPriorityStyle } from "../../../helpers/getPriorityStyle ";
 import MyDatePicker from "./MyDatePicker ";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { taskOverviewStyles } from "../../../components/Tasks/taskOverview/styles"
+import {
+  changeSubTaskStatusCheckox,
+  changeTaskStatusCheckox,
+  editTaskAndSubtask,
+} from "../../../api/modules/taskModule";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { toast } from "react-toastify";
+import { formatAssigneeText, formatPriority, formatStatus } from "../../../helpers/tasks";
 import CustomDialog from "../../common/CustomDialog";
-import OverviewCard from "../taskOverview/subComponents/TaskOverviewCard";
-import { taskOverviewStyles } from "../taskOverview/styles";
-import TaskInfo from "./TaskInfo";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
-import OverviewCardHeader from "../taskOverview/subComponents/TaskOverviewCardHeader";
 import TaskPreview from "../taskOverview/subComponents/TaskPreview";
 import SubtaskPreview from "../subtaskOverview/subComponent/SubtaskPreview";
 
-export default function TaskTable() {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+export default function TaskTable({ rows, setRows, fetchData }) {
   const theme = useTheme();
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
-  const [rows, setRows] = useState(tasks);
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
+
+  const [rowId, setRowId] = useState(0);
+  const [subRowId, setSubRowId] = useState(0);
   const [openSubrows, setOpenSubrows] = useState(false);
   const [expandedTaskId, setExpandedTaskId] = useState(0);
-  const [rowId, setRowId] = useState(0);
-  const [editMode, setEditMode] = useState(false);
+  const [rowStates, setRowStates] = useState({});
+  const [taskName, setTaskName] = useState("");
+  const [subTaskName, setSubTaskName] = useState("");
 
-  const [selectedAssignee, setSelectedAssignee] = useState("john doe");
-  const [selectedPriority, setSelectedPriority] = useState("high");
-  const [selectedStatus, setSelectedStatus] = useState("in progress");
+  //assingnee
+  const [assignees, setAssignees] = useState([]);
+  const [selectedAssignees, setSelectedAssignees] = useState({});
+  const [editTaskAssignee, setEditTaskAssignee] = useState(null);
+  const [editSubTaskAssignee, setEditSubTaskAssignee] = useState(null);
+  const [taskAssignee, setTaskAssignee] = useState(null);
+  const [subTaskAssignee, setSubTaskAssignee] = useState(null);
+  //priority
+  const [selectedPriorities, setSelectedPriorities] = useState({});
+  const [editTaskPriority, setEditTaskPriority] = useState(null);
+  const [editSubTaskPriority, setEditSubTaskPriority] = useState(null);
+  //status
+  const [selectedStatuses, setSelectedStatuses] = useState({});
+  const [editTaskStatus, setEditTaskStatus] = useState(null);
+  const [editSubTaskStatus, setEditSubTaskStatus] = useState(null);
+  //Duedate
+  const [selectedTaskDueDate, setSelectedTaskDueDate] = useState(null);
+  const [selectedSubTaskDueDate, setSelectedSubTaskDueDate] = useState(null);
 
-  const [editAssignee, setEditAssignee] = useState(false);
-  const [editPriority, setEditPriority] = useState(false);
-  const [editStatus, setEditStatus] = useState(false);
+  // Fetch taskAssignees from API or another source
+  useEffect(() => {
+    const fetchedAssignees = [{ value: regId, text: "To Me" }, { value: 2, text: "john" }];
+    setAssignees(fetchedAssignees);
+  }, []);
 
-  const statusBg = getStatusStyle(selectedStatus);
-  const priorityBg = getPriorityStyle(selectedPriority);
+  // Set the initial selectedPriorities based on rows
+  useEffect(() => {
+    const initialSelectedPriorities = {};
+
+    rows?.forEach((row) => {
+      // Check for the main row's priority
+      if (row.tpriority) {
+        initialSelectedPriorities[row.tid] = row.tpriority;
+      }
+
+      // Check for subrows and their priorities
+      if (row.subTasks && Array.isArray(row.subTasks)) {
+        row.subTasks.forEach((subrow) => {
+          if (subrow.stpriority) {
+            initialSelectedPriorities[subrow.stid] = subrow.stpriority;
+          }
+        });
+      }
+    });
+
+    setSelectedPriorities(initialSelectedPriorities);
+  }, [rows]);
+
+  // Set the initial selectedStatuses based on rows
+  useEffect(() => {
+    const initialSelectedStatuses = {};
+
+    rows?.forEach((row) => {
+      // Check for the main row's priority
+      if (row.tstatus) {
+        initialSelectedStatuses[row.tid] = row.tstatus;
+      }
+
+      // Check for subrows and their priorities
+      if (row.subTasks && Array.isArray(row.subTasks)) {
+        row.subTasks.forEach((subrow) => {
+          if (subrow.ststatus) {
+            initialSelectedStatuses[subrow.stid] = subrow.ststatus;
+          }
+        });
+      }
+    });
+
+    setSelectedStatuses(initialSelectedStatuses);
+  }, [rows]);
+
+  // Set the initial selectedTaskAssignees based on rows
+  useEffect(() => {
+    const initialSelectedAssignees = {};
+
+    rows?.forEach((row) => {
+      // Check for the main row's task assignee
+      if (row?.tassignee) {
+        initialSelectedAssignees[row.tid] = row.tassignee;
+      }
+
+      // Check for subrows and their task assignees
+      if (row.subTasks && Array.isArray(row.subTasks)) {
+        row.subTasks.forEach((subrow) => {
+          if (subrow.stassignee) {
+            initialSelectedAssignees[subrow.stid] = subrow.stassignee;
+          }
+        });
+      }
+    });
+
+    setSelectedAssignees(initialSelectedAssignees);
+  }, [rows]);
+
 
   const handleDragEnd = (e) => {
     if (!e.destination) return;
@@ -84,96 +176,451 @@ export default function TaskTable() {
     setOpenSubrows(!openSubrows);
   };
 
-  const handleTaskDescription = (rowId) => {
-    if (editMode) {
-      //write logic for task description
-      setEditMode(false);
-    } else {
-      setEditMode(true);
-      setRowId(rowId);
-    }
-  };
-
-  // tasks descrition
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
-
-  const handleEditAssignee = (rowId) => {
+  //Task Code checkbox
+  const handleTaskCodeCheckBoxDialog = (event, rowId, tAssignee, tStatus) => {
     setRowId(rowId);
-    setEditAssignee(true);
-  };
-
-  const handleAssignee = (event, rowId) => {
-    setEditAssignee(false);
-    setSelectedAssignee(event.target.value);
-  };
-
-  const handleEditPriority = (rowId) => {
-    setRowId(rowId);
-    setEditPriority(true);
-  };
-
-  const handlePriority = (event, rowId) => {
-    setEditPriority(false);
-    setSelectedPriority(event.target.value);
-  };
-
-  const handleEditStatus = (rowId) => {
-    setRowId(rowId);
-    setEditStatus(true);
-  };
-
-  const handleStatus = (event, rowId) => {
-    setEditStatus(false);
-    setSelectedStatus(event.target.value);
-  };
-
-  const handleCodeCheckBoxDialog = (event, rowId) => {
-    if (event.target.checked) {
+    setTaskAssignee(tAssignee);
+    // for already checked and done
+    if (!event.target.checked && tStatus === "done") {
+      // If the checkbox is checked and status is done, open the dialog to make the status incomplete
       dispatch(
         openCnfModal({
-          modalName: "statusToComplete",
+          modalName: "changeTaskCheckboxStatus",
+          title: "",
+          description: `Do you want to Change Task Status to Incomplete?`,
+        })
+      );
+    } else if (event.target.checked && tStatus !== "done") {
+      // If the checkbox is unchecked and the status is not done, open the dialog to make the status Complete
+      dispatch(
+        openCnfModal({
+          modalName: "changeTaskCheckboxStatus",
           title: "",
           description: `Do you want to Change Task Status to Complete?`,
         })
       );
-      handleMoreClose();
     } else {
-      dispatch(closeCnfModal({ modalName: "statusToComplete" }));
+      dispatch(closeCnfModal({ modalName: "changeTaskCheckboxStatus" }));
     }
   };
-  
+
+  const handleTaskYes = async () => {
+    const data = { tid: rowId, tassignee: taskAssignee };
+    try {
+      const response = await changeTaskStatusCheckox(regId, data);
+      fetchData();
+      dispatch(closeCnfModal({ modalName: "changeTaskCheckboxStatus" }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in changing the task status:", error);
+    }
+  };
+
+  //Subtask Code checkbox
+  const handleSubTaskCodeCheckBoxDialog = (event, subrowId, stAssignee, stStatus) => {
+    setSubRowId(subrowId);
+    setSubTaskAssignee(stAssignee);
+    // for already checked and done
+    if (!event.target.checked && stStatus === "done") {
+      // If the checkbox is checked and status is done, open the dialog to make the status incomplete
+      dispatch(
+        openCnfModal({
+          modalName: "changeSubTaskCheckboxStatus",
+          title: "",
+          description: `Do you want to Change Subtask Status to Incomplete?`,
+        })
+      );
+    } else if (event.target.checked && stStatus !== "done") {
+      // If the checkbox is unchecked and the status is not done, open the dialog to make the status Complete
+      dispatch(
+        openCnfModal({
+          modalName: "changeSubTaskCheckboxStatus",
+          title: "",
+          description: `Do you want to Change Subtask Status to Complete?`,
+        })
+      );
+    } else {
+      dispatch(closeCnfModal({ modalName: "changeSubTaskCheckboxStatus" }));
+    }
+  };
+
+  const handleSubTaskYes = async () => {
+    const data = { stid: subRowId, stassignee: subTaskAssignee };
+    try {
+      const response = await changeSubTaskStatusCheckox(regId, data);
+      fetchData();
+      dispatch(closeCnfModal({ modalName: "changeSubTaskCheckboxStatus" }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in changing the subtask status:", error);
+    }
+  };
+
+  //Edit Task Name
+  const handleEditTaskName = (taskId, taskName) => {
+    setRowStates((prevRowStates) => ({
+      ...prevRowStates,
+      [taskId]: {
+        ...prevRowStates[taskId],
+        editMode: true,
+        taskName: taskName,
+      },
+    }));
+  };
+
+  const handleCancelTaskNameEdit = (taskId) => {
+    // Reset the taskName to its original value or an empty string
+    const originalTaskName = rowStates[taskId]?.tname || '';
+    // setTaskName(originalTaskName);
+
+    // Reset editMode to false for the specified task
+    setRowStates((prevRowStates) => ({
+      ...prevRowStates,
+      [taskId]: {
+        ...prevRowStates[taskId],
+        editMode: false,
+        // Optionally, reset the taskName in rowStates as well
+        taskName: originalTaskName,
+      },
+    }));
+  };
+
+  const updateTaskName = async (taskId, taskName) => {
+    try {
+      const data = {
+        div_class: "task_editable",
+        div_field: "tname_field",
+        div_id: taskId,
+        txt: taskName,
+        user_id: regId,
+      };
+
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      // Handle any errors that occur during the API call
+      console.error("Error updating task name:", error);
+    }
+  };
+
+  const handleSaveTaskClick = async (taskId) => {
+    try {
+      await updateTaskName(taskId, taskName);
+      // Update the display with the saved task name
+      setRowStates((prevRowStates) => ({
+        ...prevRowStates,
+        [taskId]: {
+          ...prevRowStates[taskId],
+          editMode: false,
+        },
+      }));
+    } catch (error) {
+      console.error("Error handling save task click:", error);
+    }
+  }
+
+  //Edit SubTask Name
+  const handleEditSubTaskName = (subtaskId, subtaskName) => {
+    setRowStates((prevRowStates) => ({
+      ...prevRowStates,
+      [subtaskId]: {
+        ...prevRowStates[subtaskId],
+        editMode: true,
+        subtaskName: subtaskName,
+      },
+    }));
+  };
+
+  const handleCancelSubTaskNameEdit = (subtaskId) => {
+    // Reset the SubtaskName to its original value or an empty string
+    const originalSubTaskName = rowStates[subtaskId]?.stname || '';
+    // setSubTaskName(originalSubTaskName);
+
+    // Reset editMode to false for the specified task
+    setRowStates((prevRowStates) => ({
+      ...prevRowStates,
+      [subtaskId]: {
+        ...prevRowStates[subtaskId],
+        editMode: false,
+        // Optionally, reset the taskName in rowStates as well
+        subtaskName: originalSubTaskName,
+      },
+    }));
+  };
+
+  const updateSubTaskName = async (subtaskId, subtaskName) => {
+    try {
+      const data = {
+        div_class: "subtask_editable",
+        div_field: "stname_field",
+        div_id: subtaskId,
+        txt: subtaskName,
+        user_id: regId,
+      };
+
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      console.error("Error updating SubTask name:", error);
+    }
+  };
+
+  const handleSaveSubTaskClick = async (subtaskId) => {
+    try {
+      await updateSubTaskName(subtaskId, subTaskName);
+
+      // Update the local state to reflect the change
+      setRowStates((prevRowStates) => ({
+        ...prevRowStates,
+        [subtaskId]: {
+          ...prevRowStates[subtaskId],
+          editMode: false,
+        },
+      }));
+
+    } catch (error) {
+      console.error("Error handling save SubTask click:", error);
+    }
+  };
+
+  // Task Assignee
+  const handleTaskAssignee = (event, taskId) => {
+    const newAssignee = event.target.value;
+    // Update the selected assignees
+    setSelectedAssignees((prevSelected) => ({
+      ...prevSelected,
+      [taskId]: newAssignee,
+    }));
+    // Close the assignee editing
+    setEditTaskAssignee(null);
+  };
+
+  const handleEditTaskAssignee = (taskId) => {
+    setEditTaskAssignee(taskId);
+  };
+
+  // SubTask Assignee
+  const handleSubTaskAssignee = (event, subtaskId) => {
+    const newAssignee = event.target.value;
+    // Update the selected assignees
+    setSelectedAssignees((prevSelected) => ({
+      ...prevSelected,
+      [subtaskId]: newAssignee,
+    }));
+    // Close the assignee editing
+    setEditSubTaskAssignee(null);
+  };
+
+  const handleEditSubTaskAssignee = (subtaskId) => {
+    setEditSubTaskAssignee(subtaskId);
+  };
+
+  //Task Priority
+  const updateTaskPriority = async (taskId, newPriority) => {
+    try {
+      const data = {
+        div_class: "task_editable",
+        div_field: "tpriority_field",
+        div_id: taskId,
+        txt: newPriority,
+        user_id: regId,
+      };
+
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      // Handle any errors that occur during the API call
+      console.error("Error updating priority:", error);
+    }
+  };
+
+  const handleTaskPriority = async (event, taskId) => {
+    try {
+      const newPriority = event.target.value;
+      await updateTaskPriority(taskId, newPriority);
+
+      // Update the local state to reflect the change
+      setSelectedPriorities((prevSelected) => ({
+        ...prevSelected,
+        [taskId]: newPriority,
+      }));
+      // Close the priority editing
+      setEditTaskPriority(null);
+    } catch (error) {
+      console.error("Error handling the priority:", error);
+    }
+  };
+
+  const handleEditTaskPriority = (taskId) => {
+    setEditTaskPriority(taskId);
+  };
+
+  //SubTask Priority
+  const updateSubTaskPriority = async (subtaskId, newPriority) => {
+    try {
+      const data = {
+        div_class: "subtask_editable",
+        div_field: "stpriority_field",
+        div_id: subtaskId,
+        txt: newPriority,
+        user_id: regId,
+      };
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      console.error("Error updating priority:", error);
+    }
+  };
+
+  const handleSubTaskPriority = async (event, subtaskId) => {
+    try {
+      const newPriority = event.target.value;
+      await updateSubTaskPriority(subtaskId, newPriority);
+
+      // Update the local state to reflect the change
+      setSelectedPriorities((prevSelected) => ({
+        ...prevSelected,
+        [subtaskId]: newPriority,
+      }));
+      // Close the priority editing
+      setEditSubTaskPriority(null);
+    } catch (error) {
+      console.error("Error handling the priority:", error);
+    }
+  };
+
+  const handleEditSubTaskPriority = (subtaskId) => {
+    setEditSubTaskPriority(subtaskId);
+  };
+
+  //Task Status
+  const updateTaskStatus = async (taskId, newStatus) => {
+    try {
+      const data = {
+        div_class: "task_editable",
+        div_field: "tstatus_field",
+        div_id: taskId,
+        txt: newStatus,
+        user_id: regId,
+      };
+
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleTaskStatus = async (event, taskId) => {
+    try {
+      const newStatus = event.target.value;
+      await updateTaskStatus(taskId, newStatus);
+
+      // Update the local state to reflect the change
+      setSelectedStatuses((prevSelected) => ({
+        ...prevSelected,
+        [taskId]: newStatus,
+      }));
+      // Close the status editing
+      setEditTaskStatus(null);
+    } catch (error) {
+      console.error("Error handling the status:", error);
+    }
+  };
+
+  const handleEditTaskStatus = (taskId) => {
+    setEditTaskStatus(taskId);
+  };
+
+  //SubTask Status
+  const updateSubTaskStatus = async (subtaskId, newStatus) => {
+    try {
+      const data = {
+        div_class: "subtask_editable",
+        div_field: "ststatus_field",
+        div_id: subtaskId,
+        txt: newStatus,
+        user_id: regId,
+      };
+
+      // Assuming editTaskAndSubtask returns a Promise
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      // Handle any errors that occur during the API call
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleSubTaskStatus = async (event, subtaskId) => {
+    try {
+      const newStatus = event.target.value;
+      await updateSubTaskStatus(subtaskId, newStatus);
+
+      // Update the local state to reflect the change
+      setSelectedStatuses((prevSelected) => ({
+        ...prevSelected,
+        [subtaskId]: newStatus,
+      }));
+      // Close the status editing
+      setEditSubTaskStatus(null);
+    } catch (error) {
+      console.error("Error handling the status:", error);
+    }
+  };
+
+  const handleEditSubTaskStatus = (subtaskId) => {
+    setEditSubTaskStatus(subtaskId);
+  };
+
+  //Task Duedate
+  const handleTaskDueDateChange = (date) => {
+    setSelectedTaskDueDate(date);
+  };
+
+  //SubTask Duedate
+  const handleSubTaskDueDateChange = (date) => {
+    setSelectedSubTaskDueDate(date);
+  };
+
   //Task PreviewDialog code
   const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
   const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
-  const [filteredTask, setFilterTask] = useState(null);
-  const [filteredSubTask, setFilterSubTask] = useState(null);
+  const [parentTaskName, setParentTaskName] = useState("");
 
   // Task prview Dailog Code
   const handleOpenTaskPreviewDialog = (rowId) => {
-    const filteredTaskRow = rows.filter((row, index) => row.id === rowId);
-    setFilterTask(filteredTaskRow);
+    setRowId(rowId);
     setOpenTaskPreviewDialog(true);
   };
+
   const handleCloseTaskPreviewDialog = () => {
     setOpenTaskPreviewDialog(false);
   };
 
   // Sub Task prview Dailog Code
-  const handleOpenSubTaskPreviewDialog = (subrowId) => {
-    console.log(subrowId);
-    const filteredSubTaskRow = rows.reduce((result, row) => {
-      const matchingSubrow = row.subRows.find((subrow) => subrow.id === subrowId);
-      if (matchingSubrow) {
-        result.push(matchingSubrow);
-      }
-      return result;
-    }, []);
-    console.log(filteredSubTaskRow);
-    setFilterSubTask(filteredSubTaskRow);
+  const handleOpenSubTaskPreviewDialog = (subrowId, parent_tname) => {
+    setParentTaskName(parent_tname);
+    setSubRowId(subrowId);
     setOpenSubTaskPreviewDialog(true);
   };
+
   const handleCloseSubTaskPreviewDialog = () => {
     setOpenSubTaskPreviewDialog(false);
   };
@@ -181,10 +628,10 @@ export default function TaskTable() {
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <TableContainer component={Paper} sx={{ minHeight: "72vh" }}>
+        <TableContainer sx={{ minHeight: "72vh" }}>
           <Table sx={{ minWidth: "650px" }} aria-label="simple table">
             <TableHead>
-              <TableRow sx={{ width: "100%" }}>
+              <TableRow sx={{ width: "100%", bgcolor: "#FFFFFF", }}>
                 <TableCell align="left" sx={{ width: "10%" }}>
                   &nbsp;
                 </TableCell>
@@ -194,19 +641,19 @@ export default function TaskTable() {
                 <TableCell align="left" sx={{ width: "30%" }}>
                   Task
                 </TableCell>
-                <TableCell align="center" sx={{ width: "5%" }}>
+                <TableCell align="center" sx={{ width: "10%" }}>
                   Assignee
                 </TableCell>
-                <TableCell align="center" sx={{ width: "5%" }}>
+                <TableCell align="center" sx={{ width: "10%" }}>
                   Priority
                 </TableCell>
-                <TableCell align="center" sx={{ width: "5%" }}>
+                <TableCell align="center" sx={{ width: "10%" }}>
                   Status
                 </TableCell>
-                <TableCell align="center" sx={{ width: "15%" }}>
+                <TableCell align="center" sx={{ width: "10%" }}>
                   Due Date
                 </TableCell>
-                <TableCell align="center" sx={{ width: "20%" }}>
+                <TableCell align="center" sx={{ width: "10%" }}>
                   Actions
                 </TableCell>
               </TableRow>
@@ -214,65 +661,54 @@ export default function TaskTable() {
             <Droppable droppableId="droppable-1">
               {(provider) => (
                 <TableBody ref={provider.innerRef} {...provider.droppableProps}>
-                  {rows.map((row, index) => (
-                    <Draggable
-                      key={row.code}
-                      draggableId={row.code}
-                      index={index}
-                    >
+                  {rows?.map((row, index) => (
+                    <Draggable key={row?.tcode} draggableId={row?.tcode} index={index}>
                       {(provider) => (
-                        <React.Fragment key={row.code}>
+                        <React.Fragment key={row?.tcode}>
                           <TableRow
                             sx={{
                               " &:last-child th": { border: 0 },
                               width: "100%",
-                              bgcolor: "white",
+                              bgcolor: "#FFFFFF",
                               "&:hover": {
                                 backgroundColor: "#F7F7F7",
-                                "& .task-description": {
+                                "& .task-name": {
                                   color: theme.palette.primary.dark,
                                 },
                               },
                             }}
                             {...provider.draggableProps}
-                            ref={provider.innerRef}
-                          >
+                            ref={provider.innerRef}>
                             {/* Icons */}
                             <TableCell sx={{ width: "10%" }} align="center">
                               <Stack
                                 direction="row"
                                 justifyContent="start"
                                 alignItems="center"
-                                spacing={1}
-                              >
+                                spacing={1}>
                                 <Tooltip
                                   title="Reorder row"
                                   arrow
                                   size="small"
-                                  placement="top-start"
-                                >
+                                  placement="top-start">
                                   <IconButton
                                     size="small"
                                     component="span"
-                                    {...provider.dragHandleProps}
-                                  >
+                                    {...provider.dragHandleProps}>
                                     <ReorderIcon />
                                   </IconButton>
                                 </Tooltip>
 
-                                {row.subRows && row.subRows.length > 0 && (
+                                {row?.subTasks && row?.subTasks?.length > 0 && (
                                   <IconButton
                                     size="small"
-                                    onClick={() => handleToggleSubrows(row.id)}
-                                  >
-                                    {openSubrows &&
-                                    expandedTaskId === row.id ? (
+                                    onClick={() => handleToggleSubrows(row?.tid)}>
+                                    {openSubrows && expandedTaskId === row?.tid ? (
                                       <Tooltip
                                         title="Hide subrows"
                                         arrow
                                         size="small"
-                                        placement="top-start"
-                                      >
+                                        placement="top-start">
                                         <ExpandLessIcon />
                                       </Tooltip>
                                     ) : (
@@ -280,8 +716,7 @@ export default function TaskTable() {
                                         title="Show subrows"
                                         arrow
                                         size="small"
-                                        placement="top-start"
-                                      >
+                                        placement="top-start">
                                         <ExpandMoreIcon />
                                       </Tooltip>
                                     )}
@@ -293,114 +728,123 @@ export default function TaskTable() {
                             {/* Code */}
                             <TableCell sx={{ width: "10%" }} align="center">
                               <FormGroup sx={{ width: "100px" }}>
-                                <FormControlLabel sx={{ color: "black" }} control={<Checkbox size="small" onChange={(event) => handleCodeCheckBoxDialog(event, row.id)} />} label={row.code} />
+                                <FormControlLabel
+                                  sx={{ color: "black" }}
+                                  control={
+                                    <Checkbox
+                                      checked={row?.tstatus === "done"}
+                                      size="small"
+                                      onChange={(event) =>
+                                        handleTaskCodeCheckBoxDialog(
+                                          event,
+                                          row?.tid,
+                                          row?.tassignee,
+                                          row?.tstatus
+                                        )
+                                      }
+                                    />
+                                  }
+                                  label={row?.tcode}
+                                />
                               </FormGroup>
                             </TableCell>
 
-                            {/* Task Description */}
+                            {/* Task Name */}
                             <TableCell sx={{ width: "30%" }} align="left">
-                              <Box
-                                component="form"
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                sx={{ height: "100%" }}
-                              >
-                                <Stack
-                                  direction="row"
-                                  justifyContent="space-between"
-                                  alignItems="center"
-                                  spacing={1}
-                                >
-                                  {editMode && rowId === row.id ? (
-                                    <CustomTextField
-                                      name="taskDescription"
-                                      placeholder="Enter Task description..."
-                                      register={register}
-                                      errors={errors}
-                                      validation={
-                                        globalValidations.taskDescription
-                                      } // Pass the validation rules as a prop
+                              <Box component="form" noValidate sx={{ height: "100%" }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                                  {rowStates[row.tid]?.editMode ? (
+                                    <TextField
+                                      name="tname"
+                                      label=""
+                                      variant="outlined"
+                                      value={rowStates[row.tid]?.taskName}
+                                      onChange={(e) => {
+                                        setTaskName(e.target.value);
+                                        setRowStates((prevRowStates) => ({
+                                          ...prevRowStates,
+                                          [row.tid]: {
+                                            ...prevRowStates[row.tid],
+                                            taskName: e.target.value,
+                                          },
+                                        }));
+                                      }}
+                                      fullWidth
                                     />
                                   ) : (
                                     <>
-                                      <Typography
-                                        onClick={() =>
-                                          handleOpenTaskPreviewDialog(row.id)
-                                        }
-                                        className="task-description"
-                                        sx={{
-                                          textDecoration: "none",
-                                          color: theme.palette.secondary.dark,
-                                          fontSize: "13px",
-                                          fontWeight: "400",
-                                        }}
-                                      >
-                                        {row.description}
+                                      <Typography component="p" variant="caption" display="block" sx={{
+                                        textDecoration: "none",
+                                        color: theme.palette.secondary.dark,
+                                        cursor: "pointer",
+                                        fontSize: "13px",
+                                        fontWeight: "400",
+                                      }} className="task-name" gutterBottom ml={1} textAlign="left" onClick={() => handleOpenTaskPreviewDialog(row?.tid)}>
+                                        {rowStates[row?.tid]?.taskName || row?.tname}
                                       </Typography>
 
                                       <CustomDialog
-                                        handleClose={
-                                          handleCloseTaskPreviewDialog
-                                        }
+                                        handleClose={handleCloseTaskPreviewDialog}
                                         open={openTaskPreviewDialog}
                                         modalTitle="Task"
-                                        redirectPath={"/tasks-overview"}
+                                        redirectPath={`/tasks-overview/${rowId}`}
                                         showModalButton={true}
-                                        modalSize="lg"
-                                      >
-                                        <TaskPreview
-                                          styles={styles}
-                                          filteredRow={filteredTask}
-                                        />
+                                        modalSize="lg">
+                                        <TaskPreview styles={styles} taskId={rowId} />
                                       </CustomDialog>
                                     </>
+
                                   )}
-                                  <Tooltip
-                                    title={
-                                      editMode ? "Save task" : "Rename task"
-                                    }
-                                    arrow
-                                    size="small"
-                                    placement="top-start"
+
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      alignItems: "center",
+                                    }}
                                   >
-                                    <IconButton
-                                      size="small"
-                                      onClick={() =>
-                                        handleTaskDescription(row.id)
-                                      }
-                                    >
-                                      {editMode && rowId === row.id ? (
-                                        <SaveIcon />
-                                      ) : (
-                                        <EditIcon />
-                                      )}
-                                    </IconButton>
-                                  </Tooltip>
+                                    {rowStates[row.tid]?.editMode ? (
+                                      <>
+                                        <IconButton
+                                          size="small"
+                                          type="button"
+                                          sx={{ fontSize: "1rem" }}
+                                          onClick={() => handleCancelTaskNameEdit(row?.tid)}>
+                                          <CancelIcon fontSize="inherit" />
+                                        </IconButton>
+                                        <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={() => handleSaveTaskClick(row?.tid)}>
+                                          <SaveIcon fontSize="inherit" />
+                                        </IconButton>
+                                      </>
+                                    ) : (
+                                      <IconButton
+                                        size="small"
+                                        type="button"
+                                        sx={{ fontSize: "1rem" }}
+                                        onClick={(event) => handleEditTaskName(row?.tid, row?.tname)}
+                                      >
+                                        <EditIcon fontSize="inherit" />
+                                      </IconButton>
+                                    )}
+                                  </Box>
                                 </Stack>
                               </Box>
                             </TableCell>
 
                             {/* Assignee */}
-                            <TableCell sx={{ width: "5%" }} align="center">
+                            <TableCell sx={{ width: "10%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
-                                {editAssignee && rowId === row.id ? (
+                                {editTaskAssignee === row.tid ? (
                                   <FormControl fullWidth>
                                     <Select
-                                      value={selectedAssignee}
-                                      onChange={(event) =>
-                                        handleAssignee(event, row.id)
-                                      }
-                                    >
-                                      {taskAssignees.map((assignee, index) => (
-                                        <MenuItem
-                                          key={index}
-                                          value={assignee.value}
-                                        >
+                                      value={selectedAssignees[row.tid] || regId}
+                                      onChange={(event) => handleTaskAssignee(event, row.tid)}>
+                                      {assignees.map((assignee, index) => (
+                                        <MenuItem key={index} value={assignee.value}>
                                           <Typography
                                             component="p"
                                             variant="caption"
-                                            display="block"
-                                          >
+                                            display="block">
                                             {assignee.text}
                                           </Typography>
                                         </MenuItem>
@@ -410,7 +854,12 @@ export default function TaskTable() {
                                 ) : (
                                   <Box>
                                     <Chip
-                                      label={selectedAssignee}
+                                      label={formatAssigneeText(
+                                        selectedAssignees[row?.tid] ||
+                                        row?.tassignee,
+                                        regId,
+                                        assignees
+                                      )}
                                       variant="contained"
                                       sx={{
                                         minWidth: "80px",
@@ -419,8 +868,7 @@ export default function TaskTable() {
                                     />
                                     <IconButton
                                       size="small"
-                                      onClick={() => handleEditAssignee(row.id)}
-                                    >
+                                      onClick={() => handleEditTaskAssignee(row.tid)}>
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -429,27 +877,21 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Priority */}
-                            <TableCell sx={{ width: "5%" }} align="center">
+                            <TableCell sx={{ width: "10%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
-                                {editPriority && rowId === row.id ? (
+                                {editTaskPriority === row.tid ? (
                                   <FormControl fullWidth>
                                     <Select
-                                      value={selectedPriority}
-                                      onChange={(event) =>
-                                        handlePriority(event, row.id)
-                                      }
-                                    >
+                                      value={selectedPriorities[row.tid] || ""}
+                                      onChange={(event) => handleTaskPriority(event, row?.tid)}>
                                       {taskPriorities.map((priority, index) => (
-                                        <MenuItem
-                                          key={index}
-                                          value={priority.value}
-                                        >
+                                        <MenuItem key={index} value={priority.value}>
                                           <Typography
                                             component="p"
                                             variant="caption"
-                                            display="block"
-                                          >
+                                            display="block">
                                             {priority.text}
+                                            {/* {formatPriority(priority.text)} */}
                                           </Typography>
                                         </MenuItem>
                                       ))}
@@ -458,18 +900,19 @@ export default function TaskTable() {
                                 ) : (
                                   <Box>
                                     <Chip
-                                      label={selectedPriority}
+                                      label={formatPriority(
+                                        selectedPriorities[row.tid] || row.tpriority || ""
+                                      )}
                                       variant="contained"
                                       sx={{
                                         minWidth: "80px",
                                         maxWidth: "85px",
-                                        ...priorityBg,
+                                        ...priorityColors[selectedPriorities[row.tid]],
                                       }}
                                     />
                                     <IconButton
                                       size="small"
-                                      onClick={() => handleEditPriority(row.id)}
-                                    >
+                                      onClick={() => handleEditTaskPriority(row.tid)}>
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -478,27 +921,20 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Status */}
-                            <TableCell sx={{ width: "5%" }} align="center">
+                            <TableCell sx={{ width: "10%" }} align="center">
                               <Box sx={{ minWidth: 120 }}>
-                                {editStatus && rowId === row.id ? (
+                                {editTaskStatus === row.tid ? (
                                   <FormControl fullWidth>
                                     <Select
-                                      value={selectedStatus}
-                                      onChange={(event) =>
-                                        handleStatus(event, row.id)
-                                      }
-                                    >
+                                      value={selectedStatuses[row.tid] || ""}
+                                      onChange={(event) => handleTaskStatus(event, row.tid)}>
                                       {taskStatuses.map((status, index) => (
-                                        <MenuItem
-                                          key={index}
-                                          value={status.value}
-                                        >
+                                        <MenuItem key={index} value={status.value}>
                                           <Typography
                                             component="p"
                                             variant="caption"
-                                            display="block"
-                                          >
-                                            {status.text}
+                                            display="block">
+                                            {formatStatus(status.text)}
                                           </Typography>
                                         </MenuItem>
                                       ))}
@@ -507,18 +943,19 @@ export default function TaskTable() {
                                 ) : (
                                   <Box>
                                     <Chip
-                                      label={selectedStatus}
+                                      label={formatStatus(
+                                        selectedStatuses[row.tid] || row.tstatus || ""
+                                      )}
                                       variant="contained"
                                       sx={{
                                         minWidth: "80px",
                                         maxWidth: "85px",
-                                        ...statusBg,
+                                        ...statusColors[selectedStatuses[row.tid]],
                                       }}
                                     />
                                     <IconButton
                                       size="small"
-                                      onClick={() => handleEditStatus(row.id)}
-                                    >
+                                      onClick={() => handleEditTaskStatus(row.tid)}>
                                       <ExpandMoreIcon />
                                     </IconButton>
                                   </Box>
@@ -527,278 +964,166 @@ export default function TaskTable() {
                             </TableCell>
 
                             {/* Due Date */}
-                            <TableCell sx={{ width: "15%" }} align="center">
+                            <TableCell sx={{ width: "10%" }} align="center">
                               <MyDatePicker
                                 label=""
                                 required={false}
                                 sizeWidth="132px"
                                 showBorder={false}
+                                value={row?.tdue_date ? new Date(row.tdue_date) : null}
+                                onChange={handleTaskDueDateChange}
                               />
                             </TableCell>
 
                             {/* Actions */}
-                            <TableCell sx={{ width: "20%" }} align="center">
-                              <Actions
-                                rowId={row.id}
-                                isParentRow={row.isParentRow}
-                              />
+                            <TableCell sx={{ width: "10%" }} align="center">
+                              <Actions rowId={row?.tid} isParentRow={true} />
                             </TableCell>
                           </TableRow>
 
+                          {/* Subrows will be here */}
                           {openSubrows &&
-                            expandedTaskId === row.id &&
-                            row.subRows.map((subrow, index) => (
+                            expandedTaskId === row?.tid &&
+                            row?.subTasks.map((subrow, index) => (
                               <TableRow
                                 sx={{
                                   " &:last-child th": { border: 0 },
                                   width: "100%",
-                                  bgcolor: "white",
+                                  bgcolor: "#FFFFFF",
                                   "&:hover": {
                                     backgroundColor: "#F7F7F7",
-                                    "& .task-description": {
-                                      color: theme.palette.primary.dark,
-                                    },
+                                    "& .task-name": { color: theme.palette.primary.dark },
                                   },
-                                }}
-                              >
-                                {/* Icons */}
+                                }}>
+                                {/* SubTaskIcons */}
                                 <TableCell align="right">
                                   <IconButton size="small">
                                     <SubdirectoryArrowRightRoundedIcon />
                                   </IconButton>
                                 </TableCell>
 
-                                {/* Code */}
-                                <TableCell align="center">
+                                {/* SubTaskCode */}
+                                <TableCell sx={{ width: "10%" }} align="center">
                                   <FormGroup sx={{ width: "100px" }}>
                                     <FormControlLabel
                                       sx={{ color: "black" }}
                                       control={
                                         <Checkbox
+                                          checked={subrow?.ststatus === "done"}
                                           size="small"
-                                          onChange={() =>
-                                            handleCodeCheckBoxDialog()
+                                          onChange={(event) =>
+                                            handleSubTaskCodeCheckBoxDialog(
+                                              event,
+                                              subrow?.stid,
+                                              subrow?.stassignee,
+                                              subrow?.ststatus
+                                            )
                                           }
                                         />
                                       }
-                                      label={subrow.code}
+                                      label={subrow?.stcode}
                                     />
                                   </FormGroup>
                                 </TableCell>
 
-                                {/* Task Description */}
-                                <TableCell align="left">
-                                  <Box
-                                    component="form"
-                                    noValidate
-                                    onSubmit={handleSubmit(onSubmit)}
-                                    sx={{ height: "100%" }}
-                                  >
-                                    <Stack
-                                      direction="row"
-                                      justifyContent="space-between"
-                                      alignItems="center"
-                                      spacing={1}
+                                {/* SubTask Name */}
+                                <TableCell sx={{ width: "30%" }} align="left">
+                                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                                    {rowStates[subrow.stid]?.editMode ? (
+                                      <TextField
+                                        name="stname"
+                                        label=""
+                                        variant="outlined"
+                                        value={rowStates[subrow.stid]?.subtaskName}
+                                        onChange={(e) => {
+                                          setSubTaskName(e.target.value);
+                                          setRowStates((prevRowStates) => ({
+                                            ...prevRowStates,
+                                            [subrow.stid]: {
+                                              ...prevRowStates[subrow.stid],
+                                              subtaskName: e.target.value,
+                                            },
+                                          }));
+                                        }}
+                                        fullWidth
+                                      />
+                                    ) : (
+                                      <>
+                                        <Typography component="p" variant="caption" display="block" sx={{
+                                          textDecoration: "none",
+                                          color: theme.palette.secondary.dark,
+                                          cursor: "pointer",
+                                          fontSize: "13px",
+                                          fontWeight: "400",
+                                        }} className="task-name" gutterBottom ml={1} textAlign="left" onClick={() => handleOpenSubTaskPreviewDialog(subrow?.stid)}>
+                                          {rowStates[subrow.stid]?.subtaskName || subrow?.stname}
+                                        </Typography>
+
+                                        <CustomDialog
+                                          handleClose={handleCloseSubTaskPreviewDialog}
+                                          open={openSubTaskPreviewDialog}
+                                          modalTitle="Subtask"
+                                          redirectPath={`/subtasks-overview/${subRowId}`}
+                                          showModalButton={true}
+                                          modalSize="lg">
+                                          <SubtaskPreview styles={styles} subtaskId={subRowId} />
+                                        </CustomDialog>
+                                      </>
+
+                                    )}
+
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                      }}
                                     >
-                                      {editMode && rowId === subrow.id ? (
-                                        <CustomTextField
-                                          name="taskDescription"
-                                          placeholder="Enter Task description..."
-                                          register={register}
-                                          errors={errors}
-                                          validation={
-                                            globalValidations.taskDescription
-                                          } // Pass the validation rules as a prop
-                                        />
-                                      ) : (
+                                      {rowStates[subrow.stid]?.editMode ? (
                                         <>
-                                          <Typography
-                                            onClick={() =>
-                                              handleOpenSubTaskPreviewDialog(
-                                                subrow.id
-                                              )
-                                            }
-                                            className="task-description"
-                                            sx={{
-                                              textDecoration: "none",
-                                              color:
-                                                theme.palette.secondary.dark,
-                                              fontSize: "13px",
-                                              fontWeight: "400",
-                                            }}
-                                          >
-                                            {subrow.description}
-                                          </Typography>
+                                          <IconButton
+                                            size="small"
+                                            type="button"
+                                            sx={{ fontSize: "1rem" }}
+                                            onClick={() => handleCancelSubTaskNameEdit(subrow?.stid)}>
 
-                                          <CustomDialog
-                                            handleClose={
-                                              handleCloseSubTaskPreviewDialog
-                                            }
-                                            open={openSubTaskPreviewDialog}
-                                            modalTitle="Subtask"
-                                            redirectPath={"/subtasks-overview"}
-                                            showModalButton={true}
-                                            modalSize="lg"
-                                          >
-                                            <SubtaskPreview
-                                              styles={styles}
-                                              filteredRow={filteredSubTask}
-                                            />
-                                          </CustomDialog>
+                                            <CancelIcon fontSize="inherit" />
+                                          </IconButton>
+                                          <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={() => handleSaveSubTaskClick(subrow?.stid)}>
+                                            <SaveIcon fontSize="inherit" />
+                                          </IconButton>
                                         </>
+                                      ) : (
+                                        <IconButton
+                                          size="small"
+                                          type="button"
+                                          sx={{ fontSize: "1rem" }}
+                                          onClick={(event) => handleEditSubTaskName(subrow?.stid, subrow?.stname)}
+                                        >
+                                          <EditIcon fontSize="inherit" />
+                                        </IconButton>
                                       )}
-                                      <Tooltip
-                                        title={
-                                          editMode ? "Save task" : "Rename task"
-                                        }
-                                        arrow
-                                        size="small"
-                                        placement="top-start"
-                                      >
-                                        <IconButton
-                                          size="small"
-                                          onClick={() =>
-                                            handleTaskDescription(subrow.id)
-                                          }
-                                        >
-                                          {editMode && rowId === subrow.id ? (
-                                            <SaveIcon />
-                                          ) : (
-                                            <EditIcon />
-                                          )}
-                                        </IconButton>
-                                      </Tooltip>
-                                    </Stack>
-                                  </Box>
+                                    </Box>
+                                  </Stack>
                                 </TableCell>
 
-                                {/* Assignee */}
-                                <TableCell align="center">
+                                {/* SubTask Assignee */}
+                                <TableCell sx={{ width: "10%" }} align="center">
                                   <Box sx={{ minWidth: 120 }}>
-                                    {editAssignee && rowId === subrow.id ? (
+                                    {editSubTaskAssignee === subrow?.stid ? (
                                       <FormControl fullWidth>
                                         <Select
-                                          value={selectedAssignee}
+                                          value={selectedAssignees[subrow?.stid] || ""}
                                           onChange={(event) =>
-                                            handleAssignee(event, subrow.id)
-                                          }
-                                        >
-                                          {taskAssignees.map(
-                                            (assignee, index) => (
-                                              <MenuItem
-                                                key={index}
-                                                value={assignee.value}
-                                              >
-                                                <Typography
-                                                  component="p"
-                                                  variant="caption"
-                                                  display="block"
-                                                >
-                                                  {assignee.text}
-                                                </Typography>
-                                              </MenuItem>
-                                            )
-                                          )}
-                                        </Select>
-                                      </FormControl>
-                                    ) : (
-                                      <Box>
-                                        <Chip
-                                          label={selectedAssignee}
-                                          variant="contained"
-                                          sx={{
-                                            minWidth: "80px",
-                                            maxWidth: "85px",
-                                          }}
-                                        />
-                                        <IconButton
-                                          size="small"
-                                          onClick={() =>
-                                            handleEditAssignee(subrow.id)
-                                          }
-                                        >
-                                          <ExpandMoreIcon />
-                                        </IconButton>
-                                      </Box>
-                                    )}
-                                  </Box>
-                                </TableCell>
-
-                                {/* Priority */}
-                                <TableCell align="center">
-                                  <Box sx={{ minWidth: 120 }}>
-                                    {editPriority && rowId === subrow.id ? (
-                                      <FormControl fullWidth>
-                                        <Select
-                                          value={selectedPriority}
-                                          onChange={(event) =>
-                                            handlePriority(event, subrow.id)
-                                          }
-                                        >
-                                          {taskPriorities.map(
-                                            (priority, index) => (
-                                              <MenuItem
-                                                key={index}
-                                                value={priority.value}
-                                              >
-                                                <Typography
-                                                  component="p"
-                                                  variant="caption"
-                                                  display="block"
-                                                >
-                                                  {priority.text}
-                                                </Typography>
-                                              </MenuItem>
-                                            )
-                                          )}
-                                        </Select>
-                                      </FormControl>
-                                    ) : (
-                                      <Box>
-                                        <Chip
-                                          label={selectedPriority}
-                                          variant="contained"
-                                          sx={{
-                                            minWidth: "80px",
-                                            maxWidth: "85px",
-                                            ...priorityBg,
-                                          }}
-                                        />
-                                        <IconButton
-                                          size="small"
-                                          onClick={() =>
-                                            handleEditPriority(subrow.id)
-                                          }
-                                        >
-                                          <ExpandMoreIcon />
-                                        </IconButton>
-                                      </Box>
-                                    )}
-                                  </Box>
-                                </TableCell>
-
-                                {/* Status */}
-                                <TableCell align="center">
-                                  <Box sx={{ minWidth: 120 }}>
-                                    {editStatus && rowId === subrow.id ? (
-                                      <FormControl fullWidth>
-                                        <Select
-                                          value={selectedStatus}
-                                          onChange={(event) =>
-                                            handleStatus(event, subrow.id)
-                                          }
-                                        >
-                                          {taskStatuses.map((status, index) => (
-                                            <MenuItem
-                                              key={index}
-                                              value={status.value}
-                                            >
+                                            handleSubTaskAssignee(event, subrow?.stid)
+                                          }>
+                                          {assignees.map((assignee, index) => (
+                                            <MenuItem key={index} value={assignee.value}>
                                               <Typography
                                                 component="p"
                                                 variant="caption"
-                                                display="block"
-                                              >
-                                                {status.text}
+                                                display="block">
+                                                {assignee.text}
                                               </Typography>
                                             </MenuItem>
                                           ))}
@@ -807,20 +1132,113 @@ export default function TaskTable() {
                                     ) : (
                                       <Box>
                                         <Chip
-                                          label={selectedStatus}
+                                          label={formatAssigneeText(
+                                            selectedAssignees[subrow?.stid] ||
+                                            subrow?.stassignee,
+                                            regId,
+                                            assignees
+                                          )}
                                           variant="contained"
                                           sx={{
                                             minWidth: "80px",
                                             maxWidth: "85px",
-                                            ...statusBg,
                                           }}
                                         />
                                         <IconButton
                                           size="small"
-                                          onClick={() =>
-                                            handleEditStatus(subrow.id)
-                                          }
-                                        >
+                                          onClick={() => handleEditSubTaskAssignee(subrow?.stid)}>
+                                          <ExpandMoreIcon />
+                                        </IconButton>
+                                      </Box>
+                                    )}
+                                  </Box>
+                                </TableCell>
+
+                                {/* SubTask Priority */}
+                                <TableCell sx={{ width: "10%" }} align="center">
+                                  <Box sx={{ minWidth: 120 }}>
+                                    {editSubTaskPriority === subrow?.stid ? (
+                                      <FormControl fullWidth>
+                                        <Select
+                                          value={selectedPriorities[subrow?.stid] || ""}
+                                          onChange={(event) =>
+                                            handleSubTaskPriority(event, subrow?.stid)
+                                          }>
+                                          {taskPriorities.map((priority, index) => (
+                                            <MenuItem key={index} value={priority.value}>
+                                              <Typography
+                                                component="p"
+                                                variant="caption"
+                                                display="block">
+                                                {formatPriority(priority.text)}
+                                              </Typography>
+                                            </MenuItem>
+                                          ))}
+                                        </Select>
+                                      </FormControl>
+                                    ) : (
+                                      <Box>
+                                        <Chip
+                                          label={formatPriority(
+                                            selectedPriorities[subrow?.stid] ||
+                                            subrow?.stpriority ||
+                                            ""
+                                          )}
+                                          variant="contained"
+                                          sx={{
+                                            minWidth: "80px",
+                                            maxWidth: "85px",
+                                            ...priorityColors[selectedPriorities[subrow?.stid]],
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() => handleEditSubTaskPriority(subrow?.stid)}>
+                                          <ExpandMoreIcon />
+                                        </IconButton>
+                                      </Box>
+                                    )}
+                                  </Box>
+                                </TableCell>
+
+                                {/* SubTask Status */}
+                                <TableCell sx={{ width: "10%" }} align="center">
+                                  <Box sx={{ minWidth: 120 }}>
+                                    {editSubTaskStatus === subrow?.stid ? (
+                                      <FormControl fullWidth>
+                                        <Select
+                                          value={selectedStatuses[subrow?.stid] || ""}
+                                          onChange={(event) =>
+                                            handleSubTaskStatus(event, subrow?.stid)
+                                          }>
+                                          {taskStatuses.map((status, index) => (
+                                            <MenuItem key={index} value={status.value}>
+                                              <Typography
+                                                component="p"
+                                                variant="caption"
+                                                display="block">
+                                                {formatStatus(status.text)}
+                                              </Typography>
+                                            </MenuItem>
+                                          ))}
+                                        </Select>
+                                      </FormControl>
+                                    ) : (
+                                      <Box>
+                                        <Chip
+                                          label={formatStatus(
+                                            selectedStatuses[subrow?.stid] || subrow?.ststatus || ""
+                                          )}
+                                          variant="contained"
+                                          sx={{
+                                            minWidth: "80px",
+                                            maxWidth: "85px",
+                                            ...statusColors[selectedStatuses[subrow?.stid]],
+                                          }}
+                                        />
+                                        <IconButton
+                                          size="small"
+                                          onClick={() => handleEditSubTaskStatus(subrow?.stid)}>
                                           <ExpandMoreIcon />
                                         </IconButton>
                                       </Box>
@@ -829,24 +1247,25 @@ export default function TaskTable() {
                                 </TableCell>
 
                                 {/* Due Date */}
-                                <TableCell align="center">
+                                <TableCell sx={{ width: "10%" }} align="center">
                                   <MyDatePicker
                                     label=""
                                     required={false}
                                     sizeWidth="132px"
                                     showBorder={false}
+                                    value={subrow?.tdue_date ? new Date(subrow?.tdue_date) : null}
+                                    onChange={handleSubTaskDueDateChange}
                                   />
                                 </TableCell>
 
                                 {/* Actions */}
                                 <TableCell sx={{ width: "20%" }} align="center">
-                                  <Actions
-                                    rowId={subrow.id}
-                                    isParentRow={subrow.isParentRow}
-                                  />
+                                  <Actions rowId={subrow?.stid} isParentRow={false} />
                                 </TableCell>
                               </TableRow>
-                            ))}
+                            )
+                            )
+                          }
                         </React.Fragment>
                       )}
                     </Draggable>
@@ -859,7 +1278,8 @@ export default function TaskTable() {
         </TableContainer>
       </DragDropContext>
 
-      <ConfirmationDialog value={"statusToComplete"} />
+      <ConfirmationDialog value={"changeTaskCheckboxStatus"} handleYes={handleTaskYes} />
+      <ConfirmationDialog value={"changeSubTaskCheckboxStatus"} handleYes={handleSubTaskYes} />
     </>
   );
 }

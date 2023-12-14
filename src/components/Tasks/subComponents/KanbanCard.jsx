@@ -8,10 +8,11 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Box, Divider, Grid, Stack, Tooltip } from "@mui/material";
+import { Box, Divider, Grid, Stack } from "@mui/material";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { useForm } from "react-hook-form";
 import { globalValidations } from "../../../utils/GlobalValidation";
 import CustomTextField from "../../common/CustomTextField";
@@ -19,48 +20,88 @@ import SmallList from "./SmallList";
 import { taskOverviewStyles } from "../taskOverview/styles";
 import CustomDialog from "../../common/CustomDialog";
 import TaskPreview from "../taskOverview/subComponents/TaskPreview";
+import moment from "moment"
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { toast } from "react-toastify";
+import { editTaskAndSubtask } from "../../../api/modules/taskModule";
 
 const KanbanCard = ({ cardData }) => {
+
   const {
     handleSubmit,
     register,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm();
   const theme = useTheme();
   const [rowId, setRowId] = React.useState(0);
   const [editMode, setEditMode] = React.useState(false);
+  const [taskName, setTaskName] = React.useState("");
+  const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
+
   //Task PreviewDialog code
   const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
-  const [filteredTask, setFilterTask] = React.useState([cardData]);
   const styles = taskOverviewStyles();
 
-  // Task prview Dailog Code start
+  // Task prview Dailog Code 
   const handleOpenTaskPreviewDialog = (rowId) => {
-    // const filteredTaskRow = rows.filter((row, index) => row.id === rowId);
-    // setFilterTask(filteredTaskRow);
+    setRowId(rowId);
     setOpenTaskPreviewDialog(true);
   };
 
   const handleCloseTaskPreviewDialog = () => {
     setOpenTaskPreviewDialog(false);
   };
-  // Task prview Dailog Code start
 
-  const handleTaskDescription = (event) => {
-    // Prevent the link from navigating
-    event.stopPropagation();
-    if (editMode) {
-      //write logic for task description
-      setEditMode(false);
-    } else {
-      setEditMode(true);
-      //   setRowId(rowId);
+  const handleCancelTaskNameEdit = (taskId) => {
+    setEditMode(false);
+    setValue("tname", cardData?.tname)
+  };
+
+  //Edit Task Name
+  const handleEditTaskName = (taskId, taskName) => {
+    setRowId(taskId);
+    setTaskName(taskName);
+    setEditMode(true);
+    setValue("tname", cardData?.tname)
+  };
+
+
+  const updateTaskName = async (taskId, taskName) => {
+    try {
+      const data = {
+        div_class: "task_editable",
+        div_field: "tname_field",
+        div_id: taskId,
+        txt: taskName,
+        user_id: regId,
+      };
+
+      const response = await editTaskAndSubtask(portfolioId, data);
+      toast.success(`${response?.message}`);
+
+      // Update the form state with the new taskName
+      setValue('tname', taskName); // Assuming 'tname' is the name of your input field
+    } catch (error) {
+      toast.error(`${error?.response?.data?.message}`);
+      console.error("Error updating task name in grid view dashboard:", error);
     }
   };
 
-  //   for tasks descrition
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+  //Task Name Save
+  const onSubmit = async (data) => {
+    try {
+      const taskName = data?.tname;
+      await updateTaskName(rowId, taskName);
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error handling save task click:", error);
+    }
   };
 
   return (
@@ -70,86 +111,129 @@ const KanbanCard = ({ cardData }) => {
         sx={{
           maxWidth: "100%",
           borderLeft: `7px solid ${theme.palette.primary.main}`,
-          // border:`2px solid ${color}`,
           borderRadius: "10px",
           marginBottom: "14px",
-          // backgroundColor:"#F5F5F5 "
-          backgroundColor: "white",
-        }}>
-        <CardActionArea onClick={() => handleOpenTaskPreviewDialog(cardData?.id)} sx={{ borderRadius: 0 }}>
-          <CardHeader
-            sx={{ padding: "10px" }}
-            avatar={
-              <Avatar sx={{ bgcolor: theme.palette.secondary.main, border: "2px solid gray" }} aria-label="goal">
-                {...stringAvatar("John Doe")}
-              </Avatar>
-            }
-            title={
-              <Box>
-                <Typography
-                  sx={{
-                    color: "#343a40",
-                    fontWeight: "300",
-                    fontSize: "12px",
-                  }}
-                  textAlign={"start"}>
-                  Project :
-                </Typography>
-                <Typography
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    fontWeight: "500",
-                    fontSize: "13px",
-                  }}
-                  textAlign={"start"}>
-                  {cardData?.projectName}
-                </Typography>
-              </Box>
-            }
-          />
-          <CardContent sx={{ padding: "10px" }}>
-            <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
-                {editMode ? (
-                  <CustomTextField
-                    name="taskDescription"
-                    placeholder="Enter Task description..."
-                    register={register}
-                    errors={errors}
-                    validation={globalValidations.taskDescription} // Pass the validation rules as a prop
-                  />
-                ) : (
-                  <Typography component="p" variant="caption" display="block" gutterBottom ml={1} textAlign="left">
-                    {cardData?.description}
-                  </Typography>
-                )}
-                <Tooltip title={editMode ? "Save task" : "Edit task"} arrow size="small" placement="top-start">
-                  <IconButton size="small" onClick={(event) => handleTaskDescription(event)}>
-                    {editMode ? <SaveIcon /> : <EditIcon />}
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+          backgroundColor: "#FFFFFF",
+          "&:hover": {
+            backgroundColor: "#F7F7F7",
+            "& .task-name": {
+              color: theme.palette.primary.dark,
+            },
+          },
+        }}
+      >
+        <CardHeader
+          sx={{ padding: "10px" }}
+          avatar={
+            <Avatar sx={{ bgcolor: theme.palette.secondary.main, border: "2px solid gray" }} aria-label="goal">
+              {...stringAvatar("John Doe")}
+            </Avatar>
+          }
+          title={
+            <Box>
+              <Typography
+                sx={{
+                  color: "#343a40",
+                  fontWeight: "300",
+                  fontSize: "12px",
+                }}
+                textAlign={"start"}>
+                Project :
+              </Typography>
+              <Typography
+                sx={{
+                  color: theme.palette.secondary.main,
+                  fontWeight: "500",
+                  fontSize: "13px",
+                }}
+                textAlign={"start"}>
+                {cardData?.projectName}
+              </Typography>
             </Box>
-          </CardContent>
-        </CardActionArea>
+          }
+        />
+        <CardContent sx={{ padding: "10px" }}>
+          <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+              {editMode ? (
+                <CustomTextField
+                  name="tname"
+                  placeholder="Enter Task Name..."
+                  register={register}
+                  errors={errors}
+                  validation={globalValidations.tname}
+                />
+              ) : (
+                <Typography component="p" variant="caption" display="block" sx={{
+                  textDecoration: "none",
+                  color: theme.palette.secondary.dark,
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: "400",
+                }} className="task-name" gutterBottom ml={1} textAlign="left" onClick={() => handleOpenTaskPreviewDialog(cardData?.tid)}>
+                  {getValues('tname') || cardData?.tname} {/* Use getValues to get the current form state */}
+                </Typography>
+              )}
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                {editMode ? (
+                  <>
+                    <IconButton
+                      size="small"
+                      type="button"
+                      sx={{ fontSize: "1rem" }}
+                      onClick={() => handleCancelTaskNameEdit(cardData?.tid)}>
+
+                      <CancelIcon fontSize="inherit" />
+                    </IconButton>
+                    <IconButton size="small" type="submit" sx={{ fontSize: "1rem" }}>
+                      <SaveIcon fontSize="inherit" />
+                    </IconButton>
+                  </>
+                ) : (
+                  <IconButton
+                    size="small"
+                    type="button"
+                    sx={{ fontSize: "1rem" }}
+                    onClick={(event) => handleEditTaskName(cardData?.tid, cardData?.tname)}
+                  >
+                    <EditIcon fontSize="inherit" />
+                  </IconButton>
+                )}
+              </Box>
+            </Stack>
+          </Box>
+        </CardContent>
         <Divider />
         <CardActions>
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <SmallList label="Due" value={cardData?.dueDate} />
+              <SmallList label="Due" value={moment(cardData?.tdue_date).format("YYYY-MM-DD")} />
             </Grid>
             <Grid item xs={4}>
-              <SmallList label="Code" value={cardData?.code} />
+              <SmallList label="Code" value={cardData?.tcode} />
             </Grid>
             <Grid item xs={4}>
-              <SmallList label="Sub Tasks" value={cardData?.ubTasksCount} />
+              <SmallList label="Sub Tasks" value={cardData?.subTasks?.length} />
             </Grid>
           </Grid>
         </CardActions>
-      </Card>
+      </Card >
 
-      <CustomDialog handleClose={handleCloseTaskPreviewDialog} open={openTaskPreviewDialog} modalTitle="Task" redirectPath={"/tasks-overview"} showModalButton={true} modalSize="lg">
-        <TaskPreview styles={styles} filteredRow={filteredTask} />
+      <CustomDialog
+        handleClose={handleCloseTaskPreviewDialog}
+        open={openTaskPreviewDialog}
+        modalTitle="Task"
+        redirectPath={`/tasks-overview/${rowId}`}
+        showModalButton={true}
+        modalSize="lg">
+        <TaskPreview styles={styles} taskId={rowId} />
       </CustomDialog>
     </>
   );

@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import KPIAccordion from "./subComponents/KPIAccordion";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Add } from "@mui/icons-material";
@@ -8,8 +8,24 @@ import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import KPIs from "../../portfolio-goals/create-goals/subComponents/KPIs";
 import CustomSearchField from "../../../common/CustomSearchField";
-const KPISection = () => {
-  const data = [1, 2];
+import { getGoalsAllStrategiesList } from "../../../../api/modules/goalkpiModule";
+const KPISection = ({goalID}) => {
+  
+  const [Goalkpidetails, setGoalkpidetails] = useState([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await getGoalsAllStrategiesList(goalID); 
+        setGoalkpidetails(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
   const [inputFields, setInputFields] = useState([]);
 
   const handleAddClick = () => {
@@ -44,10 +60,10 @@ const KPISection = () => {
             <CustomSearchField />
           </Grid>
           <Grid item xs={12} mt={2}>
-            {data.map((item, index) => {
+            {Goalkpidetails.map((item, index) => {
               return (
                 <Fragment key={index}>
-                  <KPIAccordion />
+                  <KPIAccordion kpi={item}/>
                 </Fragment>
               );
             })}
@@ -81,4 +97,4 @@ const KPISection = () => {
   );
 };
 
-export default KPISection;
+export default memo(KPISection);

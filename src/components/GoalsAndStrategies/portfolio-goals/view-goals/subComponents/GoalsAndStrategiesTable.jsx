@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import {
+  MaterialReactTable,
   useMaterialReactTable,
 } from "material-react-table";
 import {
@@ -15,6 +16,7 @@ import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 import CustomTable from "../../../../common/CustomTable";
+import moment from "moment";
 
 const GoalsAndStrategiesTable = ({
   title,
@@ -22,28 +24,34 @@ const GoalsAndStrategiesTable = ({
   handlePendingGoalOpen,
   data,
 }) => {
+  const formatDate = (timestamp) => {
+    const formattedDate = moment(timestamp).format("YYYY-MM-DD");
+    return formattedDate;
+  };
+
   const theme = useTheme();
   const navigate = useNavigate();
-  const [load, setLoad] = useState(false);
-  useEffect(() => {
-    if (data.length > 0) {
-      setLoad(false);
-    } else {
-      setLoad(true);
-    }
-  }, []);
-  const handleOpenCondition = (type) => {
+
+  const handleOpenCondition = (type, gid, gname) => {
     if (["Created Goals", "Accepted Goals"].includes(type)) {
-      handleOpen();
+      handleOpen(gid, gname);
     } else {
-      handlePendingGoalOpen();
+      handlePendingGoalOpen(gid, gname);
+    }
+  };
+
+  const handleRedirectCondition = (type, gid) => {
+    if (["Created Goals", "Accepted Goals"].includes(type)) {
+      navigate(`/goal-overview/${gid}`);
+    } else {
+      navigate(`/goal-overview-request/${gid}`);
     }
   };
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: "goals.name",
+        accessorKey: "gname",
         header: "Goals",
         size: 300,
         minSize: 200,
@@ -68,7 +76,7 @@ const GoalsAndStrategiesTable = ({
                 sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
                 aria-label="goal"
               >
-                {...stringAvatar(row.original.goals.name)}
+                {...stringAvatar(row.original.gname)}
               </Avatar>
               <Box>
                 <Typography
@@ -79,9 +87,11 @@ const GoalsAndStrategiesTable = ({
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  onClick={() => navigate("/goal-overview")}
+                  onClick={() =>
+                    handleRedirectCondition(title, row.original.gid)
+                  }
                 >
-                  {row.original.goals.name}
+                  {row.original.gname}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -91,13 +101,15 @@ const GoalsAndStrategiesTable = ({
                   }}
                   textAlign={"start"}
                 >
-                  {row.original.goals.description}
+                  {row.original.gdes}
                 </Typography>
               </Box>
             </Box>
             <IconButton
               aria-label="settings"
-              onClick={() => handleOpenCondition(title)}
+              onClick={() =>
+                handleOpenCondition(title, row.original.gid, row.original.gname)
+              }
             >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
@@ -111,15 +123,11 @@ const GoalsAndStrategiesTable = ({
         minSize: 75,
         maxSize: 150,
         Cell: ({ row }) => {
-          return (
-            title === "Created Goals" && (
-              <LinearProgressWithLabel value={row.original.progress} />
-            )
-          );
+          return <LinearProgressWithLabel value={row.original.progress} />;
         },
       },
       {
-        accessorKey: "startDate",
+        accessorKey: "gstart_date",
         header: "Start Date",
         size: 75,
         minSize: 40,
@@ -134,12 +142,12 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.startDate}
+            label={formatDate(row.original.gstart_date)}
           />
         ),
       },
       {
-        accessorKey: "endDate",
+        accessorKey: "gend_date",
         header: "End Date",
         size: 75,
         minSize: 40,
@@ -153,7 +161,7 @@ const GoalsAndStrategiesTable = ({
                 whiteSpace: "normal",
               },
             }}
-            label={row.original.endDate}
+            label={formatDate(row.original.gend_date)}
           />
         ),
       },
@@ -163,18 +171,15 @@ const GoalsAndStrategiesTable = ({
 
   const table = useMaterialReactTable({
     columns,
-    data,
+    data: data ? data : [],
     enableColumnActions: false,
     enableRowActions: false,
     enableColumnFilters: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,
-    state: {
-      showSkeletons: load,
-    },
+
     enableHiding: false,
-    // enableEditing: true,
-    // editDisplayMode: "cell",
+
     initialState: {
       pagination: { pageSize: 10, pageIndex: 0 },
       showGlobalFilter: true,
@@ -223,12 +228,8 @@ const GoalsAndStrategiesTable = ({
       </Typography>
     ),
   });
-
-  return (
-   <>
-    <CustomTable table={table}/>
-   </>
-  );
+  // console.log(table.getRowModel().rows);
+  return <MaterialReactTable table={table} />;
 };
 
 export default memo(GoalsAndStrategiesTable);

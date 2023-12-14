@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Box, InputLabel } from "@mui/material";
+import { Box, Grid, InputLabel } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export default function SelectDepartment({
   required,
-  SelectDepartment,
-  setSelectedDepartment,
   departments,
+  formValues,
+  setFormValues,
 }) {
   const theme = useTheme();
 
@@ -19,24 +19,40 @@ export default function SelectDepartment({
   };
 
   const handleChange = (fieldName) => (event, value) => {
-    console.log(value);
-    setSelectedDepartment(value.department);
+    setFormValues({
+      ...formValues,
+      [fieldName]: value.portfolio_dept_id,
+    });
+    // console.log(value);
+    // setSelectedDepartment(value.depId);
   };
 
   return (
-    <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px" }}>
-        Select Department
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
-      </InputLabel>
-      <Autocomplete
-        sx={{ marginTop: "8px", width: "100%" }}
-        options={departments}
-        value={SelectDepartment}
-        onChange={handleChange("department")}
-        getOptionLabel={(option) => option.department}
-        renderInput={(params) => <TextField {...params} placeholder="Select Your department" />}
-      />
-    </Box>
+    <>
+      <Grid item xs={2} alignSelf={"center"}>
+        <InputLabel sx={{ fontSize: "14px" }}>
+          Department
+          {required && (
+            <span style={{ color: theme.palette.error.main }}> *</span>
+          )}
+        </InputLabel>
+      </Grid>
+      <Grid item xs={10}>
+        <Autocomplete
+          sx={{ marginTop: "8px", width: "100%" }}
+          options={departments}
+          value={
+            departments.find(
+              (option) => option.portfolio_dept_id === formValues.gdept
+            ) || null
+          }
+          onChange={handleChange("gdept")}
+          getOptionLabel={(option) => option.department}
+          renderInput={(params) => (
+            <TextField {...params} placeholder="Select Your Department" />
+          )}
+        />
+      </Grid>
+    </>
   );
 }

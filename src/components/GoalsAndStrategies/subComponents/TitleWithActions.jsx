@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Grid, IconButton, Tooltip, Typography, useTheme } 
 import React, { memo } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { ContentCopy, Delete, History, NoteAdd } from "@mui/icons-material";
-import ProgressBar from "./ProgressBar";
+import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
 
 const TitleWithActions = ({
   title,
@@ -21,7 +21,12 @@ const TitleWithActions = ({
   btn3Icon,
   description,
   progressHeading,
+  progressPercentage,
+  displayBtns
 }) => {
+
+  console.log('displayBtns',displayBtns);
+
   const theme = useTheme();
   const splitString = title.split(" ");
   const splitTitle = splitString[1];
@@ -130,7 +135,7 @@ const TitleWithActions = ({
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
           {progressHeading}
         </Typography>
-        <ProgressBar />
+        <LinearProgressWithLabel value={progressPercentage}/>
       </Grid>
       <Grid item xs={12} md={12} lg={12}>
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>

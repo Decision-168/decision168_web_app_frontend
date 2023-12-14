@@ -1,4 +1,5 @@
-import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
+import React from "react";
+import { Box, Grid, Button } from "@mui/material";
 import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -6,13 +7,12 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../redux/action/modalSlice";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CustomSearchField from "../common/CustomSearchField";
-import ListSection from "./subComponents/ListSection";
-import GridSection from "./subComponents/GridSection";
 import ReduxDialog from "../common/ReduxDialog";
 import CreateEditTaskForm from "./createEditTask/CreateEditTaskForm";
 import CustomFilter from "../common/CustomFilter";
+import PortfolioListSection from "./subComponents/PortfolioListSection";
+import PortfolioGridSection from "./subComponents/PortfolioGridSection";
 
 const filterOption = [
   {
@@ -45,14 +45,15 @@ const filterOption = [
   },
 ];
 
-const Tasks = () => {
+const PortfolioTasks = () => {
   const [alignment, setAlignment] = useState("list");
+  const [value, setValue] = useState("all");
+  const dispatch = useDispatch();
+
+
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
-  const dispatch = useDispatch();
-  const [value, setValue] = useState("all");
-  const [inputFields, setInputFields] = useState([]);
 
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -70,8 +71,15 @@ const Tasks = () => {
               justifyContent: "space-between",
               flexDirection: "row",
             }}>
+
             <BasicBreadcrumbs currentPage="Tasks" />
-            <ToggleButtonGroup color="primary" value={alignment} exclusive onChange={handleChange} aria-label="Platform">
+
+            <ToggleButtonGroup
+              color="primary"
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform">
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
               </ToggleButton>
@@ -80,11 +88,19 @@ const Tasks = () => {
               </ToggleButton>
             </ToggleButtonGroup>
 
-            <Button onClick={() => dispatch(openModal("create-new-task"))} variant="contained" startIcon={<Add />} size="small">
+            <Button
+              onClick={() => dispatch(openModal("create-new-task"))}
+              variant="contained"
+              startIcon={<Add />}
+              size="small">
               Create New
             </Button>
 
-            <ReduxDialog value="create-new-task" modalTitle="Create New Task" showModalButton={false} modalSize="md">
+            <ReduxDialog
+              value="create-new-task"
+              modalTitle="Create New Task"
+              showModalButton={false}
+              modalSize="md">
               <CreateEditTaskForm editMode={false} />
             </ReduxDialog>
           </Box>
@@ -100,11 +116,11 @@ const Tasks = () => {
               flexDirection: "row",
               padding: "5px",
             }}>
-            {/* <IconButton>
-              <FilterAltIcon />
-            </IconButton> */}
-
-            <CustomFilter value={value} handleChange={handleChangeRadio} filterOption={filterOption} />
+            <CustomFilter
+              value={value}
+              handleChange={handleChangeRadio}
+              filterOption={filterOption}
+            />
           </Box>
         </Grid>
 
@@ -122,11 +138,11 @@ const Tasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection /> : <GridSection />}
+          {alignment === "list" ? <PortfolioListSection /> : <PortfolioGridSection />}
         </Grid>
       </Grid>
     </Box>
   );
 };
 
-export default memo(Tasks);
+export default memo(PortfolioTasks);

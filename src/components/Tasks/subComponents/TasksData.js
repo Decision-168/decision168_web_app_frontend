@@ -38,9 +38,9 @@ export const taskAssignees = [
 ];
 
 export const taskStatuses = [
-  { value: "to do", text: "To Do", selected: true, bgColor: "#FFC0CB", textColor: "white" },
-  { value: "in progress", text: "In Progress", selected: false, bgColor: "#9370DB", textColor: "white" },
-  { value: "in review", text: "In Review", selected: false, bgColor: "#FFD700", textColor: "white" },
+  { value: "to_do", text: "To Do", selected: true, bgColor: "#FFC0CB", textColor: "white" },
+  { value: "in_progress", text: "In Progress", selected: false, bgColor: "#9370DB", textColor: "white" },
+  { value: "in_review", text: "In Review", selected: false, bgColor: "#FFD700", textColor: "white" },
   { value: "done", text: "Done", selected: false, bgColor: "#98FB98", textColor: "white" },
 ];
 
@@ -49,6 +49,21 @@ export const taskPriorities = [
   { value: "medium", text: "Medium", selected: false, bgColor: "#F7DC6F", textColor: "white" },
   { value: "low", text: "Low", selected: false, bgColor: "#85C1E9", textColor: "white" },
 ]
+
+
+export const priorityColors = {
+  high: { backgroundColor: "#FF5733" },
+  medium: { backgroundColor: "#F7DC6F" },
+  low: { backgroundColor: "#85C1E9" },
+};
+
+
+export const statusColors = {
+  to_do: { backgroundColor: '#FFC0CB' },
+  in_progress: { backgroundColor: '#9370DB' },
+  in_review: { backgroundColor: '#FFD700' },
+  done: { backgroundColor: '#98FB98' },
+};
 
 
 

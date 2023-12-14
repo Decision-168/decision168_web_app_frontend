@@ -120,6 +120,8 @@ export default function CompanyForm({ isEditPath, depts }) {
     });
   };
 
+  setMembersIds([...getMembersIds, ...memberIdArray])
+
   const handleDepartmentChange = (selectedOptions) => {
     const departmentsArray = selectedOptions?.map((item) => item.department);
     setDepartments(departmentsArray);

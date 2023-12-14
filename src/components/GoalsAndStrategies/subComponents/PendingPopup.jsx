@@ -1,8 +1,105 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { memo } from "react";
-import { BusinessCenter, CalendarMonth, CheckCircleOutline, Person } from "@mui/icons-material";
+import React, { memo, useEffect, useState } from "react";
+import {
+  BusinessCenter,
+  CalendarMonth,
+  CheckCircleOutline,
+  Person,
+} from "@mui/icons-material";
 import GridList from "./GridList";
-const PendingPopup = ({}) => {
+import {
+  checkPortfolioMemberActive,
+  getGoalMemberDetailbyGID,
+  getGoalOverviewRequest,
+  getGoalRequest,
+} from "../../../api/modules/goalkpiModule";
+import moment from "moment";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
+  const [gmid, set_gmid] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkMemberToDisplay = async () => {
+      try {
+        const response = await checkPortfolioMemberActive(
+          "uzmakarjikar@gmail.com",
+          "2"
+        ); //useremail,portid
+        if (response) {
+          const response2 = await getGoalMemberDetailbyGID("1", gid); //userid
+          if (response2) {
+            set_gmid(response2.gmid);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    checkMemberToDisplay();
+  }, []);
+
+  const gid = goalID;
+
+  const formatDate = (timestamp) => {
+    // Check if the timestamp is valid
+    if (!timestamp) {
+      return "No Date";
+    }
+
+    // Assuming your timestamp is in milliseconds
+    const formattedDate = moment(timestamp).format("D MMM, YYYY");
+    return formattedDate;
+  };
+
+  //get goal detail
+  const [gdetail, setgdetail] = useState([]);
+
+  useEffect(() => {
+    const fetchOverviewReqData = async () => {
+      try {
+        const response = await getGoalOverviewRequest("1", gid); //userid
+
+        setgdetail(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchOverviewReqData();
+  }, []);
+  //get goal detail
+
+  const handleRequestPerform = (flag) => {
+    const RequestPerformAction = async () => {
+      try {
+        const response = await getGoalRequest(gid, gmid, flag);
+        if (response?.user_status === "pages-404") {
+          return navigate("/portfolio-goals", { replace: true });
+        }
+        if (response?.user_status === "accepted") {
+          toast.success("Goal Request Successfully Accepted!");
+        } else {
+          toast.success("Read More Goal Request Sent!");
+        }
+        if (["/portfolio-goals"].includes(window.location.pathname)) {
+          handleClose();
+        } else {
+          navigate("/portfolio-goals");
+        }
+        fetchAllData();
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    };
+
+    RequestPerformAction();
+  };
+
   return (
     <Box
       sx={{
@@ -35,18 +132,24 @@ const PendingPopup = ({}) => {
               }}
               textAlign={"start"}
             >
-              GOAL: Nov Goal
+              GOAL: {gdetail.gname}
             </Typography>
           </Box>
         </Grid>
         <Grid item xs={6} md={6} lg={6} alignSelf={"center"}>
-          <Button variant="contained" size="small" sx={{ mr: 1 }}>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mr: 1 }}
+            onClick={() => handleRequestPerform("1")}
+          >
             Accept Request
           </Button>
           <Button
             variant="contained"
             size="small"
             sx={{ background: "#383838", color: "#fff" }}
+            onClick={() => handleRequestPerform("2")}
           >
             Request More Info
           </Button>
@@ -66,21 +169,21 @@ const PendingPopup = ({}) => {
               fontSize: 13,
             }}
           >
-            No Description!
+            {gdetail?.gdes ? gdetail?.gdes : "No Description!"}
           </Typography>
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
-            info={"6 Nov, 2023"}
+            info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
-            info={"31 Dec, 2023"}
+            info={formatDate(gdetail.gend_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -89,14 +192,14 @@ const PendingPopup = ({}) => {
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Department"}
-            info={"Research & Development"}
+            info={gdetail.get_dept_name}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={gdetail.get_created_by_name}
           />
         </Grid>
       </Grid>

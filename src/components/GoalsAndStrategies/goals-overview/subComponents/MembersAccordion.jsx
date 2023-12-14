@@ -1,5 +1,10 @@
-import React, { memo, useState } from "react";
-import { Add, Groups, ExpandMore, PersonRemoveAlt1Rounded } from "@mui/icons-material";
+import React, { memo, useEffect, useState } from "react";
+import {
+  Add,
+  Groups,
+  ExpandMore,
+  PersonRemoveAlt1Rounded,
+} from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -15,16 +20,57 @@ import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import AddMemberDialog from "./AddMemberDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import MembersChildAccordion from "./MembersChildAccordion";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import {
+  AddGoalManager,
+  DirectlyRemoveGoalManager,
+  InsertSuggestedGMember,
+  InsertSuggestedIGmember,
+  RemoveGMember,
+  RemoveIGMember,
+  getGoalDetail,
+} from "../../../../api/modules/goalkpiModule";
+import { toast } from "react-toastify";
 
-const BasicAccordion = ({ pending }) => {
+const BasicAccordion = ({ goalID, pending, displayBtns }) => {
+  
+  console.log("displayBtns", displayBtns);
+
+  const gid = goalID;
+  //get goal detail
+  const [gAllDetails, setgoaldetail] = useState([]);
+  const [getgoalRes, setgoalRes] = useState([]);
+
+  const [get_id, set_id] = useState("");
+  const [gettype, settype] = useState("");
+  const [getpassname, setpassname] = useState("");
+
+  const fetchAllGMembersData = async () => {
+    try {
+      const response = await getGoalDetail(gid);
+      setgoalRes(response.goalRes);
+      setgoaldetail(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllGMembersData();
+  }, []);
+  //get goal detail
+
   const [expanded, setExpanded] = useState("acceptedBy");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
   const dispatch = useDispatch();
 
-  const handleRemoveManager = (name) => {
+  const handleRemoveManager = (name, pass_id) => {
+    set_id(pass_id);
     dispatch(
       openCnfModal({
         modalName: "removeManager",
@@ -32,6 +78,106 @@ const BasicAccordion = ({ pending }) => {
         description: `Remove ${name} as Goal Manager`,
       })
     );
+  };
+
+  const gethandleDataYes = (type, pass_id, name) => {
+    settype(type);
+    set_id(pass_id);
+    setpassname(name);
+  };
+
+  const handleYes = async () => {
+    if (gettype === "assign_manager") {
+      try {
+        const response = await AddGoalManager(gid, get_id);
+        settype("");
+        set_id("");
+        setpassname("");
+        fetchAllGMembersData();
+        dispatch(closeCnfModal({ modalName: "assignManager" }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    }
+    if (gettype === "acceptedBy" || gettype === "sentTo") {
+      try {
+        const response = await RemoveGMember(get_id);
+        settype("");
+        set_id("");
+        setpassname("");
+        fetchAllGMembersData();
+        dispatch(closeCnfModal({ modalName: "removeMember" }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    }
+    if (gettype === "invited") {
+      try {
+        const Data = {
+          user_id: "1",
+          igm_id: get_id,
+          gid: gid,
+          sent_to: getpassname,
+        };
+        const response = await RemoveIGMember(Data);
+        settype("");
+        set_id("");
+        setpassname("");
+        fetchAllGMembersData();
+        dispatch(closeCnfModal({ modalName: "removeMember" }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    }
+    if (gettype === "suggested") {
+      try {
+        const response = await InsertSuggestedGMember("1", gid, get_id); //user_id
+        settype("");
+        set_id("");
+        setpassname("");
+        fetchAllGMembersData();
+        dispatch(closeCnfModal({ modalName: "addMember" }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    }
+    if (gettype === "suggested-invite") {
+      try {
+        const response = await InsertSuggestedIGmember("1", gid, get_id); //user_id
+        settype("");
+        set_id("");
+        setpassname("");
+        fetchAllGMembersData();
+        dispatch(closeCnfModal({ modalName: "addMember" }));
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error(error);
+      }
+    }
+  };
+
+  const handleRemoveManagerYes = async () => {
+    try {
+      const response = await DirectlyRemoveGoalManager(gid, get_id);
+      settype("");
+      set_id("");
+      setpassname("");
+      fetchAllGMembersData();
+      dispatch(closeCnfModal({ modalName: "removeManager" }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error(error);
+    }
   };
 
   return (
@@ -97,90 +243,113 @@ const BasicAccordion = ({ pending }) => {
             <Typography
               sx={{ ml: 1, fontSize: 13, fontWeight: "600", color: "white" }}
             >
-              Don Mahmood
+              {getgoalRes.get_created_by_name}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              height: 46,
-              background: "white",
-              p: 2,
-              mt: 1,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
+          {getgoalRes.gmanager != 0 && (
             <Box
               sx={{
+                height: 46,
+                background: "white",
+                p: 2,
+                mt: 1,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Typography
-                sx={{ fontSize: 13, fontWeight: "600", color: "#343A40" }}
-              >
-                Goal Manager:
-              </Typography>
-              <Typography
+              <Box
                 sx={{
-                  ml: 1,
-                  fontSize: 13,
-                  fontWeight: "600",
-                  color: "#343A40",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                Uzma Karjikar
-              </Typography>
-            </Box>
-            {!pending && (
-              <Tooltip arrow title="Remove Manager" placement="left">
-                <IconButton
-                  edge="end"
-                  aria-label="remove"
-                  onClick={() => handleRemoveManager("Uzma Karjikar")}
+                <Typography
+                  sx={{ fontSize: 13, fontWeight: "600", color: "#343A40" }}
                 >
-                  <PersonRemoveAlt1Rounded
-                    sx={{ color: "#c7df19", fontSize: 20 }}
-                  />
-                </IconButton>
-              </Tooltip>
-            )}
-          </Box>
+                  Goal Manager:
+                </Typography>
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontSize: 13,
+                    fontWeight: "600",
+                    color: "#343A40",
+                  }}
+                >
+                  {getgoalRes.get_gmanager_name}
+                </Typography>
+              </Box>
+
+              {!pending && (
+                <Tooltip arrow title="Remove Manager" placement="left">
+                  <IconButton
+                    edge="end"
+                    aria-label="remove"
+                    onClick={() =>
+                      handleRemoveManager(
+                        getgoalRes.get_gmanager_name,
+                        getgoalRes.gmanager
+                      )
+                    }
+                  >
+                    <PersonRemoveAlt1Rounded
+                      sx={{ color: "#c7df19", fontSize: 20 }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Box>
+          )}
 
           <MembersChildAccordion
             value={"acceptedBy"}
             expanded={expanded}
             handleChange={() => handleChange("acceptedBy")}
+            handleYesChange={gethandleDataYes}
             title={"Request Accepted By:"}
             bgColor={"#d6f3e9"}
             pending={pending}
+            data={gAllDetails.GoalTeamMemberRes?.filter(
+              (i) =>
+                i.status === "accepted" && i.gmember != getgoalRes.gcreated_by
+            )}
           />
           <MembersChildAccordion
             value={"sentTo"}
             expanded={expanded}
             handleChange={() => handleChange("sentTo")}
+            handleYesChange={gethandleDataYes}
             title={"Request Sent To:"}
             bgColor={"#fcf0db"}
             pending={pending}
+            data={gAllDetails.GoalTeamMemberRes?.filter(
+              (i) => i.status === "send"
+            )}
           />
           <MembersChildAccordion
             value={"invited"}
             expanded={expanded}
             handleChange={() => handleChange("invited")}
+            handleYesChange={gethandleDataYes}
             title={"Invited Members:"}
             bgColor={"#fde1e1"}
             pending={pending}
+            data={gAllDetails.InvitedGoalMemberRes}
           />
           {!pending && (
             <MembersChildAccordion
               value={"suggested"}
               expanded={expanded}
               handleChange={() => handleChange("suggested")}
+              handleYesChange={gethandleDataYes}
               title={"Suggested Members:"}
               bgColor={"#dde2fa"}
+              data={gAllDetails.SuggestedGoalMemberRes?.filter(
+                (i) => i.status === "suggested"
+              )}
             />
           )}
           {!pending && (
@@ -188,22 +357,34 @@ const BasicAccordion = ({ pending }) => {
               value={"suggested-invite"}
               expanded={expanded}
               handleChange={() => handleChange("suggested-invite")}
+              handleYesChange={gethandleDataYes}
               title={"Suggested Invite Members:"}
               bgColor={"lavenderblush"}
+              data={gAllDetails.SuggestedInviteGoalMemberRes?.filter(
+                (i) => i.status === "suggested"
+              )}
             />
           )}
         </AccordionDetails>
       </Accordion>
-      <ConfirmationDialog value={"removeMember"} />
-      <ConfirmationDialog value={"assignManager"} />
-      <ConfirmationDialog value={"removeManager"} />
+      <ConfirmationDialog value={"addMember"} handleYes={handleYes} />
+      <ConfirmationDialog value={"removeMember"} handleYes={handleYes} />
+      <ConfirmationDialog value={"assignManager"} handleYes={handleYes} />
+      <ConfirmationDialog
+        value={"removeManager"}
+        handleYes={handleRemoveManagerYes}
+      />
       <ReduxDialog
         value="add-team-members"
         modalTitle="Add Team Members"
         showModalButton={false}
         modalSize="sm"
       >
-        <AddMemberDialog />
+        <AddMemberDialog
+          id={gid}
+          type={"goal"}
+          refreshData={fetchAllGMembersData}
+        />
       </ReduxDialog>
     </Box>
   );

@@ -1,9 +1,9 @@
-import { Grid, Typography } from '@mui/material';
-import React,{memo} from 'react'
-import ProgressBar from './ProgressBar';
+import { Grid, IconButton, Typography } from "@mui/material";
+import React, { memo } from "react";
+import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
+import { VisibilityOutlined } from "@mui/icons-material";
 
-const HiddenListOfDialog = ({ heading,title,value, children }) => {
-  const data = [1, 2];
+const HiddenListOfDialog = ({ heading, title, data, children, handleOpen }) => {
   return (
     <>
       <Grid item xs={12} md={12} lg={12}>
@@ -20,7 +20,7 @@ const HiddenListOfDialog = ({ heading,title,value, children }) => {
         </Typography>
       </Grid>
       <Grid item xs={12} md={12} lg={12}>
-        {data.map((item, index) => {
+        {data?.map((item, index) => {
           return (
             <Grid
               container
@@ -46,15 +46,21 @@ const HiddenListOfDialog = ({ heading,title,value, children }) => {
                       display: "inline",
                     }}
                   >
-                    {value}
+                    {item.sname}
                   </Typography>
                 </Typography>
               </Grid>
               <Grid xs={4} alignSelf={"center"}>
-                <ProgressBar />
+                <LinearProgressWithLabel value={item.kpi_progress} />
               </Grid>
               <Grid xs={1}>
-              {children}
+                <IconButton
+                  aria-label="view"
+                  size="small"
+                  onClick={() => handleOpen(item.sid, item.sname)}
+                >
+                  <VisibilityOutlined fontSize="small" />
+                </IconButton>
               </Grid>
             </Grid>
           );

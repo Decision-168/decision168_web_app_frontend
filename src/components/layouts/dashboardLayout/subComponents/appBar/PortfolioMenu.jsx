@@ -9,7 +9,6 @@ import { Stack, Typography, Avatar, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
-import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { getPorfolioCount, getPortfolios } from "../../../../../api/modules/porfolioModule";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
@@ -23,6 +22,7 @@ import {
 } from "../../../../../redux/action/portfolioSlice";
 import { getPackageDetails } from "../../../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
+
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -91,8 +91,6 @@ export default function PortfolioMenu() {
     fetchPorfolios();
   }, [email]);
 
-  console.log("portfolios", portfolios);
-
   useEffect(() => {
     if (storedPortfolioId && portfolios) {
       const portfolioIndex = portfolios?.findIndex((p) => p?.portfolio_id === storedPortfolioId);
@@ -119,8 +117,6 @@ export default function PortfolioMenu() {
   const handleCreatePortfolioClick = async (event) => {
     const porfolioCountResponse = await getPorfolioCount(79);
     const packageDetailsResponse = await getPackageDetails(packageId);
-    console.log("portfolio count", porfolioCountResponse?.portfolio_count_rows);
-    console.log("package details", packageDetailsResponse?.pack_portfolio);
 
     if (
       isValidPortfolioCount(
@@ -136,14 +132,16 @@ export default function PortfolioMenu() {
     }
   };
 
-  const handleMenuItemClick = (event, index, protfolioId) => {
+  const handleMenuItemClick = (event, index, portfolioId) => {
+    navigate("/portfolio-view");
     setSelectedIndex(index);
     setAnchorEl(null);
     // Save the new portfolioId to localStorage
-    localStorage.setItem("portfolioId", protfolioId);
-    dispatch(getProjectAndTaskCountAsync(protfolioId));
-    dispatch(getPortfolioDetailsAsync(protfolioId));
-    dispatch(getPortfolioTeamMembersAsync(protfolioId));
+    localStorage.setItem("portfolioId", portfolioId);
+    dispatch(getProjectAndTaskCountAsync(portfolioId));
+    dispatch(getPortfolioDetailsAsync(portfolioId));
+    dispatch(getPortfolioTeamMembersAsync(portfolioId)); // we have to remove from here
+
   };
 
   return (
@@ -183,8 +181,8 @@ export default function PortfolioMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}>
-        <PerfectScrollbar style={{ overflowX: "hidden" }}>
-          <Box sx={{ maxHeight: "300px", height: "100%" }}>
+        {/* <PerfectScrollbar style={{ overflowX: "hidden" }}> */}
+          <Box sx={{ height: "100%" }}>
             {portfolios && portfolios.length > 0 ? (
               portfolios.map((p, index) => (
                 <MenuItem
@@ -221,7 +219,7 @@ export default function PortfolioMenu() {
               </Typography>
             )}
           </Box>
-        </PerfectScrollbar>
+        {/* </PerfectScrollbar> */}
 
         <Divider />
 

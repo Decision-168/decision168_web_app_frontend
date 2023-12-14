@@ -1,26 +1,38 @@
 import { Grid, Typography } from "@mui/material";
 import React from "react";
-import TaskInfo from "../../subComponents/TaskInfo";
+import SubTaskInfo from "./SubTaskInfo";
 
-export default function SubtakOverviewCardBody({ styles }) {
+export default function SubtakOverviewCardBody({ styles, subtask }) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography sx={styles.label}>Subtask Code:</Typography>
-        <Typography sx={styles.labelText}>AC-2821</Typography>
+        {subtask?.stcode && (
+          <>
+            <Typography sx={styles.label}>SubTask Code:</Typography>
+            <Typography sx={styles.labelText}>{subtask?.stcode}</Typography>
+          </>
+        )}
       </Grid>
 
       <Grid item xs={12}>
-        <Typography sx={styles.label}>Subtask Description :</Typography>
-        <Typography sx={styles.labelText}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo minima adipisci quia placeat repellendus iste.</Typography>
+        {subtask?.stdes && (
+          <>
+            <Typography sx={styles.label}>SubTask Description :</Typography>
+            <Typography sx={styles.labelText}>{subtask?.stdes}</Typography>
+          </>
+        )}
       </Grid>
 
       <Grid item xs={12}>
-        <Typography sx={styles.label}>Subtask Notes:</Typography>
-        <Typography sx={styles.labelText}>Lorem ipsum dolor sit amet.</Typography>
+        {subtask?.stnote && (
+          <>
+            <Typography sx={styles.label}>SubTask Notes:</Typography>
+            <Typography sx={styles.labelText}>{subtask?.stnote}</Typography>
+          </>
+        )}
       </Grid>
 
-      <TaskInfo styles={styles} />
+      <SubTaskInfo styles={styles} info={subtask} />
     </Grid>
   );
 }

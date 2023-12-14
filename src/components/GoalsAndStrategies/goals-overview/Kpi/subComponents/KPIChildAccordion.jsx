@@ -15,10 +15,10 @@ import {
 } from "@mui/icons-material";
 import ViewProjectPopup from "../../../subComponents/ViewProjectPopup";
 import CustomDialog from "../../../../common/CustomDialog";
-import ProgressBar from "../../../subComponents/ProgressBar";
 import { useNavigate } from "react-router";
+import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 
-const KPIChildAccordion = ({}) => {
+const KPIChildAccordion = ({project}) => {
   const [openProject, setOpenProject] = useState(false);
   const navigate = useNavigate();
   const handleProjectClose = () => {
@@ -48,7 +48,7 @@ const KPIChildAccordion = ({}) => {
               display: "inline",
             }}
           >
-            Dashboard Module
+            {project.pname}
           </Typography>
         </Typography>
       </AccordionSummary>
@@ -61,12 +61,11 @@ const KPIChildAccordion = ({}) => {
         >
           <Grid item xs={7} textAlign={"left"}>
             <Typography sx={{ fontSize: 12 }}>
-              Dashboards provide users from all different businesses the ability
-              to monitor performance, crea...
+            {project?.pdes ? project?.pdes : "No Description!"}
             </Typography>
           </Grid>
           <Grid xs={3} alignSelf={"center"}>
-            <ProgressBar />
+            <LinearProgressWithLabel value={project?.progressRes}/>
           </Grid>
           <Grid
             xs={2}

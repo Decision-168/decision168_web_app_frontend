@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton } from "@mui/material";
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Add,
   BusinessCenter,
@@ -17,15 +17,104 @@ import ConfirmationDialog from "../../common/ConfirmationDialog";
 import ReduxDialog from "../../common/ReduxDialog";
 import DuplicateDialog from "./DuplicateDialog";
 import Goal from "../portfolio-goals/create-goals/subComponents/Goal";
-import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
+// import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
 import OverallHistory from "./history-section/OverallHistory";
 import GridList from "./GridList";
 import TitleWithActions from "./TitleWithActions";
 import { description } from "./style-functions";
 import HiddenListOfDialog from "./HiddenListOfDialog";
-const ViewGoalsPopup = ({}) => {
+import moment from "moment";
+import {
+  getGoalDetail,
+  getViewHistoryDateGoal,
+} from "../../../api/modules/goalkpiModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
+const ViewGoalsPopup = ({ goalID, id }) => {
+  const gid = goalID;
+
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const formatDate = (timestamp) => {
+    // Check if the timestamp is valid
+    if (!timestamp) {
+      return "No Date";
+    }
+
+    // Assuming your timestamp is in milliseconds
+    const formattedDate = moment(timestamp).format("D MMM, YYYY");
+    return formattedDate;
+  };
+
+  //get goal & kpi detail
+  const [gdetail, setgdetail] = useState([]);
+  const [kpidetails, setkpidetails] = useState([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await getGoalDetail(gid);
+        setgdetail(response.goalRes);
+        setkpidetails(response.GoalsAllStrategiesListRes);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+  //get goal & kpi detail
+
+  //Check Button Visibility
+  const [displayBtns, setdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayTitleWithActions = async () => {
+      try {
+        if (gdetail.gcreated_by == user_id) {
+          setdisplayBtns("all");
+        } else if (
+          gdetail.get_portfolio_createdby_id == user_id ||
+          gdetail.gmanager == user_id
+        ) {
+          setdisplayBtns("some");
+        } else {
+          setdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setdisplayBtns("no");
+      }
+    };
+
+    DisplayTitleWithActions();
+  }, []);
+  //Check Button Visibility
+
+  const [allHist, setallHist] = useState([]);
+
+  useEffect(() => {
+    const fetchAllHistoryData = async () => {
+      try {
+        const hresponse = await getViewHistoryDateGoal(gid);
+        setallHist(hresponse.history_dates);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllHistoryData();
+  }, []);
+
   const [openKPI, setOpenKPI] = useState(false);
   const [inputFields, setInputFields] = useState([]);
+
+  const [getkpi_id, setkpi_id] = useState([]);
+  const [getkpi_sname, setkpi_sname] = useState([]);
 
   const handleAddClick = () => {
     setInputFields([...inputFields, { KPI: "", Description: "" }]);
@@ -33,7 +122,9 @@ const ViewGoalsPopup = ({}) => {
   const handleKPIClose = () => {
     setOpenKPI(false);
   };
-  const handleKPIOpen = () => {
+  const handleKPIOpen = (sid, sname) => {
+    setkpi_id(sid);
+    setkpi_sname(sname);
     setOpenKPI(true);
   };
 
@@ -85,7 +176,7 @@ const ViewGoalsPopup = ({}) => {
     >
       <Grid container spacing={2}>
         <TitleWithActions
-          title={"GOAL: Demo Goal"}
+          title={`GOAL: ${gdetail.gname}`}
           handleClick1={handleCreateGoal}
           handleClick2={handleCreateKPI}
           handleDelete={handleDelete}
@@ -96,21 +187,23 @@ const ViewGoalsPopup = ({}) => {
           btn2Text={"Add KPIs"}
           btn1Icon={<Edit />}
           btn2Icon={<Add />}
-          description={description}
+          description={gdetail?.gdes ? gdetail?.gdes : "No Description!"}
           progressHeading={"Progress :"}
+          progressPercentage={gdetail.progress}
+          displayBtns={displayBtns}
         />
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
-            info={"6 Nov, 2023"}
+            info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
-            info={"31 Dec, 2023"}
+            info={formatDate(gdetail.gend_date)}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -119,38 +212,35 @@ const ViewGoalsPopup = ({}) => {
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Department"}
-            info={"Research & Development"}
+            info={gdetail.get_dept_name}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={gdetail.get_created_by_name}
           />
         </Grid>
 
-        {window.location.pathname !== "/goal-overview" && (
+        {!window.location.pathname.startsWith("/goal-overview/") && (
           <HiddenListOfDialog
             heading={"KPIs"}
             title={"KPI"}
-            value={"ABC Strategy 3"}
-          >
-            <IconButton aria-label="view" size="small" onClick={handleKPIOpen}>
-              <VisibilityOutlined fontSize="small" />
-            </IconButton>
-          </HiddenListOfDialog>
+            data={kpidetails}
+            handleOpen={handleKPIOpen}
+          />
         )}
       </Grid>
       <CustomDialog
         handleClose={handleKPIClose}
         open={openKPI}
-        modalTitle="ABC Strategy 3"
-        redirectPath={"/kpi-overview"}
+        modalTitle={getkpi_sname}
+        redirectPath={`/kpi-overview/${getkpi_id}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewKpiPopup />
+        <ViewKpiPopup kpi_id={getkpi_id} />
       </CustomDialog>
       <ConfirmationDialog value={"fileItGoal"} />
       <ConfirmationDialog value={"deleteGoal"} />
@@ -160,7 +250,12 @@ const ViewGoalsPopup = ({}) => {
         showModalButton={false}
         modalSize="md"
       >
-        <OverallHistory />
+        <OverallHistory
+          allHist={allHist}
+          name={gdetail.gname}
+          type={"goal"}
+          id={gdetail.gid}
+        />
       </ReduxDialog>
       <ReduxDialog
         value="duplicate-goal"
@@ -168,7 +263,7 @@ const ViewGoalsPopup = ({}) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateDialog />
+        <DuplicateDialog goalData = {gdetail} />
       </ReduxDialog>
       <ReduxDialog
         value="edit-goals"
@@ -185,7 +280,7 @@ const ViewGoalsPopup = ({}) => {
         modalSize="sm"
       >
         <KPIs
-          individual={true}
+          individual={false}
           inputFields={inputFields}
           setInputFields={setInputFields}
           handleAddClick={handleAddClick}

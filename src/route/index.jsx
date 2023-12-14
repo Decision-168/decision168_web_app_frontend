@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { lazy } from "react";
+import React, { lazy, useState , useEffect} from "react";
 import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
@@ -39,13 +39,17 @@ const ProjectOverviewRequest = lazy(() =>
 );
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
-const Tasks = lazy(() => import("../components/Tasks"));
+const PortfolioTasks = lazy(() => import("../components/Tasks"));
+const DashboardTasks = lazy(() => import("../components/Tasks/DashboardTasks"));
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
-const AccountVerification = lazy(() => import("../components/auth/accountVerification"));
+const AccountVerification = lazy(() =>
+  import("../components/auth/accountVerification")
+);
 
 const RouteIndex = () => {
+
   return (
     <Router>
       <Routes>
@@ -140,7 +144,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/goal-overview"
+            path="/goal-overview/:gid"
             element={
               <DashboardLayout>
                 <GoalsOverview />
@@ -148,7 +152,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/goal-overview-request"
+            path="/goal-overview-request/:gid"
             element={
               <DashboardLayout>
                 <GoalOverviewRequest />
@@ -159,7 +163,16 @@ const RouteIndex = () => {
             path="/project-tasks-list"
             element={
               <DashboardLayout>
-                <Tasks />
+                <h1>Project's tasks</h1>
+              </DashboardLayout>
+            }
+          />
+
+          <Route
+            path="/all-tasks"
+            element={
+              <DashboardLayout>
+                <DashboardTasks />
               </DashboardLayout>
             }
           />
@@ -167,7 +180,7 @@ const RouteIndex = () => {
             path="/today-tasks"
             element={
               <DashboardLayout>
-                <Tasks />
+                <h1>Today's tasks</h1>
               </DashboardLayout>
             }
           />
@@ -175,7 +188,7 @@ const RouteIndex = () => {
             path="/week-tasks"
             element={
               <DashboardLayout>
-                <Tasks />
+                <h1>Week's tasks</h1>
               </DashboardLayout>
             }
           />
@@ -183,7 +196,7 @@ const RouteIndex = () => {
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
-                <Tasks />
+                <PortfolioTasks />
               </DashboardLayout>
             }
           />
@@ -204,7 +217,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/tasks-overview"
+            path="/tasks-overview/:taskId"
             element={
               <DashboardLayout>
                 <TaskOverview />
@@ -212,7 +225,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/subtasks-overview"
+            path="/subtasks-overview/:subTaskId"
             element={
               <DashboardLayout>
                 <SubtaskOverview />
@@ -220,7 +233,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/kpi-overview"
+            path="/kpi-overview/:sid"
             element={
               <DashboardLayout>
                 <KPIOverview />
@@ -279,15 +292,23 @@ const RouteIndex = () => {
           <Route
             exact
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
-            element={<VerifyInviteMember/>}
+            element={<VerifyInviteMember />}
           />
         </Route>
 
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
-          <Route exact path="/account-verification/:token" element={<AccountVerification />} />
+          <Route
+            exact
+            path="/account-verification/:token"
+            element={<AccountVerification />}
+          />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route exact path="/change-password/:id" element={<ChangePassword />} />
+          <Route
+            exact
+            path="/change-password/:id"
+            element={<ChangePassword />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

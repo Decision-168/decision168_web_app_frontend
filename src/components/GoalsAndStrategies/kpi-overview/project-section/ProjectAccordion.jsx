@@ -17,9 +17,10 @@ import ProgressBar from "../../subComponents/ProgressBar";
 import CustomDialog from "../../../common/CustomDialog";
 import ViewProjectPopup from "../../subComponents/ViewProjectPopup";
 import { useNavigate } from "react-router";
+import LinearProgressWithLabel from "../../../common/LinearProgressWithLabel";
 
-const ProjectAccordion = ({}) => {
-  const data = [1, 2];
+const ProjectAccordion = ({project}) => {
+  
   const [openProject, setOpenProject] = useState(false);
   const navigate = useNavigate();
   const handleProjectClose = () => {
@@ -52,7 +53,7 @@ const ProjectAccordion = ({}) => {
                 display: "inline",
               }}
             >
-              Dashboard Module
+              {project.pname}
             </Typography>
           </Typography>
         </AccordionSummary>
@@ -65,12 +66,11 @@ const ProjectAccordion = ({}) => {
           >
             <Grid item xs={7} textAlign={"left"}>
               <Typography sx={{ fontSize: 12 }}>
-                Dashboards provide users from all different businesses the
-                ability to monitor performance, create re..
+              {project?.pdes ? project?.pdes : "No Description!"}
               </Typography>
             </Grid>
             <Grid xs={3} alignSelf={"center"}>
-              <ProgressBar />
+            <LinearProgressWithLabel value={project?.progressRes}/>
             </Grid>
             <Grid
               xs={2}

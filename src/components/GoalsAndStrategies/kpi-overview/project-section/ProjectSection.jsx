@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ProjectAccordion from "./ProjectAccordion";
 import { Add } from "@mui/icons-material";
@@ -8,9 +8,25 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import CreateProject from "../../../project/Dialogs/CreateProject";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
-const ProjectSection = () => {
+import { getStrategyDetail } from "../../../../api/modules/goalkpiModule";
+const ProjectSection = ({kpi_id}) => {
     const dispatch = useDispatch();
-  const data = [1, 2];
+
+    const [kpiProDetails, setkpiProDetails] = useState([]);
+
+    useEffect(() => {
+      const fetchAllData = async () => {
+        try {
+          const response = await getStrategyDetail(kpi_id);
+          setkpiProDetails(response.projectRes);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      fetchAllData();
+    }, []);
+
   return (
     <PerfectScrollbar>
       <Box
@@ -39,10 +55,10 @@ const ProjectSection = () => {
             <CustomSearchField />
           </Grid>
           <Grid item xs={12} mt={2}>
-            {data.map((item, index) => {
+            {kpiProDetails?.map((item, index) => {
               return (
                 <Fragment key={index}>
-                  <ProjectAccordion />
+                  <ProjectAccordion project={item}/>
                 </Fragment>
               );
             })}

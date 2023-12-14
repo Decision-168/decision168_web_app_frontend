@@ -93,11 +93,18 @@ export const globalValidations = {
             message: "Invalid task",
         },
     },
-    taskDescription: {
-        required: "Task description is required",
+    tname: {
+        required: "Task Name is required",
         pattern: {
             value: /^[A-Za-z\s]+$/,
-            message: "Invalid description",
+            message: "Invalid task Name",
+        },
+    },
+    stname: {
+        required: "Subtask Name is required",
+        pattern: {
+            value: /^[A-Za-z\s]+$/,
+            message: "Invalid Subtask Name",
         },
     },
     taskNote: {
