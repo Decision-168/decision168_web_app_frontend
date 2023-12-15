@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  InputLabel,
-  Avatar,
-  TextField,
-  Stack,
-  IconButton,
-} from "@mui/material";
+import { Box, Button, Grid, InputLabel, Avatar, TextField, Stack, IconButton } from "@mui/material";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
 import CustomNumberField from "../../../common/CustomNumberField";
 import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
@@ -18,7 +9,6 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import CircularLoader from "../../../common/CircularLoader";
 import AddSocialMediaLinks from "../../../common/AddSocialMediaLinks";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
-import SelectCountry from "../../../common/SelectCountry";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -34,6 +24,8 @@ import {
   getPortfolioDetailsAsync,
   selectPorfolioDetails,
 } from "../../../../redux/action/portfolioSlice";
+import SelectOption from "../../../common/SelectOption";
+import { getCountries } from "../../../../api/modules/dashboardModule";
 
 export default function CompanyForm({ isEditPath, depts }) {
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
@@ -128,7 +120,7 @@ export default function CompanyForm({ isEditPath, depts }) {
     });
   };
 
-  setMembersIds([...getMembersIds, ...memberIdArray]);
+  // setMembersIds([...getMembersIds, ...memberIdArray]);
 
   const handleDepartmentChange = (selectedOptions) => {
     const departmentsArray = selectedOptions?.map((item) => item.department);
@@ -161,6 +153,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    alert(`${JSON.stringify(formValues)}`);
     setLoading(true);
 
     const updatedFields = inputFields.map((field) => ({
@@ -179,9 +172,7 @@ export default function CompanyForm({ isEditPath, depts }) {
       return;
     }
 
-    const customDepartmentArray = updatedFields.map(
-      (item) => item.cus_department
-    );
+    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
     const departmentData = {
       portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
       departments: departments,
@@ -349,17 +340,22 @@ export default function CompanyForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <SelectCountry
+          <SelectOption
+            label="Country"
             required={false}
+            field="country" // Unique identifier for this field
+            idKey="country_code" // Key to identify each option
+            getOptionLabel={(option) => option.country_name} // which want to display after select
+            dynamicOptions={true} // true or false based on your condition
+            loadOptions={getCountries} //pass only if dynamicOptions true
+            staticOptions={null} // Your static options array
             formValues={formValues}
             setFormValues={setFormValues}
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
-          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
-            Add Company Logo
-          </InputLabel>
+          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Company Logo</InputLabel>
           <Button
             fullWidth
             variant="outlined"
@@ -388,9 +384,7 @@ export default function CompanyForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
-          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
-            Add Cover Picture
-          </InputLabel>
+          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Cover Picture</InputLabel>
           <Button
             fullWidth
             variant="outlined"
@@ -449,14 +443,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
             <Grid item xs={12} md={8} pl={1} textAlign="start">
               {inputFields.map((inputField, index) => (
-                <Grid
-                  container
-                  key={index}
-                  my={1}
-                  px={1}
-                  spacing={2}
-                  bgcolor="#F7F7F7"
-                >
+                <Grid container key={index} my={1} px={1} spacing={2} bgcolor="#F7F7F7">
                   <Grid item xs={10} py={2} mt={2.5} textAlign="start">
                     <TextField
                       fullWidth
@@ -469,11 +456,7 @@ export default function CompanyForm({ isEditPath, depts }) {
                     />
                   </Grid>
                   <Grid item xs={2} py={2} mt={2.5}>
-                    <Stack
-                      direction="row"
-                      justifyContent="end"
-                      alignItems="center"
-                    >
+                    <Stack direction="row" justifyContent="end" alignItems="center">
                       {inputFields.length > 0 && (
                         <IconButton onClick={() => handleRemoveClick(index)}>
                           <RemoveCircleRoundedIcon />
@@ -493,13 +476,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
         <Grid item xs={12} sm={12} py={2} textAlign="end">
           <Button size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
-            {loading ? (
-              <CircularLoader />
-            ) : isEditPath ? (
-              "Save Changes"
-            ) : (
-              "Create"
-            )}
+            {loading ? <CircularLoader /> : isEditPath ? "Save Changes" : "Create"}
           </Button>
         </Grid>
       </Grid>

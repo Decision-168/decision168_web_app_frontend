@@ -5,7 +5,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { taskPriorities, priorityColors, taskStatuses, statusColors } from "../subComponents/TasksData";
-import Actions from "./Actions";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReorderIcon from "@mui/icons-material/Reorder";

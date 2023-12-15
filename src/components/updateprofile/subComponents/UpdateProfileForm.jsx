@@ -10,12 +10,12 @@ import { getUserDetailsAsync, selectUserDetails } from "../../../redux/action/us
 import { useSelector } from "react-redux";
 import GenderRadioGroup from "../../common/GenderRadioGroup";
 import CustomDatePicker from "../../common/CustomDatePicker";
-import SelectCountry from "../../common/SelectCountry";
-import { updateUserProfile } from "../../../api/modules/dashboardModule";
+import { getCountries, updateUserProfile } from "../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
 import { parseISO } from "date-fns";
 import { useDispatch } from "react-redux";
+import SelectOption from "../../common/SelectOption";
 
 export default function UpdateProfileForm() {
   const theme = useTheme();
@@ -73,6 +73,7 @@ export default function UpdateProfileForm() {
   };
 
   const handleSubmit = async (event) => {
+    alert(`${JSON.stringify(formValues)}`)
     event.preventDefault();
     setLoading(true);
 
@@ -191,7 +192,18 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <SelectCountry required={false} formValues={formValues} setFormValues={setFormValues} />
+          <SelectOption
+            label="Country"
+            required={false}
+            field="country" // Unique identifier for this field
+            idKey="country_code" // Key to identify each option
+            getOptionLabel={(option) => option.country_name} // which want to display after select
+            dynamicOptions={true} // true or false based on your condition
+            loadOptions={getCountries} //pass only if dynamicOptions true
+            staticOptions={null} // Your static options array
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -222,7 +234,8 @@ export default function UpdateProfileForm() {
               color: theme.palette.secondary.light,
               "&:hover": { backgroundColor: theme.palette.secondary.dark },
             }}
-            onClick={handleGoBack}>
+            onClick={handleGoBack}
+          >
             Cancel
           </Button>
           <Button size="small" type="submit" variant="contained" sx={{ ml: 1, width: "130px" }}>
