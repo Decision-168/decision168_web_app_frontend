@@ -11,7 +11,7 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import ReduxDialog from "../../common/ReduxDialog";
@@ -28,13 +28,21 @@ import CreateProject from "../../project/Dialogs/CreateProject";
 import { useNavigate } from "react-router";
 import moment from "moment";
 import {
+  CallFileItKPI,
+  CallTrashKPI,
   getStrategyDetail,
   getViewHistoryDateStrategy,
 } from "../../../api/modules/goalkpiModule";
 import ProjectListOfDialog from "./ProjectListOfDialog";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
+import { toast } from "react-toastify";
 const ViewKpiPopup = ({ kpi_id }) => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [openProject, setOpenProject] = useState(false);
+
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -110,11 +118,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
     return formattedDate;
   };
 
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [openProject, setOpenProject] = useState(false);
-
   const handleProjectClose = () => {
     setOpenProject(false);
   };
@@ -152,6 +155,30 @@ const ViewKpiPopup = ({ kpi_id }) => {
   };
   const handleAddProject = () => {
     dispatch(openModal("create-project"));
+  };
+  
+  const handleKpiFileItYes = async () => {  
+    try {
+      const response = await CallFileItKPI(kpiDetail.sid, "1"); //user_id
+      dispatch(closeCnfModal({ modalName: "fileItKPI" }));
+      toast.success(`${response.message}`);
+      navigate(`/goal-overview/${kpiDetail.gid}`);
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error(error);
+    }
+  };
+
+  const handleKpiDeleteYes = async () => {    
+    try {
+      const response = await CallTrashKPI(kpiDetail.sid, "1"); //user_id
+      dispatch(closeCnfModal({ modalName: "deleteKPI" }));
+      toast.success(`${response.message}`);
+      navigate(`/goal-overview/${kpiDetail.gid}`);
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error(error);
+    }
   };
 
   return (
@@ -224,8 +251,8 @@ const ViewKpiPopup = ({ kpi_id }) => {
           />
         )}
       </Grid>
-      <ConfirmationDialog value={"fileItKPI"} />
-      <ConfirmationDialog value={"deleteKPI"} />
+      <ConfirmationDialog value={"fileItKPI"} handleYes={handleKpiFileItYes} />
+      <ConfirmationDialog value={"deleteKPI"} handleYes={handleKpiDeleteYes} />
       <ReduxDialog
         value="edit-kpi"
         modalTitle="Edit KPI"

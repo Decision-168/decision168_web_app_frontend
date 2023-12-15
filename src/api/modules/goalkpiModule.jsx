@@ -648,7 +648,7 @@ export const getViewAllHistoryStrategy = async (sid) => {
   }
 };
 
-export const CreateGoal = async (formData) => {
+export const InsertGoalData = async (formData) => {
   try {
     const response = await axios.post(`${apiUrl}${api.InsertGoal}`, formData);
     return response.data;
@@ -657,7 +657,7 @@ export const CreateGoal = async (formData) => {
   }
 };
 
-export const CreateStrategies = async (formData) => {
+export const InsertStrategiesData = async (formData) => {
   try {
     const response = await axios.post(
       `${apiUrl}${api.InsertStrategies}`,
@@ -815,10 +815,54 @@ export const EditStrategy = async (formdata) => {
   }
 };
 
-export const getGoalCreateDD = async (portfolio_id,user_id) => {
+export const getGoalCreateDD = async (portfolio_id, user_id) => {
   try {
     const response = await axios.get(
       `${apiUrl}${api.GoalCreateDD}${portfolio_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallFileItGoal = async (goal_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.FileItGoal}${goal_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallFileItKPI = async (strategy_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.FileItKPI}${strategy_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallTrashGoal = async (goal_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.TrashGoal}${goal_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallTrashKPI = async (strategy_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.TrashKPI}${strategy_id}/${user_id}`
     );
     return response.data;
   } catch (error) {

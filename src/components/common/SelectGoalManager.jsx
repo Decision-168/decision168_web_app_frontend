@@ -30,9 +30,6 @@ export default function SelectGoalManager({
       <Grid item xs={2} alignSelf={"center"}>
         <InputLabel sx={{ fontSize: "14px" }}>
           Goal Manager
-          {required && (
-            <span style={{ color: theme.palette.error.main }}> *</span>
-          )}
         </InputLabel>
       </Grid>
       <Grid item xs={10}>

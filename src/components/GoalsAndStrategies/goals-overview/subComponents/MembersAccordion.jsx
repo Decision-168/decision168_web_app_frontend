@@ -212,7 +212,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             >
               Team Members
             </Typography>
-            {!pending && (
+            {(!pending && (displayBtns === "all" || displayBtns === "some")) && (
               <Tooltip arrow title="Add Team Member" placement="right">
                 <IconButton
                   aria-label="add"
@@ -283,7 +283,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
                 </Typography>
               </Box>
 
-              {!pending && (
+              {(!pending && (displayBtns === "all" || displayBtns === "some")) && (
                 <Tooltip arrow title="Remove Manager" placement="left">
                   <IconButton
                     edge="end"
@@ -312,6 +312,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             title={"Request Accepted By:"}
             bgColor={"#d6f3e9"}
             pending={pending}
+            displayBtns={displayBtns}
             data={gAllDetails.GoalTeamMemberRes?.filter(
               (i) =>
                 i.status === "accepted" && i.gmember != getgoalRes.gcreated_by
@@ -325,6 +326,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             title={"Request Sent To:"}
             bgColor={"#fcf0db"}
             pending={pending}
+            displayBtns={displayBtns}
             data={gAllDetails.GoalTeamMemberRes?.filter(
               (i) => i.status === "send"
             )}
@@ -337,6 +339,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             title={"Invited Members:"}
             bgColor={"#fde1e1"}
             pending={pending}
+            displayBtns={displayBtns}
             data={gAllDetails.InvitedGoalMemberRes}
           />
           {!pending && (
@@ -347,6 +350,8 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
               handleYesChange={gethandleDataYes}
               title={"Suggested Members:"}
               bgColor={"#dde2fa"}
+              pending={pending}
+              displayBtns={displayBtns}
               data={gAllDetails.SuggestedGoalMemberRes?.filter(
                 (i) => i.status === "suggested"
               )}
@@ -360,6 +365,8 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
               handleYesChange={gethandleDataYes}
               title={"Suggested Invite Members:"}
               bgColor={"lavenderblush"}
+              pending={pending}
+              displayBtns={displayBtns}
               data={gAllDetails.SuggestedInviteGoalMemberRes?.filter(
                 (i) => i.status === "suggested"
               )}

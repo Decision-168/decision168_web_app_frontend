@@ -9,15 +9,16 @@ import { useDispatch } from "react-redux";
 import KPIs from "../../portfolio-goals/create-goals/subComponents/KPIs";
 import CustomSearchField from "../../../common/CustomSearchField";
 import { getGoalsAllStrategiesList } from "../../../../api/modules/goalkpiModule";
-const KPISection = ({goalID}) => {
-  
+const KPISection = ({ goalID }) => {
   const [Goalkpidetails, setGoalkpidetails] = useState([]);
+  const [getGoalInfo, setGoalInfo] = useState([]);
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await getGoalsAllStrategiesList(goalID); 
-        setGoalkpidetails(response);
+        const response = await getGoalsAllStrategiesList(goalID);
+        setGoalInfo(response.goalRes);
+        setGoalkpidetails(response.listResults);
       } catch (error) {
         console.error(error);
       }
@@ -26,10 +27,10 @@ const KPISection = ({goalID}) => {
     fetchAllData();
   }, []);
 
-  const [inputFields, setInputFields] = useState([]);
+  const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
 
   const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+    setInputFields([...inputFields, { sname: "", sdes: "" }]);
   };
   const dispatch = useDispatch();
   return (
@@ -63,7 +64,7 @@ const KPISection = ({goalID}) => {
             {Goalkpidetails.map((item, index) => {
               return (
                 <Fragment key={index}>
-                  <KPIAccordion kpi={item}/>
+                  <KPIAccordion kpi={item} />
                 </Fragment>
               );
             })}
@@ -90,6 +91,8 @@ const KPISection = ({goalID}) => {
             inputFields={inputFields}
             setInputFields={setInputFields}
             handleAddClick={handleAddClick}
+            passGID={getGoalInfo.gid}
+            passGDEPT={getGoalInfo.gdept}
           />
         </ReduxDialog>
       </Box>

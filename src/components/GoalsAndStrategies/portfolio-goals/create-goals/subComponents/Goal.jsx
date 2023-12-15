@@ -12,9 +12,11 @@ import {
 import React, { memo, useEffect, useState } from "react";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
 import InviteMembers from "../../../subComponents/InviteMembers";
-import Duration from "../../../subComponents/Duration";
 
-import { getGoalCreateDD } from "../../../../../api/modules/goalkpiModule";
+import {
+  getGoalCreateDD,
+  getGoalDetail,
+} from "../../../../../api/modules/goalkpiModule";
 import SelectDepartment from "../../../../common/SelectDepartment";
 import SelectGoalManager from "../../../../common/SelectGoalManager";
 import { useSelector } from "react-redux";
@@ -22,8 +24,9 @@ import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import moment from "moment";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import CustomDatePicker from "../../../../common/CustomDatePicker";
+import MultiSelectOptionGrid from "../../../../common/MultiSelectOptionGrid";
 
-const Goal = ({ individual, onUpdate }) => {
+const Goal = ({ individual, onUpdate, passGID }) => {
   const theme = useTheme();
   //get user id
   const user = useSelector(selectUserDetails);
@@ -37,23 +40,24 @@ const Goal = ({ individual, onUpdate }) => {
   const [availableMembers, setAvailableMembers] = useState([]);
 
   const [formValues, setFormValues] = useState({
-    gname: null,
+    gname: "",
     gdept: "",
-    gdes: null,
+    gdes: "",
     gcreated_by: "1", //user_id
     portfolio_id: "2", //portfolio_id
-    gmanager: "",
+    gmanager: 0,
+    gstart_date: new Date(),
+    gend_date: new Date(),
     team_member: [],
     imemail: [],
   });
 
   useEffect(() => {
     // Callback to parent component with updated form values
-    if(!individual){
-    onUpdate(formValues);
+    if (!individual) {
+      onUpdate(formValues);
     }
-  
-  }, [formValues])
+  }, [formValues]);
 
   useEffect(() => {
     const fetchAllHistoryData = async () => {
@@ -76,14 +80,11 @@ const Goal = ({ individual, onUpdate }) => {
     setAvailableMembers(memberData);
   }, [memberData]);
 
-  
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    console.log (value);
-    setFormValues((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+  const handleChange = (fieldName) => (event) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
   };
 
   useEffect(() => {
@@ -104,11 +105,59 @@ const Goal = ({ individual, onUpdate }) => {
     });
   };
 
-  // const CommonForm = ({}) => {
-  //   return (
+  //Goal Edit Part
 
-  //   );
-  // };
+  const [getGDetail, setGDetail] = useState([]);
+  const [getGMembers, setGMembers] = useState([]);
+  if (passGID) {
+    useEffect(() => {
+      const fetchAllEditGoalData = async () => {
+        try {
+          const response = await getGoalDetail(passGID);
+          setGDetail(response.goalRes);
+          const getGMembersData = response.GoalTeamMemberRes;
+          // const gmembers = getGMembersData.map(member => member.gmember);
+          const gmembers = getGMembersData
+            .filter((member) => member.reg_id != response.goalRes?.gcreated_by)
+            .map((member) => member.reg_id);
+          setGMembers(gmembers);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchAllEditGoalData();
+    }, []);
+  }
+
+  useEffect(() => {
+    const gStartDate = getGDetail?.gstart_date
+      ? new Date(getGDetail.gstart_date)
+      : new Date();
+
+    const gendDate = getGDetail?.gend_date
+      ? new Date(getGDetail.gend_date)
+      : new Date();
+
+    setFormValues({
+      gname: getGDetail?.gname,
+      gdept: getGDetail?.gdept,
+      gdes: getGDetail?.gdes,
+      gcreated_by: "1", //user_id
+      portfolio_id: "2", //portfolio_id
+      gmanager: getGDetail?.gmanager,
+      gstart_date: gStartDate,
+      gend_date: gendDate,
+      team_member: getGMembers,
+      imemail: [],
+    });
+  }, [getGDetail, getGMembers]);
+
+  const handleGoalEdit = async () => {
+    console.log("edit", formValues);
+    console.log(passGID);
+  };
+
+  //Goal Edit Part
 
   return (
     <>
@@ -130,78 +179,41 @@ const Goal = ({ individual, onUpdate }) => {
               setFormValues={setFormValues}
             />
 
-            <SelectGoalManager
+            <MultiSelectOptionGrid
+              label="Members"
               required={false}
-              managers={assignee}
+              field="team_member"
+              idKey="id"
+              getOptionLabel={(option) => option.name}
+              staticOptions={memberData}
               formValues={formValues}
               setFormValues={setFormValues}
             />
-            <Grid item xs={2} alignSelf={"center"}>
-              <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
-            </Grid>
-            <Grid item xs={7}>
-              <Autocomplete
-                multiple
-                value={selectedMembers}
-                fullWidth
-                options={availableMembers}
-                getOptionLabel={(option) => option.name}
-                getOptionSelected={(option, value) => option.id === value.id}
-                onChange={(event, newMembers) => {
-                  setSelectedMembers(newMembers);
-                  const members = newMembers?.map((member) => member.id);
-                  setAvailableMembers(
-                    memberData.filter((member) => !newMembers.includes(member))
-                  );
-                  setFormValues({
-                    ...formValues,
-                    team_member: members,
-                  });
-                }}
-                inputValue={memberInputValue}
-                onInputChange={(event, newMemberInputValue) => {
-                  setMemberInputValue(newMemberInputValue);
-                }}
-                renderInput={(params) => {
-                  return <TextField {...params} />;
-                }}
-              />
-            </Grid>
+
             <InviteMembers
               formValues={formValues}
               setFormValues={setFormValues}
             />
-            <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
+            <Grid
+              container
+              alignItems="center"
+              style={{ marginLeft: "28px", marginTop: "16px" }}
+            >
               <Grid item xs={2}>
                 <InputLabel sx={{ fontSize: "14px" }}>
-                  Duration
+                  End Date
                   <span style={{ color: theme.palette.error.main }}> *</span>
                 </InputLabel>
               </Grid>
               <Grid item xs={10} container spacing={1}>
-                <Grid item xs={5}>
-                  <CustomDatePicker
-                    label=""
-                    value={formValues.gstart_date}
-                    onChange={handleStartDateChange}
-                  />
-                </Grid>
-                <Grid item xs={5}>
-                  <CustomDatePicker
-                    label=""
-                    value={formValues.gend_date}
-                    onChange={handleEndDateChange}
-                  />
-                </Grid>
+                <CustomDatePicker
+                  label=""
+                  value={formValues.gend_date}
+                  onChange={handleEndDateChange}
+                />
               </Grid>
             </Grid>
-            {/* <Duration
-          label="Duration "
-          labelColor=""
-          individual={individual}
-          required={true}
-          onDateChange={handleDateChange}
-        /> */}
+
             <CustomMultilineTextField
               label="Description"
               name="gdes"
@@ -235,37 +247,18 @@ const Goal = ({ individual, onUpdate }) => {
             formValues={formValues}
             setFormValues={setFormValues}
           />
-          <Grid item xs={2} alignSelf={"center"}>
-            <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
-          </Grid>
-          <Grid item xs={7}>
-            <Autocomplete
-              multiple
-              value={selectedMembers}
-              fullWidth
-              options={availableMembers}
-              getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => option.id === value.id}
-              onChange={(event, newMembers) => {
-                setSelectedMembers(newMembers);
-                const members = newMembers?.map((member) => member.id);
-                setAvailableMembers(
-                  memberData.filter((member) => !newMembers.includes(member))
-                );
-                setFormValues({
-                  ...formValues,
-                  team_member: members,
-                });
-              }}
-              inputValue={memberInputValue}
-              onInputChange={(event, newMemberInputValue) => {
-                setMemberInputValue(newMemberInputValue);
-              }}
-              renderInput={(params) => {
-                return <TextField {...params} />;
-              }}
-            />
-          </Grid>
+
+          <MultiSelectOptionGrid
+            label="Members"
+            required={false}
+            field="team_member"
+            idKey="id"
+            getOptionLabel={(option) => option.name}
+            staticOptions={memberData}
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
+
           <InviteMembers
             formValues={formValues}
             setFormValues={setFormValues}
@@ -294,13 +287,7 @@ const Goal = ({ individual, onUpdate }) => {
               </Grid>
             </Grid>
           </Grid>
-          {/* <Duration
-          label="Duration "
-          labelColor=""
-          individual={individual}
-          required={true}
-          onDateChange={handleDateChange}
-        /> */}
+
           <CustomMultilineTextField
             label="Description"
             name="gdes"
@@ -324,7 +311,7 @@ const Goal = ({ individual, onUpdate }) => {
             }}
           >
             <Box sx={{ flex: "1 1 auto" }} />
-            <Button variant="contained" size="small">
+            <Button variant="contained" size="small" onClick={handleGoalEdit}>
               Save Changes
             </Button>
           </Box>

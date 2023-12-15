@@ -26,7 +26,7 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 const ViewGoalsIndex = () => {
   //get goal lists
   const [AllGoalData, setAllGoalData] = useState([]);
-  const fetchAllData = async () => {
+  const fetchAllPortfolioGoalData = async () => {
     try {
       const response = await getAllGoalList("1", "2"); //userid,portid
       setAllGoalData(response);
@@ -36,7 +36,7 @@ const ViewGoalsIndex = () => {
   };
 
   useEffect(() => {  
-    fetchAllData();
+    fetchAllPortfolioGoalData();
   }, []);
   //get goal lists
 
@@ -191,7 +191,7 @@ const ViewGoalsIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateGoal />
+        <CreateGoal fetchAllData={fetchAllPortfolioGoalData}/>
       </ReduxDialog>
 
       <CustomDialog
@@ -212,7 +212,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllData} goalID={goalID} id={id}/>
+        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllPortfolioGoalData} goalID={goalID} id={id}/>
       </CustomDialog>
     </Box>
   );

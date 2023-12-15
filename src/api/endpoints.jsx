@@ -1,8 +1,5 @@
 const api = {
-
-
   //-----------------------------User Module Start----------------
-
 
   //user register api
   userRegister: "user/register",
@@ -18,8 +15,6 @@ const api = {
 
   //user change-password api
   userChangePass: "user/change-password/",
-
-
 
   //-----------------------------Dashboard Module Start----------------
 
@@ -197,7 +192,8 @@ const api = {
   // CheckGM: "goal/check-gm/",
 
   //getAccepted_PortTM_GoalList
-  Accepted_PortTM_GoalList: "goal/get-all-accepted-portfolio-team-member-goal-list/",
+  Accepted_PortTM_GoalList:
+    "goal/get-all-accepted-portfolio-team-member-goal-list/",
 
   //getProjectById
   ProjectById: "goal/get-project-by-id/",
@@ -279,12 +275,24 @@ const api = {
 
   //UpdateStrategies
   UpdateStrategy: "goal/update-strategies",
-  
+
   //get country by country code
   country: "user/get-country/",
 
   //getGoalCreateDD
   GoalCreateDD: "goal/get-goal-create-dd/",
+
+  //FileItGoal
+  FileItGoal: "file-cabinet/file-it/goal/",
+
+  //FileItKPI
+  FileItKPI: "file-cabinet/file-it/kpi/",
+
+  //TrashGoal
+  TrashGoal: "trash/delete/goal/",
+
+  //TrashKPI
+  TrashKPI: "trash/delete/kpi/",
 
   //-----------------------------Porfolio Modlue Start----------------
 
@@ -332,8 +340,6 @@ const api = {
 
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
-
-
 
   //-----------------------------Task Modlue Start----------------
 
@@ -426,8 +432,6 @@ const api = {
   // Reopen Subtask
   fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
 
-
-
   //-----------------------------Archive Module Start----------------
 
   // Archive Portfolio
@@ -480,7 +484,6 @@ const api = {
 
   // UnArchive Subtask
   unarchiveSubtask: "archive/reopen/subtask/",
-
 
   //-----------------------------Trash Module Start----------------
 
@@ -579,6 +582,5 @@ const api = {
 
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
-
 };
 export default api;

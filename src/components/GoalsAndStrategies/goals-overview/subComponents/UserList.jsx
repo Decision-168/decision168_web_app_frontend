@@ -17,12 +17,15 @@ import {
 import { useDispatch } from "react-redux";
 import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
+
 const UserList = ({
   assignManagerFlag,
   pending,
+  displayBtns,
   data,
   passhandleYesChange,
 }) => {
+  
   const dispatch = useDispatch();
   let username = "";
   let pass_table_id = "";
@@ -78,7 +81,7 @@ const UserList = ({
       sx={{ m: 1, p: 0 }}
       secondaryAction={
         <Box>
-          {assignManagerFlag === "acceptedBy" && !pending && (
+          {(assignManagerFlag === "acceptedBy" && (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
             <Tooltip arrow title="Assign as Manager" placement="left">
               <IconButton
                 edge="end"
@@ -89,10 +92,10 @@ const UserList = ({
               </IconButton>
             </Tooltip>
           )}
-          {(assignManagerFlag === "acceptedBy" ||
+          {((assignManagerFlag === "acceptedBy" ||
             assignManagerFlag === "sentTo" ||
             assignManagerFlag === "invited") &&
-            !pending && (
+            (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
               <Tooltip arrow title="Remove Member" placement="left">
                 <IconButton
                   edge="end"
@@ -103,9 +106,9 @@ const UserList = ({
                 </IconButton>
               </Tooltip>
             )}
-          {(assignManagerFlag === "suggested" ||
+          {((assignManagerFlag === "suggested" ||
             assignManagerFlag === "suggested-invite") &&
-            !pending && (
+            (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
               <Tooltip arrow title="Add Member" placement="left">
                 <IconButton
                   edge="end"

@@ -19,6 +19,7 @@ const MembersChildAccordion = ({
   title,
   bgColor,
   pending,
+  displayBtns,
   data
 }) => {
   return (
@@ -69,7 +70,7 @@ const MembersChildAccordion = ({
         {data?.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList data={item} assignManagerFlag={value} pending ={pending} passhandleYesChange={handleYesChange}/>
+              <UserList data={item} assignManagerFlag={value} pending ={pending} displayBtns={displayBtns} passhandleYesChange={handleYesChange}/>
             </List>
           );
         })}

@@ -23,6 +23,9 @@ import {
 
 const GoalsOverview = () => {
   const { gid } = useParams();
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
 
   //get user id
   const user = useSelector(selectUserDetails);
@@ -85,7 +88,7 @@ const GoalsOverview = () => {
   const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
 
   useEffect(() => {
-    const DisplayTitleWithActions = async () => {
+    const DisplayAccordionActions = async () => {
       try {
         if (getName.gcreated_by == user_id) {
           setAccdisplayBtns("all");
@@ -103,16 +106,13 @@ const GoalsOverview = () => {
       }
     };
 
-    DisplayTitleWithActions();
-  }, []);
+    DisplayAccordionActions();
+  }, [getName, user_id]);
+
   //Check Button Visibility
 
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const [inputFields, setInputFields] = useState([]);
-
   const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+    setInputFields([...inputFields, { sname: "", sdes: "" }]);
   };
 
   return (
@@ -176,7 +176,7 @@ const GoalsOverview = () => {
                 <MembersAccordion goalID={gid} displayBtns={AccdisplayBtns} />
               </Grid>
               <Grid item xs={12} lg={12}>
-                <RecentHistory id={gid} type={"goal"}/>
+                <RecentHistory id={gid} type={"goal"} />
               </Grid>
             </Grid>
           </Grid>
@@ -187,7 +187,7 @@ const GoalsOverview = () => {
           showModalButton={false}
           modalSize="md"
         >
-          <Goal individual={true} updetail={setName}/>
+          <Goal passGID={gid} individual={true} />
         </ReduxDialog>
         <ReduxDialog
           value="create-kpis"
@@ -200,7 +200,8 @@ const GoalsOverview = () => {
             inputFields={inputFields}
             setInputFields={setInputFields}
             handleAddClick={handleAddClick}
-            goalID={gid}
+            passGID={getName.gid}
+            passGDEPT={getName.gdept}
           />
         </ReduxDialog>
 
@@ -218,15 +219,15 @@ const GoalsOverview = () => {
           />
         </ReduxDialog>
 
-        <ConfirmationDialog value={"fileItGoal"} />
-        <ConfirmationDialog value={"deleteGoal"} />
+        {/* <ConfirmationDialog value={"fileItGoal"} />
+        <ConfirmationDialog value={"deleteGoal"} /> */}
         <ReduxDialog
           value="duplicate-goal"
           modalTitle="Copy Goal"
           showModalButton={false}
           modalSize="sm"
         >
-          <DuplicateDialog goalData = {getName} />
+          <DuplicateDialog goalData={getName} />
         </ReduxDialog>
       </Box>
     )
