@@ -16,8 +16,18 @@ import {
 import moment from "moment";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
 
 const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  const user_email = user?.email_address;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   const [gmid, set_gmid] = useState("");
   const navigate = useNavigate();
 
@@ -25,11 +35,11 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
     const checkMemberToDisplay = async () => {
       try {
         const response = await checkPortfolioMemberActive(
-          "uzmakarjikar@gmail.com",
-          "2"
-        ); //useremail,portid
+          user_email,
+          storedPorfolioId
+        );
         if (response) {
-          const response2 = await getGoalMemberDetailbyGID("1", gid); //userid
+          const response2 = await getGoalMemberDetailbyGID(user_id, gid);
           if (response2) {
             set_gmid(response2.gmid);
           }
@@ -61,7 +71,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
   useEffect(() => {
     const fetchOverviewReqData = async () => {
       try {
-        const response = await getGoalOverviewRequest("1", gid); //userid
+        const response = await getGoalOverviewRequest(user_id, gid);
 
         setgdetail(response);
       } catch (error) {

@@ -18,9 +18,11 @@ const KPIOverview = () => {
 
   //get user id
   const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
-  const email = user?.email_address;
+  const user_id = user?.reg_id;
+  const user_email = user?.email_address;
   //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const [displayData, setdisplayData] = useState(false);
 
@@ -28,9 +30,9 @@ const KPIOverview = () => {
     const checkMemberToDisplay = async () => {
       try {
         const response = await checkPortfolioMemberActive(
-          "uzmakarjikar@gmail.com",
-          "2"
-        ); //useremail,portid
+          user_email,
+          storedPorfolioId
+        ); 
         if (response) {
           setdisplayData(true);
         } else {

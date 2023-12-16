@@ -61,17 +61,17 @@ const ViewGoalsPopup = ({ goalID, id }) => {
   //get goal & kpi detail
   const [gdetail, setgdetail] = useState([]);
   const [kpidetails, setkpidetails] = useState([]);
-
+  const fetchAllGoalData = async () => {
+    try {
+      const response = await getGoalDetail(gid);
+      setgdetail(response.goalRes);
+      setkpidetails(response.GoalsAllStrategiesListRes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchAllGoalData = async () => {
-      try {
-        const response = await getGoalDetail(gid);
-        setgdetail(response.goalRes);
-        setkpidetails(response.GoalsAllStrategiesListRes);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     fetchAllGoalData();
   }, []);
   //get goal & kpi detail
@@ -99,7 +99,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     };
 
     DisplayTitleWithActions();
-  }, []);
+  }, [gdetail,user_id]);
   //Check Button Visibility
 
   const [allHist, setallHist] = useState([]);
@@ -172,7 +172,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
 
   const handleGoalFileItYes = async () => {
     try {
-      const response = await CallFileItGoal(gdetail.gid, "1"); //user_id
+      const response = await CallFileItGoal(gdetail.gid, user_id); 
       dispatch(closeCnfModal({ modalName: "fileItGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
@@ -184,7 +184,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
 
   const handleGoalDeleteYes = async () => {
     try {
-      const response = await CallTrashGoal(gdetail.gid, "1"); //user_id
+      const response = await CallTrashGoal(gdetail.gid, user_id); 
       dispatch(closeCnfModal({ modalName: "deleteGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
@@ -221,7 +221,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           description={gdetail?.gdes ? gdetail?.gdes : "No Description!"}
           progressHeading={"Progress :"}
           progressPercentage={gdetail.progress}
-          displayBtns={"all"}
+          displayBtns={displayBtns}
         />
         <Grid item xs={3} md={3} lg={3}>
           <GridList
@@ -308,7 +308,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <Goal passGID={gdetail.gid} individual={true} />
+        <Goal passGID={gdetail.gid} refreshGoalOverview={fetchAllGoalData} individual={true} />
       </ReduxDialog>
       <ReduxDialog
         value="create-kpis"

@@ -34,11 +34,19 @@ import {
   getGoalDetail,
 } from "../../../../api/modules/goalkpiModule";
 import { toast } from "react-toastify";
+import SuggestMemberDialog from "./SuggestMemberDialog";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const BasicAccordion = ({ goalID, pending, displayBtns }) => {
-  
-  console.log("displayBtns", displayBtns);
 
+  //console.log("displayBtns", displayBtns);
+
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+  
   const gid = goalID;
   //get goal detail
   const [gAllDetails, setgoaldetail] = useState([]);
@@ -118,7 +126,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     if (gettype === "invited") {
       try {
         const Data = {
-          user_id: "1",
+          user_id: user_id,
           igm_id: get_id,
           gid: gid,
           sent_to: getpassname,
@@ -137,7 +145,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     }
     if (gettype === "suggested") {
       try {
-        const response = await InsertSuggestedGMember("1", gid, get_id); //user_id
+        const response = await InsertSuggestedGMember(user_id, gid, get_id);
         settype("");
         set_id("");
         setpassname("");
@@ -151,7 +159,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     }
     if (gettype === "suggested-invite") {
       try {
-        const response = await InsertSuggestedIGmember("1", gid, get_id); //user_id
+        const response = await InsertSuggestedIGmember(user_id, gid, get_id); 
         settype("");
         set_id("");
         setpassname("");
@@ -218,6 +226,17 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
                   aria-label="add"
                   color="primary"
                   onClick={() => dispatch(openModal("add-team-members"))}
+                >
+                  <Add />
+                </IconButton>
+              </Tooltip>
+            )}
+            {(!pending && displayBtns === "no") && (
+              <Tooltip arrow title="Suggest Team Member" placement="right">
+                <IconButton
+                  aria-label="Suggest"
+                  color="primary"
+                  onClick={() => dispatch(openModal("suggest-team-members"))}
                 >
                   <Add />
                 </IconButton>
@@ -388,6 +407,19 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         modalSize="sm"
       >
         <AddMemberDialog
+          id={gid}
+          type={"goal"}
+          refreshData={fetchAllGMembersData}
+        />
+      </ReduxDialog>
+
+      <ReduxDialog
+        value="suggest-team-members"
+        modalTitle="Suggest Team Members"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <SuggestMemberDialog
           id={gid}
           type={"goal"}
           refreshData={fetchAllGMembersData}

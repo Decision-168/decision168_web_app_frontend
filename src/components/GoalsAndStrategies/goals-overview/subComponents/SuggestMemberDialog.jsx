@@ -17,14 +17,14 @@ import { useTheme } from "@emotion/react";
 import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import {
-  AddGoalMember,
+  AddGoalSuggestTMember,
   getAccepted_PortTM_GoalList,
 } from "../../../../api/modules/goalkpiModule";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 
-const AddMemberDialog = ({ id, type, refreshData }) => {
+const SuggestMemberDialog = ({ id, type, refreshData }) => {
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -45,7 +45,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     gid: id,
-    gcreated_by: user_id, 
+    user_id: user_id, 
     team_member: [],
     imemail: [],
   });
@@ -98,10 +98,10 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
       const data = { ...formValues, imemail: resultArray };
       setLoading(true);
       try {
-        const response = await AddGoalMember(data);
+        const response = await AddGoalSuggestTMember(data);
         refreshData();
         toast.success(`${response.message}`);
-        dispatch(closeModal("add-team-members"));
+        dispatch(closeModal("suggest-team-members"));
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
@@ -206,7 +206,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
             Close
           </Button>
           <Button type="submit" variant="contained" size="small">
-            Add
+            Suggest
           </Button>
         </DialogActions>
       </Box>
@@ -214,4 +214,4 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
   );
 };
 
-export default memo(AddMemberDialog);
+export default memo(SuggestMemberDialog);

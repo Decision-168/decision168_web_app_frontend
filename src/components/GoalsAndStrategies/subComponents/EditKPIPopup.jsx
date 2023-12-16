@@ -6,7 +6,7 @@ import {
   Grid,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CustomLabelTextField from "./CustomLabelTextField";
 import CustomMultilineTextField from "./CustomMultilineTextField";
 import { useSelector } from "react-redux";
@@ -34,7 +34,7 @@ const EditKPIPopup = ({ kpiData, fetchAllKPIDataFun }) => {
       sname: kpiData?.sname,
       sdes: kpiData?.sdes,
       sid: kpiData?.sid,
-      user_id: "1", //user_id
+      user_id: user_id, 
     });
   }, [kpiData]);
 
@@ -51,7 +51,6 @@ const EditKPIPopup = ({ kpiData, fetchAllKPIDataFun }) => {
 
     try {
       const data = { ...formValues };
-      //console.log(data);
       const response = await EditStrategy(data);
       fetchAllKPIDataFun();
       dispatch(closeModal("edit-kpi"));
@@ -115,4 +114,4 @@ const EditKPIPopup = ({ kpiData, fetchAllKPIDataFun }) => {
   );
 };
 
-export default EditKPIPopup;
+export default memo(EditKPIPopup);

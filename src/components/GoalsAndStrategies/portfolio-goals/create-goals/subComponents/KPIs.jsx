@@ -7,7 +7,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import CustomMultilineTextField from "../../../subComponents/CustomMultilineTextField";
 import { RemoveCircle } from "@mui/icons-material";
@@ -32,6 +32,8 @@ const KPIs = ({
   const user_id = user?.reg_id;
   //get user id
 
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   const handleInputChange = (event, index) => {
     const values = [...inputFields];
     values[index][event.target.name] = event.target.value;
@@ -47,8 +49,8 @@ const KPIs = ({
   //Only KPIs Create Part
   const handleOnlyKpiCreate = async () => {
     const oktemp = () => ({
-      screated_by: "1", //user_id
-      portfolio_id: "2", //portfolio_id
+      screated_by: user_id,
+      portfolio_id: storedPorfolioId,
       kpiArray: inputFields,
       gdept_id: passGDEPT,
       gid: passGID,
@@ -180,4 +182,4 @@ const KPIs = ({
   );
 };
 
-export default KPIs;
+export default memo(KPIs);

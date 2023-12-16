@@ -26,10 +26,10 @@ const OverallHistory = ({ allHist, name, type, id }) => {
             Export To Excel
           </Button>
         </Box>
-        {allHist?.map((item, index) => {
+        {allHist?.map((oh_item, oh_index) => {
           return (
-            <Fragment key={index}>
-              <HistoryList allhdata={item} type={type} id={id}/>
+            <Fragment key={oh_index}>
+              <HistoryList allhdata={oh_item} type={type} id={id}/>
             </Fragment>
           );
         })}

@@ -10,6 +10,7 @@ import moment from "moment";
 import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
 
 const RecentList = ({ data, id, type }) => {
+  
   const inputDate = data.DateOnly;
 
   // Parse the input date using Moment.js
@@ -65,10 +66,11 @@ const RecentList = ({ data, id, type }) => {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {recentHisDetails.map((item, index) => {
-          const formattedHDate = moment(item.h_date).format("HH:mm");
+        {recentHisDetails.map((rhl_item, rhl_index) => {
+          const formattedHDate = moment(rhl_item.h_date).format("HH:mm");
           return (
             <Box
+            key={rhl_index}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -93,7 +95,7 @@ const RecentList = ({ data, id, type }) => {
               </Typography>
               <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
               <Typography sx={{ fontSize: 13, color: "#212934", mx: 0.5 }}>
-                {item.h_description}
+                {rhl_item.h_description}
               </Typography>
             </Box>
           );

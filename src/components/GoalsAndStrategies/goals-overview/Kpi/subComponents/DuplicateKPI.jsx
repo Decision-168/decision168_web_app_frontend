@@ -6,7 +6,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import KpiTabSection from "./KpiTabSection";
 import { useSelector } from "react-redux";
@@ -32,7 +32,7 @@ const DuplicateKPI = ({ kpiData }) => {
       ...formValues,
       sname: `${kpiData?.sname} [copy]`,
       sid: kpiData?.sid,
-      screated_by: "1", //user_id
+      screated_by: user_id,
       copy_detail: "everything",
       cust_strategy: "",
     });
@@ -51,7 +51,6 @@ const DuplicateKPI = ({ kpiData }) => {
       setLoading(true);
       try {
         const response = await CopyStrategy(formValues);
-        //return navigate(`/kpi-overview/${response.sid}`, { replace: true });
         // Handling success
         toast.success(`${response.message}`);
         navigate(`/kpi-overview/${response.sid}`);
@@ -68,7 +67,6 @@ const DuplicateKPI = ({ kpiData }) => {
         setLoading(false);
       }
     } else {
-      // Show an error because gname is empty
       toast.error("KPI name cannot be empty");
     }
   };
@@ -114,4 +112,4 @@ const DuplicateKPI = ({ kpiData }) => {
   );
 };
 
-export default DuplicateKPI;
+export default memo(DuplicateKPI);

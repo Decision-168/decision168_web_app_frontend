@@ -27,6 +27,8 @@ const CreateGoal = ({ fetchAllData }) => {
   const user_id = user?.reg_id;
   //get user id
 
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   const [activeStep, setActiveStep] = useState(0);
   const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
   const [getInsertedGID, setInsertedGID] = useState("");
@@ -37,17 +39,13 @@ const CreateGoal = ({ fetchAllData }) => {
     kpiArray: [],
     gdept_id: "",
     gid: "",
-    screated_by: "1", //user_id
-    portfolio_id: "2", //portfolio_id
+    screated_by: user_id, 
+    portfolio_id: storedPorfolioId, 
   });
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
-  // const handleBack = () => {
-  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  // };
 
   const handleChildUpdate = (formValues) => {
     setChildFormValues(formValues);
@@ -108,10 +106,7 @@ const CreateGoal = ({ fetchAllData }) => {
       const response = await InsertStrategiesData(kdata);
       fetchAllData();
       dispatch(closeModal("create-goals-kpis"));
-      toast.success(`${response.message}`);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 2000);
+      toast.success(`${response.message}`);      
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
@@ -210,15 +205,7 @@ const CreateGoal = ({ fetchAllData }) => {
           </Button>
         ) : (
           <>
-            <>
-              {/* <Button
-                variant="contained"
-                size="small"
-                sx={{ background: "#383838", color: "#fff", mr: 1 }}
-                onClick={handleBack}
-              >
-                Back
-              </Button> */}
+            <>              
               <Button variant="contained" size="small" onClick={handleAddClick}>
                 Add More KPI's
               </Button>

@@ -57,10 +57,10 @@ const RecentHistory = ({ id, type }) => {
         History
       </Typography>
 
-      {recentData.map((item, index) => {
+      {recentData.map((rh_item, rh_index) => {
         return (
-          <Fragment key={index}>
-            <RecentList data={item} id={id} type={type} />
+          <Fragment key={rh_index}>
+            <RecentList data={rh_item} id={id} type={type} />
           </Fragment>
         );
       })}

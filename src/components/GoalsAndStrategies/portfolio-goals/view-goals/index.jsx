@@ -24,11 +24,18 @@ import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const ViewGoalsIndex = () => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   //get goal lists
   const [AllGoalData, setAllGoalData] = useState([]);
   const fetchAllPortfolioGoalData = async () => {
     try {
-      const response = await getAllGoalList("1", "2"); //userid,portid
+      const response = await getAllGoalList(user_id, storedPorfolioId); 
       setAllGoalData(response);
     } catch (error) {
       console.error(error);
@@ -39,11 +46,6 @@ const ViewGoalsIndex = () => {
     fetchAllPortfolioGoalData();
   }, []);
   //get goal lists
-
-  //get user id
-  const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
-  //get user id
 
   const [goalID, setGoalID] = useState("");
   const [goalName, setGoalName] = useState("");
@@ -202,7 +204,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <ViewGoalsPopup goalID={goalID} id={id}/>
+        <ViewGoalsPopup goalID={goalID} id={user_id}/>
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingGoalClose}
@@ -212,7 +214,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllPortfolioGoalData} goalID={goalID} id={id}/>
+        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllPortfolioGoalData} goalID={goalID} id={user_id}/>
       </CustomDialog>
     </Box>
   );

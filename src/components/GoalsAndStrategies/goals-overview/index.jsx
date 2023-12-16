@@ -30,8 +30,10 @@ const GoalsOverview = () => {
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
-  const email = user?.email_address;
+  const user_email = user?.email_address;
   //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const [displayData, setdisplayData] = useState(false);
 
@@ -39,11 +41,11 @@ const GoalsOverview = () => {
     const checkMemberToDisplay = async () => {
       try {
         const response = await checkPortfolioMemberActive(
-          "uzmakarjikar@gmail.com",
-          "2"
-        ); //useremail,portid
+          user_email,
+          storedPorfolioId
+        ); 
         if (response) {
-          const response2 = await getGoalMemberDetailbyGID("1", gid); //userid
+          const response2 = await getGoalMemberDetailbyGID(user_id, gid); 
           if (response2) {
             setdisplayData(true);
           } else {
@@ -56,11 +58,9 @@ const GoalsOverview = () => {
         if (error.response?.status === 400) {
           navigate("/portfolio-goals");
         }
-
         console.error(error);
         toast.error(`Portfolio Owner Inactive You!`);
         setdisplayData(false);
-        // Handle error, maybe show an error message
       }
     };
 
@@ -219,8 +219,6 @@ const GoalsOverview = () => {
           />
         </ReduxDialog>
 
-        {/* <ConfirmationDialog value={"fileItGoal"} />
-        <ConfirmationDialog value={"deleteGoal"} /> */}
         <ReduxDialog
           value="duplicate-goal"
           modalTitle="Copy Goal"

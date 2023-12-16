@@ -14,6 +14,7 @@ import CustomMultilineTextField from "../../../subComponents/CustomMultilineText
 import InviteMembers from "../../../subComponents/InviteMembers";
 
 import {
+  EditGoal,
   getGoalCreateDD,
   getGoalDetail,
 } from "../../../../../api/modules/goalkpiModule";
@@ -25,26 +26,31 @@ import moment from "moment";
 import CustomLabelTextField from "../../../subComponents/CustomLabelTextField";
 import CustomDatePicker from "../../../../common/CustomDatePicker";
 import MultiSelectOptionGrid from "../../../../common/MultiSelectOptionGrid";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../../../../redux/action/modalSlice";
 
-const Goal = ({ individual, onUpdate, passGID }) => {
+const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
   //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   const [departments, setdepartments] = useState([]);
   const [assignee, setassignee] = useState([]);
-  const [memberData, setmemberData] = useState([]);
-  const [selectedMembers, setSelectedMembers] = useState([]);
-  const [memberInputValue, setMemberInputValue] = useState("");
+  const [memberData, setmemberData] = useState([]); 
   const [availableMembers, setAvailableMembers] = useState([]);
 
   const [formValues, setFormValues] = useState({
     gname: "",
     gdept: "",
     gdes: "",
-    gcreated_by: "1", //user_id
-    portfolio_id: "2", //portfolio_id
+    gcreated_by: user_id, 
+    portfolio_id: storedPorfolioId, 
     gmanager: 0,
     gstart_date: new Date(),
     gend_date: new Date(),
@@ -62,7 +68,7 @@ const Goal = ({ individual, onUpdate, passGID }) => {
   useEffect(() => {
     const fetchAllHistoryData = async () => {
       try {
-        const response = await getGoalCreateDD("2", "1"); //portfolio_id,user_id
+        const response = await getGoalCreateDD(storedPorfolioId, user_id);
         if (response) {
           setdepartments(response.PortfolioDepartmentRes);
           setassignee(response.AssignManagerListRes);
@@ -116,7 +122,6 @@ const Goal = ({ individual, onUpdate, passGID }) => {
           const response = await getGoalDetail(passGID);
           setGDetail(response.goalRes);
           const getGMembersData = response.GoalTeamMemberRes;
-          // const gmembers = getGMembersData.map(member => member.gmember);
           const gmembers = getGMembersData
             .filter((member) => member.reg_id != response.goalRes?.gcreated_by)
             .map((member) => member.reg_id);
@@ -142,8 +147,8 @@ const Goal = ({ individual, onUpdate, passGID }) => {
       gname: getGDetail?.gname,
       gdept: getGDetail?.gdept,
       gdes: getGDetail?.gdes,
-      gcreated_by: "1", //user_id
-      portfolio_id: "2", //portfolio_id
+      gcreated_by: user_id, 
+      portfolio_id: storedPorfolioId, 
       gmanager: getGDetail?.gmanager,
       gstart_date: gStartDate,
       gend_date: gendDate,
@@ -153,8 +158,37 @@ const Goal = ({ individual, onUpdate, passGID }) => {
   }, [getGDetail, getGMembers]);
 
   const handleGoalEdit = async () => {
-    console.log("edit", formValues);
-    console.log(passGID);
+    let { gmanager, gstart_date, portfolio_id, ...newFormValues } = formValues;
+    newFormValues.gid = passGID;
+
+    const requiredEditFields = ["gname", "gdept", "gend_date"];
+
+    const areAllEditFieldsFilled = requiredEditFields.every(
+      (efield) => newFormValues[efield]
+    );
+
+    if (!areAllEditFieldsFilled) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const { imemail } = newFormValues;
+      const edata = {
+        ...newFormValues,
+        imemail: imemail.map((item) => item.email),
+      };
+
+      const response = await EditGoal(edata);
+      toast.success(`${response.message}`);
+      refreshGoalOverview();
+      dispatch(closeModal("edit-goals"));
+    } catch (error) {
+      // Handling error
+      console.log(error);
+      toast.error(`${error.response?.error}`);
+      console.error("Error updating:", error);
+    }
   };
 
   //Goal Edit Part

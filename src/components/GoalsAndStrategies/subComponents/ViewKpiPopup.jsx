@@ -89,7 +89,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
     };
 
     DisplayTitleWithActions();
-  }, []);
+  }, [kpiDetail, user_id]);
   //Check Button Visibility
 
   const [allKPIHist, setallKPIHist] = useState([]);
@@ -159,7 +159,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
   
   const handleKpiFileItYes = async () => {  
     try {
-      const response = await CallFileItKPI(kpiDetail.sid, "1"); //user_id
+      const response = await CallFileItKPI(kpiDetail.sid, user_id);
       dispatch(closeCnfModal({ modalName: "fileItKPI" }));
       toast.success(`${response.message}`);
       navigate(`/goal-overview/${kpiDetail.gid}`);
@@ -171,7 +171,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
 
   const handleKpiDeleteYes = async () => {    
     try {
-      const response = await CallTrashKPI(kpiDetail.sid, "1"); //user_id
+      const response = await CallTrashKPI(kpiDetail.sid, user_id);
       dispatch(closeCnfModal({ modalName: "deleteKPI" }));
       toast.success(`${response.message}`);
       navigate(`/goal-overview/${kpiDetail.gid}`);

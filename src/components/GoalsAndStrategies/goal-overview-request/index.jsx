@@ -14,9 +14,11 @@ import {
 const GoalOverviewRequest = () => {
   //get user id
   const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
-  const email = user?.email_address;
+  const user_id = user?.reg_id;
+  const user_email = user?.email_address;
   //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const { gid } = useParams();
 
@@ -26,11 +28,11 @@ const GoalOverviewRequest = () => {
     const checkMemberToDisplay = async () => {
       try {
         const response = await checkPortfolioMemberActive(
-          "uzmakarjikar@gmail.com",
-          "2"
-        ); //useremail,portid
+          user_email,
+          storedPorfolioId
+        );
         if (response) {
-          const response2 = await getGoalMemberDetailbyGID("1", gid); //userid
+          const response2 = await getGoalMemberDetailbyGID(user_id, gid);
           if (response2) {
             setdisplayData(true);
           } else {
@@ -46,7 +48,6 @@ const GoalOverviewRequest = () => {
         console.error(error);
         toast.error(`Portfolio Owner Inactive You!`);
         setdisplayData(false);
-        // Handle error, maybe show an error message
       }
     };
 
@@ -60,7 +61,7 @@ const GoalOverviewRequest = () => {
 
         <Grid container spacing={1}>
           <Grid item xs={12} lg={8}>
-            <PendingPopup goalID={gid} id={id} />
+            <PendingPopup goalID={gid} id={user_id} />
           </Grid>
           <Grid item xs={12} lg={4}>
             <MembersAccordion goalID={gid} pending={true} />
