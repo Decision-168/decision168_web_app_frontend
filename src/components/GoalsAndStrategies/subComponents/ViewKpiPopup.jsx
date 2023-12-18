@@ -63,7 +63,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
 
   useEffect(() => {
     fetchAllKPIData();
-  }, []);
+  }, [kpi_id]);
 
   //Check Button Visibility
   const [displayBtns, setdisplayBtns] = useState("no");
@@ -105,7 +105,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
     };
 
     fetchKPIAllHistoryData();
-  }, []);
+  }, [kpi_id]);
 
   const formatDate = (timestamp) => {
     // Check if the timestamp is valid

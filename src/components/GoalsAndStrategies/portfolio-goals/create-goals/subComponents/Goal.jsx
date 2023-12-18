@@ -80,7 +80,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
     };
 
     fetchAllHistoryData();
-  }, []);
+  }, [storedPorfolioId, user_id]);
 
   useEffect(() => {
     setAvailableMembers(memberData);
@@ -92,10 +92,6 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
       [fieldName]: event.target.value,
     });
   };
-
-  useEffect(() => {
-    setAvailableMembers(memberData);
-  }, [memberData]);
 
   const handleStartDateChange = (date) => {
     setFormValues({
@@ -131,7 +127,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
         }
       };
       fetchAllEditGoalData();
-    }, []);
+    }, [passGID]);
   }
 
   useEffect(() => {

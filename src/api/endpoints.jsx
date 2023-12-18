@@ -147,8 +147,8 @@ const api = {
   //delete_gMember
   DeleteGMember: "goal/remove-goal-member/",
 
-  // //goal_open_work_new_assignee
-  // GoalOpenWorkNewAssignee: "goal/goal-open-work-new-assignee",
+  //goal_open_work_new_assignee
+  GoalOpenWorkNewAssignee: "goal/goal-open-work-new-assignee",
 
   //assign_goalmanager
   AssignGoalManager: "goal/assign-goal-manager/",

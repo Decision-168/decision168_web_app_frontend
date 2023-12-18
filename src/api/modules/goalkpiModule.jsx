@@ -365,17 +365,17 @@ export const RemoveGMember = async (gmid) => {
   }
 };
 
-// export const UpdateGoalOpenWorkNewAssignee = async (formdata) => {
-//   try {
-//     const response = await axios.patch(
-//       `${apiUrl}${api.GoalOpenWorkNewAssignee}`,
-//       formdata
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const UpdateGoalOpenWorkNewAssignee = async (formdata) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.GoalOpenWorkNewAssignee}`,
+      formdata
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const AddGoalManager = async (gid, gmember_id) => {
   try {

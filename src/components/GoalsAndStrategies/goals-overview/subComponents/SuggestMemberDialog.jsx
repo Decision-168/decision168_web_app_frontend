@@ -64,7 +64,7 @@ const SuggestMemberDialog = ({ id, type, refreshData }) => {
       };
 
       fetchAllHistoryData();
-    }, []);
+    }, [storedPorfolioId, id]);
   }
 
   useEffect(() => {

@@ -35,16 +35,20 @@ const ViewGoalsIndex = () => {
   const [AllGoalData, setAllGoalData] = useState([]);
   const fetchAllPortfolioGoalData = async () => {
     try {
-      const response = await getAllGoalList(user_id, storedPorfolioId); 
-      setAllGoalData(response);
+      if (storedPorfolioId) {
+        const response = await getAllGoalList(user_id, storedPorfolioId);
+        setAllGoalData(response);
+      } else {
+        setAllGoalData([]);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {  
+  useEffect(() => {
     fetchAllPortfolioGoalData();
-  }, []);
+  }, [user_id, storedPorfolioId]);
   //get goal lists
 
   const [goalID, setGoalID] = useState("");
@@ -193,7 +197,7 @@ const ViewGoalsIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateGoal fetchAllData={fetchAllPortfolioGoalData}/>
+        <CreateGoal fetchAllData={fetchAllPortfolioGoalData} />
       </ReduxDialog>
 
       <CustomDialog
@@ -204,7 +208,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <ViewGoalsPopup goalID={goalID} id={user_id}/>
+        <ViewGoalsPopup goalID={goalID} id={user_id} />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingGoalClose}
@@ -214,7 +218,12 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllPortfolioGoalData} goalID={goalID} id={user_id}/>
+        <PendingPopup
+          handleClose={handlePendingGoalClose}
+          fetchAllData={fetchAllPortfolioGoalData}
+          goalID={goalID}
+          id={user_id}
+        />
       </CustomDialog>
     </Box>
   );

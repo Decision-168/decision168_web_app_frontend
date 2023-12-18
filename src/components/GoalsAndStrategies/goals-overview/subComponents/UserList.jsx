@@ -25,7 +25,6 @@ const UserList = ({
   data,
   passhandleYesChange,
 }) => {
-  
   const dispatch = useDispatch();
   let username = "";
   let pass_table_id = "";
@@ -47,7 +46,7 @@ const UserList = ({
   }
 
   const handleAddUser = (type, name, pass_id) => {
-    passhandleYesChange(type, pass_id,name);
+    passhandleYesChange(type, pass_id, name, "");
     dispatch(
       openCnfModal({
         modalName: "addMember",
@@ -56,8 +55,8 @@ const UserList = ({
       })
     );
   };
-  const handleRemoveUser = (type, name, pass_id) => {
-    passhandleYesChange(type, pass_id,name);
+  const handleRemoveUser = (type, name, pass_id, pass_member_id) => {
+    passhandleYesChange(type, pass_id, name, pass_member_id);
     dispatch(
       openCnfModal({
         modalName: "removeMember",
@@ -67,7 +66,7 @@ const UserList = ({
     );
   };
   const handleAssignManager = (name, pass_id) => {
-    passhandleYesChange("assign_manager", pass_id,name);
+    passhandleYesChange("assign_manager", pass_id, name, "");
     dispatch(
       openCnfModal({
         modalName: "assignManager",
@@ -81,39 +80,52 @@ const UserList = ({
       sx={{ m: 1, p: 0 }}
       secondaryAction={
         <Box>
-          {(assignManagerFlag === "acceptedBy" && (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
-            <Tooltip arrow title="Assign as Manager" placement="left">
-              <IconButton
-                edge="end"
-                aria-label="add"
-                onClick={() => handleAssignManager(username, pass_member_id)}
-              >
-                <PersonAddAlt1 sx={{ color: "#c7df19", fontSize: 20 }} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {((assignManagerFlag === "acceptedBy" ||
+          {assignManagerFlag === "acceptedBy" &&
+            !pending &&
+            (displayBtns === "all" || displayBtns === "some") && (
+              <Tooltip arrow title="Assign as Manager" placement="left">
+                <IconButton
+                  edge="end"
+                  aria-label="add"
+                  onClick={() => handleAssignManager(username, pass_member_id)}
+                >
+                  <PersonAddAlt1 sx={{ color: "#c7df19", fontSize: 20 }} />
+                </IconButton>
+              </Tooltip>
+            )}
+          {(assignManagerFlag === "acceptedBy" ||
             assignManagerFlag === "sentTo" ||
             assignManagerFlag === "invited") &&
-            (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
+            !pending &&
+            (displayBtns === "all" || displayBtns === "some") && (
               <Tooltip arrow title="Remove Member" placement="left">
                 <IconButton
                   edge="end"
                   aria-label="remove"
-                  onClick={() => handleRemoveUser(assignManagerFlag, username, pass_table_id)}
+                  onClick={() =>
+                    handleRemoveUser(
+                      assignManagerFlag,
+                      username,
+                      pass_table_id,
+                      pass_member_id
+                    )
+                  }
                 >
                   <DisabledByDefaultRounded sx={{ fontSize: 20 }} />
                 </IconButton>
               </Tooltip>
             )}
-          {((assignManagerFlag === "suggested" ||
+          {(assignManagerFlag === "suggested" ||
             assignManagerFlag === "suggested-invite") &&
-            (!pending && (displayBtns === "all" || displayBtns === "some"))) && (
+            !pending &&
+            (displayBtns === "all" || displayBtns === "some") && (
               <Tooltip arrow title="Add Member" placement="left">
                 <IconButton
                   edge="end"
                   aria-label="add"
-                  onClick={() => handleAddUser(assignManagerFlag, username, pass_table_id)}
+                  onClick={() =>
+                    handleAddUser(assignManagerFlag, username, pass_table_id)
+                  }
                 >
                   <AddBox sx={{ color: "#c7df19", fontSize: 20 }} />
                 </IconButton>

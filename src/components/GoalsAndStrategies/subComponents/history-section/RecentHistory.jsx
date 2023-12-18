@@ -8,11 +8,16 @@ import {
 
 const RecentHistory = ({ id, type }) => {
   const [recentHis, setrecentHis] = useState([]);
-  if (type === "goal") {
+  
     useEffect(() => {
       const fetchRecentHistoryData = async () => {
         try {
-          const response = await getViewHistoryDateGoal(id);
+          let response;
+          if (type === "goal") {
+            response = await getViewHistoryDateGoal(id);
+          } else if (type === "kpi") {
+            response = await getViewHistoryDateStrategy(id);
+          }
           setrecentHis(response.history_dates);
         } catch (error) {
           console.error(error);
@@ -20,23 +25,8 @@ const RecentHistory = ({ id, type }) => {
       };
 
       fetchRecentHistoryData();
-    }, []);
-  }
+    }, [id, type]);  
 
-  if (type === "kpi") {
-    useEffect(() => {
-      const fetchRecentHistoryData = async () => {
-        try {
-          const response = await getViewHistoryDateStrategy(id);
-          setrecentHis(response.history_dates);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchRecentHistoryData();
-    }, []);
-  }
   const recentData = recentHis.slice(0, 5);
 
   return (

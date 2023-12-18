@@ -19,7 +19,9 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 
-const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
+const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {  
+  const gid = goalID;
+
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -50,9 +52,8 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
     };
 
     checkMemberToDisplay();
-  }, []);
+  }, [user_id, gid]);
 
-  const gid = goalID;
 
   const formatDate = (timestamp) => {
     // Check if the timestamp is valid
@@ -80,7 +81,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
     };
 
     fetchOverviewReqData();
-  }, []);
+  }, [user_id, gid]);
   //get goal detail
 
   const handleRequestPerform = (flag) => {

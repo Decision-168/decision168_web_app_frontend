@@ -7,9 +7,15 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import {
+  getViewHistoryDateWiseGoal,
+  getViewHistoryDateWiseStrategy,
+} from "../../../../api/modules/goalkpiModule";
 
 const HistoryList = ({ allhdata, type, id }) => {
+  console.log("allhdata", allhdata);
+  console.log("type", type);
+  console.log("id", id);
 
   const allinputDate = allhdata.DateOnly;
 
@@ -27,37 +33,24 @@ const HistoryList = ({ allhdata, type, id }) => {
   const PassallformattedDate = allparsedDate.format("YYYY-MM-DD");
   const [allHisDetails, setallHisDetails] = useState([]);
 
-  if (type === "goal") {
-    useEffect(() => {
-      const alldateParam = encodeURIComponent(PassallformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseGoal(id, alldateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
+  useEffect(() => {
+    const alldateParam = encodeURIComponent(PassallformattedDate);
+    const fetchAllHistoryDetails = async () => {
+      try {
+        let response;
+        if (type === "goal") {
+          response = await getViewHistoryDateWiseGoal(id, alldateParam);
+        } else if (type === "kpi") {
+          response = await getViewHistoryDateWiseStrategy(id, alldateParam);
         }
-      };
+        setallHisDetails(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      fetchAllHistoryDetails();
-    }, []);
-  }
-
-  if (type === "kpi") {
-    useEffect(() => {
-      const alldateParam = encodeURIComponent(PassallformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseStrategy(id, alldateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchAllHistoryDetails();
-    }, []);
-  }
+    fetchAllHistoryDetails();
+  }, [type, id, PassallformattedDate]);
 
   return (
     <Accordion>

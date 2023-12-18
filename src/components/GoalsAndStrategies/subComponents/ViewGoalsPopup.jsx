@@ -73,7 +73,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
   
   useEffect(() => {
     fetchAllGoalData();
-  }, []);
+  }, [gid]);
   //get goal & kpi detail
 
   //Check Button Visibility
@@ -115,7 +115,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     };
 
     fetchAllHistoryData();
-  }, []);
+  }, [gid]);
 
   const [openKPI, setOpenKPI] = useState(false);
   const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);

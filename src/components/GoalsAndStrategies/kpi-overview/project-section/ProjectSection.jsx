@@ -25,7 +25,7 @@ const ProjectSection = ({kpi_id}) => {
       };
   
       fetchAllData();
-    }, []);
+    }, [kpi_id]);
 
   return (
     <PerfectScrollbar>

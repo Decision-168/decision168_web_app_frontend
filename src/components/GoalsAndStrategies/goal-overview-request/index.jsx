@@ -52,7 +52,7 @@ const GoalOverviewRequest = () => {
     };
 
     checkMemberToDisplay();
-  }, []);
+  }, [user_id, gid]);
 
   return (
     displayData === true && (

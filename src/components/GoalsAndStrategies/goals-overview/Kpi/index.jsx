@@ -25,7 +25,7 @@ const KPISection = ({ goalID }) => {
     };
 
     fetchAllData();
-  }, []);
+  }, [goalID]);
 
   const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
 

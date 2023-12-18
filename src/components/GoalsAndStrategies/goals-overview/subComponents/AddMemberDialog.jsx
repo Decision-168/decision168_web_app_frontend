@@ -64,7 +64,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
       };
 
       fetchAllHistoryData();
-    }, []);
+    }, [storedPorfolioId, id]);
   }
 
   useEffect(() => {

@@ -65,7 +65,7 @@ const GoalsOverview = () => {
     };
 
     checkMemberToDisplay();
-  }, []);
+  }, [user_email, storedPorfolioId]);
 
   const [allHist, setallHist] = useState([]);
   const [getName, setName] = useState([]);
@@ -82,7 +82,7 @@ const GoalsOverview = () => {
     };
 
     fetchAllHistoryData();
-  }, []);
+  }, [gid]);
 
   //Check Button Visibility
   const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
@@ -214,7 +214,7 @@ const GoalsOverview = () => {
           <OverallHistory
             allHist={allHist}
             name={getName.gname}
-            type={"Goal"}
+            type={"goal"}
             id={getName.gid}
           />
         </ReduxDialog>

@@ -17,6 +17,7 @@ import {
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
+import CustomDialog from "../../../common/CustomDialog";
 import AddMemberDialog from "./AddMemberDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import MembersChildAccordion from "./MembersChildAccordion";
@@ -37,17 +38,19 @@ import { toast } from "react-toastify";
 import SuggestMemberDialog from "./SuggestMemberDialog";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
+import AssignToSomeoneDailogGoalContent from "./AssignToSomeoneDailogGoalContent";
 
 const BasicAccordion = ({ goalID, pending, displayBtns }) => {
-
   //console.log("displayBtns", displayBtns);
 
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
   //get user id
-  
+
   const gid = goalID;
+  const [open, setOpen] = useState(false);
+  const [result, setResult] = useState({});
   //get goal detail
   const [gAllDetails, setgoaldetail] = useState([]);
   const [getgoalRes, setgoalRes] = useState([]);
@@ -55,6 +58,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
   const [get_id, set_id] = useState("");
   const [gettype, settype] = useState("");
   const [getpassname, setpassname] = useState("");
+  const [getpassmemberid, setpassmemberid] = useState("");
 
   const fetchAllGMembersData = async () => {
     try {
@@ -68,7 +72,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
 
   useEffect(() => {
     fetchAllGMembersData();
-  }, []);
+  }, [gid]);
   //get goal detail
 
   const [expanded, setExpanded] = useState("acceptedBy");
@@ -76,6 +80,14 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     setExpanded(isExpanded ? panel : false);
   };
   const dispatch = useDispatch();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleRemoveManager = (name, pass_id) => {
     set_id(pass_id);
@@ -88,10 +100,11 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     );
   };
 
-  const gethandleDataYes = (type, pass_id, name) => {
+  const gethandleDataYes = (type, pass_id, name, pass_member_id) => {
     settype(type);
     set_id(pass_id);
     setpassname(name);
+    setpassmemberid(pass_member_id);
   };
 
   const handleYes = async () => {
@@ -112,12 +125,19 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     if (gettype === "acceptedBy" || gettype === "sentTo") {
       try {
         const response = await RemoveGMember(get_id);
-        settype("");
-        set_id("");
-        setpassname("");
-        fetchAllGMembersData();
-        dispatch(closeCnfModal({ modalName: "removeMember" }));
-        toast.success(`${response.message}`);
+        if (response.message) {
+          settype("");
+          set_id("");
+          setpassname("");
+          setpassmemberid("");
+          fetchAllGMembersData();
+          dispatch(closeCnfModal({ modalName: "removeMember" }));
+          toast.success(`${response.message}`);
+        } else {
+          dispatch(closeCnfModal({ modalName: "removeMember" }));
+          setResult(response);
+          handleClickOpen();
+        }
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
         console.error(error);
@@ -159,7 +179,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
     }
     if (gettype === "suggested-invite") {
       try {
-        const response = await InsertSuggestedIGmember(user_id, gid, get_id); 
+        const response = await InsertSuggestedIGmember(user_id, gid, get_id);
         settype("");
         set_id("");
         setpassname("");
@@ -220,7 +240,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             >
               Team Members
             </Typography>
-            {(!pending && (displayBtns === "all" || displayBtns === "some")) && (
+            {!pending && (displayBtns === "all" || displayBtns === "some") && (
               <Tooltip arrow title="Add Team Member" placement="right">
                 <IconButton
                   aria-label="add"
@@ -231,7 +251,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
                 </IconButton>
               </Tooltip>
             )}
-            {(!pending && displayBtns === "no") && (
+            {!pending && displayBtns === "no" && (
               <Tooltip arrow title="Suggest Team Member" placement="right">
                 <IconButton
                   aria-label="Suggest"
@@ -302,24 +322,25 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
                 </Typography>
               </Box>
 
-              {(!pending && (displayBtns === "all" || displayBtns === "some")) && (
-                <Tooltip arrow title="Remove Manager" placement="left">
-                  <IconButton
-                    edge="end"
-                    aria-label="remove"
-                    onClick={() =>
-                      handleRemoveManager(
-                        getgoalRes.get_gmanager_name,
-                        getgoalRes.gmanager
-                      )
-                    }
-                  >
-                    <PersonRemoveAlt1Rounded
-                      sx={{ color: "#c7df19", fontSize: 20 }}
-                    />
-                  </IconButton>
-                </Tooltip>
-              )}
+              {!pending &&
+                (displayBtns === "all" || displayBtns === "some") && (
+                  <Tooltip arrow title="Remove Manager" placement="left">
+                    <IconButton
+                      edge="end"
+                      aria-label="remove"
+                      onClick={() =>
+                        handleRemoveManager(
+                          getgoalRes.get_gmanager_name,
+                          getgoalRes.gmanager
+                        )
+                      }
+                    >
+                      <PersonRemoveAlt1Rounded
+                        sx={{ color: "#c7df19", fontSize: 20 }}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                )}
             </Box>
           )}
 
@@ -400,6 +421,26 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         value={"removeManager"}
         handleYes={handleRemoveManagerYes}
       />
+      <CustomDialog
+        handleClose={handleClose}
+        open={open}
+        modalTitle={`Remove ${getpassname}`}
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <AssignToSomeoneDailogGoalContent
+          result={result}
+          data={gAllDetails.GoalTeamMemberRes}
+          gid={gid}
+          portfolio_id={getgoalRes.portfolio_id}
+          user_id={user_id}
+          memberName={getpassname}
+          memberRegId={getpassmemberid}
+          gmid_id={get_id}
+          handleClose={handleClose}
+          fetchAllGMembersData={fetchAllGMembersData}
+        />
+      </CustomDialog>
       <ReduxDialog
         value="add-team-members"
         modalTitle="Add Team Members"

@@ -51,7 +51,7 @@ const KPIOverview = () => {
     };
 
     checkMemberToDisplay();
-  }, []);
+  }, [user_email, storedPorfolioId]);
 
   const [getKPIName, setKPIName] = useState([]);
 
@@ -66,7 +66,7 @@ const KPIOverview = () => {
     };
 
     fetchKPIAllHistoryData();
-  }, []);
+  }, [sid]);
 
   const theme = useTheme();
   const navigate = useNavigate();
