@@ -22,14 +22,21 @@ const ProjectListViewTable = ({
   data,
   handlePendingOpen,
 }) => {
-  const handleOpenCondition = (type, pid) => {
-    console.log(pid)
+  const handleOpenCondition = (type, pid, pname) => {
     if (["Created Projects", "Accepted Projects"].includes(type)) {
-      handleOpen(pid);
+      handleOpen(type, pid, pname);
     } else {
-      handlePendingOpen(pid);
+      handlePendingOpen(type, pid, pname);
     }
   };
+
+  const openPage = (type, pid, pname) => {
+    if (["Created Projects", "Accepted Projects"].includes(type)) {
+      navigate(`/projects-overview/${pid}`)
+    }else{
+      navigate(`/projects-overview-request/${pid}`)
+    }
+  }
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -37,7 +44,7 @@ const ProjectListViewTable = ({
     () => [
       {
         accessorKey: "project.name",
-        header: "Goals",
+        header: "Projects",
         size: 300,
         minSize: 200,
         maxSize: 300,
@@ -73,7 +80,7 @@ const ProjectListViewTable = ({
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  onClick={() => navigate("/projects-overview")}
+                  onClick={() => openPage(title,row?.original?.project?.id,row.original.project.name)}
                 >
                   {row?.original?.project?.name}
                 </Typography>
@@ -94,7 +101,7 @@ const ProjectListViewTable = ({
 
             <IconButton
               aria-label="settings"
-              onClick={() => handleOpenCondition(title,row?.original?.project?.id)}
+              onClick={() => handleOpenCondition(title,row?.original?.project?.id,row.original.project.name)}
             >
               <VisibilityOutlined fontSize="small" />
             </IconButton>

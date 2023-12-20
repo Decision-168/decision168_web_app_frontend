@@ -9,16 +9,22 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
-import DocViewer, {DocViewerRenderers,
-} from "@cyntler/react-doc-viewer";
-const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+const FilePreviewPopup = ({ nodes, open, handleClose, selectedFile }) => {
   const theme = useTheme();
+  const file_path = (nodes.type === "project-file") && (`../src/assets/project_files/${nodes.name}`) || (nodes.type === "task-file") && (`../src/assets/task_files/${nodes.name}`) || (nodes.type === "subtask-file") && (`../src/assets/task_files/${nodes.name}`) || (nodes.type === "content-file") && (`../src/assets/plan_content_files/${nodes.name}`)
+  const file_name = nodes.name;
+  const parts = file_name.split('.');
+  const fileExtension = parts.length > 1 ? parts.pop() : '';
 
- const docs = [
-   {
-     uri: "https://docs.google.com/presentation/d/1880vP6ofSnG0ADcb8IUKZCRs1xgEry2A/edit?usp=drive_link&ouid=111146504207628920971&rtpof=true&sd=true",
-   },
- ];
+  const docs = [
+    {
+      uri: file_path,
+      fileType: fileExtension,
+      fileName: `${nodes.name}`
+    }
+  ];
+
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth={true}>
       <DialogTitle
@@ -51,21 +57,20 @@ const FilePreviewPopup = ({ open, handleClose, selectedFile }) => {
       <DialogContent
         sx={{ display: "flex", justifyContent: "center", width: "100%" }}
       >
-        {selectedFile ? (
+        {nodes.name ? (
           <>
             <DocViewer
-              documents={docs}
-              pluginRenderers={DocViewerRenderers}
-              theme={{
-                primary: "#5296d8",
-                secondary: "#00000099",
-                tertiary: "#5296d899",
-                text_primary: "#00000099",
-                text_secondary: "#5296d8",
-                text_tertiary: "#00000099",
-                disableThemeScrollbar: false,
-              }}
-            />
+            pluginRenderers={DocViewerRenderers}
+            documents={docs}
+            style={{ width: 700, height: "auto" }}
+            config={{
+              header: {
+                disableHeader: true,
+                disableFileName: true,
+                retainURLParams: false,
+              },
+            }}
+          />
           </>
         ) : (
           <Box>

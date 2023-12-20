@@ -8,6 +8,7 @@ import {
 } from "../style-functions";
 import moment from "moment";
 import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
 
 const HistoryList = ({ allhdata, type, id }) => {
   const inputDate = allhdata.DateOnly;
@@ -47,6 +48,22 @@ const HistoryList = ({ allhdata, type, id }) => {
       const fetchAllHistoryDetails = async () => {
         try {
           const response = await getViewHistoryDateWiseStrategy(id, dateParam);
+          setallHisDetails(response);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchAllHistoryDetails();
+    }, []);
+  }
+
+  if (type === "project") {
+    useEffect(() => {
+      const dateParam = encodeURIComponent(PassformattedDate);
+      const fetchAllHistoryDetails = async () => {
+        try {
+          const response = await getViewHistoryDateWiseProject(id, dateParam);
           setallHisDetails(response);
         } catch (error) {
           console.log(error);

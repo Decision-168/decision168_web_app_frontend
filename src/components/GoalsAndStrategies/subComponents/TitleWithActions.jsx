@@ -20,12 +20,12 @@ const TitleWithActions = ({
   btn2Icon,
   btn3Icon,
   description,
+  taskCount,
   progressHeading,
   progressPercentage,
+  projectTitleType,
   displayBtns
 }) => {
-
-  console.log('displayBtns',displayBtns);
 
   const theme = useTheme();
   const splitString = title.split(" ");
@@ -100,42 +100,52 @@ const TitleWithActions = ({
           )}
         </Box>
       </Grid>
-      <Grid item xs={12} md={12} lg={4}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "bottom",
-            justifyContent: "end",
-            flexDirection: "row",
-          }}
-        >
-          <Tooltip arrow title="Duplicate">
-            <IconButton onClick={handleDuplicate}>
-              <ContentCopy sx={{ fontSize: "20px" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip arrow title="File It">
-            <IconButton onClick={handleFileIt}>
-              <NoteAdd sx={{ fontSize: "20px" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip arrow title="Delete">
-            <IconButton onClick={handleDelete}>
-              <Delete sx={{ fontSize: "20px" }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip arrow title="View History">
-            <IconButton onClick={handleViewHistory}>
-              <History sx={{ fontSize: "20px" }} />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      </Grid>
+      {projectTitleType !== 'Accepted Projects' ?
+        (
+          <Grid item xs={12} md={12} lg={4}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "bottom",
+                justifyContent: "end",
+                flexDirection: "row",
+              }}
+            >
+              <Tooltip arrow title="Duplicate">
+                <IconButton onClick={handleDuplicate}>
+                  <ContentCopy sx={{ fontSize: "20px" }} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip arrow title="File It">
+                <IconButton onClick={handleFileIt}>
+                  <NoteAdd sx={{ fontSize: "20px" }} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip arrow title="Delete">
+                <IconButton onClick={handleDelete}>
+                  <Delete sx={{ fontSize: "20px" }} />
+                </IconButton>
+              </Tooltip>
+              <Tooltip arrow title="View History">
+                <IconButton onClick={handleViewHistory}>
+                  <History sx={{ fontSize: "20px" }} />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Grid>
+        ) : <></>
+      }
       <Grid item xs={12} md={12} lg={12}>
-        <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
-          {progressHeading}
-        </Typography>
-        <LinearProgressWithLabel value={progressPercentage}/>
+        {taskCount ?
+          (
+            <>
+            <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
+              {progressHeading}
+            </Typography>
+            <LinearProgressWithLabel value={progressPercentage}/>
+            </>
+          ) : <></>
+        }
       </Grid>
       <Grid item xs={12} md={12} lg={12}>
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>

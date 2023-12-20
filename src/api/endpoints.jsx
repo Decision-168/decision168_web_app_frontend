@@ -589,5 +589,56 @@ const api = {
   // Project Detail
   getProjectById: "project/get-project-by-id/",
 
+  // Task Links
+  getProjectTaskLinks: "project/get-project-tasks-links/",
+
+  // Subtask Links
+  getProjectSubtaskLinks: "project/get-project-subtasks-links/",
+
+  // Project Task Assignees
+  getProjectTaskAssignees: "project/get-project-task-assignee/",
+
+  // Project Files
+  getProjectFiles: "project/project-files/",
+
+  //Project History
+  ViewHistoryDateProject: "project/view-history-date-project/",
+
+  //Project History Date Wise
+  ViewHistoryDateWiseProject: "project/view-history-date-wise-project/",
+
+  //Project History Date Range Wise
+  ViewHistoryDateRangeProject: "project/view-history-date-range-project/",
+
+  //All Project History
+  ViewAllHistoryProject: "project/view-all-history-project/",
+
+  //Project Comments
+  getProjectComments: "project/get-project-comments/",
+
+  //Project Mention List
+  getProjectMentionList: "project/mention-list/",
+
+  // FileIt Project
+  fileCabinetFileitProject: "file-cabinet/file-it/project/",
+
+  // Duplicate Project
+  postCopyProject: "project/duplicate-project/",
+
+  // Insert Comment
+  insertProjectComment: "task/insert-comment/",
+
+  // Delete Comment
+  deleteProjectComment: "task/delete-comment/",
+
+  // Project Member Data
+  projectMemberData: "project/get-project-member-data/",
+
+  // Project Request
+  projectRequest: "project-request/",
+
+  // Insert Project Files
+  insertProjectFiles: "project/insert-project-files/",
+
 };
 export default api;

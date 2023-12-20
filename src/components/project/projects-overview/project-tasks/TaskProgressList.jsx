@@ -1,6 +1,7 @@
 import { Avatar, Box, Grid, Typography } from "@mui/material";
 import React, { memo } from "react";
 import LinearProgressWithLabel from "../../../common/LinearProgressWithLabel";
+import { stringAvatar } from "../../../../helpers/stringAvatar";
 
 const TaskProgressList = ({ item }) => {
   return (
@@ -16,8 +17,8 @@ const TaskProgressList = ({ item }) => {
         >
           {item?.profileImage ? (
             <Avatar
-              alt="user name"
-              src={item?.profileImage}
+              alt={stringAvatar(item?.name)}
+              src={`/src/assets/student_photos/${item?.profileImage}`}
               sx={{ width: "2rem", height: "2rem" }}
             />
           ) : (

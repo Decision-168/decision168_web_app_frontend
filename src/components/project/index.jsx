@@ -58,9 +58,9 @@ const ProjectIndex = () => {
   const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
 
   const [projectData, setProjectData] = useState([]);
-  const [projectDetail, setProjectDetail] = useState([]);
-  const [projectId, setProjectId] = useState();
-  const [projectTitle, setProjectTitle] = useState();
+  const [projectId, setProjectId] = useState(0);
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectTitleType, setProjectTitleType] = useState(null);
 
   const fetchProjectData = async () => {
     try {
@@ -75,15 +75,6 @@ const ProjectIndex = () => {
     fetchProjectData();
   }, [userID]);
 
-  const specificProjectData = async (pid) => {
-    try {
-      const response = await getProjectDetail(pid);
-      setProjectDetail(response);
-      setProjectTitle(response?.pname);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -99,18 +90,19 @@ const ProjectIndex = () => {
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
-  const handleProjectPreviewOpen = (pid) => {
-    console.log(pid)
-    specificProjectData(pid);
+  const handleProjectPreviewOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
     setProjectId(pid);
+    setProjectTitle(pname);
     setPreviewProject(true);
   };
  const handlePendingProjectClose = () => {
    setOpenPreviewPendingProj(false);
  };
- const handlePendingProjectOpen = (pid) => {
-    specificProjectData(pid);
+ const handlePendingProjectOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
     setProjectId(pid);
+    setProjectTitle(pname);
     setOpenPreviewPendingProj(true);
  };
   const dispatch = useDispatch();
@@ -212,24 +204,22 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle={projectTitle}
-        modalData={projectDetail}
-        redirectPath={"/projects-overview"}
+        modalTitle={projectTitle}        
+        redirectPath={`/projects-overview/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup />
+        <ViewProjectPopup pid={projectId} projectTitleType={projectTitleType} refreshData={fetchProjectData} handleClose={handleProjectPreviewClose}/>
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingProjectClose}
         open={openPreviewPendingProj}
         modalTitle={projectTitle}
-        modalData={projectDetail}
-        redirectPath={"/projects-overview-request"}
+        redirectPath={`/projects-overview-request/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <PendingProjectPopup />
+        <PendingProjectPopup pid={projectId} refreshData={fetchProjectData} handleClose={handlePendingProjectClose}/>
       </CustomDialog>
     </Box>
   );

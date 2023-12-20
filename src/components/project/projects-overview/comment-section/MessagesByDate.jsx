@@ -3,12 +3,18 @@ import Typography from "@mui/material/Typography";
 import { Box, Divider, IconButton, MenuItem, Popover } from "@mui/material";
 import { DoDisturb, MoreVert, Schedule } from "@mui/icons-material";
 import moment from "moment/moment";
+import { deleteComment } from "../../../../api/modules/ProjectModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { toast } from "react-toastify";
 const MessagesByDate = ({
   date,
   groupedMessages,
   setMessages,
   saveMessagesToLocalStorage,
 }) => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
   const [deletePopoverAnchor, setDeletePopoverAnchor] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -22,8 +28,10 @@ const MessagesByDate = ({
     setSelectedItemId(null);
   };
 
-  const handleDeleteMessage = () => {
-    setMessages((prevMessages) =>
+  const handleDeleteMessage = async () => {
+    try {
+      const response = await deleteComment(userID, selectedItemId);
+      setMessages((prevMessages) =>
       prevMessages.map((msg) =>
         msg.id === selectedItemId ? { ...msg, isDeleted: true } : msg
       )
@@ -35,7 +43,17 @@ const MessagesByDate = ({
     });
     setDeletePopoverAnchor(null);
     setSelectedItemId(null);
+
+    toast.success(`${response.message}`);
+
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response?.error}`);
+    }
   };
+
+  // console.log(groupedMessages)
+  // console.log(groupedMessages[date])
 
   return (
     <Box p={2}>
@@ -78,7 +96,7 @@ const MessagesByDate = ({
                       mx: 1,
                     }}
                   >
-                    {!message.isDeleted ? "AB-5177" : ""}
+                    {message.cCode ? message.cCode : ""}
                   </Typography>
                   <Box
                     sx={{
@@ -156,7 +174,7 @@ const MessagesByDate = ({
                       mx: 1,
                     }}
                   >
-                    {!message.isDeleted ? "AB-5177" : ""}
+                    {message?.cCode ? message.cCode : ""}
                   </Typography>
                 </>
               )}

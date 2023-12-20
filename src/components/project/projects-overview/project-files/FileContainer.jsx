@@ -8,36 +8,79 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   CustomTabPanel,
   a11yProps,
 } from "../../../GoalsAndStrategies/subComponents/style-functions";
 import FilesList from "./FilesList";
+import { getProjectDetail, getProjectFiles, insertFiles } from "../../../../api/modules/ProjectModule";
+import { toast } from "react-toastify";
 
-const files = [
-  {
-    fileName: "decision168-flow.docx",
-    type: "file",
-  },
-  {
-    fileName: "decision168-flow.docx",
-    type: "task-file",
-  },
-];
-const FileContainer = () => {
+const FileContainer = ({pid}) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [projectData, setProjectData] = useState([]);
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectDetail(pid);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchProjectData();
+  }, [pid]);
+  
+  const handleFileChange = async (event) => {
+    let fileArray = [];
+    const file = event.target.files;
+    const time = Math.floor(Date.now() / 1000);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    for (const f of file) {
+      const fileName = `${time}_${f.name.toLowerCase()}`;
+      fileArray.push(fileName)
+    }
+    const fileData = {
+      pid: pid,
+      pcreated_by: projectData?.project?.pcreated_by,
+      pfile: fileArray
+    }
+    try {
+      const response = await insertFiles(fileData);
+      fetchProjectFileData()
+      toast.success(`${response.message}`);
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response.error}`);
+    }
     setSelectedFile(file);
   };
 
-  const [value, setValue] = React.useState(0);
-
+  const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [projectFileData, setProjectFileData] = useState([]);
+  const [taskFileData, setTaskFileData] = useState([]);
+  const [subtaskFileData, setSubtaskFileData] = useState([]);
+  const fetchProjectFileData = async () => {
+    try {
+      const response = await getProjectFiles(pid);
+      setProjectFileData(response.projectFileDetail);
+      setTaskFileData(response.taskFileDetail);
+      setSubtaskFileData(response.subtaskFileDetail);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectFileData();
+  }, [pid]);
+
   return (
     <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
       <Grid container>
@@ -53,6 +96,7 @@ const FileContainer = () => {
                 hidden
                 name="profileImage"
                 type="file"
+                multiple
                 onChange={handleFileChange}
               />
               <Tooltip arrow title="Select file" placement="right">
@@ -75,12 +119,10 @@ const FileContainer = () => {
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              {files.filter((i) => i.type === "file").length > 0 ? (
-                files
-                  .filter((i) => i.type === "file")
-                  .map((item, index) => (
+              {projectFileData?.filter((i) => i.type === "project-file").length > 0 ? (
+                projectFileData?.filter((i) => i.type === "project-file")?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList item={item} selectedFile={selectedFile} />
+                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
                     </Fragment>
                   ))
               ) : (
@@ -90,12 +132,10 @@ const FileContainer = () => {
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              {files.filter((i) => i.type === "task-file").length > 0 ? (
-                files
-                  .filter((i) => i.type === "task-file")
-                  .map((item, index) => (
+              {taskFileData?.filter((i) => i.type === "task-file").length > 0 ? (
+                taskFileData?.filter((i) => i.type === "task-file")?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList item={item} selectedFile={selectedFile} />
+                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
                     </Fragment>
                   ))
               ) : (
@@ -105,12 +145,10 @@ const FileContainer = () => {
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              {files.filter((i) => i.type === "subtask-file").length > 0 ? (
-                files
-                  .filter((i) => i.type === "subtask-file")
-                  .map((item, index) => (
+              {subtaskFileData?.filter((i) => i.type === "subtask-file").length > 0 ? (
+                subtaskFileData?.filter((i) => i.type === "subtask-file")?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList item={item} selectedFile={selectedFile} />
+                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
                     </Fragment>
                   ))
               ) : (

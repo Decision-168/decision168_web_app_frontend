@@ -16,13 +16,13 @@ import { stringAvatar } from "../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
-  const handleOpenCondition = (type) => {
+  const handleOpenCondition = (type, pid, pname) => {
     if (
       ["created-project", "accepted-project"].includes(type)
     ) {
-      handleOpen();
+      handleOpen(pid, pname);
     } else {
-      handlePendingOpen();
+      handlePendingOpen(pid, pname);
     }
   };
 
@@ -40,7 +40,7 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
       }}
     >
       <CardActionArea
-        onClick={() => navigate("/projects-overview")}
+        onClick={() => navigate(`/projects-overview/${item?.project?.id}`)}
         sx={{
           borderRadius: 0,
           height: "120px",
@@ -126,7 +126,7 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
         </AvatarGroup>
         <IconButton
           aria-label="settings"
-          onClick={() => handleOpenCondition(value)}
+          onClick={() => handleOpenCondition(value, item?.project?.id,item?.project?.name)}
         >
           <VisibilityOutlined fontSize="small" />
         </IconButton>

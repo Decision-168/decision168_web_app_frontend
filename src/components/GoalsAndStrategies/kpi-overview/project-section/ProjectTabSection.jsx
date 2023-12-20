@@ -12,13 +12,36 @@ import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import { CustomTabPanel, a11yProps } from "../../subComponents/style-functions";
 
 
-const ProjectTabSection = ({}) => {
+const ProjectTabSection = ({ formValues, setFormValues }) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    let copy_detail_val = "everything";
+    let cust_project_val = "";
+    if(newValue === 1)
+    {
+      copy_detail_val = "custom";
+    }
+    setFormValues({
+      ...formValues,
+      copy_detail: copy_detail_val,
+      cust_project: cust_project_val,
+    });
   };
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
+
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked)
+    if (event.target.checked === true) {
+      const newRadioValue = event.target.value;
+      console.log(newRadioValue)
+      setFormValues({
+        ...formValues,
+        cust_project: newRadioValue,
+      });
+    }
+  };
 
   const info = [
     {
@@ -117,7 +140,8 @@ const ProjectTabSection = ({}) => {
           control={
             <Checkbox
               checked={checked}
-              onChange={(event) => setChecked(event.target.checked)}
+              value="1"
+              onChange={(event) => handleCheckboxChange(event)}
             />
           }
           label="Task & Its Subtask without Assignee's"
