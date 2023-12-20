@@ -10,11 +10,11 @@ import OverviewCardHeader from "./TaskOverviewCardHeader";
 import OverviewCardBody from "./TaskOverviewCardBody";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
-import DuplicateDialog from "../../subComponents/DuplicateDialog";
 import { patchDeleteTask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fileItTask } from "../../../../api/modules/taskModule";
+import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
 const TaskOverviewCard = ({ styles, task }) => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const TaskOverviewCard = ({ styles, task }) => {
   };
 
   const handleDuplicateDialog = () => {
-    dispatch(openModal("duplicate-task"));
+    dispatch(openModal("duplicate-overview-task"));
   };
 
   //File It
@@ -103,15 +103,12 @@ const TaskOverviewCard = ({ styles, task }) => {
       </ReduxDialog>
 
       <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm />
+        <CreateSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      {/* <ReduxDialog value="edit-sub-task" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md">
-        <EditSubTasksForm />
-      </ReduxDialog> */}
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateDialog />
+      <ReduxDialog value="duplicate-overview-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+        <DuplicateTaskDialog  taskData={task} closeModalName={"duplicate-overview-task"}/>
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItTaskInOverview"} handleYes={handleFileItTaskYes} />

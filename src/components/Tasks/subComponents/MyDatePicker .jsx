@@ -6,17 +6,7 @@ import { Box, IconButton, InputLabel } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTheme } from "@mui/material/styles";
 
-// Function to format the date as YY/MM/DD
-// function formatDateAsYYMMDD(date) {
-//   const year = date.getFullYear().toString().slice(0);
-//   const month = (date.getMonth() + 1).toString().padStart(2, "0");
-//   const day = date.getDate().toString().padStart(2, "0");
-//   return `${year}-${month}-${day}`;
-// }
-
-// ... (your imports)
-
-function MyDatePicker({ label, required, sizeWidth, showBorder, value, onChange }) {
+function MyDatePicker({ label, required, sizeWidth, showBorder,minDate, maxDate, value, onChange, isDisabled }) {
   const theme = useTheme();
   const [userInteracted, setUserInteracted] = useState(false);
   const [startDate, setStartDate] = useState(value || new Date()); // Use the provided value or initialize a new date
@@ -26,7 +16,7 @@ function MyDatePicker({ label, required, sizeWidth, showBorder, value, onChange 
     setUserInteracted(true);
     if (onChange) {
       onChange(date);
-      console.log('New selected value:', date);
+      console.log("New selected value:", date);
     }
   };
 
@@ -53,7 +43,7 @@ function MyDatePicker({ label, required, sizeWidth, showBorder, value, onChange 
         variant="outlined"
         disabled
         fullWidth
-        value={startDate.toISOString().split('T')[0]} // Format the date in YY/MM/DD format
+        value={startDate.toISOString().split("T")[0]} // Format the date in YY/MM/DD format
         sx={{
           width: sizeWidth,
           "& .MuiOutlinedInput-notchedOutline": {
@@ -69,7 +59,19 @@ function MyDatePicker({ label, required, sizeWidth, showBorder, value, onChange 
             <DatePicker
               selected={startDate}
               onChange={handleDateChange}
-              customInput={<CalendarMonthIcon sx={{ width: "30px", height: "30px", pr: 1, pt: 1, cursor: "pointer" }} />}
+              peekNextMonth
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              dateFormat="yyyy-MM-dd" // Set the date format
+              minDate={minDate} // Set the minimum date
+              maxDate={maxDate} // Set the maximum date
+              disabled={isDisabled} 
+              customInput={
+                <IconButton size="small" sx={{ fontSize: "1.2rem" }}>
+                  <CalendarMonthIcon fontSize="inherit" />
+                </IconButton>
+              }
             />
           ),
         }}

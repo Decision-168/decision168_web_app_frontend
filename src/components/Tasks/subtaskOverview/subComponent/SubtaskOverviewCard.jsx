@@ -8,12 +8,12 @@ import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import SubTaskOverviewCardHeader from "./SubTaskOverviewCardHeader";
 import SubtakOverviewCardBody from "./SubtakOverviewCardBody";
-import DuplicateDialog from "../../subComponents/DuplicateDialog";
 import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 import { patchDeleteSubtask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fileItSubTask } from "../../../../api/modules/taskModule";
+import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 
 const SubtaskOverviewCard = ({ styles, subtask }) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
   };
 
   const handleDuplicateDialog = () => {
-    dispatch(openModal("duplicate-task"));
+    dispatch(openModal("duplicate-overview-subtask"));
   };
 
   //File It
@@ -81,7 +81,7 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <SubTaskOverviewCardHeader title={`SubTask: ${subtask?.stname}`} btn1Text={"Edit Task"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <SubTaskOverviewCardHeader title={`Subtask: ${subtask?.stname}`} btn1Text={"Edit Task"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
         <SubtakOverviewCardBody styles={styles} subtask={subtask} />
       </Grid>
 
@@ -89,8 +89,8 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
         <EditSubTasksForm />
       </ReduxDialog>
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateDialog />
+      <ReduxDialog value="duplicate-overview-subtask" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+        <DuplicateSubtaskDialog subtaskData={subtask} closeModalName={"duplicate-overview-subtask"} />
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItSubTaskInOverview"} handleYes={handleFileItSubTaskYes} />

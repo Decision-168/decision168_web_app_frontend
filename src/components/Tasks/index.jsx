@@ -45,7 +45,7 @@ const filterOption = [
   },
 ];
 
-const PortfolioTasks = () => {
+const PortfolioTasksList = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const dispatch = useDispatch();
@@ -145,4 +145,4 @@ const PortfolioTasks = () => {
   );
 };
 
-export default memo(PortfolioTasks);
+export default memo(PortfolioTasksList);

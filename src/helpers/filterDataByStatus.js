@@ -7,7 +7,21 @@ export const filterDataByStatus = (data, status) => {
         id: uuidv4(),
         content: {
           ...task,
-          subTasks: task.subTasks.filter(subtask => subtask.ststatus === status)
+          subTasks: task.subTasks
         }
       }))
   };
+
+
+  
+// export const filterDataByStatus = (data, status) => {
+//   return data
+//     .filter(task => task.tstatus === status)
+//     .map(task => ({
+//       id: uuidv4(),
+//       content: {
+//         ...task,
+//         subTasks: task.subTasks.filter(subtask => subtask.ststatus === status)
+//       }
+//     }))
+// };

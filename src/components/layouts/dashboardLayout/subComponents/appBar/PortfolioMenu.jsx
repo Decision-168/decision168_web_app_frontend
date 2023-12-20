@@ -70,8 +70,8 @@ export default function PortfolioMenu() {
   const [portfolios, setPortfolios] = React.useState([]);
   const [selectedPortfolio, setSelectedPortfolio] = React.useState("portfolio");
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  const email = user?.email_address;
-  // const email = "uzmakarjikar@gmail.com";
+  // const email = user?.email_address;
+  const email = "uzmakarjikar@gmail.com"; // for testing
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default function PortfolioMenu() {
 
   const fetchPorfolios = async () => {
     try {
-      const response = await getPortfolios(email);
+      const response = await getPortfolios({email});
       setPortfolios(response);
     } catch (error) {
       console.error(error);

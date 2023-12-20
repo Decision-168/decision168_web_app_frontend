@@ -5,7 +5,6 @@ import ReduxDialog from "../../common/ReduxDialog";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/action/modalSlice";
 import CreateSubTasksForm from "../createEditSubtasks/CreateSubTasksForm";
-import DuplicateDialog from "./DuplicateDialog";
 import EditSubTasksForm from "../createEditSubtasks/EditSubTasksForm";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
@@ -14,8 +13,10 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { fileItSubTask, fileItTask } from "../../../api/modules/taskModule";
+import DuplicateTaskDialog from "./DuplicateTaskDialog";
+import DuplicateSubtaskDialog from "./DuplicateSubtaskDialog";
 
-export default function More({ rowId, isParentRow, fetchData, anchorEl, setAnchorEl }) {
+export default function More({ rowId, task, subTask, isParentRow, fetchData, anchorEl, setAnchorEl }) {
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   const open = Boolean(anchorEl);
@@ -24,28 +25,33 @@ export default function More({ rowId, isParentRow, fetchData, anchorEl, setAncho
     setAnchorEl(null);
   };
 
-  const handleEditTaskDialog = (rowId) => {
+  const handleEditTaskDialog = () => {
     dispatch(openModal("edit-task"));
     handleMoreClose();
   };
 
-  const handleAddSubTasksDialog = (rowId) => {
+  const handleAddSubTasksDialog = () => {
     dispatch(openModal("add-sub-tasks"));
     handleMoreClose();
   };
 
   const handleEditSubTaskDialog = (rowId) => {
-    dispatch(openModal("edit-sub-task"));
+    dispatch(openModal("edit-subtask"));
     handleMoreClose();
   };
 
-  const handleDuplicateDialog = (rowId) => {
-    dispatch(openModal("duplicate-task"));
+  //Duplicate Task
+  const handleDuplicateDialog = () => {
+    if(isParentRow){
+      dispatch(openModal("duplicate-task"));
+    }else{
+      dispatch(openModal("duplicate-subtask"));
+    }
     handleMoreClose();
   };
 
   //File It
-  const handleFileItDialog = (rowId) => {
+  const handleFileItDialog = () => {
     if (isParentRow) {
       dispatch(
         openCnfModal({
@@ -170,10 +176,10 @@ export default function More({ rowId, isParentRow, fetchData, anchorEl, setAncho
       >
         {isParentRow ? (
           <>
-            <MenuItem onClick={() => handleEditTaskDialog(rowId)} sx={{ fontSize: "13px" }}>
+            <MenuItem onClick={() => handleEditTaskDialog()} sx={{ fontSize: "13px" }}>
               Edit Task
             </MenuItem>
-            <MenuItem onClick={() => handleAddSubTasksDialog(rowId)} sx={{ fontSize: "13px" }}>
+            <MenuItem onClick={() => handleAddSubTasksDialog()} sx={{ fontSize: "13px" }}>
               Add Subtask
             </MenuItem>
           </>
@@ -182,32 +188,56 @@ export default function More({ rowId, isParentRow, fetchData, anchorEl, setAncho
             Edit Subtask
           </MenuItem>
         )}
-
-        <MenuItem onClick={() => handleDuplicateDialog(rowId)} sx={{ fontSize: "13px" }}>
+        <MenuItem onClick={() => handleDuplicateDialog()} sx={{ fontSize: "13px" }}>
           Duplicate
         </MenuItem>
-        <MenuItem onClick={() => handleFileItDialog(rowId)} sx={{ fontSize: "13px" }}>
+        <MenuItem onClick={() => handleFileItDialog()} sx={{ fontSize: "13px" }}>
           File It
         </MenuItem>
-        <MenuItem onClick={() => handleDeleteDialog(rowId)} sx={{ fontSize: "13px" }}>
+        <MenuItem onClick={() => handleDeleteDialog()} sx={{ fontSize: "13px" }}>
           Delete {isParentRow ? "Task" : "Subtask"}
         </MenuItem>
       </Menu>
 
       <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} />
+        <CreateEditTaskForm editMode={true} taskEditData={task} />
       </ReduxDialog>
 
-      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm />
+      <ReduxDialog
+        value="add-sub-tasks"
+        modalTitle="Add Sub Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      <ReduxDialog value="edit-sub-task" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md">
-        <EditSubTasksForm />
+      <ReduxDialog
+        value="edit-subtask"
+        modalTitle="Edit Sub Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        {/* <EditSubTasksForm /> */}
+        <CreateSubTasksForm editMode={true} taskData={task} subtaskData={subTask}/>
       </ReduxDialog>
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateDialog />
+      <ReduxDialog
+        value="duplicate-task"
+        modalTitle="Copy Task"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-task"} />
+      </ReduxDialog>
+
+      <ReduxDialog
+        value="duplicate-subtask"
+        modalTitle="Copy Subtask"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateSubtaskDialog subtaskData={subTask} closeModalName={"duplicate-subtask"}/>
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItTask"} handleYes={handleFileItTaskYes} />

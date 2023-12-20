@@ -251,7 +251,7 @@ export default function PersonalInfo() {
                 </Grid>
                 <Grid item xs={12} sm={8}>
                   <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                    <SocialMedia links={details?.social_media} icons={details?.social_media_icon} />
+                    {/* <SocialMedia links={details?.social_media} icons={details?.social_media_icon} /> */}
                   </Stack>
                 </Grid>
               </Grid>

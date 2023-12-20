@@ -7,7 +7,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
-import DuplicateDialog from "../../subComponents/DuplicateDialog";
 import { useDispatch } from "react-redux";
 import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
@@ -21,6 +20,7 @@ import { patchDeleteTask } from "../../../../api/modules/TrashModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
+import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
 const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
   // };
 
   const handleDuplicateDialog = () => {
-    dispatch(openModal("duplicate-task"));
+    dispatch(openModal("duplicate-preview-task"));
   };
 
   //File It
@@ -136,7 +136,21 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
           <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
-                <OverviewCardHeader title={`TASK:${task?.tname}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+                <OverviewCardHeader
+                  title={`TASK: ${task?.tname}`}
+                  btn1Text={"Add Task"}
+                  btn2Text={"Add Subtask"}
+                  btn3Text={"Edit Task"}
+                  btn1Icon={<Add />}
+                  btn2Icon={<Add />}
+                  btn3Icon={<Edit />}
+                  handleClick1={handleAddTasksDialog}
+                  handleClick2={handleAddSubTasksDialog}
+                  handleClick3={handleEditTaskDialog}
+                  handleDuplicate={handleDuplicateDialog}
+                  handleFileIt={handleFileItDialog}
+                  handleDelete={handleDeleteDialog}
+                />
                 <Grid container>
                   <Grid item xs={12}>
                     {task?.tcode && (
@@ -195,7 +209,10 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                         task?.subTasks?.map((subTask, index) => (
                           <Box key={index} sx={styles.subtaskLinkWrapper}>
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
-                            <Typography onClick={() => handleSubTaskPreviewDialog(subTask?.stid)} sx={styles.subtaskLinkText}>
+                            <Typography
+                              onClick={() => handleSubTaskPreviewDialog(subTask?.stid)}
+                              sx={styles.subtaskLinkText}
+                            >
                               {subTask?.stcode} : {subTask?.stname}
                             </Typography>
                           </Box>
@@ -226,19 +243,36 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
         <CreateEditTaskForm editMode={true} />
       </ReduxDialog>
 
-      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm />
+      <ReduxDialog
+        value="add-sub-tasks"
+        modalTitle="Add Sub Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+          <CreateSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateDialog />
+      <ReduxDialog
+        value="duplicate-preview-task"
+        modalTitle="Copy Task"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-preview-task"}/>
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItTaskInPreview"} handleYes={handleFileItTaskYes} />
 
       <ConfirmationDialog value={"deleteTaskInPreview"} handleYes={handleDeleteTaskYes} />
 
-      <CustomDialog handleClose={handleCloseTaskPreviewDailog} open={openSubTaskPreviewDailog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subTaskId}`} showModalButton={true} modalSize="lg">
+      <CustomDialog
+        handleClose={handleCloseTaskPreviewDailog}
+        open={openSubTaskPreviewDailog}
+        modalTitle="Subtask"
+        redirectPath={`/subtasks-overview/${subTaskId}`}
+        showModalButton={true}
+        modalSize="lg"
+      >
         <SubtaskPreview styles={styles} subtaskId={subTaskId} parentTaskName={task?.tname} />
       </CustomDialog>
     </>

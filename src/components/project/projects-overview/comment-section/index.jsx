@@ -122,12 +122,12 @@ const CommentSection = ({ projectId }) => {
       <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
         {messages.length > 0 ? (
           <ScrollBar>
-            <Box sx={{ maxHeight: "380px" }}>{renderMessagesByDate()}</Box>
+            <Box sx={{height:"100%",  }}>{renderMessagesByDate()}</Box>
           </ScrollBar>
         ) : (
           <Box
             sx={{
-              maxHeight: "380px",
+              // maxHeight: "380px",
               display: "flex",
               alignItems: "center",
               flexDirection: "row",

@@ -15,12 +15,7 @@ export default function BasicBreadcrumbs({ currentPage, showBackButton }) {
   }
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      py={2}
-    >
+    <Stack direction="row" justifyContent="space-between" alignItems="center" py={2}>
       <Breadcrumbs aria-label="breadcrumb">
         <Typography
           component="h6"
@@ -44,6 +39,7 @@ export default function BasicBreadcrumbs({ currentPage, showBackButton }) {
             backgroundColor: theme.palette.secondary.main,
             color: theme.palette.secondary.light,
             "&:hover": { backgroundColor: theme.palette.secondary.dark },
+            mx: 2,
           }}
           onClick={handleGoBack}
         >
