@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Avatar,
   DialogActions,
@@ -9,42 +9,115 @@ import {
 } from "@mui/material";
 import Goal from "./subComponents/Goal";
 import KPIs from "./subComponents/KPIs";
+import { toast } from "react-toastify";
+import {
+  InsertGoalData,
+  InsertStrategiesData,
+} from "../../../../api/modules/goalkpiModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { useDispatch } from "react-redux";
+import { closeModal } from "../../../../redux/action/modalSlice";
 
 const steps = ["Goal", "KPIs"];
-const CreateGoal = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
+const CreateGoal = ({ fetchAllData }) => {
+  const dispatch = useDispatch();
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
+  const [getInsertedGID, setInsertedGID] = useState("");
+  const [getInsertedGDept, setInsertedGDept] = useState("");
+  const [childFormValues, setChildFormValues] = useState({});
+
+  const [formKPIValues, setFormKPIValues] = useState({
+    kpiArray: [],
+    gdept_id: "",
+    gid: "",
+    screated_by: user_id, 
+    portfolio_id: storedPorfolioId, 
+  });
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const [childFormValues, setChildFormValues] = useState({});
-
   const handleChildUpdate = (formValues) => {
     setChildFormValues(formValues);
   };
 
-  const handleSave = () => {
-    // Logic to save the Goal data    
-    console.log("formValues",childFormValues);
-    console.log("Goal data saved!");
-    handleNext(); // Proceed to the next step (KPIs)
+  const handleSave = async () => {
+    const requiredFields = ["gname", "gdept", "gstart_date", "gend_date"];
+
+    const areAllFieldsFilled = requiredFields.every(
+      (field) => childFormValues[field]
+    );
+
+    if (!areAllFieldsFilled) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const { imemail } = childFormValues;
+      const data = {
+        ...childFormValues,
+        imemail: imemail.map((item) => item.email),
+      };
+
+      const response = await InsertGoalData(data);
+      setInsertedGID(response.gid);
+      setInsertedGDept(response.gdept);
+      toast.success(`${response.message}`);
+      setChildFormValues({});
+      handleNext(); // Proceed to the next step (KPIs)
+      //console.log(data);
+    } catch (error) {
+      // Handling error
+      console.log(error);
+      toast.error(`${error.response?.error}`);
+      console.error("Error updating:", error);
+    }
   };
 
-  const handleCreate = () => {
-    // Logic to create KPIs
-    console.log("KPIs created!");
-    console.log(inputFields);
+  const handleCreate = async () => {
+    const temp = () => ({
+      ...formKPIValues,
+      kpiArray: inputFields,
+      gdept_id: getInsertedGDept,
+      gid: getInsertedGID,
+    });
+
+    const kdata = temp();
+
+    const isSnameEmpty = kdata.kpiArray.some((kpi) => kpi.sname.trim() === "");
+
+    if (isSnameEmpty) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      const response = await InsertStrategiesData(kdata);
+      fetchAllData();
+      dispatch(closeModal("create-goals-kpis"));
+      toast.success(`${response.message}`);      
+    } catch (error) {
+      // Handling error
+      toast.error(`${error.response?.error}`);
+      console.error("Error updating:", error);
+    }
   };
-  const [inputFields, setInputFields] = useState([]);
 
   const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+    setInputFields([...inputFields, { sname: "", sdes: "" }]);
   };
+
   const activeAvatar = {
     backgroundColor: "#c7df19",
     color: "#fff",
@@ -111,7 +184,7 @@ const CreateGoal = () => {
           </Box>
           {activeStep === 0 ? (
             <Box>
-              <Goal onUpdate={handleChildUpdate}/>
+              <Goal onUpdate={handleChildUpdate} />
             </Box>
           ) : (
             <Box sx={{ pt: 1 }}>
@@ -132,15 +205,7 @@ const CreateGoal = () => {
           </Button>
         ) : (
           <>
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ background: "#383838", color: "#fff", mr: 1 }}
-                onClick={handleBack}
-              >
-                Back
-              </Button>
+            <>              
               <Button variant="contained" size="small" onClick={handleAddClick}>
                 Add More KPI's
               </Button>

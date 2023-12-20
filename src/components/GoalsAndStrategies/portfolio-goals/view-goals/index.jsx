@@ -24,26 +24,32 @@ import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const ViewGoalsIndex = () => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   //get goal lists
   const [AllGoalData, setAllGoalData] = useState([]);
-  const fetchAllData = async () => {
+  const fetchAllPortfolioGoalData = async () => {
     try {
-      const response = await getAllGoalList("1", "2"); //userid,portid
-      setAllGoalData(response);
+      if (storedPorfolioId) {
+        const response = await getAllGoalList(user_id, storedPorfolioId);
+        setAllGoalData(response);
+      } else {
+        setAllGoalData([]);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {  
-    fetchAllData();
-  }, []);
+  useEffect(() => {
+    fetchAllPortfolioGoalData();
+  }, [user_id, storedPorfolioId]);
   //get goal lists
-
-  //get user id
-  const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
-  //get user id
 
   const [goalID, setGoalID] = useState("");
   const [goalName, setGoalName] = useState("");
@@ -191,7 +197,7 @@ const ViewGoalsIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateGoal />
+        <CreateGoal fetchAllData={fetchAllPortfolioGoalData} />
       </ReduxDialog>
 
       <CustomDialog
@@ -202,7 +208,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <ViewGoalsPopup goalID={goalID} id={id}/>
+        <ViewGoalsPopup goalID={goalID} id={user_id} />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingGoalClose}
@@ -212,7 +218,12 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllData} goalID={goalID} id={id}/>
+        <PendingPopup
+          handleClose={handlePendingGoalClose}
+          fetchAllData={fetchAllPortfolioGoalData}
+          goalID={goalID}
+          id={user_id}
+        />
       </CustomDialog>
     </Box>
   );

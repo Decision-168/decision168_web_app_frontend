@@ -31,7 +31,7 @@ const KPIAccordion = ({kpi}) => {
     };
 
     fetchAllData();
-  }, []);
+  }, [sid]);
 
   const [inputFields, setInputFields] = useState([]);
 

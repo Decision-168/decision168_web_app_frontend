@@ -1,8 +1,5 @@
 const api = {
-
-
   //-----------------------------User Module Start----------------
-
 
   //user register api
   userRegister: "user/register",
@@ -18,8 +15,6 @@ const api = {
 
   //user change-password api
   userChangePass: "user/change-password/",
-
-
 
   //-----------------------------Dashboard Module Start----------------
 
@@ -55,71 +50,29 @@ const api = {
 
   //-----------------------------Goal & KPI Modlue Start----------------
 
-  // //GoalsList
-  // CreatedGoalList: "goal/get-goals-list/",
-
-  // //AcceptedGoalsAllList
-  // AcceptedGoalList: "goal/get-accepted-goals-list/",
-
-  // //PendingGoalsAllList
-  // PendingGoalList: "goal/get-pending-goals-list/",
-
-  // //ReadMoreGoalsAllList
-  // ReadMoreGoalList: "goal/get-readmore-goals-list/",
-
   //AllGoalList
   AllGoalList: "goal/get-all-goals-list/",
 
   //check_PortfolioMemberActive
   PortfolioMemberActive: "goal/check-portfolio-member-active/",
 
-  //getGoalCount
-  GoalCount: "goal/get-goal-count/",
+  // //getGoalCount
+  // GoalCount: "goal/get-goal-count/",
 
-  //Goal_tasks
-  GoalTasks: "goal/get-goal-tasks/",
-
-  //Goal_subtasks
-  GoalSubtasks: "goal/get-goal-subtasks/",
-
-  // //Goalprogress_done
-  // GoalTasksProgressDone: "goal/get-goal-task-progress-done/",
-
-  // //Goalprogress_total
-  // GoalTasksProgressTotal: "goal/get-goal-task-progress-total/",
-
-  // //Goalsub_progress_done
-  // GoalSubtasksProgressDone: "goal/get-goal-subtask-progress-done/",
-
-  // //Goalsub_progress_total
-  // GoalSubtasksProgressTotal: "goal/get-goal-subtask-progress-total/",
-
-  // //GoalProgress
-  // GoalProgress: "goal/get-goal-progress/",
-
-  //getStrategiesCount
-  StrategiesCount: "goal/get-strategies-count/",
+  // //getStrategiesCount
+  // StrategiesCount: "goal/get-strategies-count/",
 
   //goal-request
   GoalRequest: "goal-request/",
 
-  //goal-invite-reject-request
-  GoalInviteRejectRequest: "goal-invite-reject-request/",
+  // //goal-invite-reject-request
+  // GoalInviteRejectRequest: "goal-invite-reject-request/",
 
   //goal-overview-request
   GoalOverviewRequest: "goal/goal-overview-request/",
 
   //getGoalMemberDetailbyGID
   GoalMemberDetailbyGID: "goal/goal-member-detail/",
-
-  //get_PDepartment
-  PDepartment: "goal/get-department-name/",
-
-  // //GoalTeamMember
-  // GoalTeamMember: "goal/goal-team-member/",
-
-  // //InvitedGoalMember
-  // InvitedGoalMember: "goal/goal-invited-member/",
 
   //GoalsAllStrategiesList
   GoalsAllStrategiesList: "goal/goal-all-strategies-list/",
@@ -130,95 +83,27 @@ const api = {
   //view_history_date_goal
   ViewHistoryDateGoal: "goal/view-history-date-goal/",
 
-  //GoalDetailAccepted
-  GoalDetailAccepted: "goal/goal-detail-accepted/",
-
-  //file_itStrategy_tasks
-  FileItStrategyTasks: "goal/file-it-strategy-tasks/",
-
-  //file_itStrategy_subtasks
-  FileItStrategySubtasks: "goal/file-it-strategy-subtasks/",
-
-  // //Strategyprogress_done
-  // StrategyTasksProgressDone: "goal/get-strategy-task-progress-done/",
-
-  // //Strategyprogress_total
-  // StrategyTasksProgressTotal: "goal/get-strategy-task-progress-total/",
-
-  // //Strategysub_progress_done
-  // StrategySubtasksProgressDone: "goal/get-strategy-subtask-progress-done/",
-
-  // //Strategysub_progress_total
-  // StrategySubtasksProgressTotal: "goal/get-strategy-subtask-progress-total/",
-
-  // //StrategyProgress
-  // StrategyProgress: "goal/get-strategy-progress/",
-
   //StrategyAllProjectsList
   StrategyAllProjectsList: "goal/get-strategy-all-projects-list/",
 
-  //p_tasks
-  ProjectTasks: "goal/get-project-tasks/",
+  // //CheckProjectTeamMember
+  // ProjectTeamMember: "goal/check-project-team-member/",
 
-  //p_subtasks
-  ProjectSubtasks: "goal/get-project-subtasks/",
-
-  // //progress_done
-  // ProjectTasksProgressDone: "goal/get-project-task-progress-done/",
-
-  // //progress_total
-  // ProjectTasksProgressTotal: "goal/get-project-task-progress-total/",
-
-  // //sub_progress_done
-  // ProjectSubtasksProgressDone: "goal/get-project-subtask-progress-done/",
-
-  // //sub_progress_total
-  // ProjectSubtasksProgressTotal: "goal/get-project-subtask-progress-total/",
-
-  // //ProjectProgress
-  // ProjectProgress: "goal/get-project-progress/",
-
-  //CheckProjectTeamMember
-  ProjectTeamMember: "goal/check-project-team-member/",
-
-  //getProjectCount
-  ProjectCount: "goal/get-project-count/",
-
-  //check_notify_goal_suggested
-  NotifyGoalSuggested: "goal/check-notify-goal-suggested/",
-
-  // //SuggestedGoalMember
-  // SuggestedGoalMember: "goal/goal-suggested-member/",
-
-  // //SuggestedInviteGoalMember
-  // SuggestedInviteGoalMember: "goal/goal-suggested-invite-member/",
-
-  // //check_gm
-  // CheckGM: "goal/check-gm/",
+  // //getProjectCount
+  // ProjectCount: "goal/get-project-count/",
 
   //getAccepted_PortTM_GoalList
-  Accepted_PortTM_GoalList: "goal/get-all-accepted-portfolio-team-member-goal-list/",
-
-  //getProjectById
-  ProjectById: "goal/get-project-by-id/",
+  Accepted_PortTM_GoalList:
+    "goal/get-all-accepted-portfolio-team-member-goal-list/",
 
   //view_history_date_wise_goal
   ViewHistoryDateWiseGoal: "goal/view-history-date-wise-goal/",
 
-  //view_history_date_range_goal
-  ViewHistoryDateRangeGoal: "goal/view-history-date-range-goal/",
+  // //view_history_date_range_goal
+  // ViewHistoryDateRangeGoal: "goal/view-history-date-range-goal/",
 
-  //view_all_history_goal
-  ViewAllHistoryGoal: "goal/view-all-history-goal/",
-
-  //GoalTeamMemberAccepted
-  GoalTeamMemberAccepted: "goal/get-goal-team-member-accepted/",
-
-  //Strategy_tasks
-  StrategyTasks: "goal/strategy-tasks/",
-
-  //Strategy_subtasks
-  StrategySubtasks: "goal/strategy-subtasks/",
+  // //view_all_history_goal
+  // ViewAllHistoryGoal: "goal/view-all-history-goal/",
 
   //StrategyDetail
   StrategyDetail: "goal/strategy-detail/",
@@ -229,11 +114,11 @@ const api = {
   //view_history_date_wise_strategy
   ViewHistoryDateWiseStrategy: "goal/view-history-date-wise-strategy/",
 
-  //view_history_date_range_strategy
-  ViewHistoryDateRangeStrategy: "goal/view-history-date-range-strategy/",
+  // //view_history_date_range_strategy
+  // ViewHistoryDateRangeStrategy: "goal/view-history-date-range-strategy/",
 
-  //view_all_history_strategy
-  ViewAllHistoryStrategy: "goal/view-all-history-strategy/",
+  // //view_all_history_strategy
+  // ViewAllHistoryStrategy: "goal/view-all-history-strategy/",
 
   //InsertGoals
   InsertGoal: "goal/insert-goal",
@@ -279,12 +164,24 @@ const api = {
 
   //UpdateStrategies
   UpdateStrategy: "goal/update-strategies",
-  
-  //get country by country code
-  country: "user/get-country/",
 
   //getGoalCreateDD
   GoalCreateDD: "goal/get-goal-create-dd/",
+
+  //FileItGoal
+  FileItGoal: "file-cabinet/file-it/goal/",
+
+  //FileItKPI
+  FileItKPI: "file-cabinet/file-it/kpi/",
+
+  //TrashGoal
+  TrashGoal: "trash/delete/goal/",
+
+  //TrashKPI
+  TrashKPI: "trash/delete/kpi/",
+
+  //get country by country code
+  country: "user/get-country/",
 
   //-----------------------------Porfolio Modlue Start----------------
 
@@ -332,8 +229,6 @@ const api = {
 
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
-
-
 
   //-----------------------------Task Modlue Start----------------
 
@@ -426,8 +321,6 @@ const api = {
   // Reopen Subtask
   fileCabinetReopenSubtask: "file-cabinet/reopen/subtask/",
 
-
-
   //-----------------------------Archive Module Start----------------
 
   // Archive Portfolio
@@ -480,7 +373,6 @@ const api = {
 
   // UnArchive Subtask
   unarchiveSubtask: "archive/reopen/subtask/",
-
 
   //-----------------------------Trash Module Start----------------
 

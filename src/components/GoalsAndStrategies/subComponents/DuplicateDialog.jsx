@@ -44,7 +44,7 @@ const DuplicateDialog = ({ goalData }) => {
         : null,
       gend_date: goalData?.gend_date ? parseISO(goalData.gend_date) : null,
       gid: goalData?.gid,
-      gcreated_by: "1", //user_id
+      gcreated_by: user_id,
       copy_detail: "everything",
       cust_goal: "",
     });
@@ -81,7 +81,7 @@ const DuplicateDialog = ({ goalData }) => {
       moment(formValues.gend_date, moment.ISO_8601, true).isValid()
     ) {
       setLoading(true);
-      //console.log("formValues", formValues);
+      
       try {
         const response = await CopyGoal(formValues);
         toast.success(`${response.message}`);

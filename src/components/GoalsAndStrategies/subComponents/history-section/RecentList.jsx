@@ -26,53 +26,26 @@ const RecentList = ({ data, id, type }) => {
   const PassformattedDate = parsedDate.format("YYYY-MM-DD");
   const [recentHisDetails, setrecentHisDetails] = useState([]);
 
-  if (type === "goal") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchRecentHistoryData = async () => {
-        try {
-          const response = await getViewHistoryDateWiseGoal(id, dateParam);
-          setrecentHisDetails(response);
-        } catch (error) {
-          console.log(error);
+  useEffect(() => {
+    const dateParam = encodeURIComponent(PassformattedDate);
+    const fetchRecentHistoryData = async () => {
+      try {
+        let response;
+        if (type === "goal") {
+          response = await getViewHistoryDateWiseGoal(id, dateParam);
+        } else if (type === "kpi") {
+          response = await getViewHistoryDateWiseStrategy(id, dateParam);
+        } else if (type === "project") {
+          response = await getViewHistoryDateWiseProject(id, dateParam);
         }
-      };
+        setrecentHisDetails(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      fetchRecentHistoryData();
-    }, []);
-  }
-  
-  if (type === "kpi") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchRecentHistoryData = async () => {
-        try {
-          const response = await getViewHistoryDateWiseStrategy(id, dateParam);
-          setrecentHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchRecentHistoryData();
-    }, []);
-  }
-  
-  if (type === "project") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchRecentHistoryData = async () => {
-        try {
-          const response = await getViewHistoryDateWiseProject(id, dateParam);
-          setrecentHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchRecentHistoryData();
-    }, []);
-  }
+    fetchRecentHistoryData();
+  }, [id, PassformattedDate, type]);
 
   return (
     <Accordion>
@@ -82,10 +55,11 @@ const RecentList = ({ data, id, type }) => {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {recentHisDetails.map((item, index) => {
-          const formattedHDate = moment(item.h_date).format("HH:mm");
+        {recentHisDetails.map((rhl_item, rhl_index) => {
+          const formattedHDate = moment(rhl_item.h_date).format("HH:mm");
           return (
             <Box
+              key={rhl_index}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -110,7 +84,7 @@ const RecentList = ({ data, id, type }) => {
               </Typography>
               <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
               <Typography sx={{ fontSize: 13, color: "#212934", mx: 0.5 }}>
-                {item.h_description}
+                {rhl_item.h_description}
               </Typography>
             </Box>
           );

@@ -11,52 +11,44 @@ import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../.
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
 
 const HistoryList = ({ allhdata, type, id }) => {
-  const inputDate = allhdata.DateOnly;
-  const [allHisDetails, setallHisDetails] = useState([]);
+  console.log("allhdata", allhdata);
+  console.log("type", type);
+  console.log("id", id);
+
+  const allinputDate = allhdata.DateOnly;
 
   // Parse the input date using Moment.js
-  const parsedDate = moment(inputDate);
+  const allparsedDate = moment(allinputDate);
 
   // Format the date as "Today - Thu, December 07, 2023"
-  const formattedDate = parsedDate.calendar(null, {
+  const allformattedDate = allparsedDate.calendar(null, {
     sameDay: "[Today] - ddd, MMMM DD, YYYY",
     lastDay: "[Yesterday] - ddd, MMMM DD, YYYY",
     lastWeek: "ddd, MMMM DD, YYYY",
     sameElse: "ddd, MMMM DD, YYYY",
   });
 
-  const PassformattedDate = parsedDate.format("YYYY-MM-DD");
-  if (type === "goal") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseGoal(id, dateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
+  const PassallformattedDate = allparsedDate.format("YYYY-MM-DD");
+  const [allHisDetails, setallHisDetails] = useState([]);
+
+  useEffect(() => {
+    const alldateParam = encodeURIComponent(PassallformattedDate);
+    const fetchAllHistoryDetails = async () => {
+      try {
+        let response;
+        if (type === "goal") {
+          response = await getViewHistoryDateWiseGoal(id, alldateParam);
+        } else if (type === "kpi") {
+          response = await getViewHistoryDateWiseStrategy(id, alldateParam);
         }
-      };
+        setallHisDetails(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      fetchAllHistoryDetails();
-    }, []);
-  }
-
-  if (type === "kpi") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseStrategy(id, dateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchAllHistoryDetails();
-    }, []);
-  }
+    fetchAllHistoryDetails();
+  }, [type, id, PassallformattedDate]);
 
   if (type === "project") {
     useEffect(() => {
@@ -78,14 +70,15 @@ const HistoryList = ({ allhdata, type, id }) => {
     <Accordion>
       <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
         <Typography sx={{ fontSize: 14, fontWeight: "600", color: "#212934" }}>
-          {formattedDate}
+          {allformattedDate}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {allHisDetails?.map((item, index) => {
-          const formattedHDate = moment(item.h_date).format("HH:mm");
+        {allHisDetails?.map((ohl_item, ohl_index) => {
+          const formattedHDate = moment(ohl_item.h_date).format("HH:mm");
           return (
             <Box
+              key={ohl_index}
               sx={{
                 display: "flex",
                 flexDirection: "row",
@@ -111,11 +104,11 @@ const HistoryList = ({ allhdata, type, id }) => {
               </Typography>
               <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
               <Typography sx={{ fontSize: 14, color: "#212934", mx: 1 }}>
-                {item.h_resource}
+                {ohl_item.h_resource}
               </Typography>
               <ArrowRightAlt sx={{ fontSize: 20, color: "#c7df19" }} />
               <Typography sx={{ fontSize: 14, color: "#212934", mx: 1 }}>
-                {item.h_description}
+                {ohl_item.h_description}
               </Typography>
             </Box>
           );

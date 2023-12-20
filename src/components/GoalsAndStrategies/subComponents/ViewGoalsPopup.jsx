@@ -9,7 +9,10 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ViewKpiPopup from "./ViewKpiPopup";
 import CustomDialog from "../../common/CustomDialog";
@@ -25,13 +28,18 @@ import { description } from "./style-functions";
 import HiddenListOfDialog from "./HiddenListOfDialog";
 import moment from "moment";
 import {
+  CallFileItGoal,
+  CallTrashGoal,
   getGoalDetail,
   getViewHistoryDateGoal,
 } from "../../../api/modules/goalkpiModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const ViewGoalsPopup = ({ goalID, id }) => {
+  const navigate = useNavigate();
   const gid = goalID;
 
   //get user id
@@ -53,20 +61,19 @@ const ViewGoalsPopup = ({ goalID, id }) => {
   //get goal & kpi detail
   const [gdetail, setgdetail] = useState([]);
   const [kpidetails, setkpidetails] = useState([]);
-
+  const fetchAllGoalData = async () => {
+    try {
+      const response = await getGoalDetail(gid);
+      setgdetail(response.goalRes);
+      setkpidetails(response.GoalsAllStrategiesListRes);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const response = await getGoalDetail(gid);
-        setgdetail(response.goalRes);
-        setkpidetails(response.GoalsAllStrategiesListRes);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchAllData();
-  }, []);
+    fetchAllGoalData();
+  }, [gid]);
   //get goal & kpi detail
 
   //Check Button Visibility
@@ -92,7 +99,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     };
 
     DisplayTitleWithActions();
-  }, []);
+  }, [gdetail,user_id]);
   //Check Button Visibility
 
   const [allHist, setallHist] = useState([]);
@@ -108,16 +115,16 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     };
 
     fetchAllHistoryData();
-  }, []);
+  }, [gid]);
 
   const [openKPI, setOpenKPI] = useState(false);
-  const [inputFields, setInputFields] = useState([]);
+  const [inputFields, setInputFields] = useState([{ sname: "", sdes: "" }]);
 
   const [getkpi_id, setkpi_id] = useState([]);
   const [getkpi_sname, setkpi_sname] = useState([]);
 
   const handleAddClick = () => {
-    setInputFields([...inputFields, { KPI: "", Description: "" }]);
+    setInputFields([...inputFields, { sname: "", sdes: "" }]);
   };
   const handleKPIClose = () => {
     setOpenKPI(false);
@@ -161,6 +168,30 @@ const ViewGoalsPopup = ({ goalID, id }) => {
   };
   const handleCreateKPI = () => {
     dispatch(openModal("create-kpis"));
+  };
+
+  const handleGoalFileItYes = async () => {
+    try {
+      const response = await CallFileItGoal(gdetail.gid, user_id); 
+      dispatch(closeCnfModal({ modalName: "fileItGoal" }));
+      toast.success(`${response.message}`);
+      navigate("/portfolio-goals");
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error(error);
+    }
+  };
+
+  const handleGoalDeleteYes = async () => {
+    try {
+      const response = await CallTrashGoal(gdetail.gid, user_id); 
+      dispatch(closeCnfModal({ modalName: "deleteGoal" }));
+      toast.success(`${response.message}`);
+      navigate("/portfolio-goals");
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+      console.error(error);
+    }
   };
 
   return (
@@ -242,8 +273,14 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       >
         <ViewKpiPopup kpi_id={getkpi_id} />
       </CustomDialog>
-      <ConfirmationDialog value={"fileItGoal"} />
-      <ConfirmationDialog value={"deleteGoal"} />
+      <ConfirmationDialog
+        value={"fileItGoal"}
+        handleYes={handleGoalFileItYes}
+      />
+      <ConfirmationDialog
+        value={"deleteGoal"}
+        handleYes={handleGoalDeleteYes}
+      />
       <ReduxDialog
         value="view-all-history"
         modalTitle="HISTORY"
@@ -263,7 +300,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateDialog goalData = {gdetail} />
+        <DuplicateDialog goalData={gdetail} />
       </ReduxDialog>
       <ReduxDialog
         value="edit-goals"
@@ -271,7 +308,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <Goal individual={true} />
+        <Goal passGID={gdetail.gid} refreshGoalOverview={fetchAllGoalData} individual={true} />
       </ReduxDialog>
       <ReduxDialog
         value="create-kpis"
@@ -280,10 +317,12 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         modalSize="sm"
       >
         <KPIs
-          individual={false}
+          individual={true}
           inputFields={inputFields}
           setInputFields={setInputFields}
           handleAddClick={handleAddClick}
+          passGID={gdetail.gid}
+          passGDEPT={gdetail.gdept}
         />
       </ReduxDialog>
     </Box>

@@ -1,4 +1,13 @@
-import { Avatar, Box, Button, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { ContentCopy, Delete, History, NoteAdd } from "@mui/icons-material";
@@ -23,9 +32,9 @@ const TitleWithActions = ({
   taskCount,
   progressHeading,
   progressPercentage,
-  projectTitleType,
   displayBtns
 }) => {
+  //console.log("displayBtns", displayBtns);
 
   const theme = useTheme();
   const splitString = title.split(" ");
@@ -59,49 +68,49 @@ const TitleWithActions = ({
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={12} md={12} lg={8}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row",
-            pt: 1,
-            pb: 1,
-          }}
-        >
-          <Button
-            variant="contained"
-            startIcon={btn1Icon}
-            size="small"
-            sx={{ mr: 1 }}
-            onClick={handleClick1}
-          >
-            {btn1Text}
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={btn2Icon}
-            size="small"
-            sx={{ mr: 1 }}
-            onClick={handleClick2}
-          >
-            {btn2Text}
-          </Button>
-          {btn3Text && (
-            <Button
-              variant="contained"
-              startIcon={btn3Icon}
-              size="small"
-              sx={{ mr: 1 }}
-              onClick={handleClick3}
+      {(displayBtns === "all" || displayBtns === "some") && (
+        <>
+          <Grid item xs={12} md={12} lg={8}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                pt: 1,
+                pb: 1,
+              }}
             >
-              {btn3Text}
-            </Button>
-          )}
-        </Box>
-      </Grid>
-      {projectTitleType !== 'Accepted Projects' ?
-        (
+              <Button
+                variant="contained"
+                startIcon={btn1Icon}
+                size="small"
+                sx={{ mr: 1 }}
+                onClick={handleClick1}
+              >
+                {btn1Text}
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={btn2Icon}
+                size="small"
+                sx={{ mr: 1 }}
+                onClick={handleClick2}
+              >
+                {btn2Text}
+              </Button>
+              {btn3Text && (
+                <Button
+                  variant="contained"
+                  startIcon={btn3Icon}
+                  size="small"
+                  sx={{ mr: 1 }}
+                  onClick={handleClick3}
+                >
+                  {btn3Text}
+                </Button>
+              )}
+            </Box>
+          </Grid>
           <Grid item xs={12} md={12} lg={4}>
             <Box
               sx={{
@@ -111,21 +120,25 @@ const TitleWithActions = ({
                 flexDirection: "row",
               }}
             >
-              <Tooltip arrow title="Duplicate">
-                <IconButton onClick={handleDuplicate}>
-                  <ContentCopy sx={{ fontSize: "20px" }} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip arrow title="File It">
-                <IconButton onClick={handleFileIt}>
-                  <NoteAdd sx={{ fontSize: "20px" }} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip arrow title="Delete">
-                <IconButton onClick={handleDelete}>
-                  <Delete sx={{ fontSize: "20px" }} />
-                </IconButton>
-              </Tooltip>
+              {displayBtns === "all" && (
+                <>
+                  <Tooltip arrow title="Duplicate">
+                    <IconButton onClick={handleDuplicate}>
+                      <ContentCopy sx={{ fontSize: "20px" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow title="File It">
+                    <IconButton onClick={handleFileIt}>
+                      <NoteAdd sx={{ fontSize: "20px" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip arrow title="Delete">
+                    <IconButton onClick={handleDelete}>
+                      <Delete sx={{ fontSize: "20px" }} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
               <Tooltip arrow title="View History">
                 <IconButton onClick={handleViewHistory}>
                   <History sx={{ fontSize: "20px" }} />
@@ -133,20 +146,21 @@ const TitleWithActions = ({
               </Tooltip>
             </Box>
           </Grid>
-        ) : <></>
-      }
-      <Grid item xs={12} md={12} lg={12}>
-        {taskCount ?
+        </>
+      )}
+      {taskCount ?
           (
             <>
-            <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
-              {progressHeading}
-            </Typography>
-            <LinearProgressWithLabel value={progressPercentage}/>
+            <Grid item xs={12} md={12} lg={12}>
+              <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
+                {progressHeading}
+              </Typography>
+              <LinearProgressWithLabel value={progressPercentage} />
+            </Grid>
             </>
           ) : <></>
         }
-      </Grid>
+      
       <Grid item xs={12} md={12} lg={12}>
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
           Description :

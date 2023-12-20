@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import ProjectAccordion from "./ProjectAccordion";
 import { Add } from "@mui/icons-material";
@@ -25,7 +25,7 @@ const ProjectSection = ({kpi_id}) => {
       };
   
       fetchAllData();
-    }, []);
+    }, [kpi_id]);
 
   return (
     <PerfectScrollbar>
@@ -87,4 +87,4 @@ const ProjectSection = ({kpi_id}) => {
   );
 };
 
-export default ProjectSection;
+export default memo(ProjectSection);
