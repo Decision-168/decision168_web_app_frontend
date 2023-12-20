@@ -13,7 +13,57 @@ import { useNavigate } from "react-router-dom";
 import CustomSearchField from "../../common/CustomSearchField";
 import PortfolioListView from "./subComponents/views/PortfolioListView";
 import PortfolioCardView from "./subComponents/views/PortfolioCardView";
-
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
+const data = [
+  {
+    name: "Owais",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Jameel",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Alim",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Zaheer",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Owais",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Jameel",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Alim",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+  {
+    name: "Arshad",
+    company: "Decision168 Inc",
+    image:
+      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
+  },
+];
 // Define the AllPortfolios component
 const AllPortfolios = () => {
   // State to manage the view alignment (list or grid)
@@ -27,6 +77,10 @@ const AllPortfolios = () => {
   // Check if the alignment is set to "list"
   const align = alignment === "list";
   // Render the component
+
+    const [query, setQuery] = useState("");
+    const newResults = SearchWithFuse(["name", "company"], query, data);
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       {/* Container for the header and portfolio view switch */}
@@ -77,13 +131,17 @@ const AllPortfolios = () => {
         {/* Section for Search Field (only visible in grid view) */}
         {!align && (
           <Grid item xs={8} sm={3} md={3} lg={3}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
         {/* Section for rendering either List or Grid View based on alignment */}
         <Grid item xs={12}>
           {/* Conditional rendering based on the alignment */}
-          {align ? <PortfolioListView /> : <PortfolioCardView />}
+          {align ? (
+            <PortfolioListView />
+          ) : (
+            <PortfolioCardView newResults={newResults} />
+          )}
         </Grid>
       </Grid>
     </Box>

@@ -20,7 +20,7 @@ import FreeTrial from "./subComponents/FreeTrial";
 import { openModal } from "../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 export default function Pricing() {
-    const [validity, setValidity] = React.useState("monthly");
+  const [validity, setValidity] = useState("monthly");
   const styles = pricingStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -38,11 +38,11 @@ export default function Pricing() {
     }
   }, []);
 
-   const handleValidity = (event, newValue) => {
-     if (newValue !== null) {
-       setValidity(newValue);
-     }
-   };
+  const handleValidity = (event, newValue) => {
+    if (newValue !== null) {
+      setValidity(newValue);
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>

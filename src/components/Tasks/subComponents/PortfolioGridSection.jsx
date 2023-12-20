@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,memo } from "react";
 import { Box, Paper } from "@mui/material";
 import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
@@ -11,26 +11,28 @@ import { getPortfolioTasksSubtasksGridView } from "../../../api/modules/taskModu
 import { filterDataByStatus } from "../../../helpers/filterDataByStatus"
 import Loader from "../../common/Loader";
 
-const PortfolioGridSection = () => {
-
-  const [rows, setRows] = useState([]);
+const PortfolioGridSection = ({ setData, filterData }) => {
+  // const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = React.useState({});
   const user = useSelector(selectUserDetails);
   // const regId = user?.reg_id;
   // const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const regId = 1;
-  const portfolioId = 2
+  const portfolioId = 2;
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await getPortfolioTasksSubtasksGridView(portfolioId, regId);
-      setRows(response);
+      const response = await getPortfolioTasksSubtasksGridView(
+        portfolioId,
+        regId
+      );
+      setData(response);
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -38,13 +40,15 @@ const PortfolioGridSection = () => {
     fetchData();
   }, [portfolioId, regId]);
 
-
   useEffect(() => {
     // Update columns when rows change
-    const filteredDataTodo = filterDataByStatus(rows, "to_do");
-    const filteredDataInProgress = filterDataByStatus(rows, "in_progress");
-    const filteredDataInReview = filterDataByStatus(rows, "in_review");
-    const filteredDataDone = filterDataByStatus(rows, "done");
+    const filteredDataTodo = filterDataByStatus(filterData, "to_do");
+    const filteredDataInProgress = filterDataByStatus(
+      filterData,
+      "in_progress"
+    );
+    const filteredDataInReview = filterDataByStatus(filterData, "in_review");
+    const filteredDataDone = filterDataByStatus(filterData, "done");
 
     const updatedColumns = {
       [uuidv4()]: {
@@ -70,8 +74,7 @@ const PortfolioGridSection = () => {
     };
 
     setColumns(updatedColumns);
-  }, [rows]);
-
+  }, [filterData]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -112,9 +115,20 @@ const PortfolioGridSection = () => {
 
   return (
     <>
-      {
-        loading ? <Loader /> : <Box sx={{ mt: 2, display: "grid", gap: 2, gridTemplateColumns: "repeat(4, 1fr)" }}>
-          <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Box
+          sx={{
+            mt: 2,
+            display: "grid",
+            gap: 2,
+            gridTemplateColumns: "repeat(4, 1fr)",
+          }}
+        >
+          <DragDropContext
+            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+          >
             {Object.entries(columns).map(([columnId, column], index) => {
               return (
                 <Droppable droppableId={columnId} key={columnId}>
@@ -124,15 +138,24 @@ const PortfolioGridSection = () => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                          background: snapshot.isDraggingOver ? "#DEE1E6" : "#FFFFFF",
+                          background: snapshot.isDraggingOver
+                            ? "#DEE1E6"
+                            : "#FFFFFF",
                           padding: 14,
                           width: "100%",
                           minHeight: 500,
                           margin: "5px 0",
                           borderRadius: "0.5rem",
-                        }}>
+                        }}
+                      >
                         {/* Column Header */}
-                        <KanbanColumnHeader status={column.name} color={column.color} count={column.items.length > 0 ? column.items.length : 0} />
+                        <KanbanColumnHeader
+                          status={column.name}
+                          color={column.color}
+                          count={
+                            column.items.length > 0 ? column.items.length : 0
+                          }
+                        />
 
                         {/* Column Body */}
                         <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
@@ -140,7 +163,11 @@ const PortfolioGridSection = () => {
                             <Box sx={{ mr: 2 }}>
                               {column?.items?.map((item, index) => {
                                 return (
-                                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                                  <Draggable
+                                    key={item.id}
+                                    draggableId={item.id}
+                                    index={index}
+                                  >
                                     {(provided) => {
                                       return (
                                         <div
@@ -154,7 +181,8 @@ const PortfolioGridSection = () => {
                                             minHeight: "50px",
                                             color: "white",
                                             ...provided.draggableProps.style,
-                                          }}>
+                                          }}
+                                        >
                                           <KanbanCard cardData={item.content} />
                                         </div>
                                       );
@@ -174,9 +202,9 @@ const PortfolioGridSection = () => {
             })}
           </DragDropContext>
         </Box>
-      }
+      )}
     </>
   );
 };
 
-export default PortfolioGridSection;
+export default memo(PortfolioGridSection);

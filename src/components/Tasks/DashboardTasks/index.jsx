@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
 import Loader from "../../common/Loader";
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 
 const filterOption = [
   {
@@ -84,6 +85,12 @@ const DashboardTasks = () => {
     setValue(event.target.value);
   }, []);
 
+    const [query, setQuery] = useState("");
+    const newResults = SearchWithFuse(
+      ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
+      query,
+      rows
+    );
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -95,14 +102,16 @@ const DashboardTasks = () => {
               alignItems: "center",
               justifyContent: "space-between",
               flexDirection: "row",
-            }}>
+            }}
+          >
             <BasicBreadcrumbs currentPage="Tasks" />
             <ToggleButtonGroup
               color="primary"
               value={alignment}
               exclusive
               onChange={handleChange}
-              aria-label="Platform">
+              aria-label="Platform"
+            >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
               </ToggleButton>
@@ -115,7 +124,8 @@ const DashboardTasks = () => {
               onClick={() => dispatch(openModal("create-new-task"))}
               variant="contained"
               startIcon={<Add />}
-              size="small">
+              size="small"
+            >
               Create New
             </Button>
 
@@ -123,7 +133,8 @@ const DashboardTasks = () => {
               value="create-new-task"
               modalTitle="Create New Task"
               showModalButton={false}
-              modalSize="md">
+              modalSize="md"
+            >
               <CreateEditTaskForm editMode={false} />
             </ReduxDialog>
           </Box>
@@ -138,7 +149,8 @@ const DashboardTasks = () => {
               justifyContent: "end",
               flexDirection: "row",
               padding: "5px",
-            }}>
+            }}
+          >
             {/* <IconButton>
               <FilterAltIcon />
             </IconButton> */}
@@ -159,16 +171,25 @@ const DashboardTasks = () => {
               alignItems: "center",
               justifyContent: "end",
               flexDirection: "row",
-            }}>
-            <CustomSearchField />
+            }}
+          >
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Box>
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection rows={rows} setRows={setRows} fetchData={fetchData} loading={loading} /> : <GridSection rows={rows} loading={loading}/>}
+          {alignment === "list" ? (
+            <ListSection
+              rows={newResults}
+              setRows={setRows}
+              fetchData={fetchData}
+              loading={loading}
+            />
+          ) : (
+            <GridSection rows={newResults} loading={loading} />
+          )}
         </Grid>
       </Grid>
-
     </Box>
   );
 };

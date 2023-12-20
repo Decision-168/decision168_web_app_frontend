@@ -5,6 +5,12 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import {
+  acceptedData,
+  createData,
+  moreInfoRequest,
+  pendingRequest,
+} from "./portfolio-projects-list/project-data";
 import { useState, useCallback } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -19,36 +25,37 @@ import CreateProject from "./Dialogs/CreateProject";
 import CustomDialog from "../common/CustomDialog";
 import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
 import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
- const filterOption = [
-   {
-     value: "all",
-     label: "All",
-   },
-   {
-     value: "created",
-     label: "Created",
-   },
-   {
-     value: "accepted",
-     label: "Accepted",
-   },
-   {
-     value: "pending",
-     label: "Pending",
-   },
-   {
-     value: "more-info-requests",
-     label: "More Info Requests",
-   },
-   {
-     value: "regular-projects",
-     label: "Regular Projects",
-   },
-   {
-     value: "goal-projects",
-     label: "Goal Projects",
-   },
- ];
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
+const filterOption = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "created",
+    label: "Created",
+  },
+  {
+    value: "accepted",
+    label: "Accepted",
+  },
+  {
+    value: "pending",
+    label: "Pending",
+  },
+  {
+    value: "more-info-requests",
+    label: "More Info Requests",
+  },
+  {
+    value: "regular-projects",
+    label: "Regular Projects",
+  },
+  {
+    value: "goal-projects",
+    label: "Goal Projects",
+  },
+];
 const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
@@ -59,23 +66,54 @@ const ProjectIndex = () => {
     setValue(event.target.value);
   }, []);
   const [previewProject, setPreviewProject] = useState(false);
-      const [openPreviewPendingProj, setOpenPreviewPendingProj] =
-        useState(false);
- 
+  const [openPreviewPendingProj, setOpenPreviewPendingProj] = useState(false);
+
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
   const handleProjectPreviewOpen = () => {
     setPreviewProject(true);
   };
- const handlePendingProjectClose = () => {
-   setOpenPreviewPendingProj(false);
- };
- const handlePendingProjectOpen = () => {
-   setOpenPreviewPendingProj(true);
- };
+  const handlePendingProjectClose = () => {
+    setOpenPreviewPendingProj(false);
+  };
+  const handlePendingProjectOpen = () => {
+    setOpenPreviewPendingProj(true);
+  };
   const dispatch = useDispatch();
   const align = alignment === "list";
+  const [query, setQuery] = useState("");
+  const cardData = {
+    all: [
+      ...(createData || []),
+      ...(acceptedData || []),
+      ...(pendingRequest || []),
+      ...(moreInfoRequest || []),
+    ],
+    created: [...(createData || [])],
+    accepted: [...(acceptedData || [])],
+    "pending-requests": [...(pendingRequest || [])],
+    "more-info-requests": [...(moreInfoRequest || [])],
+    "regular-projects": [
+      ...(createData?.filter((i) => i.projectType === 0) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 0) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 0) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 0) || []),
+    ],
+    "goal-projects": [
+      ...(createData?.filter((i) => i.projectType === 1) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 1) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 1) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 1) || []),
+    ],
+  };
+  const cardsToRender = cardData[value] || [];
+  const newResults = SearchWithFuse(
+    ["project.name"],
+    query,
+    cardsToRender || []
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -140,7 +178,7 @@ const ProjectIndex = () => {
         </Grid>
         {!align && (
           <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
 
@@ -155,7 +193,7 @@ const ProjectIndex = () => {
             <ProjectGridView
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
-              value={value}
+              filterData={newResults}
             />
           )}
         </Grid>

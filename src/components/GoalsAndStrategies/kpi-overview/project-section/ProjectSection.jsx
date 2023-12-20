@@ -9,23 +9,27 @@ import CreateProject from "../../../project/Dialogs/CreateProject";
 import { openModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import { getStrategyDetail } from "../../../../api/modules/goalkpiModule";
-const ProjectSection = ({kpi_id}) => {
-    const dispatch = useDispatch();
+import { SearchWithFuse } from "../../../../helpers/SearchWithFuse";
+const ProjectSection = ({ kpi_id }) => {
+  const dispatch = useDispatch();
 
-    const [kpiProDetails, setkpiProDetails] = useState([]);
+  const [kpiProDetails, setkpiProDetails] = useState([]);
 
-    useEffect(() => {
-      const fetchAllData = async () => {
-        try {
-          const response = await getStrategyDetail(kpi_id);
-          setkpiProDetails(response.projectRes);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-  
-      fetchAllData();
-    }, [kpi_id]);
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const response = await getStrategyDetail(kpi_id);
+        setkpiProDetails(response.projectRes);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAllData();
+  }, [kpi_id]);
+
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["pname"], query, kpiProDetails);
 
   return (
     <PerfectScrollbar>
@@ -52,13 +56,13 @@ const ProjectSection = ({kpi_id}) => {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
           <Grid item xs={12} mt={2}>
-            {kpiProDetails?.map((item, index) => {
+            {newResults?.map((item, index) => {
               return (
                 <Fragment key={index}>
-                  <ProjectAccordion project={item}/>
+                  <ProjectAccordion project={item} />
                 </Fragment>
               );
             })}

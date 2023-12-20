@@ -13,6 +13,7 @@ import CreateEditTaskForm from "./createEditTask/CreateEditTaskForm";
 import CustomFilter from "../common/CustomFilter";
 import PortfolioListSection from "./subComponents/PortfolioListSection";
 import PortfolioGridSection from "./subComponents/PortfolioGridSection";
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
 
 const filterOption = [
   {
@@ -58,6 +59,13 @@ const PortfolioTasks = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
+   const [data, setData] = useState([])
+     const [query, setQuery] = useState("");
+     const newResults = SearchWithFuse(
+       ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
+       query,
+       data
+     );
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -70,8 +78,8 @@ const PortfolioTasks = () => {
               alignItems: "center",
               justifyContent: "space-between",
               flexDirection: "row",
-            }}>
-
+            }}
+          >
             <BasicBreadcrumbs currentPage="Tasks" />
 
             <ToggleButtonGroup
@@ -79,7 +87,8 @@ const PortfolioTasks = () => {
               value={alignment}
               exclusive
               onChange={handleChange}
-              aria-label="Platform">
+              aria-label="Platform"
+            >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
               </ToggleButton>
@@ -92,7 +101,8 @@ const PortfolioTasks = () => {
               onClick={() => dispatch(openModal("create-new-task"))}
               variant="contained"
               startIcon={<Add />}
-              size="small">
+              size="small"
+            >
               Create New
             </Button>
 
@@ -100,7 +110,8 @@ const PortfolioTasks = () => {
               value="create-new-task"
               modalTitle="Create New Task"
               showModalButton={false}
-              modalSize="md">
+              modalSize="md"
+            >
               <CreateEditTaskForm editMode={false} />
             </ReduxDialog>
           </Box>
@@ -115,7 +126,8 @@ const PortfolioTasks = () => {
               justifyContent: "end",
               flexDirection: "row",
               padding: "5px",
-            }}>
+            }}
+          >
             <CustomFilter
               value={value}
               handleChange={handleChangeRadio}
@@ -132,13 +144,18 @@ const PortfolioTasks = () => {
               alignItems: "center",
               justifyContent: "end",
               flexDirection: "row",
-            }}>
-            <CustomSearchField />
+            }}
+          >
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Box>
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <PortfolioListSection /> : <PortfolioGridSection />}
+          {alignment === "list" ? (
+            <PortfolioListSection setData={setData} filterData={newResults} />
+          ) : (
+            <PortfolioGridSection setData={setData} filterData={newResults} />
+          )}
         </Grid>
       </Grid>
     </Box>

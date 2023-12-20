@@ -1,22 +1,24 @@
 import React, { memo, useState } from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Clear, SearchRounded } from "@mui/icons-material";
-const CustomSearchField = ({}) => {
-  const [value, setValue] = useState("");
+const CustomSearchField = ({ query, setQuery }) => {
+  const handleSearch = ({ currentTarget = [] }) => {
+    setQuery(currentTarget.value);
+  };
 
   return (
     <TextField
       placeholder={"Search..."}
       fullWidth
       type={"text"}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={query}
+      onChange={handleSearch}
       InputProps={{
         endAdornment: (
           <>
             <InputAdornment position="end">
-              <IconButton onClick={() => setValue("")} edge="end">
-                {value ? <Clear /> : <SearchRounded />}
+              <IconButton onClick={() => setQuery("")} edge="end">
+                {query ? <Clear /> : <SearchRounded />}
               </IconButton>
             </InputAdornment>
           </>
