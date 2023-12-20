@@ -24,4 +24,4 @@ jobs:
         run: npm install && npm run build
 
       - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./build/ s3://decesion168-cicd –delete
+        run: aws s3 sync ./build/ s3://decesion168-s3-cicd –delete
