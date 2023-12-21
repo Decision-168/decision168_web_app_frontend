@@ -121,7 +121,11 @@ const ViewGoalsIndex = () => {
     "more-info-requests": [...(AllGoalData?.moreInfoRequest || [])],
   };
   const cardsToRender = cardData[value] || [];
-  const newResults = SearchWithFuse(["gname"], query, cardsToRender || []);
+  const newResults = SearchWithFuse(
+    ["gname", "gend_date"],
+    query,
+    cardsToRender || []
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>

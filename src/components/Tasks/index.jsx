@@ -59,12 +59,12 @@ const PortfolioTasksList = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
-   const [data, setData] = useState([])
+   const [rows, setRows] = useState([]);
      const [query, setQuery] = useState("");
      const newResults = SearchWithFuse(
        ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
        query,
-       data
+       rows
      );
 
   return (
@@ -152,9 +152,9 @@ const PortfolioTasksList = () => {
 
         <Grid item xs={12} lg={12}>
           {alignment === "list" ? (
-            <PortfolioListSection setData={setData} filterData={newResults} />
+            <PortfolioListSection setRows={setRows} rows={newResults} />
           ) : (
-            <PortfolioGridSection setData={setData} filterData={newResults} />
+            <PortfolioGridSection setRows={setRows} rows={newResults} />
           )}
         </Grid>
       </Grid>

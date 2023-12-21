@@ -22,6 +22,7 @@ import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../redux/action/userSlice";
 import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
  const filterOption = [
    {
      value: "all",
@@ -106,7 +107,13 @@ const ProjectIndex = () => {
  };
   const dispatch = useDispatch();
   const align = alignment === "list";
+
+
   const [query, setQuery] = useState("");
+   const createData = projectData.projectRegularList;
+   const acceptedData = projectData.projectAcceptedList;
+   const pendingRequest = projectData.projectPendingList;
+   const moreInfoRequest = projectData.projectReadMoreList;
   const cardData = {
     all: [
       ...(createData || []),
@@ -219,7 +226,7 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              filterData={newResults}
             />
           )}
         </Grid>
@@ -235,12 +242,17 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle={projectTitle}        
+        modalTitle={projectTitle}
         redirectPath={`/projects-overview/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup pid={projectId} projectTitleType={projectTitleType} refreshData={fetchProjectData} handleClose={handleProjectPreviewClose}/>
+        <ViewProjectPopup
+          pid={projectId}
+          projectTitleType={projectTitleType}
+          refreshData={fetchProjectData}
+          handleClose={handleProjectPreviewClose}
+        />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingProjectClose}
@@ -250,7 +262,11 @@ const ProjectIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingProjectPopup pid={projectId} refreshData={fetchProjectData} handleClose={handlePendingProjectClose}/>
+        <PendingProjectPopup
+          pid={projectId}
+          refreshData={fetchProjectData}
+          handleClose={handlePendingProjectClose}
+        />
       </CustomDialog>
     </Box>
   );

@@ -7,8 +7,7 @@ import { getPortfolioTasksSubtasksListView } from "../../../api/modules/taskModu
 import Loader from "../../common/Loader";
 import NoListTaskFound from "./NoListTaskFound";
 
-const PortfolioListSection = () => {
-  const [rows, setRows] = useState([]);
+const PortfolioListSection = ({ rows, setRows }) => {
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
   // const regId = user?.reg_id;
@@ -19,7 +18,10 @@ const PortfolioListSection = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await getPortfolioTasksSubtasksListView(portfolioId, regId);
+      const response = await getPortfolioTasksSubtasksListView(
+        portfolioId,
+        regId
+      );
       setRows(response);
     } catch (error) {
       console.error(error);
@@ -35,7 +37,11 @@ const PortfolioListSection = () => {
   return (
     <Grid container mt={2}>
       <Grid item xs={12}>
-        {loading ? <Loader /> : <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />}
+        {loading ? (
+          <Loader />
+        ) : (
+          <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
+        )}
       </Grid>
     </Grid>
   );

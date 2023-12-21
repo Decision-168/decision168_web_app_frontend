@@ -13,10 +13,6 @@ import GridSection from "../subComponents/GridSection";
 import ReduxDialog from "../../common/ReduxDialog";
 import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
 import CustomFilter from "../../common/CustomFilter";
-import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../../redux/action/userSlice";
-import { getAlltasksAndSubtasks } from "../../../api/modules/taskModule";
-import Loader from "../../common/Loader";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 
 const filterOption = [
@@ -54,7 +50,7 @@ const DashboardTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const dispatch = useDispatch();
-
+  const [rows, setRows] = useState([]);
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
@@ -156,7 +152,11 @@ const DashboardTasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection/> : <GridSection/>}
+          {alignment === "list" ? (
+            <ListSection setRows={setRows} rows={newResults} />
+          ) : (
+            <GridSection setRows={setRows} rows={newResults} />
+          )}
         </Grid>
       </Grid>
     </Box>
