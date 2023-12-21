@@ -1,15 +1,11 @@
-import React, { memo, useState } from "react";
-import { FormControl, FormControlLabel, Checkbox, Radio, RadioGroup, useTheme, Typography, Box, Tab, Tabs } from "@mui/material";
+import React, { memo } from "react";
+import { FormControlLabel, Checkbox,  useTheme, Typography, Box, Tab, Tabs } from "@mui/material";
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import { CustomTabPanel, a11yProps } from "../../GoalsAndStrategies/subComponents/style-functions";
 
-const DuplicateTabSection = ({}) => {
-  const [value, setValue] = useState(0);
-  const theme = useTheme();
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+const DuplicateTaskTabSection = ({tabvalue, setTabValue, isChecked, setIsChecked}) => {
 
+  const theme = useTheme();
   const info = [
     {
       text: "Import all Task Details with Assignee's",
@@ -24,12 +20,14 @@ const DuplicateTabSection = ({}) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ width: "100%" }}>
+        <Tabs value={tabvalue} onChange={ (event, newValue) => {
+    setTabValue(newValue);
+  }} aria-label="basic tabs example" sx={{ width: "100%" }}>
           <Tab label="Everything" sx={{ width: "50%" }} {...a11yProps(0)} />
           <Tab label="Custom" sx={{ width: "50%" }} {...a11yProps(1)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
+      <CustomTabPanel value={tabvalue} index={0}>
         {info.map((item, index) => {
           return (
             <Box
@@ -67,7 +65,7 @@ const DuplicateTabSection = ({}) => {
           &nbsp; &nbsp; * Any Files will not copy!
         </Typography>
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
+      <CustomTabPanel value={tabvalue} index={1}>
         <Typography sx={{ fontSize: 13, display: "inline" }}>
           Select items to import with
           <Typography sx={{ fontSize: 13, mx: 1, fontWeight: "700", display: "inline" }}>Task Details</Typography>
@@ -75,7 +73,7 @@ const DuplicateTabSection = ({}) => {
         </Typography>
 
         <FormControlLabel
-          control={<Checkbox value="taskAndSubtask" size="small" />}
+          control={<Checkbox checked={isChecked === "2"}  size="small" onChange={() => setIsChecked(isChecked === "1" ? "2" : "1")} />}
           label={
             <Typography
               component="p"
@@ -95,4 +93,4 @@ const DuplicateTabSection = ({}) => {
     </Box>
   );
 };
-export default memo(DuplicateTabSection);
+export default memo(DuplicateTaskTabSection);

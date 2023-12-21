@@ -2,7 +2,7 @@ import axios from "axios";
 import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const getPortfolios = async (email) => {
+export const getPortfolios = async ({email}) => {
   try {
     const response = await axios.get(`${apiUrl}${api.porfolios}${email}`);
     return response.data;

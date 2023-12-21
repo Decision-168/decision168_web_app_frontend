@@ -14,12 +14,13 @@ import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import GenderRadioGroup from "../../../common/GenderRadioGroup";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
-import SelectCountry from "../../../common/SelectCountry";
 import CircularLoader from "../../../common/CircularLoader";
 import { updatePortfolio } from "../../../../api/modules/porfolioModule";
 import { useSelector } from "react-redux";
 import { selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
+import SelectOption from "../../../common/SelectOption";
+import { getCountries } from "../../../../api/modules/dashboardModule";
 
 const countries = [
   { label: "India" },
@@ -96,8 +97,6 @@ export default function IndividualForm({ isEditPath, depts }) {
     });
   }, [details]);
 
-
-
   useEffect(() => {
     // Split the comma-separated strings into arrays
     const iconsArray = formValues.social_media_icon?.split(",");
@@ -145,6 +144,7 @@ export default function IndividualForm({ isEditPath, depts }) {
   };
 
   const handleSubmit = async (event) => {
+    alert(`${JSON.stringify(formValues)}`)
     event.preventDefault();
     setLoading(true);
 
@@ -153,8 +153,8 @@ export default function IndividualForm({ isEditPath, depts }) {
       error: !field.cus_department.trim()
         ? "Department cannot be empty"
         : !isDepartmentValid(field.cus_department)
-          ? "Invalid department"
-          : false,
+        ? "Invalid department"
+        : false,
     }));
 
     setInputFields(updatedFields);
@@ -322,7 +322,18 @@ export default function IndividualForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <SelectCountry required={false} formValues={formValues} setFormValues={setFormValues} />
+          <SelectOption
+            label="Country"
+            required={false}
+            field="country" // Unique identifier for this field
+            idKey="country_code" // Key to identify each option
+            getOptionLabel={(option) => option.country_name} // which want to display after select
+            dynamicOptions={true} // true or false based on your condition
+            loadOptions={getCountries} //pass only if dynamicOptions true
+            staticOptions={null} // Your static options array
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -336,7 +347,8 @@ export default function IndividualForm({ isEditPath, depts }) {
             variant="outlined"
             startIcon={<CameraAltIcon />}
             size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}>
+            sx={{ mt: 1, backgroundColor: "white" }}
+          >
             {isEditPath ? "Add / Change Profile Picture" : " Add Company Logo"}
           </Button>
         </Grid>
@@ -350,7 +362,8 @@ export default function IndividualForm({ isEditPath, depts }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Avatar src="" sx={{ width: "100px", height: "100px" }} />
             </Box>
           ) : null}
@@ -363,7 +376,8 @@ export default function IndividualForm({ isEditPath, depts }) {
             variant="outlined"
             startIcon={<CameraAltIcon />}
             size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}>
+            sx={{ mt: 1, backgroundColor: "white" }}
+          >
             {isEditPath ? "Add / Change Cover Picture" : " Add Cover Picture"}
           </Button>
         </Grid>
@@ -406,7 +420,8 @@ export default function IndividualForm({ isEditPath, depts }) {
                 variant="contained"
                 startIcon={<DashboardCustomizeIcon />}
                 size="medium"
-                sx={{ mt: 1 }}>
+                sx={{ mt: 1 }}
+              >
                 Add Custom Department
               </Button>
             </Grid>
@@ -443,7 +458,7 @@ export default function IndividualForm({ isEditPath, depts }) {
           <AddSocialMediaLinks fields={fields} setFields={setFields} />
         </Grid>
 
-        <Grid item xs={12} sm={12} px={2} py={2} textAlign="left">
+        <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
           <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
             {loading ? <CircularLoader /> : isEditPath ? "Save Changes" : "Create"}
           </Button>

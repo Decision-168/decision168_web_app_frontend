@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Button, Icon, IconButton, DialogContent, DialogActions } from "@mui/material";
+import { Box, Grid, Button,} from "@mui/material";
 import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -7,7 +7,6 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/action/modalSlice";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CustomSearchField from "../../common/CustomSearchField";
 import ListSection from "../subComponents/ListSection";
 import GridSection from "../subComponents/GridSection";
@@ -54,28 +53,7 @@ const filterOption = [
 const DashboardTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
-  const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const user = useSelector(selectUserDetails);
-  const regId = user?.reg_id;
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await getAlltasksAndSubtasks(regId);
-      setRows(response);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  }, [regId]);
-
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -178,16 +156,7 @@ const DashboardTasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? (
-            <ListSection
-              rows={newResults}
-              setRows={setRows}
-              fetchData={fetchData}
-              loading={loading}
-            />
-          ) : (
-            <GridSection rows={newResults} loading={loading} />
-          )}
+          {alignment === "list" ? <ListSection/> : <GridSection/>}
         </Grid>
       </Grid>
     </Box>

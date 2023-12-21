@@ -9,7 +9,6 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import CircularLoader from "../../../common/CircularLoader";
 import AddSocialMediaLinks from "../../../common/AddSocialMediaLinks";
 import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
-import SelectCountry from "../../../common/SelectCountry";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -25,6 +24,8 @@ import {
   getPortfolioDetailsAsync,
   selectPorfolioDetails,
 } from "../../../../redux/action/portfolioSlice";
+import SelectOption from "../../../common/SelectOption";
+import { getCountries } from "../../../../api/modules/dashboardModule";
 
 export default function CompanyForm({ isEditPath, depts }) {
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
@@ -51,7 +52,7 @@ export default function CompanyForm({ isEditPath, depts }) {
   }, [isEditPath]);
 
   const [formValues, setFormValues] = useState({
-    portfolio_createdby:user?.reg_id,
+    portfolio_createdby: user?.reg_id,
     portfolio_user: "company",
     portfolio_name: "",
     company_website: "",
@@ -75,7 +76,7 @@ export default function CompanyForm({ isEditPath, depts }) {
   useEffect(() => {
     setFormValues({
       ...formValues,
-      portfolio_createdby:user?.reg_id,
+      portfolio_createdby: user?.reg_id,
       portfolio_user: details?.portfolio_user,
       portfolio_name: details?.portfolio_name,
       company_website: details?.company_website,
@@ -97,21 +98,20 @@ export default function CompanyForm({ isEditPath, depts }) {
     });
   }, [details]);
 
-
   useEffect(() => {
     // Split the comma-separated strings into arrays
     const iconsArray = formValues.social_media_icon?.split(",");
     const linksArray = formValues.social_media?.split(",");
-  
+
     // Combine the arrays into an array of objects
-    const resultArray = iconsArray?.map((social_media_icon, index) => ({
-      social_media_icon,
-      social_media: linksArray[index],
-    })) || [];
-  
+    const resultArray =
+      iconsArray?.map((social_media_icon, index) => ({
+        social_media_icon,
+        social_media: linksArray[index],
+      })) || [];
+
     setFields(resultArray);
   }, [isEditPath, formValues.social_media_icon, formValues.social_media]);
-  
 
   const handleChange = (fieldName) => (event) => {
     setFormValues({
@@ -120,7 +120,7 @@ export default function CompanyForm({ isEditPath, depts }) {
     });
   };
 
-  setMembersIds([...getMembersIds, ...memberIdArray])
+  // setMembersIds([...getMembersIds, ...memberIdArray]);
 
   const handleDepartmentChange = (selectedOptions) => {
     const departmentsArray = selectedOptions?.map((item) => item.department);
@@ -153,6 +153,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    alert(`${JSON.stringify(formValues)}`);
     setLoading(true);
 
     const updatedFields = inputFields.map((field) => ({
@@ -182,7 +183,11 @@ export default function CompanyForm({ isEditPath, depts }) {
     try {
       const icons = fields?.map((item) => item.social_media_icon).join(",");
       const links = fields?.map((item) => item.social_media).join(",");
-      const data = { ...formValues, social_media_icon: icons, social_media: links };
+      const data = {
+        ...formValues,
+        social_media_icon: icons,
+        social_media: links,
+      };
       if (isEditPath) {
         const portfolioId = storedPortfolioId;
         const response = await updatePortfolio(portfolioId, data);
@@ -335,7 +340,18 @@ export default function CompanyForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <SelectCountry required={false} formValues={formValues} setFormValues={setFormValues} />
+          <SelectOption
+            label="Country"
+            required={false}
+            field="country" // Unique identifier for this field
+            idKey="country_code" // Key to identify each option
+            getOptionLabel={(option) => option.country_name} // which want to display after select
+            dynamicOptions={true} // true or false based on your condition
+            loadOptions={getCountries} //pass only if dynamicOptions true
+            staticOptions={null} // Your static options array
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
@@ -345,7 +361,8 @@ export default function CompanyForm({ isEditPath, depts }) {
             variant="outlined"
             startIcon={<CameraAltIcon />}
             size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}>
+            sx={{ mt: 1, backgroundColor: "white" }}
+          >
             {isEditPath ? "Add / Change Profile Picture" : " Add Company Logo"}
           </Button>
         </Grid>
@@ -359,7 +376,8 @@ export default function CompanyForm({ isEditPath, depts }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Avatar src="" sx={{ width: "100px", height: "100px" }} />
             </Box>
           ) : null}
@@ -372,7 +390,8 @@ export default function CompanyForm({ isEditPath, depts }) {
             variant="outlined"
             startIcon={<CameraAltIcon />}
             size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}>
+            sx={{ mt: 1, backgroundColor: "white" }}
+          >
             {isEditPath ? "Add / Change Cover Picture" : " Add Cover Picture"}
           </Button>
         </Grid>
@@ -380,7 +399,13 @@ export default function CompanyForm({ isEditPath, depts }) {
         <Grid item xs={12} sm={8} px={2} py={1} textAlign="center">
           {/* For the preview during edit */}
           {isEditPath ? (
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <img src={CoverImage} alt="" width="100%" height="250px" />
             </Box>
           ) : null}
@@ -410,7 +435,8 @@ export default function CompanyForm({ isEditPath, depts }) {
                 variant="contained"
                 startIcon={<DashboardCustomizeIcon />}
                 size="medium"
-                sx={{ mt: 1 }}>
+                sx={{ mt: 1 }}
+              >
                 Add Custom Department
               </Button>
             </Grid>

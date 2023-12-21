@@ -27,7 +27,10 @@ const SocialMedia = ({ links, icons }) => {
 
           return (
             <IconButton key={index} href={socialMediaMap[icon]} target="_blank">
-              {<IconComponent sx={{ color: "black" }} />}
+              <span>
+                {/* Wrap IconComponent in a span to make it a valid React element */}
+                {<IconComponent sx={{ color: "black" }} />}
+              </span>
             </IconButton>
           );
         })}

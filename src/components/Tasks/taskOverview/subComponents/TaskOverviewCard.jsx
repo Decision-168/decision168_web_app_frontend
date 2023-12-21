@@ -2,7 +2,7 @@ import { Grid, Paper } from "@mui/material";
 import React, { memo } from "react";
 import { Add, Edit } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
@@ -10,10 +10,15 @@ import OverviewCardHeader from "./TaskOverviewCardHeader";
 import OverviewCardBody from "./TaskOverviewCardBody";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
-import DuplicateDialog from "../../subComponents/DuplicateDialog";
+import { patchDeleteTask } from "../../../../api/modules/TrashModule";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { fileItTask } from "../../../../api/modules/taskModule";
+import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
 const TaskOverviewCard = ({ styles, task }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAddTasksDialog = () => {
     dispatch(openModal("add-task"));
@@ -28,27 +33,58 @@ const TaskOverviewCard = ({ styles, task }) => {
   };
 
   const handleDuplicateDialog = () => {
-    dispatch(openModal("duplicate-task"));
+    dispatch(openModal("duplicate-overview-task"));
   };
 
+  //File It
   const handleFileItDialog = () => {
     dispatch(
       openCnfModal({
-        modalName: "fileIt",
+        modalName: "fileItTaskInOverview",
         title: "Are you sure?",
         description: `You want to file the Task`,
       })
     );
   };
 
+  const handleFileItTaskYes = async () => {
+    const task_id = task?.tid;
+    // const user_id = user?.reg_id;
+    const user_id = 1; // for testing
+    try {
+      const response = await fileItTask(task_id, user_id);
+      dispatch(closeCnfModal({ modalName: "fileItTaskInOverview" }));
+      navigate("/all-tasks");
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in filing the task:", error);
+    }
+  };
+
   const handleDeleteDialog = () => {
     dispatch(
       openCnfModal({
-        modalName: "deleteTask",
+        modalName: "deleteTaskInOverview",
         title: "Are you sure?",
         description: `You want to Delete the Task`,
       })
     );
+  };
+
+  const handleDeleteTaskYes = async () => {
+    const task_id = task?.tid;
+    // const user_id = user?.reg_id;
+    const user_id = 1; // for testing
+    try {
+      const response = await patchDeleteTask(task_id, user_id);
+      dispatch(closeCnfModal({ modalName: "deleteTaskInOverview" }));
+      navigate("/all-tasks");
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in Deleteing the Overview task :", error);
+    }
   };
 
   return (
@@ -67,20 +103,17 @@ const TaskOverviewCard = ({ styles, task }) => {
       </ReduxDialog>
 
       <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm />
+        <CreateSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      {/* <ReduxDialog value="edit-sub-task" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md">
-        <EditSubTasksForm />
-      </ReduxDialog> */}
 
-      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateDialog />
+      <ReduxDialog value="duplicate-overview-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+        <DuplicateTaskDialog  taskData={task} closeModalName={"duplicate-overview-task"}/>
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileIt"} />
+      <ConfirmationDialog value={"fileItTaskInOverview"} handleYes={handleFileItTaskYes} />
 
-      <ConfirmationDialog value={"deleteTask"} />
+      <ConfirmationDialog value={"deleteTaskInOverview"} handleYes={handleDeleteTaskYes} />
     </Paper>
   );
 };
