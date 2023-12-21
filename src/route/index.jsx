@@ -257,7 +257,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/projects-overview"
+            path="/projects-overview/:pid"
             element={
               <DashboardLayout>
                 <ProjectOverview />
@@ -265,7 +265,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/projects-overview-request"
+            path="/projects-overview-request/:pid"
             element={
               <DashboardLayout>
                 <ProjectOverviewRequest />

@@ -1,36 +1,25 @@
 import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TaskProgressList from "./TaskProgressList";
+import { getTaskAssignees } from "../../../../api/modules/ProjectModule";
 
-const tasks = [
-  {
-    name: "Alim Mohammad",
-    profileImage: null,
-    status: "Done: 3 Total: 5",
-    progress: 60,
-  },
-  {
-    name: "Uzma Karjikar",
-    profileImage: null,
-    status: "Done: 3 Total: 6",
-    progress: 50,
-  },
-];
-const subTasks = [
-  {
-    name: "Jameel Syed",
-    profileImage: null,
-    status: "Done: 2 Total: 10",
-    progress: 40,
-  },
-  {
-    name: "Afrin Syed",
-    profileImage: null,
-    status: "Done: 4 Total: 5",
-    progress: 80,
-  },
-];
-const TaskContainer = () => {
+const TaskContainer = ({pid}) => {
+  const [taskData, setTaskData] = useState([]);
+  const [subtaskData, setSubtaskData] = useState([]);
+  const fetchTaskData = async () => {
+    try {
+      const response = await getTaskAssignees(pid);
+      setTaskData(response.projectTaskAssigneeDetail);
+      setSubtaskData(response.projectSubtaskAssigneeDetail);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchTaskData();
+  }, [pid]);
+
   return (
     <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
       <Grid container>
@@ -44,7 +33,7 @@ const TaskContainer = () => {
             Tasks:
           </Typography>
         </Grid>
-        {tasks.map((item, index) => {
+        {taskData.map((item, index) => {
           return (
             <Grid item xs={12} lg={12} my={1} key={index}>
               <TaskProgressList item={item} />
@@ -58,7 +47,7 @@ const TaskContainer = () => {
           </Typography>
         </Grid>
 
-        {subTasks.map((item, index) => {
+        {subtaskData.map((item, index) => {
           return (
             <Grid item xs={12} lg={12} my={1} key={index}>
               <TaskProgressList item={item} />

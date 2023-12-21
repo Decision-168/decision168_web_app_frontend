@@ -5,13 +5,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import {
-  acceptedData,
-  createData,
-  moreInfoRequest,
-  pendingRequest,
-} from "./portfolio-projects-list/project-data";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
@@ -25,38 +19,62 @@ import CreateProject from "./Dialogs/CreateProject";
 import CustomDialog from "../common/CustomDialog";
 import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
 import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
-import { SearchWithFuse } from "../../helpers/SearchWithFuse";
-const filterOption = [
-  {
-    value: "all",
-    label: "All",
-  },
-  {
-    value: "created",
-    label: "Created",
-  },
-  {
-    value: "accepted",
-    label: "Accepted",
-  },
-  {
-    value: "pending",
-    label: "Pending",
-  },
-  {
-    value: "more-info-requests",
-    label: "More Info Requests",
-  },
-  {
-    value: "regular-projects",
-    label: "Regular Projects",
-  },
-  {
-    value: "goal-projects",
-    label: "Goal Projects",
-  },
-];
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../redux/action/userSlice";
+import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
+ const filterOption = [
+   {
+     value: "all",
+     label: "All",
+   },
+   {
+     value: "created",
+     label: "Created",
+   },
+   {
+     value: "accepted",
+     label: "Accepted",
+   },
+   {
+     value: "pending",
+     label: "Pending",
+   },
+   {
+     value: "more-info-requests",
+     label: "More Info Requests",
+   },
+   {
+     value: "regular-projects",
+     label: "Regular Projects",
+   },
+   {
+     value: "goal-projects",
+     label: "Goal Projects",
+   },
+ ];
 const ProjectIndex = () => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+
+  const [projectData, setProjectData] = useState([]);
+  const [projectId, setProjectId] = useState(0);
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectTitleType, setProjectTitleType] = useState(null);
+
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectList(userID, storedPortfolioId);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, [userID]);
+
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -71,15 +89,21 @@ const ProjectIndex = () => {
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
-  const handleProjectPreviewOpen = () => {
+  const handleProjectPreviewOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
+    setProjectId(pid);
+    setProjectTitle(pname);
     setPreviewProject(true);
   };
-  const handlePendingProjectClose = () => {
-    setOpenPreviewPendingProj(false);
-  };
-  const handlePendingProjectOpen = () => {
+ const handlePendingProjectClose = () => {
+   setOpenPreviewPendingProj(false);
+ };
+ const handlePendingProjectOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
+    setProjectId(pid);
+    setProjectTitle(pname);
     setOpenPreviewPendingProj(true);
-  };
+ };
   const dispatch = useDispatch();
   const align = alignment === "list";
   const [query, setQuery] = useState("");
@@ -188,12 +212,14 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
+              projectData={projectData}
             />
           ) : (
             <ProjectGridView
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
-              filterData={newResults}
+              value={value}
+              projectData={projectData}
             />
           )}
         </Grid>
@@ -209,22 +235,22 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle="Dashboard Module"
-        redirectPath={"/projects-overview"}
+        modalTitle={projectTitle}        
+        redirectPath={`/projects-overview/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup />
+        <ViewProjectPopup pid={projectId} projectTitleType={projectTitleType} refreshData={fetchProjectData} handleClose={handleProjectPreviewClose}/>
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingProjectClose}
         open={openPreviewPendingProj}
-        modalTitle="Test Project for developer"
-        redirectPath={"/projects-overview-request"}
+        modalTitle={projectTitle}
+        redirectPath={`/projects-overview-request/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <PendingProjectPopup />
+        <PendingProjectPopup pid={projectId} refreshData={fetchProjectData} handleClose={handlePendingProjectClose}/>
       </CustomDialog>
     </Box>
   );

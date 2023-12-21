@@ -7,10 +7,8 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import {
-  getViewHistoryDateWiseGoal,
-  getViewHistoryDateWiseStrategy,
-} from "../../../../api/modules/goalkpiModule";
+import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
 
 const RecentList = ({ data, id, type }) => {
   const inputDate = data.DateOnly;
@@ -37,6 +35,8 @@ const RecentList = ({ data, id, type }) => {
           response = await getViewHistoryDateWiseGoal(id, dateParam);
         } else if (type === "kpi") {
           response = await getViewHistoryDateWiseStrategy(id, dateParam);
+        } else if (type === "project") {
+          response = await getViewHistoryDateWiseProject(id, dateParam);
         }
         setrecentHisDetails(response);
       } catch (error) {

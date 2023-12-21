@@ -5,6 +5,7 @@ import {
   getViewHistoryDateGoal,
   getViewHistoryDateStrategy,
 } from "../../../../api/modules/goalkpiModule";
+import { getViewHistoryDateProject } from "../../../../api/modules/ProjectModule";
 
 const RecentHistory = ({ id, type }) => {
   const [recentHis, setrecentHis] = useState([]);
@@ -27,6 +28,35 @@ const RecentHistory = ({ id, type }) => {
       fetchRecentHistoryData();
     }, [id, type]);  
 
+  if (type === "kpi") {
+    useEffect(() => {
+      const fetchRecentHistoryData = async () => {
+        try {
+          const response = await getViewHistoryDateStrategy(id);
+          setrecentHis(response.history_dates);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchRecentHistoryData();
+    }, []);
+  }
+
+  if (type === "project") {
+    useEffect(() => {
+      const fetchRecentHistoryData = async () => {
+        try {
+          const response = await getViewHistoryDateProject(id);
+          setrecentHis(response.history_dates);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchRecentHistoryData();
+    }, []);
+  }
   const recentData = recentHis.slice(0, 5);
 
   return (

@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   Add,
   CalendarMonth,
@@ -10,7 +10,7 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,10 +22,84 @@ import TitleWithActions from "./TitleWithActions";
 import { description2 } from "./style-functions";
 import CreateProject from "../../project/Dialogs/CreateProject";
 import CreateEditTaskForm from "../../Tasks/createEditTask/CreateEditTaskForm";
-const ViewProjectPopup = ({}) => {
+import { fileItProject, getProjectDetail, getViewHistoryDateProject } from "../../../api/modules/ProjectModule";
+import { getUserData } from "../../../api/modules/FileCabinetModule";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { patchDeleteProject } from "../../../api/modules/TrashModule";
+const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [projectData, setProjectData] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(null);
+
+  useEffect(() => {
+    const pathName = window.location.pathname;
+    const pathSegments = pathName.split('/');
+    const indexSecondLast = pathSegments.length - 2;
+    const secondLastParameter = indexSecondLast >= 0 ? pathSegments[indexSecondLast] : '';
+    setCurrentPage(secondLastParameter);
+  }, []);
+
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectDetail(pid);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    fetchProjectData();
+  }, [pid]);
+  const projectDetail = projectData?.project;
+  const projectName = projectDetail?.pname;
+  const projectDescription = projectDetail?.pdes;
+  const AllTaskCount = projectData?.allTaskCount;
+  const DoneTaskCount = projectData?.doneTaskCount;
+  const links = projectDetail?.plink;
+  const link_comments = projectDetail?.plink_comment;
+  const projectStartDate = new Date(projectDetail?.pcreated_date);
+  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
+  const projectType = projectDetail?.ptype;
+
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(projectDetail?.pcreated_by);
+      setUserData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [projectData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+  const [history, setHistory] = useState([]);
+  const fetchAllHistoryData = async () => {
+    try {
+      const response = await getViewHistoryDateProject(pid);
+      setHistory(response.history_dates);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllHistoryData();
+  }, [pid]);
+
   const handleFileIt = () => {
     dispatch(
       openCnfModal({
@@ -45,6 +119,46 @@ const ViewProjectPopup = ({}) => {
     );
   };
 
+  const handleFileItYes = async () => {
+    try {
+      const response = await fileItProject(pid, userID);  
+      dispatch(closeCnfModal({ modalName: 'fileItProject' }));
+      refreshData()
+      toast.success(`${response.message}`);
+
+      if(currentPage == 'projects-overview'){
+        navigate(-1);
+      }else{
+        handleClose()
+      }
+
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'fileItProject' }));
+      console.log(error)
+      toast.error(`${error.response?.data?.error}`);
+    }
+  };
+
+  const handleDeleteYes = async () => {
+    try {
+      const response = await patchDeleteProject(pid, userID);
+      dispatch(closeCnfModal({ modalName: 'deleteProject' }));
+      refreshData()
+      toast.success(`${response.message}`);
+
+      if(currentPage == 'projects-overview'){
+        navigate(-1);
+      }else{
+        handleClose()
+      }
+
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteProject' }));
+      console.log(error)
+      toast.error(`${error.response?.data?.error}`);
+    }
+  };
+
   const handleDuplicate = () => {
     dispatch(openModal("duplicate-project"));
   };
@@ -61,6 +175,32 @@ const ViewProjectPopup = ({}) => {
   const handleViewAllTask = () => {
     navigate("/project-tasks-list");
   };
+
+  //Check Button Visibility
+  const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayAccordionActions = async () => {
+      try {
+        if (projectDetail.pcreated_by == userID) {
+          setAccdisplayBtns("all");
+        } else if (
+          projectDetail.get_portfolio_createdby_id == userID ||
+          projectDetail.pmanager == userID
+        ) {
+          setAccdisplayBtns("some");
+        } else {
+          setAccdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setAccdisplayBtns("no");
+      }
+    };
+
+    DisplayAccordionActions();
+  }, [projectDetail, userID]);
+
   const CommonLinks = ({ link, linkName }) => {
     return (
       <>
@@ -110,7 +250,7 @@ const ViewProjectPopup = ({}) => {
     >
       <Grid container spacing={2}>
         <TitleWithActions
-          title={"Project: Dashboard Module"}
+          title={`Project: ${projectName}`}
           handleClick1={handleEditProject}
           handleClick2={handleAddTask}
           handleClick3={handleViewAllTask}
@@ -124,8 +264,11 @@ const ViewProjectPopup = ({}) => {
           btn1Icon={<Edit />}
           btn2Icon={<Add />}
           btn3Icon={<Visibility />}
-          description={description2}
-          progressHeading={"Status :- Done: 4 Total: 11"}
+          description={projectDescription}
+          taskCount={AllTaskCount}
+          progressHeading={`Status :- Done: ${DoneTaskCount} Total: ${AllTaskCount}`}
+          progressPercentage={projectData?.taskProgress}
+          displayBtns={AccdisplayBtns}
         />
         <Grid item xs={12} md={12} lg={12}>
           <Typography sx={{ fontSize: 13, textAlign: "left" }}>
@@ -134,14 +277,13 @@ const ViewProjectPopup = ({}) => {
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            <CommonLinks
-              link={"https://dev.decision168.com/register"}
-              linkName={"registration link"}
-            />
-            <CommonLinks
-              link={"https://dev.decision168.com/login"}
-              linkName={"login link"}
-            />
+            {links && links.split(',').map((link, index) => (
+              <CommonLinks
+              key={index}
+              link={link}
+              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
+            /> 
+            ))}
           </Grid>
         </Grid>
 
@@ -149,14 +291,14 @@ const ViewProjectPopup = ({}) => {
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created Date"}
-            info={"6 Nov, 2023"}
+            info={formattedProjectStartDate}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
-            info={"Uzma Karjikar"}
+            info={userName}
           />
         </Grid>
         <Grid item xs={3} md={3} lg={3}>
@@ -165,19 +307,23 @@ const ViewProjectPopup = ({}) => {
               <FolderOpenOutlined sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Type"}
-            info={"Goals & Strategies"}
+            info={
+              projectType === 'content' ? 'Content' :
+              projectType === 'goal_strategy' ? 'Goals & Strategies' :
+              'Project'
+            }
           />
         </Grid>
       </Grid>
-      <ConfirmationDialog value={"fileItProject"} />
-      <ConfirmationDialog value={"deleteProject"} />
+      <ConfirmationDialog value={"fileItProject"} handleYes={handleFileItYes} />
+      <ConfirmationDialog value={"deleteProject"} handleYes={handleDeleteYes}/>
       <ReduxDialog
         value="duplicate-project"
         modalTitle="Copy Project"
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateProject />
+        <DuplicateProject projectData={projectData}/>
       </ReduxDialog>
 
       <ReduxDialog
@@ -186,7 +332,12 @@ const ViewProjectPopup = ({}) => {
         showModalButton={false}
         modalSize="md"
       >
-        <OverallHistory />
+        <OverallHistory 
+        allHist={history}
+        name={projectName}
+        type={"project"}
+        id={pid}
+        />
       </ReduxDialog>
       <ReduxDialog
         value="edit-project"

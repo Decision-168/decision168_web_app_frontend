@@ -3,6 +3,9 @@ import React, { Fragment, useEffect, useState } from "react";
 import HistoryList from "./HistoryList";
 
 const OverallHistory = ({ allHist, name, type, id }) => {
+  console.log(allHist)
+  console.log(name)
+  console.log(type)
   return (
     <DialogContent dividers>
       <Box

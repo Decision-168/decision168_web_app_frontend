@@ -29,9 +29,10 @@ const TitleWithActions = ({
   btn2Icon,
   btn3Icon,
   description,
+  taskCount,
   progressHeading,
   progressPercentage,
-  displayBtns,
+  displayBtns
 }) => {
   //console.log("displayBtns", displayBtns);
 
@@ -147,12 +148,19 @@ const TitleWithActions = ({
           </Grid>
         </>
       )}
-      <Grid item xs={12} md={12} lg={12}>
-        <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
-          {progressHeading}
-        </Typography>
-        <LinearProgressWithLabel value={progressPercentage} />
-      </Grid>
+      {taskCount ?
+          (
+            <>
+            <Grid item xs={12} md={12} lg={12}>
+              <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
+                {progressHeading}
+              </Typography>
+              <LinearProgressWithLabel value={progressPercentage} />
+            </Grid>
+            </>
+          ) : <></>
+        }
+      
       <Grid item xs={12} md={12} lg={12}>
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
           Description :
