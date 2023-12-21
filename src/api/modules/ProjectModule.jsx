@@ -197,3 +197,121 @@ export const insertFiles = async (formData) => {
       throw error;
     }
 };
+
+export const AddProjectManager = async (pid, pmember_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.AssignProjectManager}${pid}/${pmember_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const RemoveProjectMember = async (pmid) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.DeleteProjectMember}${pmid}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const RemoveInvitedProjectMember = async (formdata) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.DeleteInvitedProjectMember}`,
+      formdata
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const InsertSuggestedProjectMember = async (user_id, pid, suggest_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.AddSuggestedProjectMember}${user_id}/${pid}/${suggest_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const InsertSuggestedInvitedProjectMember = async (user_id, pid, suggest_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.AddSuggestedInvitedProjectMember}${user_id}/${pid}/${suggest_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const DirectlyRemoveProjectManager = async (pid, pmember_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.DirectRemoveProjectManager}${pid}/${pmember_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAccepted_PortTM_ProjectList = async (portfolio_id, pid) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.Accepted_PortTM_ProjectList}${portfolio_id}/${pid}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAccepted_GoalTM_ProjectList = async (gid, pid) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.Accepted_GoalTM_ProjectList}${gid}/${pid}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const AddProjectMember = async (formData) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.InsertProjectMember}`, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const AddProjectSuggestTMember = async (formData) => {
+  try {
+    const response = await axios.post(
+      `${apiUrl}${api.InsertProjectSuggestTMember}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const UpdateProjectOpenWorkNewAssignee = async (formdata) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.ProjectOpenWorkNewAssignee}`,
+      formdata
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

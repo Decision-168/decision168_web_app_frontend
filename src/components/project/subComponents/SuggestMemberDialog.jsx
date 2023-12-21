@@ -18,12 +18,12 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import { AddProjectMember, getAccepted_GoalTM_ProjectList, getAccepted_PortTM_ProjectList } from "../../../api/modules/ProjectModule";
+import { AddProjectSuggestTMember, getAccepted_GoalTM_ProjectList, getAccepted_PortTM_ProjectList } from "../../../api/modules/ProjectModule";
 
-const AddMemberDialog = ({ id, gid, type, refreshData }) => {
+const SuggestMemberDialog = ({ id, gid, type, refreshData }) => {
   //get user id
   const user = useSelector(selectUserDetails);
-  const userID = user?.reg_id;
+  const user_id = user?.reg_id;
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const {
@@ -39,34 +39,34 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     pid: id,
-    pcreated_by: userID, 
+    user_id: user_id, 
     team_member: [],
     imemail: [],
   });
 
   if (type === "project") {
     useEffect(() => {
-      const fetchAllHistoryData = async () => {
-        if(gid != 0){
-          try {
-            const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id);
-            if (response) {
-              setmemberData(response);
+        const fetchAllHistoryData = async () => {
+            if(gid != 0){
+              try {
+                const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id);
+                if (response) {
+                  setmemberData(response);
+                }
+              } catch (error) {
+                console.error(error);
+              }
+            }else{
+              try {
+                const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id);
+                if (response) {
+                  setmemberData(response);
+                }
+              } catch (error) {
+                console.error(error);
+              }
             }
-          } catch (error) {
-            console.error(error);
-          }
-        }else{
-          try {
-            const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id);
-            if (response) {
-              setmemberData(response);
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      };
+        };
 
       fetchAllHistoryData();
     }, [storedPorfolioId, id]);
@@ -103,10 +103,10 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
       const data = { ...formValues, imemail: resultArray };
       setLoading(true);
       try {
-        const response = await AddProjectMember(data);
+        const response = await AddProjectSuggestTMember(data);
         refreshData();
         toast.success(`${response.message}`);
-        dispatch(closeModal("add-team-members"));
+        dispatch(closeModal("suggest-team-members"));
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
@@ -211,7 +211,7 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
             Close
           </Button>
           <Button type="submit" variant="contained" size="small">
-            Add
+            Suggest
           </Button>
         </DialogActions>
       </Box>
@@ -219,4 +219,4 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
   );
 };
 
-export default memo(AddMemberDialog);
+export default memo(SuggestMemberDialog);

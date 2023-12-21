@@ -532,5 +532,38 @@ const api = {
   // Insert Project Files
   insertProjectFiles: "project/insert-project-files/",
 
+  //Assign Project Manager
+  AssignProjectManager: "project/assign-project-manager/",
+
+  //Delete Project Member
+  DeleteProjectMember: "project/remove-project-member/",
+
+  //Delete Project Invited Member
+  DeleteInvitedProjectMember: "project/remove-project-invited-member",
+
+  //Add Suggested Project Member
+  AddSuggestedProjectMember: "project/add-suggested-project-member/",
+
+  //Add Suggested Project Invited Member
+  AddSuggestedInvitedProjectMember: "project/add-invited-suggested-project-member/",
+
+  //Direct Remove Project Manager
+  DirectRemoveProjectManager: "project/direct-remove-project-manager/",
+
+  //Accepted Portfolio team member project list
+  Accepted_PortTM_ProjectList: "project/get-all-accepted-portfolio-team-member-project-list/",
+
+  //Accepted Goal team member project list
+  Accepted_GoalTM_ProjectList: "project/get-all-accepted-goal-team-member-project-list/",
+
+  //Insert Project Member
+  InsertProjectMember: "project/insert-project-member",
+
+  //Insert Project Suggested Team Member
+  InsertProjectSuggestTMember: "project/insert-project-suggest-team-member",
+
+  //project_open_work_new_assignee
+  ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
+
 };
 export default api;

@@ -175,6 +175,32 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   const handleViewAllTask = () => {
     navigate("/project-tasks-list");
   };
+
+  //Check Button Visibility
+  const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayAccordionActions = async () => {
+      try {
+        if (projectDetail.pcreated_by == userID) {
+          setAccdisplayBtns("all");
+        } else if (
+          projectDetail.get_portfolio_createdby_id == userID ||
+          projectDetail.pmanager == userID
+        ) {
+          setAccdisplayBtns("some");
+        } else {
+          setAccdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setAccdisplayBtns("no");
+      }
+    };
+
+    DisplayAccordionActions();
+  }, [projectDetail, userID]);
+
   const CommonLinks = ({ link, linkName }) => {
     return (
       <>
@@ -242,7 +268,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
           taskCount={AllTaskCount}
           progressHeading={`Status :- Done: ${DoneTaskCount} Total: ${AllTaskCount}`}
           progressPercentage={projectData?.taskProgress}
-          projectTitleType={projectTitleType}
+          displayBtns={AccdisplayBtns}
         />
         <Grid item xs={12} md={12} lg={12}>
           <Typography sx={{ fontSize: 13, textAlign: "left" }}>

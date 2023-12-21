@@ -52,6 +52,31 @@ const ProjectOverview = () => {
 
   const userName = `${userData?.first_name} ${userData?.last_name}`;
 
+  //Check Button Visibility
+  const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
+
+  useEffect(() => {
+    const DisplayAccordionActions = async () => {
+      try {
+        if (pDetail.pcreated_by == userID) {
+          setAccdisplayBtns("all");
+        } else if (
+          pDetail.get_portfolio_createdby_id == userID ||
+          pDetail.pmanager == userID
+        ) {
+          setAccdisplayBtns("some");
+        } else {
+          setAccdisplayBtns("no");
+        }
+      } catch (error) {
+        console.error(error);
+        setAccdisplayBtns("no");
+      }
+    };
+
+    DisplayAccordionActions();
+  }, [pDetail, userID]);
+
   const theme = useTheme();
   const navigate = useNavigate();
   return (
@@ -140,7 +165,7 @@ const ProjectOverview = () => {
         <Grid item xs={12} lg={4}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-              <MembersAccordion pid={pid} />
+              <MembersAccordion pid={pid} displayBtns={AccdisplayBtns}/>
             </Grid>
             <Grid item xs={12} lg={12}>
               <CommentSection projectId={pid} taskId={"0"} subtaskId={"0"}/>
