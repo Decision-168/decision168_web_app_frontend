@@ -12,6 +12,28 @@ export const getProjectList = async (user_id, portfolio_id) => {
     }
 };
 
+export const getPortfolioProjectList = async (user_id, portfolio_id) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.getPortfolioProjectList}${user_id}/${portfolio_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getDashboardProjectList = async (user_id, portfolio_id) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.getDashboardProjectList}${user_id}/${portfolio_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getProjectDetail = async (project_id) => {
     try {
       const response = await axios.get(`${apiUrl}${api.getProjectById}${project_id}`

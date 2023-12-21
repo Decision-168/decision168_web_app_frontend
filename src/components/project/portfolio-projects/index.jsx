@@ -7,7 +7,12 @@ import {
   useTheme,
 } from "@mui/material";
 import { useState, useCallback, useEffect } from "react";
-import { FormatListBulleted, GridView, Add, ArrowBack } from "@mui/icons-material";
+import {
+  FormatListBulleted,
+  GridView,
+  Add,
+  ArrowBack,
+} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import CustomFilter from "../../common/CustomFilter";
@@ -22,10 +27,7 @@ import ViewProjectPopup from "../../GoalsAndStrategies/subComponents/ViewProject
 import PendingProjectPopup from ".././portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import {
-  getProjectDetail,
-  getProjectList,
-} from "../../../api/modules/ProjectModule";
+import { getPortfolioProjectList } from "../../../api/modules/ProjectModule";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 import { useNavigate, useParams } from "react-router";
 const filterOption = [
@@ -46,7 +48,7 @@ const PortfolioProjects = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
   const { portfolioId } = useParams();
-  const theme =useTheme()
+  const theme = useTheme();
   const navigate = useNavigate();
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
@@ -55,7 +57,7 @@ const PortfolioProjects = () => {
 
   const fetchProjectData = async () => {
     try {
-      const response = await getProjectList(userID, portfolioId);
+      const response = await getPortfolioProjectList(userID, portfolioId);
       setProjectData(response);
     } catch (error) {
       console.error(error);
@@ -69,9 +71,9 @@ const PortfolioProjects = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -102,31 +104,13 @@ const PortfolioProjects = () => {
 
   const [query, setQuery] = useState("");
   const createData = projectData.projectRegularList;
-  const acceptedData = projectData.projectAcceptedList;
-  const pendingRequest = projectData.projectPendingList;
-  const moreInfoRequest = projectData.projectReadMoreList;
   const cardData = {
-    all: [
-      ...(createData || []),
-      ...(acceptedData || []),
-      ...(pendingRequest || []),
-      ...(moreInfoRequest || []),
-    ],
-    created: [...(createData || [])],
-    accepted: [...(acceptedData || [])],
-    "pending-requests": [...(pendingRequest || [])],
-    "more-info-requests": [...(moreInfoRequest || [])],
+    all: [...(createData || [])],
     "regular-projects": [
       ...(createData?.filter((i) => i.projectType === 0) || []),
-      ...(acceptedData?.filter((i) => i.projectType === 0) || []),
-      ...(pendingRequest?.filter((i) => i.projectType === 0) || []),
-      ...(moreInfoRequest?.filter((i) => i.projectType === 0) || []),
     ],
     "goal-projects": [
       ...(createData?.filter((i) => i.projectType === 1) || []),
-      ...(acceptedData?.filter((i) => i.projectType === 1) || []),
-      ...(pendingRequest?.filter((i) => i.projectType === 1) || []),
-      ...(moreInfoRequest?.filter((i) => i.projectType === 1) || []),
     ],
   };
   const cardsToRender = cardData[value] || [];
@@ -135,7 +119,23 @@ const PortfolioProjects = () => {
     query,
     cardsToRender || []
   );
+  const tableData = {
+    all: [{ title: "Created Projects", data: createData }],
+    "regular-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 0),
+      },
+    ],
+    "goal-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 1),
+      },
+    ],
+  };
 
+  const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -174,7 +174,7 @@ const PortfolioProjects = () => {
                 "&:hover": { backgroundColor: theme.palette.secondary.dark },
                 mx: 2,
               }}
-              onClick={()=>navigate(-1)}
+              onClick={() => navigate(-1)}
             >
               Back
             </Button>
@@ -224,7 +224,7 @@ const PortfolioProjects = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              projectData={tablesToRender}
             />
           ) : (
             <ProjectGridView

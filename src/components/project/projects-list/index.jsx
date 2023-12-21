@@ -21,10 +21,7 @@ import ViewProjectPopup from "../../GoalsAndStrategies/subComponents/ViewProject
 import PendingProjectPopup from ".././portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import {
-  getProjectDetail,
-  getProjectList,
-} from "../../../api/modules/ProjectModule";
+import { getDashboardProjectList } from "../../../api/modules/ProjectModule";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 import { useParams } from "react-router";
 const filterOption = [
@@ -60,7 +57,7 @@ const filterOption = [
 const ProjectsList = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
-  const { portfolioId } = useParams();
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
@@ -69,7 +66,7 @@ const ProjectsList = () => {
 
   const fetchProjectData = async () => {
     try {
-      const response = await getProjectList(userID, portfolioId);
+      const response = await getDashboardProjectList(userID, portfolioId);
       setProjectData(response);
     } catch (error) {
       console.error(error);
@@ -83,9 +80,9 @@ const ProjectsList = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -149,6 +146,59 @@ const ProjectsList = () => {
     query,
     cardsToRender || []
   );
+
+  const tableData = {
+    all: [
+      { title: "Created Projects", data: createData },
+      { title: "Accepted Projects", data: acceptedData },
+      { title: "Pending Requests", data: pendingRequest },
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    created: [{ title: "Created Projects", data: createData }],
+    accepted: [{ title: "Accepted Projects", data: acceptedData }],
+    pending: [{ title: "Pending Requests", data: pendingRequest }],
+    "more-info-requests": [
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    "regular-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 0),
+      },
+    ],
+    "goal-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 1),
+      },
+    ],
+  };
+
+  const tablesToRender = tableData[value] || [];
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -224,7 +274,7 @@ const ProjectsList = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              projectData={tablesToRender}
             />
           ) : (
             <ProjectGridView

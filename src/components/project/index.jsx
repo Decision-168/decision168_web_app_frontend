@@ -83,9 +83,9 @@ const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -149,6 +149,59 @@ const ProjectIndex = () => {
     query,
     cardsToRender || []
   );
+
+  const tableData = {
+    all: [
+      { title: "Created Projects", data: createData },
+      { title: "Accepted Projects", data: acceptedData },
+      { title: "Pending Requests", data: pendingRequest },
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    created: [{ title: "Created Projects", data: createData }],
+    accepted: [{ title: "Accepted Projects", data: acceptedData }],
+    pending: [{ title: "Pending Requests", data: pendingRequest }],
+    "more-info-requests": [
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    "regular-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 0),
+      },
+    ],
+    "goal-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 1),
+      },
+    ],
+  };
+
+  const tablesToRender = tableData[value] || [];
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -224,7 +277,7 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              projectData={tablesToRender}
             />
           ) : (
             <ProjectGridView

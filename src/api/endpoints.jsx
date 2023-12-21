@@ -511,11 +511,16 @@ const api = {
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
 
-
   //-----------------------------Project Module Start----------------
 
   // Project List / Grid
   getProjectList: "project/get-project-list/",
+
+  // Portfolio Project List / Grid
+  getPortfolioProjectList: "project/get-portfolio-projects-list/",
+
+  // Dashboard Project List / Grid
+  getDashboardProjectList: "project/get-dashboard-project-list/",
 
   // Project Detail
   getProjectById: "project/get-project-by-id/",
@@ -584,16 +589,19 @@ const api = {
   AddSuggestedProjectMember: "project/add-suggested-project-member/",
 
   //Add Suggested Project Invited Member
-  AddSuggestedInvitedProjectMember: "project/add-invited-suggested-project-member/",
+  AddSuggestedInvitedProjectMember:
+    "project/add-invited-suggested-project-member/",
 
   //Direct Remove Project Manager
   DirectRemoveProjectManager: "project/direct-remove-project-manager/",
 
   //Accepted Portfolio team member project list
-  Accepted_PortTM_ProjectList: "project/get-all-accepted-portfolio-team-member-project-list/",
+  Accepted_PortTM_ProjectList:
+    "project/get-all-accepted-portfolio-team-member-project-list/",
 
   //Accepted Goal team member project list
-  Accepted_GoalTM_ProjectList: "project/get-all-accepted-goal-team-member-project-list/",
+  Accepted_GoalTM_ProjectList:
+    "project/get-all-accepted-goal-team-member-project-list/",
 
   //Insert Project Member
   InsertProjectMember: "project/insert-project-member",
@@ -603,6 +611,5 @@ const api = {
 
   //project_open_work_new_assignee
   ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
-
 };
 export default api;
