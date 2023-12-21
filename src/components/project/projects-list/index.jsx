@@ -8,24 +8,24 @@ import {
 import { useState, useCallback, useEffect } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
-import CustomFilter from "../common/CustomFilter";
-import CustomSearchField from "../common/CustomSearchField";
-import ProjectListView from "./portfolio-projects-list/ProjectListView";
-import ProjectGridView from "./portfolio-projects-list/ProjectGridView";
-import { openModal } from "../../redux/action/modalSlice";
-import ReduxDialog from "../common/ReduxDialog";
-import CreateProject from "./Dialogs/CreateProject";
-import CustomDialog from "../common/CustomDialog";
-import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
-import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
+import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
+import CustomFilter from "../../common/CustomFilter";
+import CustomSearchField from "../../common/CustomSearchField";
+import ProjectListView from ".././portfolio-projects-list/ProjectListView";
+import ProjectGridView from ".././portfolio-projects-list/ProjectGridView";
+import { openModal } from "../../../redux/action/modalSlice";
+import ReduxDialog from "../../common/ReduxDialog";
+import CreateProject from ".././Dialogs/CreateProject";
+import CustomDialog from "../../common/CustomDialog";
+import ViewProjectPopup from "../../GoalsAndStrategies/subComponents/ViewProjectPopup";
+import PendingProjectPopup from ".././portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../redux/action/userSlice";
+import { selectUserDetails } from "../../../redux/action/userSlice";
 import {
   getProjectDetail,
   getProjectList,
-} from "../../api/modules/ProjectModule";
-import { SearchWithFuse } from "../../helpers/SearchWithFuse";
+} from "../../../api/modules/ProjectModule";
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 import { useParams } from "react-router";
 const filterOption = [
   {
@@ -57,7 +57,7 @@ const filterOption = [
     label: "Goal Projects",
   },
 ];
-const ProjectIndex = () => {
+const ProjectsList = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
   const { portfolioId } = useParams();
@@ -277,4 +277,4 @@ const ProjectIndex = () => {
   );
 };
 
-export default ProjectIndex;
+export default ProjectsList;

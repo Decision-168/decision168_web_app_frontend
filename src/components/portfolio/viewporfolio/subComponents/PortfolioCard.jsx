@@ -54,7 +54,7 @@ export default function PortfolioCard({ regId }) {
     {
       count: count?.projectCount,
       label: "Projects",
-      link: "/portfolio-projects-list",
+      link: `/portfolio-projects/${storedPortfolioId}`,
     },
     {
       count: count?.taskCount,

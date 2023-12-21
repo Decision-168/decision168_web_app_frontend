@@ -62,7 +62,9 @@ const ViewGoalsIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
+         if (newAlignment !== null) {
     setAlignment(newAlignment);
+     }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);

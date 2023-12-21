@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { lazy, useState , useEffect} from "react";
+import React, { lazy, useState, useEffect } from "react";
 import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
@@ -18,18 +18,26 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
 const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
 
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
 const PortfolioGoals = lazy(() =>
   import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
 );
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
 const GoalOverviewRequest = lazy(() =>
   import("../components/GoalsAndStrategies/goal-overview-request")
 );
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
 const ProjectOverview = lazy(() =>
   import("../components/project/projects-overview/ProjectOverview")
@@ -50,9 +58,13 @@ const MyAlert = lazy(() => import("../components/myAlert"));
 const AccountVerification = lazy(() =>
   import("../components/auth/accountVerification")
 );
+const PortfolioProjects = lazy(() =>
+  import("../components/project/portfolio-projects")
+);
+const ProjectsList = lazy(() => import("../components/project/projects-list"));
 
 const RouteIndex = () => {
-
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   return (
     <Router>
       <Routes>
@@ -195,11 +207,11 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-           <Route
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
-              <PortfolioTasksList />
+                <PortfolioTasksList />
               </DashboardLayout>
             }
           />
@@ -207,7 +219,7 @@ const RouteIndex = () => {
             path="/portfolio-tasks/:portfolioId"
             element={
               <DashboardLayout>
-                <PortfolioTasks/>
+                <PortfolioTasks />
               </DashboardLayout>
             }
           />
@@ -260,10 +272,26 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/portfolio-projects-list"
+            path={`/portfolio-projects-list/${portfolioId}`}
             element={
               <DashboardLayout>
                 <Project />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-projects/:portfolioId"
+            element={
+              <DashboardLayout>
+                <PortfolioProjects />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/projects-list"
+            element={
+              <DashboardLayout>
+                <ProjectsList />
               </DashboardLayout>
             }
           />

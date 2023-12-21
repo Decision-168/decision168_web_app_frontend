@@ -19,7 +19,7 @@ import {
   HelpOutline,
   SupportAgent,
 } from "@mui/icons-material";
-
+const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 export const menuItems = [
   { icon: <Dashboard />, text: "Dashboard", link: "/dashboard" },
   // {
@@ -34,7 +34,11 @@ export const menuItems = [
   // },
   { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
   { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
-  { icon: <AccountTree />, text: "Projects", link: "/portfolio-projects-list" },
+  {
+    icon: <AccountTree />,
+    text: "Projects",
+    link: `/portfolio-projects-list/${portfolioId}`,
+  },
   {
     icon: <AssignmentTurnedIn />,
     text: "Tasks",

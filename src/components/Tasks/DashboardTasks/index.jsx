@@ -52,7 +52,9 @@ const DashboardTasks = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const handleChange = (event, newAlignment) => {
+         if (newAlignment !== null) {
     setAlignment(newAlignment);
+     }
   };
 
   const handleChangeRadio = useCallback((event) => {

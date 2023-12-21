@@ -44,7 +44,9 @@ const PortfolioTasks = () => {
   const dispatch = useDispatch();
 
   const handleChange = (event, newAlignment) => {
+         if (newAlignment !== null) {
     setAlignment(newAlignment);
+     }
   };
 
   const handleChangeRadio = useCallback((event) => {

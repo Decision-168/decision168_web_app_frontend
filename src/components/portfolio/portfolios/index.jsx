@@ -72,7 +72,9 @@ const AllPortfolios = () => {
   const navigate = useNavigate();
   // Callback function to handle view alignment changes
   const handleChangeSwitch = useCallback((event, newAlignment) => {
+         if (newAlignment !== null) {
     setAlignment(newAlignment);
+     }
   }, []);
   // Check if the alignment is set to "list"
   const align = alignment === "list";
