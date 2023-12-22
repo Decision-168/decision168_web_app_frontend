@@ -61,6 +61,7 @@ export default {
   "&multiLine": {
     control: {
       fontFamily: "monospace",
+      borderRadius: "25px",
     },
     highlighter: {
       padding: 9,
@@ -69,6 +70,7 @@ export default {
     input: {
       padding: "10px",
       border: "0px",
+      borderRadius: "25px",
       fontSize: 14,
       fontFamily: "Your Desired Font, sans-serif",
       backgroundColor: "#F5F5F5",
@@ -78,7 +80,7 @@ export default {
       },
       "&::placeholder": {
         color: "#666666",
-        fontWeight: "100", // Make placeholder text lighter
+        fontWeight: "100", 
       },
       color: "#383838",
     },
@@ -86,13 +88,13 @@ export default {
 
   "&singleLine": {
     display: "inline-block",
-    width: 180,
     highlighter: {
       padding: 1,
       border: "2px inset transparent",
     },
     input: {
-      padding: 1,
+      borderRadius: "25px",
+      padding: "10px",
       border: "2px inset",
       fontSize: 14,
       fontFamily: "Your Desired Font, sans-serif",
@@ -122,3 +124,5 @@ export default {
     },
   },
 };
+
+

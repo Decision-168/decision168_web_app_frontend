@@ -21,7 +21,7 @@ export default function SubtaskFiles({ styles, files }) {
     <Paper elevation={0} sx={{ p: 2, mt: 2 }}>
       <Grid container>
         <Grid item xs={12}>
-          <Typography sx={styles.label}>Subtasks Files:</Typography>
+          <Typography sx={styles.label}>Subtask File(s):</Typography>
           {filesArray && filesArray.length > 0 ? (
             filesArray?.map((item, index) => (
               <React.Fragment key={index}>

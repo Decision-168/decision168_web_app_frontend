@@ -132,7 +132,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
   return (
     <>
       <Grid container spacing={3}>
-        <Grid item xs={12} lg={8}>
+        <Grid item xs={12}  lg={8}>
           <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
@@ -228,9 +228,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12}  lg={4}>
           <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
-            <CommentSection />
+          <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={"0"}/>
           </Paper>
         </Grid>
       </Grid>

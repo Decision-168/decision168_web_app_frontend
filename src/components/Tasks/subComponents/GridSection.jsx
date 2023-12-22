@@ -173,6 +173,9 @@ const GridSection = ({ rows, setRows }) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
+    console.log("source", source)
+    console.log("destination", destination)
+
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
@@ -181,7 +184,11 @@ const GridSection = ({ rows, setRows }) => {
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
 
+      console.log("sourceColumnName", sourceColumn.name)
+      console.log("destColumnName", destColumn.name)
+
       handleStatusChange(removed, destColumn);
+
       setColumns({
         ...columns,
         [source.droppableId]: {

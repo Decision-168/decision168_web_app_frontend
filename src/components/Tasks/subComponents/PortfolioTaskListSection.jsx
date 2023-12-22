@@ -8,6 +8,7 @@ import NoListTaskFound from "./NoListTaskFound";
 import { useParams } from "react-router-dom";
 import PortfolioTaskTable from "./PortfolioTaskTable";
 import MyPagination from "../../common/MyPagination";
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 
 const PortfolioTaskListSection = () => {
   const [rows, setRows] = useState([]);

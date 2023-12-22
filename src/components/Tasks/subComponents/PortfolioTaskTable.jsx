@@ -93,9 +93,14 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
     setOpenSubrows(false);
   };
 
-  const handleToggleSubrows = (taskId) => {
+  const handleOpenSubrows = (taskId) => {
     setExpandedTaskId(taskId);
-    setOpenSubrows(!openSubrows);
+    setOpenSubrows(true);
+  };
+
+  const handleCloseSubrows = (taskId) => {
+    setExpandedTaskId(null);
+    setOpenSubrows(false);
   };
 
   //Task Due Date
@@ -196,15 +201,19 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                 </Tooltip>
 
                                 {row?.subTasks && row?.subTasks?.length > 0 && (
-                                  <IconButton size="small" onClick={() => handleToggleSubrows(row?.tid)} style={{ backgroundColor: "#F2F2F2" }}>
+                                  <>
                                     {openSubrows && expandedTaskId === row?.tid ? (
-                                      <ExpandLessIcon />
+                                      <IconButton size="small" onClick={() => handleCloseSubrows(row?.tid)} style={{ backgroundColor: "#F2F2F2" }}>
+                                        <ExpandLessIcon />
+                                      </IconButton>
                                     ) : (
-                                      <Badge badgeContent={row?.subTasks?.length} color="secondary">
-                                        <ExpandMoreIcon />
-                                      </Badge>
+                                      <IconButton size="small" onClick={() => handleOpenSubrows(row?.tid)} style={{ backgroundColor: "#F2F2F2" }}>
+                                        <Badge badgeContent={row?.subTasks?.length} color="secondary">
+                                          <ExpandMoreIcon />
+                                        </Badge>
+                                      </IconButton>
                                     )}
-                                  </IconButton>
+                                  </>
                                 )}
                               </Stack>
                             </TableCell>

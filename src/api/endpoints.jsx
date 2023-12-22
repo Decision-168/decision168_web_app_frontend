@@ -93,8 +93,7 @@ const api = {
   // ProjectCount: "goal/get-project-count/",
 
   //getAccepted_PortTM_GoalList
-  Accepted_PortTM_GoalList:
-    "goal/get-all-accepted-portfolio-team-member-goal-list/",
+  Accepted_PortTM_GoalList: "goal/get-all-accepted-portfolio-team-member-goal-list/",
 
   //view_history_date_wise_goal
   ViewHistoryDateWiseGoal: "goal/view-history-date-wise-goal/",
@@ -230,7 +229,6 @@ const api = {
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
 
-
   //-----------------------------Task Modlue Start----------------
 
   //Dashboard All tasks (List View)
@@ -305,21 +303,26 @@ const api = {
   //Change Subtask Status in Grid View (Drag and Drop) by user id
   changeSubtaskStatusDND: "subtask/change-status/",
 
-
   //get all accepted active portfolio team members(Assignee dropdown) by portfolio id
   activePotfolioTeamMembers: "portfolio/get-all-accepted-active-portfolio-team-members/",
 
   //get all Goal team members without read_more status (Assignee dropdown) by gid
-  getGoalTeamMembers:"goal/goal-team-member/",
-  
+  getGoalTeamMembers: "goal/goal-team-member/",
+
   //get goal details for (Date Picker Date) by gid
-  getGoalDetails:"goal/goal-details/",
+  getGoalDetails: "goal/goal-details/",
 
   //insert Task file by user id
-  insertTaskFile:"task/insert-task-file/",
+  insertTaskFile: "task/insert-task-file/",
 
   //insert Subtask file by user id
-  insertSubtaskFile:"task/insert-subtask-file/",
+  insertSubtaskFile: "subtask/insert-subtask-file/",
+
+  //get Task comments by tid and userid
+  getTaskComments: "task/get-task-comments/",
+
+  //get Subask comments by tid and userid
+  geSubtaskComments: "task/get-subtask-comments/",
 
   //-----------------------------File Cabinet Module Start----------------
 
@@ -528,7 +531,6 @@ const api = {
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
 
-
   //-----------------------------Project Module Start----------------
 
   // Project List / Grid
@@ -620,6 +622,5 @@ const api = {
 
   //project_open_work_new_assignee
   ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
-
 };
 export default api;
