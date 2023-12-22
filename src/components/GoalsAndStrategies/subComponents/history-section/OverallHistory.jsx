@@ -1,11 +1,21 @@
 import { Box, Button, DialogContent, Typography } from "@mui/material";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useState } from "react";
 import HistoryList from "./HistoryList";
 
+import CustomDialog from "../../../common/CustomDialog";
+import ExportOptions from "./ExportOptions";
+
 const OverallHistory = ({ allHist, name, type, id }) => {
-  console.log(allHist)
-  console.log(name)
-  console.log(type)
+  const [data, setData] = useState([]);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <DialogContent dividers>
       <Box
@@ -25,18 +35,32 @@ const OverallHistory = ({ allHist, name, type, id }) => {
           >
             {name}
           </Typography>
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="small" onClick={handleOpen}>
             Export To Excel
           </Button>
         </Box>
-        {allHist?.map((oh_item, oh_index) => {
-          return (
-            <Fragment key={oh_index}>
-              <HistoryList allhdata={oh_item} type={type} id={id}/>
-            </Fragment>
-          );
-        })}
+        {allHist?.map((oh_item, oh_index) => (
+          <Fragment key={oh_index}>
+            <HistoryList
+              allhdata={oh_item}
+              type={type}
+              id={id}
+              name={name}
+              setData={setData}
+              data={data}
+            />
+          </Fragment>
+        ))}
       </Box>
+      <CustomDialog
+        handleClose={handleClose}
+        open={open}
+        modalTitle="Select Any One Option"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <ExportOptions name={name} data={data} />
+      </CustomDialog>
     </DialogContent>
   );
 };

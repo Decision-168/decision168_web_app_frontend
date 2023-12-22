@@ -7,14 +7,13 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import {
+  getViewHistoryDateWiseGoal,
+  getViewHistoryDateWiseStrategy,
+} from "../../../../api/modules/goalkpiModule";
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
-
-const HistoryList = ({ allhdata, type, id }) => {
-  console.log("allhdata", allhdata);
-  console.log("type", type);
-  console.log("id", id);
-
+import * as XLSX from "xlsx";
+const HistoryList = ({ data, allhdata, type, id, name, setData }) => {
   const allinputDate = allhdata.DateOnly;
 
   // Parse the input date using Moment.js
@@ -41,6 +40,7 @@ const HistoryList = ({ allhdata, type, id }) => {
         } else if (type === "kpi") {
           response = await getViewHistoryDateWiseStrategy(id, alldateParam);
         }
+        setData((prevData) => [...prevData, ...response]);
         setallHisDetails(response);
       } catch (error) {
         console.log(error);
@@ -48,7 +48,7 @@ const HistoryList = ({ allhdata, type, id }) => {
     };
 
     fetchAllHistoryDetails();
-  }, [type, id, PassallformattedDate]);
+  }, []);
 
   if (type === "project") {
     useEffect(() => {
@@ -56,6 +56,7 @@ const HistoryList = ({ allhdata, type, id }) => {
       const fetchAllHistoryDetails = async () => {
         try {
           const response = await getViewHistoryDateWiseProject(id, dateParam);
+          setData((prevData) => [...prevData, ...response]);
           setallHisDetails(response);
         } catch (error) {
           console.log(error);
@@ -65,6 +66,46 @@ const HistoryList = ({ allhdata, type, id }) => {
       fetchAllHistoryDetails();
     }, []);
   }
+
+  const handleExport = () => {
+    const exportData = alldateParam.map((item) => ({
+      Date: formatDate(item.h_date),
+      Time: formatTime(item.h_date),
+      Resource: item.h_resource,
+      Activity: item.h_description,
+    }));
+
+    exportExcelData(exportData, `${name}.xlsx`);
+  };
+
+  const exportExcelData = (data, filename) => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+    XLSX.writeFile(wb, filename);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      weekday: "short",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
+    return date.toLocaleTimeString("en-US", options);
+  };
 
   return (
     <Accordion>

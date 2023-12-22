@@ -70,7 +70,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     fetchAllGoalData();
   }, [gid]);
@@ -99,7 +99,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     };
 
     DisplayTitleWithActions();
-  }, [gdetail,user_id]);
+  }, [gdetail, user_id]);
   //Check Button Visibility
 
   const [allHist, setallHist] = useState([]);
@@ -167,12 +167,12 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     dispatch(openModal("edit-goals"));
   };
   const handleCreateKPI = () => {
-    dispatch(openModal("create-kpis"));
+    dispatch(openModal("create-kpis-popup"));
   };
 
   const handleGoalFileItYes = async () => {
     try {
-      const response = await CallFileItGoal(gdetail.gid, user_id); 
+      const response = await CallFileItGoal(gdetail.gid, user_id);
       dispatch(closeCnfModal({ modalName: "fileItGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
@@ -184,7 +184,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
 
   const handleGoalDeleteYes = async () => {
     try {
-      const response = await CallTrashGoal(gdetail.gid, user_id); 
+      const response = await CallTrashGoal(gdetail.gid, user_id);
       dispatch(closeCnfModal({ modalName: "deleteGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
@@ -308,10 +308,14 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <Goal passGID={gdetail.gid} refreshGoalOverview={fetchAllGoalData} individual={true} />
+        <Goal
+          passGID={gdetail.gid}
+          refreshGoalOverview={fetchAllGoalData}
+          individual={true}
+        />
       </ReduxDialog>
       <ReduxDialog
-        value="create-kpis"
+        value="create-kpis-popup"
         modalTitle="Add KPIs"
         showModalButton={false}
         modalSize="sm"
