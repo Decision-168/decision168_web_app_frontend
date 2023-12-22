@@ -8,7 +8,7 @@ const GridSection = ({ handleGoalOpen, handlePendingGoalOpen, filterData }) => {
       <Grid container mt={2} spacing={2}>
         {filterData?.map((item, index) => {
           return (
-            <Grid item xs={12} lg={3} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               <CustomCard
                 value={item?.type}
                 item={item}

@@ -12,7 +12,7 @@ import React, { memo } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { ContentCopy, Delete, History, NoteAdd } from "@mui/icons-material";
 import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 const TitleWithActions = ({
   title,
   handleClick1,
@@ -32,10 +32,10 @@ const TitleWithActions = ({
   taskCount,
   progressHeading,
   progressPercentage,
-  displayBtns
+  displayBtns,
 }) => {
   //console.log("displayBtns", displayBtns);
-
+  const matches = useMediaQuery("(min-width:500px)");
   const theme = useTheme();
   const splitString = title.split(" ");
   const splitTitle = splitString[1];
@@ -70,12 +70,13 @@ const TitleWithActions = ({
       </Grid>
       {(displayBtns === "all" || displayBtns === "some") && (
         <>
-          <Grid item xs={12} md={12} lg={8}>
+          <Grid item xs={12} sm={6} md={6} lg={8}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "row",
+                justifyContent: !matches ? "center" : "start",
                 pt: 1,
                 pb: 1,
               }}
@@ -111,12 +112,12 @@ const TitleWithActions = ({
               )}
             </Box>
           </Grid>
-          <Grid item xs={12} md={12} lg={4}>
+          <Grid item xs={12} sm={6} md={6} lg={4}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "bottom",
-                justifyContent: "end",
+                justifyContent: !matches ? "center" : "end",
                 flexDirection: "row",
               }}
             >
@@ -148,19 +149,21 @@ const TitleWithActions = ({
           </Grid>
         </>
       )}
-      {taskCount ?
-          (
-            <>
-            <Grid item xs={12} md={12} lg={12}>
-              <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
-                {progressHeading}
-              </Typography>
-              <LinearProgressWithLabel value={progressPercentage} />
-            </Grid>
-            </>
-          ) : <></>
-        }
-      
+      {taskCount ? (
+        <>
+          <Grid item xs={12} md={12} lg={12}>
+            <Typography
+              sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}
+            >
+              {progressHeading}
+            </Typography>
+            <LinearProgressWithLabel value={progressPercentage} />
+          </Grid>
+        </>
+      ) : (
+        <></>
+      )}
+
       <Grid item xs={12} md={12} lg={12}>
         <Typography sx={{ fontSize: 14, color: "#212934", textAlign: "start" }}>
           Description :
