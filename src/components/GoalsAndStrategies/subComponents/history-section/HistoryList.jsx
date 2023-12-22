@@ -7,14 +7,13 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import {
+  getViewHistoryDateWiseGoal,
+  getViewHistoryDateWiseStrategy,
+} from "../../../../api/modules/goalkpiModule";
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
-
-const HistoryList = ({ allhdata, type, id }) => {
-  console.log("allhdata", allhdata);
-  console.log("type", type);
-  console.log("id", id);
-
+import * as XLSX from "xlsx";
+const HistoryList = ({ allhdata, type, id, setData }) => {
   const allinputDate = allhdata.DateOnly;
 
   // Parse the input date using Moment.js
@@ -43,6 +42,7 @@ const HistoryList = ({ allhdata, type, id }) => {
         } else if (type === "project") {
           response = await getViewHistoryDateWiseProject(id, alldateParam);
         }
+        setData((prevData) => [...prevData, ...response]);
         setallHisDetails(response);
       } catch (error) {
         console.log(error);
@@ -50,7 +50,7 @@ const HistoryList = ({ allhdata, type, id }) => {
     };
 
     fetchAllHistoryDetails();
-  }, [type, id, PassallformattedDate]);
+  }, []);
 
   return (
     <Accordion>

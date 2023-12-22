@@ -3,16 +3,9 @@ import { Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ViewGoalsPopup from "../subComponents/ViewGoalsPopup";
-import ReduxDialog from "../../common/ReduxDialog";
 import MembersAccordion from "./subComponents/MembersAccordion";
-import ConfirmationDialog from "../../common/ConfirmationDialog";
-import DuplicateDialog from "../subComponents/DuplicateDialog";
 import KPISection from "./Kpi";
 import RecentHistory from "../subComponents/history-section/RecentHistory";
-import OverallHistory from "../subComponents/history-section/OverallHistory";
-import KPIs from "../portfolio-goals/create-goals/subComponents/KPIs";
-import Goal from "../portfolio-goals/create-goals/subComponents/Goal";
-import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import {
@@ -43,9 +36,9 @@ const GoalsOverview = () => {
         const response = await checkPortfolioMemberActive(
           user_email,
           storedPorfolioId
-        ); 
+        );
         if (response) {
-          const response2 = await getGoalMemberDetailbyGID(user_id, gid); 
+          const response2 = await getGoalMemberDetailbyGID(user_id, gid);
           if (response2) {
             setdisplayData(true);
           } else {
@@ -181,52 +174,6 @@ const GoalsOverview = () => {
             </Grid>
           </Grid>
         </Grid>
-        <ReduxDialog
-          value="create-goals"
-          modalTitle="Edit Goal"
-          showModalButton={false}
-          modalSize="md"
-        >
-          <Goal passGID={gid} individual={true} />
-        </ReduxDialog>
-        <ReduxDialog
-          value="create-kpis"
-          modalTitle="Add KPIs"
-          showModalButton={false}
-          modalSize="sm"
-        >
-          <KPIs
-            individual={true}
-            inputFields={inputFields}
-            setInputFields={setInputFields}
-            handleAddClick={handleAddClick}
-            passGID={getName.gid}
-            passGDEPT={getName.gdept}
-          />
-        </ReduxDialog>
-
-        <ReduxDialog
-          value="view-all-history"
-          modalTitle="HISTORY"
-          showModalButton={false}
-          modalSize="md"
-        >
-          <OverallHistory
-            allHist={allHist}
-            name={getName.gname}
-            type={"goal"}
-            id={getName.gid}
-          />
-        </ReduxDialog>
-
-        <ReduxDialog
-          value="duplicate-goal"
-          modalTitle="Copy Goal"
-          showModalButton={false}
-          modalSize="sm"
-        >
-          <DuplicateDialog goalData={getName} />
-        </ReduxDialog>
       </Box>
     )
   );
