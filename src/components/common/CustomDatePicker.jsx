@@ -46,7 +46,7 @@ function CustomDatePicker({
         variant="outlined"
         disabled
         fullWidth
-        value={moment(startDate).format("YYYY-MM-DD")}
+        value={value ? moment(startDate).format("YYYY-MM-DD") : label}
         sx={{
           width: "100%",
           "& .MuiOutlinedInput-notchedOutline": {
