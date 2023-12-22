@@ -17,12 +17,18 @@ import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
   const handleOpenCondition = (type, pid, pname) => {
-    if (
-      ["created-project", "accepted-project"].includes(type)
-    ) {
-      handleOpen(pid, pname);
+    if (["created-project", "accepted-project"].includes(type)) {
+      handleOpen(type, pid, pname);
     } else {
-      handlePendingOpen(pid, pname);
+      handlePendingOpen(type, pid, pname);
+    }
+  };
+
+  const openPage = (type, pid, pname) => {
+    if (["created-project", "accepted-project"].includes(type)) {
+      navigate(`/projects-overview/${pid}`);
+    } else {
+      navigate(`/projects-overview-request/${pid}`);
     }
   };
 
@@ -40,7 +46,7 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
       }}
     >
       <CardActionArea
-        onClick={() => navigate(`/projects-overview/${item?.project?.id}`)}
+        onClick={() => openPage(value, item?.project?.id, item?.project?.name)}
         sx={{
           borderRadius: 0,
           height: "120px",
@@ -126,7 +132,9 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
         </AvatarGroup>
         <IconButton
           aria-label="settings"
-          onClick={() => handleOpenCondition(value, item?.project?.id,item?.project?.name)}
+          onClick={() =>
+            handleOpenCondition(value, item?.project?.id, item?.project?.name)
+          }
         >
           <VisibilityOutlined fontSize="small" />
         </IconButton>

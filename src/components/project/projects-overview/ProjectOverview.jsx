@@ -16,6 +16,7 @@ import MembersAccordion from "../subComponents/MembersAccordion";
 const ProjectOverview = () => {
   const { pid } = useParams();
   const [projectData, setProjectData] = useState([]);
+  const [projectDel, setProjectDel] = useState([]);
   const [userData, setUserData] = useState([]);
 
   const user = useSelector(selectUserDetails);
@@ -25,6 +26,7 @@ const ProjectOverview = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
+      setProjectDel(response.project);
     } catch (error) {
       console.error(error);
     }
@@ -33,13 +35,12 @@ const ProjectOverview = () => {
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
-  const pDetail = projectData?.project;
-  const link_comments = pDetail?.plink_comment;
+  const link_comments = projectDel?.plink_comment;
 
   // Creater (User) Data ----------------------------------------------
   const fetchUserData = async () => {
     try {
-      const response = await getUserData(pDetail?.pcreated_by);
+      const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
     } catch (error) {
       console.error(error);
@@ -54,15 +55,14 @@ const ProjectOverview = () => {
 
   //Check Button Visibility
   const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
-
   useEffect(() => {
     const DisplayAccordionActions = async () => {
       try {
-        if (pDetail.pcreated_by == userID) {
+        if (projectDel.pcreated_by == userID) {
           setAccdisplayBtns("all");
         } else if (
-          pDetail.get_portfolio_createdby_id == userID ||
-          pDetail.pmanager == userID
+          projectDel.get_portfolio_createdby_id == userID ||
+          projectDel.pmanager == userID
         ) {
           setAccdisplayBtns("some");
         } else {
@@ -75,7 +75,7 @@ const ProjectOverview = () => {
     };
 
     DisplayAccordionActions();
-  }, [pDetail, userID]);
+  }, [projectData?.project, userID]);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -120,7 +120,7 @@ const ProjectOverview = () => {
               >
                 Back
               </Button>
-              { (pDetail?.gid != 0) ?
+              { (projectDel?.gid != 0) ?
                 (<Button
                   variant="contained"
                   startIcon={<ArrowBack />}
@@ -131,7 +131,7 @@ const ProjectOverview = () => {
                   Go To Goal
                 </Button>) : <></>
               }
-              { (pDetail?.sid != 0) ?
+              { (projectDel?.sid != 0) ?
                 (<Button
                   variant="contained"
                   startIcon={<ArrowBack />}

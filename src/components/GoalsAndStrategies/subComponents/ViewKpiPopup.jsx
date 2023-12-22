@@ -298,7 +298,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" />
+        <CreateProject flag="add" gid={kpiDetail?.gid} sid={kpiDetail?.sid} passPID={"0"} />
       </ReduxDialog>
     </Box>
   );

@@ -565,5 +565,17 @@ const api = {
   //project_open_work_new_assignee
   ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
 
+  //getProjectCreateDD
+  ProjectCreateDD: "project/get-project-create-dd/",
+
+  //Update Project
+  UpdateProject: "project/update-project",
+
+  //Insert Project
+  InsertProject: "project/insert-project",
+
+  //Insert Project Links
+  updateProjectLink: "project/update-project-links",
+
 };
 export default api;

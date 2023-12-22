@@ -40,6 +40,8 @@ const HistoryList = ({ allhdata, type, id }) => {
           response = await getViewHistoryDateWiseGoal(id, alldateParam);
         } else if (type === "kpi") {
           response = await getViewHistoryDateWiseStrategy(id, alldateParam);
+        } else if (type === "project") {
+          response = await getViewHistoryDateWiseProject(id, alldateParam);
         }
         setallHisDetails(response);
       } catch (error) {
@@ -49,22 +51,6 @@ const HistoryList = ({ allhdata, type, id }) => {
 
     fetchAllHistoryDetails();
   }, [type, id, PassallformattedDate]);
-
-  if (type === "project") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseProject(id, dateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchAllHistoryDetails();
-    }, []);
-  }
 
   return (
     <Accordion>

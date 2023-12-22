@@ -13,12 +13,14 @@ const ProjectSection = ({kpi_id}) => {
     const dispatch = useDispatch();
 
     const [kpiProDetails, setkpiProDetails] = useState([]);
+    const [goalId, setGoalId] = useState(null);
 
     useEffect(() => {
       const fetchAllData = async () => {
         try {
           const response = await getStrategyDetail(kpi_id);
           setkpiProDetails(response.projectRes);
+          setGoalId(response.goalId);
         } catch (error) {
           console.error(error);
         }
@@ -80,7 +82,7 @@ const ProjectSection = ({kpi_id}) => {
           showModalButton={false}
           modalSize="md"
         >
-          <CreateProject flag="add" />
+          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={"0"}/>
         </ReduxDialog>
       </Box>
     </PerfectScrollbar>
