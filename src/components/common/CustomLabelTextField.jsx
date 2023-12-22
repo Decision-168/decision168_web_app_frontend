@@ -10,6 +10,7 @@ export default function CustomLabelTextField({
   required,
   value,
   onChange,
+  isDisabled
 }) {
   const theme = useTheme();
 
@@ -40,6 +41,7 @@ export default function CustomLabelTextField({
         }}
         value={value}
         onChange={onChange}
+        disabled={isDisabled}
       />
     </Box>
   );

@@ -2,10 +2,54 @@ import axios from "axios";
 import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-//(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
-export const getAlltasksAndSubtasks = async (regId) => {
+//Dashboard All Tasks (List View)
+export const getDashboardAlltaskListView = async (regId) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.getAlltasksAndSubtasks}${regId}`);
+    const response = await axios.get(`${apiUrl}${api.getDashboardAlltaskListView}${regId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Dashboard All Tasks (Grid View)
+export const getDashboardAlltaskGridView = async (regId) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getDashboardAlltaskGridView}${regId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Portfolio Tasks
+export const getPortfolioTasksListView = async (portfolioId) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksListView}${portfolioId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Portfolio Tasks List (LIST VIEW)
+export const getPortfolioTasksSubtasksListView = async (portfolioId, regId) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Portfolio Tasks List (Grid VIEW)
+export const getPortfolioTasksSubtasksGridView = async (portfolioId, regId) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.getPortfolioTasksSubtasksGridView}${portfolioId}/${regId}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -62,7 +106,7 @@ export const changeSubTaskStatus = async (regId, data) => {
   }
 };
 
-//get Task Details by task_id
+//Task Details by task_id
 export const getTaskDetails = async (taskId) => {
   try {
     const response = await axios.get(`${apiUrl}${api.getTaskDetails}${taskId}`);
@@ -72,7 +116,7 @@ export const getTaskDetails = async (taskId) => {
   }
 };
 
-//get Subtask Details by subtask_id
+//Subtask Details by subtask_id
 export const getSubTaskDetails = async (subtaskId) => {
   try {
     const response = await axios.get(`${apiUrl}${api.getSubTaskDetails}${subtaskId}`);
@@ -82,21 +126,20 @@ export const getSubTaskDetails = async (subtaskId) => {
   }
 };
 
-
-//get Portfolio Tasks and Subtasks  by portfolio id and reg_id (LIST VIEW)
-export const getPortfolioTasksSubtasksListView = async (portfolioId, regId) => {
+//File it task by task_id and user_id
+export const fileItTask = async (task_id, user_id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}`);
+    const response = await axios.patch(`${apiUrl}${api.fileItTask}${task_id}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
-//get Portfolio Tasks and Subtasks  by portfolio id and reg_id (Grid VIEW)
-export const getPortfolioTasksSubtasksGridView = async (portfolioId, regId) => {
+//File it Subtask by subtask_id and user_id
+export const fileItSubTask = async (subtask_id, user_id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksSubtasksGridView}${portfolioId}/${regId}`);
+    const response = await axios.patch(`${apiUrl}${api.fileItSubTask}${subtask_id}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -104,13 +147,109 @@ export const getPortfolioTasksSubtasksGridView = async (portfolioId, regId) => {
 };
 
 // Insert Task by user id and portfolio id
-export const insertTask = async (regId, portfolioId, data) => {
+export const insertTask = async ({ regId, data }) => {
   try {
-    const response = await axios.post(`${apiUrl}${api.insertTask}${regId}/${portfolioId}`, data);
+    const response = await axios.post(`${apiUrl}${api.insertTask}${regId}`, data);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
+// Insert Task by user id and portfolio id
+export const updateTask = async ({ user_id, data }) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.updateTask}${user_id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
+// Insert Subtask by portfolio id user id
+export const insertSubtask = async ({ user_id, portfolio_id, data }) => {
+  try {
+    const response = await axios.post(
+      `${apiUrl}${api.insertSubtask}${user_id}/${portfolio_id}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Insert Task by user id and portfolio id
+export const updateSubtask = async ({ user_id, portfolio_id, data }) => {
+  try {
+    const response = await axios.post(
+      `${apiUrl}${api.updateSubtask}${user_id}/${portfolio_id}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Projects by portfolio_id and user_id
+export const getProjectsForSelectMenu = async ({ portfolio_id, user_id }) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.getProjectsForSelectMenu}${portfolio_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Project team members by pid
+export const getProjectTeamMembers = async ({ pid }) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getProjectTeamMembers}${pid}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Duplicate Task
+export const duplicateTask = async (data) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.duplicateTask}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Duplicate Subtask
+export const duplicateSubtask = async (data) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.duplicateSubtask}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Change Task status DND
+export const changeTaskStatusDND = async ({ user_id, data }) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.changeTaskStatusDND}${user_id}`, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Change Subtask status DND
+export const changeSubtaskStatusDND = async ({ user_id, data }) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.changeSubtaskStatusDND}${user_id}`, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

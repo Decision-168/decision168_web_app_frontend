@@ -22,6 +22,7 @@ import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../redux/action/userSlice";
 import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
  const filterOption = [
    {
      value: "all",
@@ -84,9 +85,8 @@ const ProjectIndex = () => {
     setValue(event.target.value);
   }, []);
   const [previewProject, setPreviewProject] = useState(false);
-      const [openPreviewPendingProj, setOpenPreviewPendingProj] =
-        useState(false);
- 
+  const [openPreviewPendingProj, setOpenPreviewPendingProj] = useState(false);
+
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
@@ -107,6 +107,44 @@ const ProjectIndex = () => {
  };
   const dispatch = useDispatch();
   const align = alignment === "list";
+
+
+  const [query, setQuery] = useState("");
+   const createData = projectData.projectRegularList;
+   const acceptedData = projectData.projectAcceptedList;
+   const pendingRequest = projectData.projectPendingList;
+   const moreInfoRequest = projectData.projectReadMoreList;
+  const cardData = {
+    all: [
+      ...(createData || []),
+      ...(acceptedData || []),
+      ...(pendingRequest || []),
+      ...(moreInfoRequest || []),
+    ],
+    created: [...(createData || [])],
+    accepted: [...(acceptedData || [])],
+    "pending-requests": [...(pendingRequest || [])],
+    "more-info-requests": [...(moreInfoRequest || [])],
+    "regular-projects": [
+      ...(createData?.filter((i) => i.projectType === 0) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 0) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 0) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 0) || []),
+    ],
+    "goal-projects": [
+      ...(createData?.filter((i) => i.projectType === 1) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 1) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 1) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 1) || []),
+    ],
+  };
+  const cardsToRender = cardData[value] || [];
+  const newResults = SearchWithFuse(
+    ["project.name"],
+    query,
+    cardsToRender || []
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -171,7 +209,7 @@ const ProjectIndex = () => {
         </Grid>
         {!align && (
           <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
 
@@ -188,7 +226,7 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              filterData={newResults}
             />
           )}
         </Grid>
@@ -204,12 +242,17 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle={projectTitle}        
+        modalTitle={projectTitle}
         redirectPath={`/projects-overview/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup pid={projectId} projectTitleType={projectTitleType} refreshData={fetchProjectData} handleClose={handleProjectPreviewClose}/>
+        <ViewProjectPopup
+          pid={projectId}
+          projectTitleType={projectTitleType}
+          refreshData={fetchProjectData}
+          handleClose={handleProjectPreviewClose}
+        />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingProjectClose}
@@ -219,7 +262,11 @@ const ProjectIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingProjectPopup pid={projectId} refreshData={fetchProjectData} handleClose={handlePendingProjectClose}/>
+        <PendingProjectPopup
+          pid={projectId}
+          refreshData={fetchProjectData}
+          handleClose={handlePendingProjectClose}
+        />
       </CustomDialog>
     </Box>
   );

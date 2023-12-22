@@ -88,26 +88,38 @@ export const pricingStyles = () => {
         width: "90%",
         height: "3rem",
         lineHeight: "3rem",
-        background: 'linear-gradient(to right, #FF0000, #AA0000)',
+        background: '#006E3E',
         color: "#FFFFFF",
         fontWeight: 700,
         overflow: "hidden", // Corrected typo here
         borderRadius: "2rem",
         borderTopLeftRadius: 0,
-        transform: "translateY(-50%)"
+        transform: "translateY(-50%)",
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
     };
 
     const ribbonTail = {
-        position: 'absolute',
-        left: "-0.7rem",
-        bottom: '4.6rem',
-        width: '0.7rem',
-        height: '1.5rem',
-        background: 'linear-gradient(to bottom, #FF0000, #AA0000)',
-        borderTopLeftRadius: '1rem',
-    }
+      position: "absolute",
+      left: "-0.7rem",
+      bottom: "4.6rem",
+      width: "0.7rem",
+      height: "1.5rem",
+      background: "#006E3E",
+      borderTopLeftRadius: "1rem",
+    };
+
+
+    const ThumbUpIcon = {
+      color: theme.palette.primary.light,
+      alignSelf: "center",
+      marginLeft: "5px",
+      height: "20px",
+      marginBottom: "4px",
+    };
 
 
 
-    return { ribbonContainer, ribbon, ribbonTail, label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink, subtaskLinkWrapper, subtaskLinkText, subtaskIcon };
+    return { ribbonContainer, ribbon, ribbonTail,ThumbUpIcon, label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink, subtaskLinkWrapper, subtaskLinkText, subtaskIcon };
 };

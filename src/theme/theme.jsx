@@ -15,6 +15,12 @@ export const theme = createTheme({
       light: "#F2F2F2",
       main: "#383838",
     },
+    tertiary: {
+      contrastText: "#FFFFFF",
+      dark: "#333333",
+      light: "#CCCCCC",
+      main: "#666666",
+    },
   },
   typography: {
     h2: {
@@ -174,7 +180,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 4,
-          padding: '8px', // Adjust border-radius and padding as needed
+          padding: '7px', // Adjust border-radius and padding as needed
           // Add other style overrides for the unselected state here
           '&.Mui-selected': {
             backgroundColor: '#C7DF19', // Change the background color as needed

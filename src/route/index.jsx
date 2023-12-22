@@ -39,8 +39,11 @@ const ProjectOverviewRequest = lazy(() =>
 );
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
-const PortfolioTasks = lazy(() => import("../components/Tasks"));
-const DashboardTasks = lazy(() => import("../components/Tasks/DashboardTasks"));
+
+const DashboardTasks = lazy(() => import("../components/Tasks/DashboardTasks")); //dashboard
+const PortfolioTasksList = lazy(() => import("../components/Tasks")); //side bar
+const PortfolioTasks = lazy(() => import("../components/Tasks/PortfolioTasks")); // from the porfolio page
+
 const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
@@ -192,11 +195,19 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
+           <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
-                <PortfolioTasks />
+              <PortfolioTasksList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-tasks/:portfolioId"
+            element={
+              <DashboardLayout>
+                <PortfolioTasks/>
               </DashboardLayout>
             }
           />

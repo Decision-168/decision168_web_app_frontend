@@ -1,49 +1,48 @@
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Box, Grid, InputLabel } from "@mui/material";
+import { Box, InputLabel } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-export default function SelectOption({
+export default function MultiSelectOption({
   label,
   required,
   field,
   idKey,
   getOptionLabel,
-  dynamicOptions, // Boolean flag to determine if options should be loaded dynamically
-  loadOptions, // Function to load options from API
+  dynamicOptions,
+  loadOptions,
   loadOptionsParams,
-  staticOptions, // Static options to be used when dynamicOptions is false
+  staticOptions,
   formValues,
   setFormValues,
   isDisabled,
-  defaultValue
 }) {
   const theme = useTheme();
   const [options, setOptions] = useState([]);
-  
-  const handleChange = (fieldName) => async (event, value) => {
+
+  const handleChange = (fieldName) => (event, values) => {
     setFormValues({
       ...formValues,
-      [fieldName]: value ? value[idKey] : null,
+      [fieldName]: values.map((value) => value[idKey]),
     });
   };
 
   useEffect(() => {
     const fetchOptions = async () => {
-      // Call the API to get options
-      const apiOptions = await loadOptions({ ...loadOptionsParams });
+      const apiOptions = await loadOptions(loadOptionsParams);
       setOptions(apiOptions);
     };
 
-    // Load options dynamically only if dynamicOptions is true
     if (dynamicOptions) {
       fetchOptions();
     } else {
-      // Use static options
       setOptions(staticOptions);
     }
   }, [dynamicOptions, loadOptions, loadOptionsParams, staticOptions]);
+
+  // Filter out selected options from the available options
+  const filteredOptions = options.filter((option) => !formValues[field]?.includes(option[idKey]));
 
   return (
     <Box sx={{ textAlign: "left" }}>
@@ -53,20 +52,14 @@ export default function SelectOption({
       </InputLabel>
 
       <Autocomplete
+        multiple
         sx={{ marginTop: "8px", width: "100%" }}
-        defaultValue={defaultValue}
-        options={options}
+        options={filteredOptions}
         disabled={isDisabled}
-        value={options?.find((option) => option[idKey] === formValues[field]) || null}
+        value={options.filter((option) => formValues[field]?.includes(option[idKey])) || []}
         onChange={handleChange(field)}
         getOptionLabel={(option) => getOptionLabel(option)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={`Select Your ${label}`}
-           
-          />
-        )}
+        renderInput={(params) => <TextField {...params} placeholder={`Select ${label}`} />}
       />
     </Box>
   );

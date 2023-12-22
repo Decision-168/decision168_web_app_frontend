@@ -1,115 +1,416 @@
-import React from "react";
-import { Box, Button, Chip, DialogActions, DialogContent, Divider, Grid, InputLabel, Paper, Stack, Tooltip, IconButton } from "@mui/material";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  DialogActions,
+  DialogContent,
+  Divider,
+  Grid,
+  InputLabel,
+  Paper,
+  Stack,
+  Tooltip,
+  IconButton,
+  Autocomplete,
+  TextField,
+} from "@mui/material";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
-import { globalValidations } from "../../../utils/GlobalValidation";
 import { useTheme } from "@mui/material/styles";
-import CustomAutocomplete from "../../common/CustomAutocomplete";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
 import CustomFileInput from "../../common/CustomFileInput";
-import MyDatePicker from "../subComponents/MyDatePicker ";
-import AddAnotherLink from "../subComponents/AddAnotherLink";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import SelectOption from "../../common/SelectOption";
+import {
+  getProjectTeamMembers,
+  getProjectsForSelectMenu,
+  insertSubtask,
+  updateSubtask,
+} from "../../../api/modules/taskModule";
+import CircularLoader from "../../common/CircularLoader";
+import CustomDatePicker from "../../common/CustomDatePicker";
+import SelectOptionSubtaskForm from "../../common/SelectOptionSubtaskForm";
+import AddAnotherLinkSubtaskForm from "../subComponents/AddAnotherLinkSubtaskForm";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { createFileArray } from "../../../helpers/createFileArray";
 
-const projects = [{ label: "project 1" }, { label: "project 2" }, { label: "project 3" }, { label: "project 4" }, { label: "project 5" }, { label: "project 6" }];
-const departments = [{ label: "Admnistration" }, { label: "Accounting & Finanace" }, { label: "AdmnistrCustomer Serviceation" }, { label: "Human Resources" }, { label: "Marketing" }, { label: "Sales" }, { label: "Research & Development" }];
-const portfolios = [{ label: "Portfolio 1" }, { label: "Portfolio 2" }, { label: "Portfolio 3" }, { label: "Portfolio 3" }, { label: "Portfolio 4" }, { label: "Portfolio 5" }, { label: "Portfolio 6" }];
-const priorities = [{ label: "High" }, { label: "Medium" }, { label: "Low" }];
-const assignees = [{ label: "Assign To Me" }, { label: "John Doe" }, { label: "Sam" }, { label: "Jams" }];
+const priorities = [
+  { name: "High", value: "high" },
+  { name: "Medium", value: "medium" },
+  { name: "Low", value: "low" },
+];
 
-export default function CreateSubTasksForm() {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) {
+  console.log("editMode", editMode);
+  console.log("taskData", taskData);
+  console.log("subtaskData", subtaskData);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const [files, setFiles] = React.useState(null);
+  const navigate = useNavigate();
+  const user = useSelector(selectUserDetails);
+  // const userId = user?.reg_id;
+  // const email = user?.email_address;
+  const userId = 1; // for testing
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const [formValues, setFormValues] = useState({
+    tid: taskData?.tid,
+    tname: taskData?.tname, // no need to post it
+    tproject_assign: taskData?.tproject_assign,
+    dept: taskData?.dept_id,
+    taskArray: [
+      {
+        team_member2: 1,
+        slinks: [
+          {
+            0: "link1",
+          },
+          {
+            1: "link2",
+          },
+        ],
+        slink_comments: [
+          {
+            0: "comment",
+          },
+          {
+            1: "comment2",
+          },
+        ],
+        stname: "my New SubTask",
+        stdes: "my Sutask description",
+        stnote: "this is my test note",
+        stfile: [
+          {
+            0: "file1",
+          },
+          {
+            1: "file2",
+          },
+        ],
+        stpriority: "",
+        stdue_date: "2023-12-15",
+      },
+    ],
+  });
+  const [projects, setProjects] = useState([]);
+  const [assignees, setAssignees] = useState([]);
+  const [files, setFiles] = useState([]);
 
-  const handleFilesChange = (newValue, info) => {
-    setFiles(newValue); // Concatenate the new files with the existing ones
+  //fetch Projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await getProjectsForSelectMenu({
+          portfolio_id: storedPortfolioId,
+          user_id: userId,
+        });
+        setProjects(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProjects();
+  }, [storedPortfolioId, userId]);
+
+  // fetch project team member (Assignees)
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
+        // Add the user to assignee to assignee list
+        const updatedResponse = [...response, { reg_id: userId, name: "To Me" }];
+        setAssignees(updatedResponse);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTeamMembers();
+  }, [taskData?.tproject_assign, userId]);
+
+  useEffect(() => {
+    if (editMode) {
+      setFormValues({
+        ...formValues,
+        tid: taskData?.tid,
+        tname: taskData?.tname, // no need to post it
+        tproject_assign: taskData?.tproject_assign,
+        dept: taskData?.dept_id,
+      });
+    }
+  }, [editMode, taskData]);
+
+  useEffect(() => {
+    // stfile = "file1,file2"
+    const filenames = subtaskData?.stfile;
+    console.log(subtaskData?.stfile);
+    (async () => {
+      try {
+        const fileArray = await createFileArray(filenames);
+        setFiles(fileArray);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    })();
+  }, [editMode, subtaskData?.stfile]);
+
+
+  useEffect(() => {
+    if (editMode) {
+      setFields([
+        {
+          stname: subtaskData?.stname,
+          stdes: subtaskData?.stdes,
+          stnote: subtaskData?.stnote,
+          stfile: files ? files : [],
+          stpriority: subtaskData?.stpriority,
+          stdue_date: subtaskData?.stdue_date ? new Date(subtaskData?.stdue_date) : "",
+          team_member2: subtaskData?.stassignee,
+          slinks: [],
+          slink_comments: [],
+        },
+      ]);
+    }
+  }, [editMode, subtaskData, files]);
+
+  // const fileObjects = [{"0": "file1"}, {"1": "file2"}]
+  // Output will be like [file1,file2 ]
+  // function createFileArrayToValueInField(fileObjects) {
+  //   const filenameArray = fileObjects.map((fileObj) => Object.values(fileObj)[0]);
+  //   const fileArray = [];
+  //   for (const filename of filenameArray) {
+  //     const content = "Placeholder content for" + filename;
+  //     const file = new File([content], filename, {
+  //       type: "text/plain", // adjust the type based on the actual file type
+  //     });
+  //     fileArray.push(file);
+  //   }
+  //   // console.log(fileArray);
+  //   return fileArray;
+  // }
+
+
+  const handleFilesChange = (index) => (newValue) => {
+    setFiles(newValue);
+    setFields((prevFields) => {
+      return prevFields.map((field, i) => {
+        if (i === index) {
+          return {
+            ...field,
+            stfile:
+              newValue?.map((file, fileIndex) => ({
+                [fileIndex]: file.name,
+              })) || [],
+          };
+        }
+
+        return field;
+      });
+    });
   };
-
-  const displayFilesInAlert = () => {
-    const fileNames = files.map((file) => file.name).join(", "); // Create a comma-separated list of file names
-    alert(`Selected files: ${fileNames}`);
-  };
-
-  // const onSubmit = (data) => {
-  //   alert(JSON.stringify(data));
-  // };
 
   // Add another Subtask code start
-  const [inputFields, setInputFields] = React.useState([
+  const [fields, setFields] = React.useState([
     {
-      subtask: "",
-      dueDate: "",
-      description: "",
-      note: "",
-      priority: "",
-      assignee: "",
-      files: "",
-      taskLinkAndComment: "",
+      stname: "",
+      stdes: "",
+      stnote: "",
+      stfile: [],
+      stpriority: "",
+      stdue_date: "",
+      team_member2: "",
+      slinks: [],
+      slink_comments: [],
     },
   ]);
 
-  const handleInputChange = (event, index) => {
-    const values = [...inputFields];
-    values[index][event.target.name] = event.target.value;
-    setInputFields(values);
+  const handleFieldChange = (fieldName) => (event, index) => {
+    const values = [...fields];
+    values[index][fieldName] = event.target.value;
+    setFields(values);
   };
 
   const handleAddClick = () => {
-    setInputFields([
-      ...inputFields,
+    setFields([
+      ...fields,
       {
-        subtask: "",
-        dueDate: "",
-        description: "",
-        note: "",
-        priority: "",
-        assignee: "",
-        files: "",
-        taskLinkAndComment: "",
+        stname: "",
+        stdes: "",
+        stnote: "",
+        stfile: [],
+        stpriority: "",
+        stdue_date: "",
+        team_member2: "",
+        slinks: [],
+        slink_comments: [],
       },
     ]);
   };
 
   const handleRemoveClick = (index) => {
-    const values = [...inputFields];
+    const values = [...fields];
     if (values.length > 1) {
       values.splice(index, 1);
-      setInputFields(values);
+      setFields(values);
     }
   };
-  // Add another Subtask code end
+
+  const handleChange = (fieldName) => (event) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
+  };
+
+  // Due Date
+  const handleDueDate = (date, index) => {
+    const updatedFields = [...fields]; // Create a copy of the fields array
+    updatedFields[index] = {
+      ...updatedFields[index],
+      stdue_date: date, // Update the stdue_date for the specific subtask
+    };
+    setFields(updatedFields);
+  };
+
+  const [linksComments, setLinksComments] = useState([
+    {
+      link: "",
+      linkComment: "",
+    },
+  ]);
+
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Define the required fields for the main form
+    const requiredFields = ["tname", "tproject_assign"];
+
+    const formData = { ...formValues, taskArray: [...fields] };
+
+    // Check for empty required fields in the main form
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
+
+    const fieldLabels = {
+      tname: "Task Name",
+      stname: "Subtask Name",
+      stdue_date: "Due Date",
+      stpriority: "Priority",
+      team_member2: "Assignee",
+    };
+
+    // Display a toast message for empty fields in the main form
+    if (emptyFields.length > 0) {
+      const errorFields = emptyFields.map((field) => fieldLabels[field]);
+      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      return;
+    }
+
+    // Validate each task within taskArray
+    for (const task of formData.taskArray) {
+      // Define the required fields for each task
+      const taskRequiredFields = ["stname", "stdue_date", "stpriority", "team_member2"];
+
+      // Check for empty required fields in each task
+      const emptyTaskFields = taskRequiredFields.filter((field) => !task[field]);
+
+      // Display a toast message for empty fields in each task
+      if (emptyTaskFields.length > 0) {
+        const errorTaskFields = emptyTaskFields.map((field) => fieldLabels[field]);
+        toast.error(`Please fill in all required fields: ${errorTaskFields.join(", ")}`);
+        return;
+      }
+    }
+
+    const editeData = {
+      stid: subtaskData?.stid,
+      stproject_assign: subtaskData?.stproject_assign,
+      dept: subtaskData?.stdept_id,
+      team_member2: formData?.taskArray[0]?.team_member2,
+      slinks: formData?.taskArray[0]?.slinks,
+      slink_comments: formData?.taskArray[0]?.slink_comments,
+      stname: formData?.taskArray[0]?.stname,
+      stdes: formData?.taskArray[0]?.stdes,
+      stnote: formData?.taskArray[0]?.stnote,
+      stfile:
+        files?.map((file, index) => ({ [index]: file.name })) || formData?.taskArray[0]?.stfile,
+      tpriority: formData?.taskArray[0]?.stpriority,
+      tdue_date: formData?.taskArray[0]?.stdue_date,
+    };
+
+    const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
+
+    alert(`${JSON.stringify(finalData)}`);
+
+    try {
+      setLoading(true);
+
+      const response = editMode
+        ? await updateSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: editeData })
+        : await insertSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: formData });
+      dispatch(closeModal(`${editMode ? "edit-subtask" : "add-sub-tasks"}`));
+      navigate(`/tasks-overview/${taskData?.tid}`); // it is creating issue if adding multiple subtasks
+      toast.success(response.message);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      toast.error(error.response?.data?.error || "An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <DialogContent dividers>
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField label="Task" name="task" required={true} placeholder="Enter Task Name" />
+            <CustomLabelTextField
+              label="Task"
+              name="tname"
+              required={true}
+              placeholder="Enter Task Name"
+              value={formValues.tname}
+              onChange={handleChange("tname")}
+              isDisabled={true}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomAutocomplete label="Project" options={projects} placeholder="Select Project" required={false} />
+            <SelectOption
+              label="Project"
+              required={false}
+              field="tproject_assign"
+              idKey="pid"
+              getOptionLabel={(option) => option.pname}
+              staticOptions={projects || []}
+              formValues={formValues}
+              setFormValues={setFormValues}
+              isDisabled={true}
+            />
           </Grid>
         </Grid>
 
         {/* Sub Task Form */}
 
-        {inputFields.map((inputField, index) => (
+        {fields?.map((field, index) => (
           <Box key={index}>
             <Divider sx={{ my: 3 }}>
-              <Chip label={inputFields.length === 1 ? "Please Enter Subtask Details" : `Please enter details for Subtask ${index + 1}`} />
+              <Chip
+                label={
+                  field.length === 1
+                    ? "Please Enter Subtask Details"
+                    : `Please enter details for Subtask ${index + 1}`
+                }
+              />
             </Divider>
             <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
               <Stack direction="row" justifyContent="end" alignItems="center">
-                {inputFields.length > 1 && (
+                {field.length > 1 && (
                   <Tooltip arrow title="Remove Subtask" size="small" placement="top-end">
                     <IconButton onClick={handleRemoveClick}>
                       <RemoveCircleRoundedIcon />
@@ -120,37 +421,97 @@ export default function CreateSubTasksForm() {
 
               <Grid container>
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomLabelTextField label="Sub Task" name="subtask" required={true} placeholder="Enter Subtask Name" />
+                  <CustomLabelTextField
+                    label="Sub Task"
+                    required={true}
+                    placeholder="Enter Subtask Name"
+                    name="stname"
+                    value={fields[index].stname || ""}
+                    onChange={(event) => handleFieldChange("stname")(event, index)}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <MyDatePicker label="Due Date" required={true} sizeWidth="100%" showBorder={true} />
+                  <CustomDatePicker
+                    label="Due Date"
+                    required
+                    minDate={new Date()} // Set the minimum date to today
+                    maxDate={new Date(taskData?.tdue_date)} // Set the maximum date to Task due date
+                    value={fields[index].stdue_date || new Date()}
+                    onChange={(date) => handleDueDate(date, index)}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomMultilineTextField label="Description" name="taskDescription" required={false} placeholder="Enter Task Description..." />
+                  <CustomMultilineTextField
+                    label="Description"
+                    required={false}
+                    placeholder="Enter Subtask Description..."
+                    name="stdes"
+                    value={fields[index].stdes || ""}
+                    onChange={(event) => handleFieldChange("stdes")(event, index)}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomMultilineTextField label="Note" name="note" required={false} placeholder="Enter Task Note..." />
+                  <CustomMultilineTextField
+                    label="Note"
+                    required={false}
+                    placeholder="Enter Subtask Note"
+                    name="stnote"
+                    value={fields[index].stnote || ""}
+                    onChange={(event) => handleFieldChange("stnote")(event, index)}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomAutocomplete label="Priority" options={priorities} placeholder="Select priority" required={true} />
+                  <Box sx={{ textAlign: "left" }}>
+                    <SelectOptionSubtaskForm
+                      label="Priority"
+                      required={true}
+                      field="stpriority"
+                      idKey="value"
+                      getOptionLabel={(option) => option.name}
+                      staticOptions={priorities}
+                      formValues={fields}
+                      setFormValues={setFields}
+                      isDisabled={false}
+                      index={index}
+                    />
+                  </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomAutocomplete label="Assignee" options={assignees} placeholder="Select Assignee" required={true} />
+                  <SelectOptionSubtaskForm
+                    label="Assignee"
+                    required={true}
+                    field="team_member2"
+                    idKey="reg_id"
+                    getOptionLabel={(option) => option.name}
+                    staticOptions={assignees || []}
+                    formValues={fields}
+                    setFormValues={setFields}
+                    isDisabled={false}
+                    index={index}
+                  />
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
+                  <CustomFileInput
+                    label="Attached File(s)"
+                    placeholder="Choose files..."
+                    multiple
+                    required={false}
+                    name="stfile"
+                    value={files}
+                    handleFilesChange={handleFilesChange(index)}
+                  />
                 </Grid>
 
-                <Grid item xs={12} sm={12} px={2} py={2}>
+                {/* <Grid item xs={12} sm={12} px={2} py={2}>
                   <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1, textAlign: "left" }}>Task Link(s) & Comment(s)</InputLabel>
-                  <AddAnotherLink />
-                </Grid>
+                  <AddAnotherLinkSubtaskForm fields={linksComments} setFields={setLinksComments} />
+                </Grid> */}
               </Grid>
             </Paper>
           </Box>
@@ -160,14 +521,44 @@ export default function CreateSubTasksForm() {
       <DialogActions>
         <Grid container>
           <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
-            <Button onClick={() => dispatch(closeModal())} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+            <Button
+              onClick={() => dispatch(closeModal())}
+              size="small"
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+                "&:hover": { backgroundColor: theme.palette.secondary.dark },
+              }}
+            >
               Close
             </Button>
-            <Button onClick={handleAddClick} size="small" type="submit" variant="contained" sx={{ ml: 1, backgroundColor: theme.palette.secondary.light, color: theme.palette.secondary.dark, "&:hover": { color: theme.palette.secondary.dark, backgroundColor: "#EBEBEB" } }}>
-              Add Another Subtask
-            </Button>
-            <Button onClick={displayFilesInAlert} size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
-              Add
+
+            {editMode ? null : (
+              <Button
+                onClick={handleAddClick}
+                size="small"
+                type="submit"
+                variant="contained"
+                sx={{
+                  ml: 1,
+                  backgroundColor: theme.palette.secondary.light,
+                  color: theme.palette.secondary.dark,
+                  "&:hover": { color: theme.palette.secondary.dark, backgroundColor: "#EBEBEB" },
+                }}
+              >
+                Add Another Subtask
+              </Button>
+            )}
+
+            <Button
+              onClick={handleSubmit}
+              size="small"
+              type="submit"
+              variant="contained"
+              sx={{ ml: 1 }}
+            >
+              {loading ? <CircularLoader /> : (editMode ? "Save Changes" : "Create")}
             </Button>
           </Grid>
         </Grid>

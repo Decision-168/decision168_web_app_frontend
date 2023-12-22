@@ -7,20 +7,24 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
 import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
-import DuplicateDialog from "../../subComponents/DuplicateDialog";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import SubtaskPreview from "../../subtaskOverview/subComponent/SubtaskPreview";
 import CustomDialog from "../../../common/CustomDialog";
 import CommentSection from "../../../project/projects-overview/comment-section";
-import { getTaskDetails } from "../../../../api/modules/taskModule";
+import { fileItTask, getTaskDetails } from "../../../../api/modules/taskModule";
+import { patchDeleteTask } from "../../../../api/modules/TrashModule";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { toast } from "react-toastify";
+import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
-const TaskPreview = ({ styles, taskId }) => {
+const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
   const dispatch = useDispatch();
-
+  const user = useSelector(selectUserDetails);
   //Dailog code
   const [openSubTaskPreviewDailog, setOpenSubTaskPreviewDailog] = React.useState(false);
   const [task, setTask] = React.useState({});
@@ -43,9 +47,8 @@ const TaskPreview = ({ styles, taskId }) => {
     fetchTaskDetails();
   }, [taskId]);
 
-
   const handleSubTaskPreviewDialog = (subtaskId) => {
-    setSubTaskId(subtaskId)
+    setSubTaskId(subtaskId);
     setOpenSubTaskPreviewDailog(true);
   };
 
@@ -70,38 +73,71 @@ const TaskPreview = ({ styles, taskId }) => {
   // };
 
   const handleDuplicateDialog = () => {
-    dispatch(openModal("duplicate-task"));
+    dispatch(openModal("duplicate-preview-task"));
   };
 
+  //File It
   const handleFileItDialog = () => {
     dispatch(
       openCnfModal({
-        modalName: "fileIt",
+        modalName: "fileItTaskInPreview",
         title: "Are you sure?",
         description: `You want to file the Task`,
       })
     );
   };
 
+  const handleFileItTaskYes = async () => {
+    const task_id = taskId;
+    // const user_id = user?.reg_id;
+    const user_id = 1; // for testing
+    try {
+      const response = await fileItTask(task_id, user_id);
+      dispatch(closeCnfModal({ modalName: "fileItTaskInPreview" }));
+      fetchData();
+      closePreview();
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in filing the task:", error);
+    }
+  };
+
   const handleDeleteDialog = () => {
     dispatch(
       openCnfModal({
-        modalName: "deleteTask",
+        modalName: "deleteTaskInPreview",
         title: "Are you sure?",
         description: `You want to Delete the Task`,
       })
     );
   };
 
+  const handleDeleteTaskYes = async () => {
+    const task_id = taskId;
+    // const user_id = user?.reg_id;
+    const user_id = 1; // for testing
+    try {
+      const response = await patchDeleteTask(task_id, user_id);
+      dispatch(closeCnfModal({ modalName: "deleteTaskInPreview" }));
+      fetchData();
+      closePreview();
+      toast.success(`${response.message}`);
+    } catch (error) {
+      toast.error(`${error?.response?.data?.error}`);
+      console.error("Error in Deleteing the task:", error);
+    }
+  };
+
   return (
     <>
-      <Grid container spacing={3} >
+      <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
           <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <OverviewCardHeader
-                  title={`TASK:${task?.tname}`}
+                  title={`TASK: ${task?.tname}`}
                   btn1Text={"Add Task"}
                   btn2Text={"Add Subtask"}
                   btn3Text={"Edit Task"}
@@ -131,7 +167,6 @@ const TaskPreview = ({ styles, taskId }) => {
                         <Typography sx={styles.labelText}>{task?.tdes}</Typography>
                       </>
                     )}
-
                   </Grid>
                   <Grid item xs={12}>
                     {task?.tnote && (
@@ -176,7 +211,8 @@ const TaskPreview = ({ styles, taskId }) => {
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
                             <Typography
                               onClick={() => handleSubTaskPreviewDialog(subTask?.stid)}
-                              sx={styles.subtaskLinkText}>
+                              sx={styles.subtaskLinkText}
+                            >
                               {subTask?.stcode} : {subTask?.stname}
                             </Typography>
                           </Box>
@@ -211,21 +247,23 @@ const TaskPreview = ({ styles, taskId }) => {
         value="add-sub-tasks"
         modalTitle="Add Sub Task"
         showModalButton={false}
-        modalSize="md">
-        <CreateSubTasksForm />
+        modalSize="md"
+      >
+          <CreateSubTasksForm taskData={task} />
       </ReduxDialog>
 
       <ReduxDialog
-        value="duplicate-task"
+        value="duplicate-preview-task"
         modalTitle="Copy Task"
         showModalButton={false}
-        modalSize="sm">
-        <DuplicateDialog />
+        modalSize="sm"
+      >
+        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-preview-task"}/>
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileIt"} />
+      <ConfirmationDialog value={"fileItTaskInPreview"} handleYes={handleFileItTaskYes} />
 
-      <ConfirmationDialog value={"deleteTask"} />
+      <ConfirmationDialog value={"deleteTaskInPreview"} handleYes={handleDeleteTaskYes} />
 
       <CustomDialog
         handleClose={handleCloseTaskPreviewDailog}
@@ -233,7 +271,8 @@ const TaskPreview = ({ styles, taskId }) => {
         modalTitle="Subtask"
         redirectPath={`/subtasks-overview/${subTaskId}`}
         showModalButton={true}
-        modalSize="lg">
+        modalSize="lg"
+      >
         <SubtaskPreview styles={styles} subtaskId={subTaskId} parentTaskName={task?.tname} />
       </CustomDialog>
     </>

@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import KPIs from "../../portfolio-goals/create-goals/subComponents/KPIs";
 import CustomSearchField from "../../../common/CustomSearchField";
 import { getGoalsAllStrategiesList } from "../../../../api/modules/goalkpiModule";
+import { SearchWithFuse } from "../../../../helpers/SearchWithFuse";
 const KPISection = ({ goalID }) => {
   const [Goalkpidetails, setGoalkpidetails] = useState([]);
   const [getGoalInfo, setGoalInfo] = useState([]);
@@ -17,6 +18,7 @@ const KPISection = ({ goalID }) => {
     const fetchAllData = async () => {
       try {
         const response = await getGoalsAllStrategiesList(goalID);
+        console.log(response);
         setGoalInfo(response.goalRes);
         setGoalkpidetails(response.listResults);
       } catch (error) {
@@ -33,6 +35,10 @@ const KPISection = ({ goalID }) => {
     setInputFields([...inputFields, { sname: "", sdes: "" }]);
   };
   const dispatch = useDispatch();
+
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["sname"], query, Goalkpidetails);
+
   return (
     <PerfectScrollbar>
       <Box
@@ -58,10 +64,10 @@ const KPISection = ({ goalID }) => {
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
           <Grid item xs={12} mt={2}>
-            {Goalkpidetails.map((item, index) => {
+            {newResults?.map((item, index) => {
               return (
                 <Fragment key={index}>
                   <KPIAccordion kpi={item} />
@@ -91,8 +97,8 @@ const KPISection = ({ goalID }) => {
             inputFields={inputFields}
             setInputFields={setInputFields}
             handleAddClick={handleAddClick}
-            passGID={getGoalInfo.gid}
-            passGDEPT={getGoalInfo.gdept}
+            passGID={getGoalInfo?.gid}
+            passGDEPT={getGoalInfo?.gdept}
           />
         </ReduxDialog>
       </Box>

@@ -165,6 +165,9 @@ const api = {
   //UpdateStrategies
   UpdateStrategy: "goal/update-strategies",
 
+  //get country by country code
+  country: "user/get-country/",
+
   //getGoalCreateDD
   GoalCreateDD: "goal/get-goal-create-dd/",
 
@@ -179,9 +182,6 @@ const api = {
 
   //TrashKPI
   TrashKPI: "trash/delete/kpi/",
-
-  //get country by country code
-  country: "user/get-country/",
 
   //-----------------------------Porfolio Modlue Start----------------
 
@@ -232,8 +232,11 @@ const api = {
 
   //-----------------------------Task Modlue Start----------------
 
-  //(LIST VIEW & GRID VIEW) All dashboard tasks and subtaks for dashboard  by regId
-  getAlltasksAndSubtasks: "task/all-tasks-subtasks/",
+  //Dashboard All tasks (List View)
+  getDashboardAlltaskListView: "task/all-tasks-subtasks-list-view/",
+
+  //Dashboard All tasks (Grid View)
+  getDashboardAlltaskGridView: "task/all-tasks-subtasks-grid-view/",
 
   //Task and subtask Editable fields by portfolio id
   editTaskAndSubtask: "task/table-editable/",
@@ -256,14 +259,50 @@ const api = {
   //get SubTask Details by subtask_id
   getSubTaskDetails: "subtask/subtask-detail/",
 
-  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (LIST VIEW)
+  //get portfolio tasks by portfolio id (portfoli-tasks) from the portfolio page
+  getPortfolioTasksListView: "task/portfolio-tasks/",
+
+  //get Portfolio Tasks and Subtasks (portfolio-tasks-list)  by portfolio id and reg_id (LIST VIEW)
   getPortfolioTasksSubtasksListView: "task/portfolio-tasks-subtasks-list-view/",
 
-  //get Portfolio Tasks and Subtasks  by portfolio id and reg_id (GRID VIEW)
+  //get Portfolio Tasks and Subtasks (portfolio-tasks-list)  by portfolio id and reg_id (GRID VIEW)
   getPortfolioTasksSubtasksGridView: "task/portfolio-tasks-subtasks-grid-view/",
 
-  // Insert Task by user id and portfolio id
+  //File It Task by  task_id  and user_id
+  fileItTask: "file-cabinet/file-it/task/",
+
+  //File It Task by  subtask_id  and user_id
+  fileItSubTask: "file-cabinet/file-it/subtask/",
+
+  // Insert Task by user id
   insertTask: "task/insert-task/",
+
+  // Insert Subtask by portfolio id user id
+  insertSubtask: "subtask/insert-subtask/",
+
+  //Update Task  by user id
+  updateTask: "task/edit-task/",
+
+  //Update Subtask  by user id
+  updateSubtask: "subtask/edit-subtask/",
+
+  //get projects by portfolio_id and user_id
+  getProjectsForSelectMenu: "get-projects-list/",
+
+  //get project team members by pid
+  getProjectTeamMembers: "project/project-team-members/",
+
+  //Duplicate task
+  duplicateTask: "task/duplicate-task",
+
+  //Duplicate Subtask
+  duplicateSubtask: "subtask/duplicate-subtask",
+
+  //Change Task Status in Grid View (Drag and Drop) by user id
+  changeTaskStatusDND: "task/change-status/",
+
+  //Change Subtask Status in Grid View (Drag and Drop) by user id
+  changeSubtaskStatusDND: "subtask/change-status/",
 
   //-----------------------------File Cabinet Module Start----------------
 

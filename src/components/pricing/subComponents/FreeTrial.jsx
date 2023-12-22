@@ -1,9 +1,6 @@
 import React, { memo } from "react";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
-import CustomNumberField from "../../common/CustomNumberField";
-import CustomSelect from "../../common/CustomSelect";
 import { DialogActions, DialogContent, Grid, Button } from "@mui/material";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useTheme } from "@emotion/react";
@@ -18,7 +15,7 @@ const items = [
   { value: "500+", text: "500+", selected: false },
 ];
 
-const ContactSaleForm = () => {
+const FreeTrial = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const {
@@ -37,36 +34,10 @@ const ContactSaleForm = () => {
         <Grid container p={2}>
           <Grid item xs={12}>
             <CustomLabelTextField
-              label="Name"
-              name="name"
-              required={true}
-              placeholder="Enter Name"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <CustomLabelTextField
-              label="Email"
-              name="email"
-              required={true}
-              placeholder="Enter Email Address"
-            />
-          </Grid>
-          <Grid item xs={12} pt={2}>
-            <CustomNumberField
-              label="Phone"
-              name="phoneNo"
-              required={true}
-              placeholder="Enter Phone No"
-            />
-          </Grid>
-          <Grid item xs={12} pt={2}>
-            <CustomSelect
-              items={items}
-              label="How many users are you exploring DECISION 168 for?"
-              labelColor=""
-              required={true}
-              handleChange={handleChange}
-              value={value}
+              label="Code/Coupon"
+              name="code_coupon"
+              required={false}
+              placeholder="Enter Code/Coupon"
             />
           </Grid>
         </Grid>
@@ -93,7 +64,7 @@ const ContactSaleForm = () => {
               variant="contained"
               sx={{ ml: 1 }}
             >
-              Send
+              Apply
             </Button>
           </Grid>
         </Grid>
@@ -101,4 +72,4 @@ const ContactSaleForm = () => {
     </>
   );
 };
-export default memo(ContactSaleForm);
+export default memo(FreeTrial);

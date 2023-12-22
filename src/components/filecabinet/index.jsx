@@ -18,17 +18,18 @@ import FilePopup from "./popup/FilePopup";
 import { getTreeData } from "../../api/modules/FileCabinetModule";
 import { selectUserDetails } from "../../redux/action/userSlice";
 import { useSelector } from "react-redux";
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
 
 const FileCabinet = () => {
   const [treeData, setTreeData] = useState([]);
-  
+
   const user = useSelector(selectUserDetails);
-  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const userID = user?.reg_id;
 
   const fetchTreeData = async () => {
     try {
-      const response = await getTreeData(storedPortfolioId,userID);
+      const response = await getTreeData(storedPortfolioId, userID);
       setTreeData(response);
     } catch (error) {
       console.error(error);
@@ -89,6 +90,9 @@ const FileCabinet = () => {
     },
   ];
 
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["name"], query, treeData);
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -138,7 +142,7 @@ const FileCabinet = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} lg={4}>
-                <CustomSearchField />
+                <CustomSearchField query={query} setQuery={setQuery} />
               </Grid>
             </Grid>
           )}
@@ -149,7 +153,7 @@ const FileCabinet = () => {
               handleModuleOpen={handleModuleOpen}
               handleFileOpen={handleFileOpen}
               value={value}
-              data={treeData}
+              data={newResults}
             />
           ) : (
             <GridSection
@@ -161,7 +165,11 @@ const FileCabinet = () => {
           )}
         </Grid>
         <Grid item xs={12} lg={3}>
-          <RecentFiles handleFileOpen={handleFileOpen} regId={userID} portfolioId={storedPortfolioId} />
+          <RecentFiles
+            handleFileOpen={handleFileOpen}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+          />
         </Grid>
       </Grid>
       <CustomPopup
@@ -175,27 +183,55 @@ const FileCabinet = () => {
         fetchTreeData={fetchTreeData}
         modalSize="md"
       >
-        {nodesData.type === "goal-content" && ( 
-          <GoalPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} /> 
+        {nodesData.type === "goal-content" && (
+          <GoalPopup
+            nodes={nodesData}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+            handleClose={handleModuleClose}
+            fetchTreeData={fetchTreeData}
+          />
         )}
-        {nodesData.type === "kpi-content" && ( 
-          <KpiPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        {nodesData.type === "kpi-content" && (
+          <KpiPopup
+            nodes={nodesData}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+            handleClose={handleModuleClose}
+            fetchTreeData={fetchTreeData}
+          />
         )}
-        {nodesData.type === "project-content" && ( 
-          <ProjectPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        {nodesData.type === "project-content" && (
+          <ProjectPopup
+            nodes={nodesData}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+            handleClose={handleModuleClose}
+            fetchTreeData={fetchTreeData}
+          />
         )}
-        {nodesData.type === "task-content" && ( 
-          <TaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        {nodesData.type === "task-content" && (
+          <TaskPopup
+            nodes={nodesData}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+            handleClose={handleModuleClose}
+            fetchTreeData={fetchTreeData}
+          />
         )}
-        {nodesData.type === "subtask-content" && ( 
-          <SubtaskPopup nodes={nodesData} regId={userID} portfolioId={storedPortfolioId} handleClose={handleModuleClose} fetchTreeData={fetchTreeData} />
+        {nodesData.type === "subtask-content" && (
+          <SubtaskPopup
+            nodes={nodesData}
+            regId={userID}
+            portfolioId={storedPortfolioId}
+            handleClose={handleModuleClose}
+            fetchTreeData={fetchTreeData}
+          />
         )}
         {(nodesData.type == "project-file" ||
-            nodesData.type == "task-file" ||
-            nodesData.type == "subtask-file" ||
-            nodesData.type == "content-file") && (
-              <FilePopup nodes={nodesData} />
-          )}
+          nodesData.type == "task-file" ||
+          nodesData.type == "subtask-file" ||
+          nodesData.type == "content-file") && <FilePopup nodes={nodesData} />}
       </CustomPopup>
     </Box>
   );

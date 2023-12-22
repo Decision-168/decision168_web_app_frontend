@@ -47,14 +47,14 @@ const InviteMembers = ({ formValues, setFormValues }) => {
           Invite More Member
         </Button>
       </Grid>
-      {formValues.imemail.map((inputField, index) => (
+      {formValues?.imemail?.map((inputField, index) => (
         <Fragment key={index}>
           <Grid item xs={2}></Grid>
           <Grid item xs={7} textAlign="start">
             <TextField
               fullWidth
               name="email"
-              value={inputField.email}
+              value={inputField?.email}
               onChange={(event) => handleInputChange(event, index)}
               placeholder="Enter Email ID To Invite Member..."
               variant="outlined"
