@@ -5,7 +5,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FormatListBulleted, GridView, Add } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
@@ -19,6 +19,10 @@ import CreateProject from "./Dialogs/CreateProject";
 import CustomDialog from "../common/CustomDialog";
 import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPopup";
 import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../redux/action/userSlice";
+import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
+import { SearchWithFuse } from "../../helpers/SearchWithFuse";
  const filterOption = [
    {
      value: "all",
@@ -50,6 +54,28 @@ import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
    },
  ];
 const ProjectIndex = () => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
+
+  const [projectData, setProjectData] = useState([]);
+  const [projectId, setProjectId] = useState(0);
+  const [projectTitle, setProjectTitle] = useState("");
+  const [projectTitleType, setProjectTitleType] = useState(null);
+
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectList(userID, storedPortfolioId);
+      setProjectData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, [userID]);
+
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
@@ -59,23 +85,66 @@ const ProjectIndex = () => {
     setValue(event.target.value);
   }, []);
   const [previewProject, setPreviewProject] = useState(false);
-      const [openPreviewPendingProj, setOpenPreviewPendingProj] =
-        useState(false);
- 
+  const [openPreviewPendingProj, setOpenPreviewPendingProj] = useState(false);
+
   const handleProjectPreviewClose = () => {
     setPreviewProject(false);
   };
-  const handleProjectPreviewOpen = () => {
+  const handleProjectPreviewOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
+    setProjectId(pid);
+    setProjectTitle(pname);
     setPreviewProject(true);
   };
  const handlePendingProjectClose = () => {
    setOpenPreviewPendingProj(false);
  };
- const handlePendingProjectOpen = () => {
-   setOpenPreviewPendingProj(true);
+ const handlePendingProjectOpen = (type, pid, pname) => {
+    setProjectTitleType(type);
+    setProjectId(pid);
+    setProjectTitle(pname);
+    setOpenPreviewPendingProj(true);
  };
   const dispatch = useDispatch();
   const align = alignment === "list";
+
+
+  const [query, setQuery] = useState("");
+   const createData = projectData.projectRegularList;
+   const acceptedData = projectData.projectAcceptedList;
+   const pendingRequest = projectData.projectPendingList;
+   const moreInfoRequest = projectData.projectReadMoreList;
+  const cardData = {
+    all: [
+      ...(createData || []),
+      ...(acceptedData || []),
+      ...(pendingRequest || []),
+      ...(moreInfoRequest || []),
+    ],
+    created: [...(createData || [])],
+    accepted: [...(acceptedData || [])],
+    "pending-requests": [...(pendingRequest || [])],
+    "more-info-requests": [...(moreInfoRequest || [])],
+    "regular-projects": [
+      ...(createData?.filter((i) => i.projectType === 0) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 0) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 0) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 0) || []),
+    ],
+    "goal-projects": [
+      ...(createData?.filter((i) => i.projectType === 1) || []),
+      ...(acceptedData?.filter((i) => i.projectType === 1) || []),
+      ...(pendingRequest?.filter((i) => i.projectType === 1) || []),
+      ...(moreInfoRequest?.filter((i) => i.projectType === 1) || []),
+    ],
+  };
+  const cardsToRender = cardData[value] || [];
+  const newResults = SearchWithFuse(
+    ["project.name"],
+    query,
+    cardsToRender || []
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -140,7 +209,7 @@ const ProjectIndex = () => {
         </Grid>
         {!align && (
           <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
 
@@ -150,12 +219,14 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
+              projectData={projectData}
             />
           ) : (
             <ProjectGridView
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
+              filterData={newResults}
             />
           )}
         </Grid>
@@ -171,22 +242,31 @@ const ProjectIndex = () => {
       <CustomDialog
         handleClose={handleProjectPreviewClose}
         open={previewProject}
-        modalTitle="Dashboard Module"
-        redirectPath={"/projects-overview"}
+        modalTitle={projectTitle}
+        redirectPath={`/projects-overview/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup />
+        <ViewProjectPopup
+          pid={projectId}
+          projectTitleType={projectTitleType}
+          refreshData={fetchProjectData}
+          handleClose={handleProjectPreviewClose}
+        />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingProjectClose}
         open={openPreviewPendingProj}
-        modalTitle="Test Project for developer"
-        redirectPath={"/projects-overview-request"}
+        modalTitle={projectTitle}
+        redirectPath={`/projects-overview-request/${projectId}`}
         showModalButton={true}
         modalSize="md"
       >
-        <PendingProjectPopup />
+        <PendingProjectPopup
+          pid={projectId}
+          refreshData={fetchProjectData}
+          handleClose={handlePendingProjectClose}
+        />
       </CustomDialog>
     </Box>
   );

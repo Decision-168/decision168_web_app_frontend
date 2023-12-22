@@ -1,65 +1,61 @@
 import React, { memo } from "react";
 import { Box, Grid } from "@mui/material";
-import {
-  acceptedData,
-  createData,
-  moreInfoRequest,
-  pendingRequest,
-} from "./project-data";
 import ProjectListViewTable from "./ProjectListViewTable";
 
-const tableData = {
-  all: [
-    { title: "Created Projects", data: createData },
-    { title: "Accepted Projects", data: acceptedData },
-    { title: "Pending Requests", data: pendingRequest },
-    { title: "More Info Requests", data: moreInfoRequest },
-  ],
-  created: [{ title: "Created Projects", data: createData }],
-  accepted: [{ title: "Accepted Projects", data: acceptedData }],
-  pending: [{ title: "Pending Requests", data: pendingRequest }],
-  "more-info-requests": [
-    { title: "More Info Requests", data: moreInfoRequest },
-  ],
-  "regular-projects": [
-    {
-      title: "Created Projects",
-      data: createData.filter((i) => i.projectType === 0),
-    },
-    {
-      title: "Accepted Projects",
-      data: acceptedData.filter((i) => i.projectType === 0),
-    },
-    {
-      title: "Pending Requests",
-      data: pendingRequest.filter((i) => i.projectType === 0),
-    },
-    {
-      title: "More Info Requests",
-      data: moreInfoRequest.filter((i) => i.projectType === 0),
-    },
-  ],
-  "goal-projects": [
-    {
-      title: "Created Projects",
-      data: createData.filter((i) => i.projectType === 1),
-    },
-    {
-      title: "Accepted Projects",
-      data: acceptedData.filter((i) => i.projectType === 1),
-    },
-    {
-      title: "Pending Requests",
-      data: pendingRequest.filter((i) => i.projectType === 1),
-    },
-    {
-      title: "More Info Requests",
-      data: moreInfoRequest.filter((i) => i.projectType === 1),
-    },
-  ],
-};
+const ProjectListView = ({ handleOpen, value, handlePendingOpen, projectData }) => {
 
-const ProjectListView = ({ handleOpen, value,handlePendingOpen }) => {
+  const tableData = {
+    all: [
+      { title: "Created Projects", data: projectData.projectRegularList },
+      { title: "Accepted Projects", data: projectData.projectAcceptedList },
+      { title: "Pending Requests", data: projectData.projectPendingList },
+      { title: "More Info Requests", data: projectData.projectReadMoreList },
+    ],
+    created: [{ title: "Created Projects", data: projectData.projectRegularList }],
+    accepted: [{ title: "Accepted Projects", data: projectData.projectAcceptedList }],
+    pending: [{ title: "Pending Requests", data: projectData.projectPendingList }],
+    "more-info-requests": [
+      { title: "More Info Requests", data: projectData.projectReadMoreList },
+    ],
+    "regular-projects": [
+      {
+        title: "Created Projects",
+        data: projectData.projectRegularList?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Accepted Projects",
+        data: projectData.projectAcceptedList?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Pending Requests",
+        data: projectData.projectPendingList?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "More Info Requests",
+        data: projectData.projectReadMoreList?.filter((i) => i.projectType === 0),
+      },
+    ],
+    "goal-projects": [
+      {
+        title: "Created Projects",
+        data: projectData.projectRegularList?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Accepted Projects",
+        data: projectData.projectAcceptedList?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Pending Requests",
+        data: projectData.projectPendingList?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "More Info Requests",
+        data: projectData.projectReadMoreList?.filter((i) => i.projectType === 1),
+      },
+    ],
+  };
+
+
   const tablesToRender = tableData[value] || [];
   return (
     <Box sx={{ flexGrow: 1 }} mb={2} mt={2}>

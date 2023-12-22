@@ -13,6 +13,7 @@ import GridSection from "../subComponents/GridSection";
 import ReduxDialog from "../../common/ReduxDialog";
 import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
 import CustomFilter from "../../common/CustomFilter";
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 
 const filterOption = [
   {
@@ -49,7 +50,7 @@ const DashboardTasks = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const dispatch = useDispatch();
-
+  const [rows, setRows] = useState([]);
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
@@ -58,6 +59,12 @@ const DashboardTasks = () => {
     setValue(event.target.value);
   }, []);
 
+    const [query, setQuery] = useState("");
+    const newResults = SearchWithFuse(
+      ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
+      query,
+      rows
+    );
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -69,14 +76,16 @@ const DashboardTasks = () => {
               alignItems: "center",
               justifyContent: "space-between",
               flexDirection: "row",
-            }}>
+            }}
+          >
             <BasicBreadcrumbs currentPage="Tasks" />
             <ToggleButtonGroup
               color="primary"
               value={alignment}
               exclusive
               onChange={handleChange}
-              aria-label="Platform">
+              aria-label="Platform"
+            >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
               </ToggleButton>
@@ -89,7 +98,8 @@ const DashboardTasks = () => {
               onClick={() => dispatch(openModal("create-new-task"))}
               variant="contained"
               startIcon={<Add />}
-              size="small">
+              size="small"
+            >
               Create New
             </Button>
 
@@ -97,7 +107,8 @@ const DashboardTasks = () => {
               value="create-new-task"
               modalTitle="Create New Task"
               showModalButton={false}
-              modalSize="md">
+              modalSize="md"
+            >
               <CreateEditTaskForm editMode={false} />
             </ReduxDialog>
           </Box>
@@ -112,7 +123,8 @@ const DashboardTasks = () => {
               justifyContent: "end",
               flexDirection: "row",
               padding: "5px",
-            }}>
+            }}
+          >
             {/* <IconButton>
               <FilterAltIcon />
             </IconButton> */}
@@ -133,16 +145,20 @@ const DashboardTasks = () => {
               alignItems: "center",
               justifyContent: "end",
               flexDirection: "row",
-            }}>
-            <CustomSearchField />
+            }}
+          >
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Box>
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection/> : <GridSection/>}
+          {alignment === "list" ? (
+            <ListSection setRows={setRows} rows={newResults} />
+          ) : (
+            <GridSection setRows={setRows} rows={newResults} />
+          )}
         </Grid>
       </Grid>
-
     </Box>
   );
 };

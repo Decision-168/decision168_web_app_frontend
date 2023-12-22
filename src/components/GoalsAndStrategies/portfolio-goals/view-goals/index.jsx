@@ -22,28 +22,36 @@ import PendingPopup from "../../subComponents/PendingPopup";
 import { getAllGoalList } from "../../../../api/modules/goalkpiModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { SearchWithFuse } from "../../../../helpers/SearchWithFuse";
 
 const ViewGoalsIndex = () => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   //get goal lists
   const [AllGoalData, setAllGoalData] = useState([]);
-  const fetchAllData = async () => {
+  const fetchAllPortfolioGoalData = async () => {
     try {
-      const response = await getAllGoalList("1", "2"); //userid,portid
-      setAllGoalData(response);
+      if (storedPorfolioId) {
+        const response = await getAllGoalList(user_id, storedPorfolioId);
+        setAllGoalData(response);
+      } else {
+        setAllGoalData([]);
+      }
     } catch (error) {
+      console.log(error);
       console.error(error);
     }
   };
 
-  useEffect(() => {  
-    fetchAllData();
-  }, []);
+  useEffect(() => {
+    fetchAllPortfolioGoalData();
+  }, [user_id, storedPorfolioId]);
   //get goal lists
-
-  //get user id
-  const user = useSelector(selectUserDetails);
-  const id = user?.reg_id;
-  //get user id
 
   const [goalID, setGoalID] = useState("");
   const [goalName, setGoalName] = useState("");
@@ -98,6 +106,27 @@ const ViewGoalsIndex = () => {
     },
   ];
   const align = alignment === "list";
+  const [query, setQuery] = useState("");
+
+  const cardData = {
+    all: [
+      ...(AllGoalData?.createData || []),
+      ...(AllGoalData?.acceptedData || []),
+      ...(AllGoalData?.pendingRequest || []),
+      ...(AllGoalData?.moreInfoRequest || []),
+    ],
+    "created-goals": [...(AllGoalData?.createData || [])],
+    "accepted-goals": [...(AllGoalData?.acceptedData || [])],
+    "pending-requests": [...(AllGoalData?.pendingRequest || [])],
+    "more-info-requests": [...(AllGoalData?.moreInfoRequest || [])],
+  };
+  const cardsToRender = cardData[value] || [];
+  const newResults = SearchWithFuse(
+    ["gname", "gend_date"],
+    query,
+    cardsToRender || []
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -162,7 +191,7 @@ const ViewGoalsIndex = () => {
         </Grid>
         {!align && (
           <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
 
@@ -178,8 +207,7 @@ const ViewGoalsIndex = () => {
             <GridSection
               handleGoalOpen={handleGoalOpen}
               handlePendingGoalOpen={handlePendingGoalOpen}
-              value={value}
-              AllGoalData={AllGoalData}
+              filterData={newResults}
             />
           )}
         </Grid>
@@ -191,7 +219,7 @@ const ViewGoalsIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateGoal />
+        <CreateGoal fetchAllData={fetchAllPortfolioGoalData} />
       </ReduxDialog>
 
       <CustomDialog
@@ -202,7 +230,7 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <ViewGoalsPopup goalID={goalID} id={id}/>
+        <ViewGoalsPopup goalID={goalID} id={user_id} />
       </CustomDialog>
       <CustomDialog
         handleClose={handlePendingGoalClose}
@@ -212,7 +240,12 @@ const ViewGoalsIndex = () => {
         showModalButton={true}
         modalSize="md"
       >
-        <PendingPopup handleClose={handlePendingGoalClose} fetchAllData={fetchAllData} goalID={goalID} id={id}/>
+        <PendingPopup
+          handleClose={handlePendingGoalClose}
+          fetchAllData={fetchAllPortfolioGoalData}
+          goalID={goalID}
+          id={user_id}
+        />
       </CustomDialog>
     </Box>
   );

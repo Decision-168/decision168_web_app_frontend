@@ -2,50 +2,6 @@ import axios from "axios";
 import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// export const getCreatedGoalList = async (user_id, portfolio_id) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.CreatedGoalList}${user_id}/${portfolio_id}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getAcceptedGoalList = async (user_id, portfolio_id) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.AcceptedGoalList}${user_id}/${portfolio_id}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getPendingGoalList = async (user_id, portfolio_id) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.PendingGoalList}${user_id}/${portfolio_id}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getReadMoreGoalList = async (user_id, portfolio_id) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.ReadMoreGoalList}${user_id}/${portfolio_id}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
 export const getAllGoalList = async (user_id, portfolio_id) => {
   try {
     const response = await axios.get(
@@ -68,39 +24,10 @@ export const checkPortfolioMemberActive = async (email_id, portfolio_id) => {
   }
 };
 
-export const getGoalCount = async (user_id, portfolio_id) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.GoalCount}${user_id}/${portfolio_id}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getGoalTasks = async (gid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.GoalTasks}${gid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getGoalSubtasks = async (gid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.GoalSubtasks}${gid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// export const getGoalTasksProgressDone = async (gid) => {
+// export const getGoalCount = async (user_id, portfolio_id) => {
 //   try {
 //     const response = await axios.get(
-//       `${apiUrl}${api.GoalTasksProgressDone}${gid}`
+//       `${apiUrl}${api.GoalCount}${user_id}/${portfolio_id}`
 //     );
 //     return response.data;
 //   } catch (error) {
@@ -108,58 +35,16 @@ export const getGoalSubtasks = async (gid) => {
 //   }
 // };
 
-// export const getGoalTasksProgressTotal = async (gid) => {
+// export const getStrategiesCount = async (user_id, gid, portfolio_id) => {
 //   try {
 //     const response = await axios.get(
-//       `${apiUrl}${api.GoalTasksProgressTotal}${gid}`
+//       `${apiUrl}${api.StrategiesCount}${user_id}/${gid}/${portfolio_id}`
 //     );
 //     return response.data;
 //   } catch (error) {
 //     throw error;
 //   }
 // };
-
-// export const getGoalSubtasksProgressDone = async (gid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.GoalSubtasksProgressDone}${gid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getGoalSubtasksProgressTotal = async (gid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.GoalSubtasksProgressTotal}${gid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getGoalProgress = async (gid) => {
-//   try {
-//     const response = await axios.get(`${apiUrl}${api.GoalProgress}${gid}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-export const getStrategiesCount = async (user_id, gid, portfolio_id) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.StrategiesCount}${user_id}/${gid}/${portfolio_id}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const getGoalRequest = async (gid, gmid, flag) => {
   try {
@@ -172,16 +57,16 @@ export const getGoalRequest = async (gid, gmid, flag) => {
   }
 };
 
-export const getGoalInviteRejectRequest = async (gid, igm_id, flag) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.GoalInviteRejectRequest}${gid}/${igm_id}/${flag}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getGoalInviteRejectRequest = async (gid, igm_id, flag) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.GoalInviteRejectRequest}${gid}/${igm_id}/${flag}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 export const getGoalOverviewRequest = async (user_id, gid) => {
   try {
@@ -204,33 +89,6 @@ export const getGoalMemberDetailbyGID = async (user_id, gid) => {
     throw error;
   }
 };
-
-export const getPDepartment = async (dept_id) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.PDepartment}${dept_id}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// export const getGoalTeamMember = async (gid) => {
-//   try {
-//     const response = await axios.get(`${apiUrl}${api.GoalTeamMember}${gid}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getInvitedGoalMember = async (gid) => {
-//   try {
-//     const response = await axios.get(`${apiUrl}${api.InvitedGoalMember}${gid}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
 
 export const getGoalsAllStrategiesList = async (gid) => {
   try {
@@ -263,92 +121,6 @@ export const getViewHistoryDateGoal = async (gid) => {
   }
 };
 
-export const getGoalDetailAccepted = async (user_id, gid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.GoalDetailAccepted}${user_id}/${gid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getFileItStrategyTasks = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.FileItStrategyTasks}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getFileItStrategySubtasks = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.FileItStrategySubtasks}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// export const getStrategyTasksProgressDone = async (sid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.StrategyTasksProgressDone}${sid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getStrategyTasksProgressTotal = async (sid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.StrategyTasksProgressTotal}${sid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getStrategySubtasksProgressDone = async (sid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.StrategySubtasksProgressDone}${sid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getStrategySubtasksProgressTotal = async (sid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.StrategySubtasksProgressTotal}${sid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getStrategyProgress = async (sid) => {
-//   try {
-//     const response = await axios.get(`${apiUrl}${api.StrategyProgress}${sid}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
 export const getStrategyAllProjectsList = async (sid) => {
   try {
     const response = await axios.get(
@@ -360,28 +132,10 @@ export const getStrategyAllProjectsList = async (sid) => {
   }
 };
 
-export const getProjectTasks = async (pid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.ProjectTasks}${pid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getProjectSubtasks = async (pid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.ProjectSubtasks}${pid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// export const getProjectTasksProgressDone = async (pid) => {
+// export const checkProjectTeamMember = async (user_id, pid) => {
 //   try {
 //     const response = await axios.get(
-//       `${apiUrl}${api.ProjectTasksProgressDone}${pid}`
+//       `${apiUrl}${api.ProjectTeamMember}${user_id}/${pid}`
 //     );
 //     return response.data;
 //   } catch (error) {
@@ -389,107 +143,10 @@ export const getProjectSubtasks = async (pid) => {
 //   }
 // };
 
-// export const getProjectTasksProgressTotal = async (pid) => {
+// export const getProjectCount = async (user_id, portfolio_id) => {
 //   try {
 //     const response = await axios.get(
-//       `${apiUrl}${api.ProjectTasksProgressTotal}${pid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getProjectSubtasksProgressDone = async (pid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.ProjectSubtasksProgressDone}${pid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getProjectSubtasksProgressTotal = async (pid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.ProjectSubtasksProgressTotal}${pid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getProjectProgress = async (pid) => {
-//   try {
-//     const response = await axios.get(`${apiUrl}${api.ProjectProgress}${pid}`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-export const checkProjectTeamMember = async (user_id, pid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectTeamMember}${user_id}/${pid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getProjectCount = async (user_id, portfolio_id) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ProjectCount}${user_id}/${portfolio_id}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const checkNotifyGoalSuggested = async (gid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.NotifyGoalSuggested}${gid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// export const getSuggestedGoalMember = async (gid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.SuggestedGoalMember}${gid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getSuggestedInviteGoalMember = async (gid) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.SuggestedInviteGoalMember}${gid}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export const getCheckGM = async (user_id, gid, portfolio_id) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.CheckGM}${user_id}/${gid}/${portfolio_id}`
+//       `${apiUrl}${api.ProjectCount}${user_id}/${portfolio_id}`
 //     );
 //     return response.data;
 //   } catch (error) {
@@ -508,15 +165,6 @@ export const getAccepted_PortTM_GoalList = async (portfolio_id, gid) => {
   }
 };
 
-export const getProjectById = async (pid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.ProjectById}${pid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 export const getViewHistoryDateWiseGoal = async (gid, hdate) => {
   try {
     const response = await axios.get(
@@ -528,64 +176,35 @@ export const getViewHistoryDateWiseGoal = async (gid, hdate) => {
   }
 };
 
-export const getViewHistoryDateRangeGoal = async (
-  gid,
-  start_date,
-  end_date
-) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ViewHistoryDateRangeGoal}${gid}`,
-      {
-        start_date: start_date,
-        end_date: end_date,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getViewHistoryDateRangeGoal = async (
+//   gid,
+//   start_date,
+//   end_date
+// ) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ViewHistoryDateRangeGoal}${gid}`,
+//       {
+//         start_date: start_date,
+//         end_date: end_date,
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getViewAllHistoryGoal = async (gid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ViewAllHistoryGoal}${gid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getGoalTeamMemberAccepted = async (gid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.GoalTeamMemberAccepted}${gid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getStrategyTasks = async (sid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.StrategyTasks}${sid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getStrategySubtasks = async (sid) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.StrategySubtasks}${sid}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getViewAllHistoryGoal = async (gid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ViewAllHistoryGoal}${gid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 export const getStrategyDetail = async (sid) => {
   try {
@@ -618,37 +237,37 @@ export const getViewHistoryDateWiseStrategy = async (sid, hdate) => {
   }
 };
 
-export const getViewHistoryDateRangeStrategy = async (
-  sid,
-  start_date,
-  end_date
-) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ViewHistoryDateRangeStrategy}${sid}`,
-      {
-        start_date: start_date,
-        end_date: end_date,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getViewHistoryDateRangeStrategy = async (
+//   sid,
+//   start_date,
+//   end_date
+// ) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ViewHistoryDateRangeStrategy}${sid}`,
+//       {
+//         start_date: start_date,
+//         end_date: end_date,
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const getViewAllHistoryStrategy = async (sid) => {
-  try {
-    const response = await axios.get(
-      `${apiUrl}${api.ViewAllHistoryStrategy}${sid}`
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+// export const getViewAllHistoryStrategy = async (sid) => {
+//   try {
+//     const response = await axios.get(
+//       `${apiUrl}${api.ViewAllHistoryStrategy}${sid}`
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
-export const CreateGoal = async (formData) => {
+export const InsertGoalData = async (formData) => {
   try {
     const response = await axios.post(`${apiUrl}${api.InsertGoal}`, formData);
     return response.data;
@@ -657,7 +276,7 @@ export const CreateGoal = async (formData) => {
   }
 };
 
-export const CreateStrategies = async (formData) => {
+export const InsertStrategiesData = async (formData) => {
   try {
     const response = await axios.post(
       `${apiUrl}${api.InsertStrategies}`,
@@ -815,10 +434,54 @@ export const EditStrategy = async (formdata) => {
   }
 };
 
-export const getGoalCreateDD = async (portfolio_id,user_id) => {
+export const getGoalCreateDD = async (portfolio_id, user_id) => {
   try {
     const response = await axios.get(
       `${apiUrl}${api.GoalCreateDD}${portfolio_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallFileItGoal = async (goal_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.FileItGoal}${goal_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallFileItKPI = async (strategy_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.FileItKPI}${strategy_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallTrashGoal = async (goal_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.TrashGoal}${goal_id}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const CallTrashKPI = async (strategy_id, user_id) => {
+  try {
+    const response = await axios.patch(
+      `${apiUrl}${api.TrashKPI}${strategy_id}/${user_id}`
     );
     return response.data;
   } catch (error) {

@@ -1,35 +1,37 @@
 import { RemoveCircleRounded } from "@mui/icons-material";
 import { Button, Grid, IconButton, TextField } from "@mui/material";
-import React, { Fragment, memo, useState } from "react";
+import React, { Fragment, memo } from "react";
 
 const InviteMembers = ({ formValues, setFormValues }) => {
-  const [inputFields, setInputFields] = useState([]);
-
-  // const updateInviteEmails = (emails) => {
-  //   setFormValues({
-  //     ...formValues,
-  //     imemail: emails,
-  //   });
-  // };
-
   const handleInputChange = (event, index) => {
-    const values = [...inputFields];
-    values[index][event.target.name] = event.target.value;
-    setInputFields(values);
-    setFormValues({
-      ...formValues,
-      imemail: values,
+    setFormValues((prevFormValues) => {
+      const updatedImEmail = [...prevFormValues.imemail];
+      updatedImEmail[index] = { ...updatedImEmail[index], [event.target.name]: event.target.value };
+     
+      return {
+        ...prevFormValues,
+        imemail: updatedImEmail,
+      };
     });
   };
 
   const handleAddClick = () => {
-    setInputFields([...inputFields, { email: "" }]);
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
+      imemail: [...prevFormValues.imemail, { email: "" }],
+    }));
   };
 
   const handleRemoveClick = (index) => {
-    const values = [...inputFields];
-    values.splice(index, 1);
-    setInputFields(values);
+    setFormValues((prevFormValues) => {
+      const updatedImEmail = [...prevFormValues.imemail];
+      updatedImEmail.splice(index, 1);
+
+      return {
+        ...prevFormValues,
+        imemail: updatedImEmail,
+      };
+    });
   };
 
   return (
@@ -45,14 +47,14 @@ const InviteMembers = ({ formValues, setFormValues }) => {
           Invite More Member
         </Button>
       </Grid>
-      {inputFields.map((inputField, index) => (
+      {formValues?.imemail?.map((inputField, index) => (
         <Fragment key={index}>
           <Grid item xs={2}></Grid>
           <Grid item xs={7} textAlign="start">
             <TextField
               fullWidth
               name="email"
-              value={inputField.email}
+              value={inputField?.email}
               onChange={(event) => handleInputChange(event, index)}
               placeholder="Enter Email ID To Invite Member..."
               variant="outlined"

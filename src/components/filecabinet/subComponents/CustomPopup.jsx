@@ -112,7 +112,7 @@ const CustomPopup = ({
     } catch (error) {
       dispatch(closeCnfModal({ modalName: 'reopenModule' }));
       handleClose()
-      toast.error(`${error.response?.error}`);
+      toast.error(`${error.response.data?.error}`);
     }
   };
 
@@ -127,7 +127,7 @@ const CustomPopup = ({
     } catch (error) {
       dispatch(closeCnfModal({ modalName: 'reopenModule' }));
       handleClose()
-      toast.error(`${error.response?.error}`);
+      toast.error(`${error.response.data?.error}`);
     }
   };
 

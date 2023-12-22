@@ -36,24 +36,63 @@ const ContactSaleForm = () => {
       <DialogContent dividers>
         <Grid container p={2}>
           <Grid item xs={12}>
-            <CustomLabelTextField label="Email" name="email" required={true} placeholder="Enter Email Address" />
+            <CustomLabelTextField
+              label="Name"
+              name="name"
+              required={true}
+              placeholder="Enter Name"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <CustomLabelTextField
+              label="Email"
+              name="email"
+              required={true}
+              placeholder="Enter Email Address"
+            />
           </Grid>
           <Grid item xs={12} pt={2}>
-            <CustomNumberField label="Phone" name="phoneNo" required={true} placeholder="Enter Phone No" />
+            <CustomNumberField
+              label="Phone"
+              name="phoneNo"
+              required={true}
+              placeholder="Enter Phone No"
+            />
           </Grid>
           <Grid item xs={12} pt={2}>
-            <CustomSelect items={items} label="How many users are you exploring DECISION 168 for?" labelColor="" required={true} handleChange={handleChange} value={value} />
+            <CustomSelect
+              items={items}
+              label="How many users are you exploring DECISION 168 for?"
+              labelColor=""
+              required={true}
+              handleChange={handleChange}
+              value={value}
+            />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
         <Grid container>
           <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
-            <Button onClick={() => dispatch(closeModal())} size="small" variant="contained" sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+            <Button
+              onClick={() => dispatch(closeModal())}
+              size="small"
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+                "&:hover": { backgroundColor: theme.palette.secondary.dark },
+              }}
+            >
               Close
             </Button>
 
-            <Button size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
+            <Button
+              size="small"
+              type="submit"
+              variant="contained"
+              sx={{ ml: 1 }}
+            >
               Send
             </Button>
           </Grid>

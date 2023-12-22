@@ -10,7 +10,7 @@
 
 export function stringAvatar(name) {
     if (typeof name === "string") {
-      const nameParts = name.split(" ");
+      const nameParts = name.toUpperCase().split(" ");
       return `${nameParts[0][0]}${nameParts[1] ? nameParts[1][0] : ""}`;
     }
     // Handle the case where name is not a string (or undefined) as needed.

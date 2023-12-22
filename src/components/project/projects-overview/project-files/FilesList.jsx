@@ -15,14 +15,27 @@ import {
   useTheme,
   Link,
 } from "@mui/material";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import FilePreviewPopup from "./FilePreviewPopup";
-const FilesList = ({ item, selectedFile }) => {
-  const [open, setOpen] = React.useState(false);
+import { patchDeleteProjectFile, patchDeleteSubtaskFile, patchDeleteTaskFile } from "../../../../api/modules/TrashModule";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+const FilesList = ({ item, selectedFile, index, refreshData }) => {
+  
+  const [open, setOpen] = useState(false);
+  const [moduleId, setModuleId] = useState(null);
+  const [fileId, setFileId] = useState(null);
+  const [typeId, setTypeId] = useState(null);
+  const [modulefile, setModulefile] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const dispatch = useDispatch();
+
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
 
   const handleClose = () => {
     setOpen(false);
@@ -36,7 +49,12 @@ const FilesList = ({ item, selectedFile }) => {
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = (currentIndex, nodes) => {
+    setSelectedIndex(currentIndex)
+    setModuleId(nodes.module_id)
+    setFileId(nodes.file_id)
+    setTypeId(nodes.type)
+    setModulefile(nodes.name)
     dispatch(
       openCnfModal({
         modalName: "deleteFile",
@@ -45,7 +63,52 @@ const FilesList = ({ item, selectedFile }) => {
       })
     );
   };
-  console.log(selectedFile);
+  const handleDeleteYes = () => {
+      if(typeId == 'project-file'){
+        handleProjectFile()
+      }else if(typeId == 'task-file'){
+        handleTaskFile()
+      }else if(typeId == 'subtask-file'){
+        handleSubtaskFile()
+      }
+  };
+
+  const handleProjectFile = async () => {
+    try {
+      const response = await patchDeleteProjectFile(moduleId, fileId, userID);      
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      refreshData();
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      toast.error(`${error.response?.data.error}`);
+    }
+  };
+
+  const handleSubtaskFile = async () => {
+    try {
+      const response = await patchDeleteSubtaskFile(moduleId, modulefile, userID);      
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      refreshData();
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      toast.error(`${error.response?.data.error}`);
+    }
+  };
+
+  const handleTaskFile = async () => {
+    try {
+      const response = await patchDeleteTaskFile(moduleId, modulefile, userID);      
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      refreshData();
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: 'deleteFile' }));
+      toast.error(`${error.response?.data.error}`);
+    }
+  };
+
   const handlePreview = () => {
     setOpen(true);
   };
@@ -70,7 +133,7 @@ const FilesList = ({ item, selectedFile }) => {
               sx={{ fontSize: 14, ml: 2, color: "#343a40",cursor:'pointer' }}
               onClick={handlePreview}
             >
-              {item.fileName}
+              {item.name}
             </Typography>
           </Box>
         </Grid>
@@ -105,7 +168,7 @@ const FilesList = ({ item, selectedFile }) => {
               <IconButton
                 aria-label="Delete"
                 color="primary"
-                onClick={handleDelete}
+                onClick={() => handleDelete(index, item)}
               >
                 <DisabledByDefault sx={{ color: "#343a40" }} />
               </IconButton>
@@ -113,8 +176,14 @@ const FilesList = ({ item, selectedFile }) => {
           </Box>
         </Grid>
       </Grid>
-      <FilePreviewPopup open={open} handleClose={handleClose} selectedFile={selectedFile}/>
-      <ConfirmationDialog value={"deleteFile"} />
+      <FilePreviewPopup nodes={item} open={open} handleClose={handleClose} selectedFile={selectedFile}/>
+      {
+        selectedIndex === index &&
+        (
+          <ConfirmationDialog value={"deleteFile"} handleYes={handleDeleteYes} />
+        )
+      }
+      
     </>
   );
 };

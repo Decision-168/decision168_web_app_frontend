@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,memo } from "react";
 import TaskTable from "./TaskTable";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
@@ -7,8 +7,8 @@ import { getDashboardAlltaskListView } from "../../../api/modules/taskModule";
 import Loader from "../../common/Loader";
 import MyPagination from "../../common/MyPagination";
 
-const ListSection = () => {
-  const [rows, setRows] = useState([]);
+const ListSection = ({rows,setRows}) => {
+
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
   // const regId = user?.reg_id;
@@ -60,4 +60,4 @@ const ListSection = () => {
   );
 };
 
-export default ListSection;
+export default memo(ListSection);

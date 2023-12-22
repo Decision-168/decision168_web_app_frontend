@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Box, Card, CardContent, Paper } from "@mui/material";
 import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
@@ -14,8 +14,7 @@ import NoGridTaskFound from "./NoGridTaskFound";
 import { changeSubtaskStatusDND, changeTaskStatusDND } from "../../../api/modules/taskModule";
 import { toast } from "react-toastify";
 
-const PortfolioGridSection = () => {
-  const [rows, setRows] = useState([]);
+const PortfolioGridSection = ({ rows, setRows }) => {
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = React.useState({});
   const user = useSelector(selectUserDetails);
@@ -82,9 +81,16 @@ const PortfolioGridSection = () => {
   // Task Status
   const updateTaskStatus = async (taskId, taskAssignee, newStatus) => {
     try {
-      const newdata = { tid: taskId, tassignee: taskAssignee, status_but: newStatus };
+      const newdata = {
+        tid: taskId,
+        tassignee: taskAssignee,
+        status_but: newStatus,
+      };
       // Assuming changeTaskStatusDND returns a Promise
-      const response = await changeTaskStatusDND({ user_id: regId, data: newdata });
+      const response = await changeTaskStatusDND({
+        user_id: regId,
+        data: newdata,
+      });
 
       // Log specific properties for debugging
       console.log("Task Status Response:", response);
@@ -100,9 +106,16 @@ const PortfolioGridSection = () => {
   // Subtask Status
   const updateSubtaskStatus = async (subtaskId, subtaskAssignee, newStatus) => {
     try {
-      const newdata = { stid: subtaskId, stassignee: subtaskAssignee, status_but: newStatus };
+      const newdata = {
+        stid: subtaskId,
+        stassignee: subtaskAssignee,
+        status_but: newStatus,
+      };
       // Assuming changeSubtaskStatusDND returns a Promise
-      const response = await changeSubtaskStatusDND({ user_id: regId, data: newdata });
+      const response = await changeSubtaskStatusDND({
+        user_id: regId,
+        data: newdata,
+      });
 
       // Log specific properties for debugging
       console.log("Subtask Status Response:", response);
@@ -121,7 +134,11 @@ const PortfolioGridSection = () => {
     if (removed?.content?.type === "task") {
       console.log("This is a task");
       try {
-        const response = await updateTaskStatus(tid, tassignee, destColumn?.value);
+        const response = await updateTaskStatus(
+          tid,
+          tassignee,
+          destColumn?.value
+        );
         if (response.status === 200) {
           toast.success(`${response.data?.message}`);
         } else {
@@ -134,7 +151,11 @@ const PortfolioGridSection = () => {
     } else {
       console.log("This is a subtask");
       try {
-        const response = await updateSubtaskStatus(tid, tassignee, destColumn?.value);
+        const response = await updateSubtaskStatus(
+          tid,
+          tassignee,
+          destColumn?.value
+        );
         if (response.status === 200) {
           toast.success(`${response.data?.message}`);
         } else {
@@ -191,8 +212,17 @@ const PortfolioGridSection = () => {
       {loading ? (
         <Loader />
       ) : (
-        <Box sx={{ mt: 2, display: "grid", gap: 2, gridTemplateColumns: "repeat(4, 1fr)" }}>
-          <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+        <Box
+          sx={{
+            mt: 2,
+            display: "grid",
+            gap: 2,
+            gridTemplateColumns: "repeat(4, 1fr)",
+          }}
+        >
+          <DragDropContext
+            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+          >
             {Object.entries(columns).map(([columnId, column], index) => {
               return (
                 <Droppable droppableId={columnId} key={columnId}>
@@ -202,7 +232,9 @@ const PortfolioGridSection = () => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                          background: snapshot.isDraggingOver ? "#DEE1E6" : "#FFFFFF",
+                          background: snapshot.isDraggingOver
+                            ? "#DEE1E6"
+                            : "#FFFFFF",
                           padding: 14,
                           width: "100%",
                           minHeight: 500,
@@ -214,7 +246,9 @@ const PortfolioGridSection = () => {
                         <KanbanColumnHeader
                           status={column.name}
                           color={column.color}
-                          count={column.items.length > 0 ? column.items.length : 0}
+                          count={
+                            column.items.length > 0 ? column.items.length : 0
+                          }
                         />
 
                         {/* Column Body */}
@@ -224,7 +258,11 @@ const PortfolioGridSection = () => {
                               {column?.items?.length > 0 ? (
                                 column?.items?.map((item, index) => {
                                   return (
-                                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                                    <Draggable
+                                      key={item.id}
+                                      draggableId={item.id}
+                                      index={index}
+                                    >
                                       {(provided) => {
                                         return (
                                           <div
@@ -270,4 +308,4 @@ const PortfolioGridSection = () => {
   );
 };
 
-export default PortfolioGridSection;
+export default memo(PortfolioGridSection);

@@ -5,14 +5,34 @@ import {
   getViewHistoryDateGoal,
   getViewHistoryDateStrategy,
 } from "../../../../api/modules/goalkpiModule";
+import { getViewHistoryDateProject } from "../../../../api/modules/ProjectModule";
 
 const RecentHistory = ({ id, type }) => {
   const [recentHis, setrecentHis] = useState([]);
-  if (type === "goal") {
+  
     useEffect(() => {
       const fetchRecentHistoryData = async () => {
         try {
-          const response = await getViewHistoryDateGoal(id);
+          let response;
+          if (type === "goal") {
+            response = await getViewHistoryDateGoal(id);
+          } else if (type === "kpi") {
+            response = await getViewHistoryDateStrategy(id);
+          }
+          setrecentHis(response.history_dates);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchRecentHistoryData();
+    }, [id, type]);  
+
+  if (type === "kpi") {
+    useEffect(() => {
+      const fetchRecentHistoryData = async () => {
+        try {
+          const response = await getViewHistoryDateStrategy(id);
           setrecentHis(response.history_dates);
         } catch (error) {
           console.error(error);
@@ -23,11 +43,11 @@ const RecentHistory = ({ id, type }) => {
     }, []);
   }
 
-  if (type === "kpi") {
+  if (type === "project") {
     useEffect(() => {
       const fetchRecentHistoryData = async () => {
         try {
-          const response = await getViewHistoryDateStrategy(id);
+          const response = await getViewHistoryDateProject(id);
           setrecentHis(response.history_dates);
         } catch (error) {
           console.error(error);
@@ -57,10 +77,10 @@ const RecentHistory = ({ id, type }) => {
         History
       </Typography>
 
-      {recentData.map((item, index) => {
+      {recentData.map((rh_item, rh_index) => {
         return (
-          <Fragment key={index}>
-            <RecentList data={item} id={id} type={type} />
+          <Fragment key={rh_index}>
+            <RecentList data={rh_item} id={id} type={type} />
           </Fragment>
         );
       })}

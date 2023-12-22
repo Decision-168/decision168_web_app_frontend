@@ -21,8 +21,17 @@ import {
   getAccepted_PortTM_GoalList,
 } from "../../../../api/modules/goalkpiModule";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const AddMemberDialog = ({ id, type, refreshData }) => {
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+
   const {
     register,
     formState: { errors },
@@ -36,7 +45,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     gid: id,
-    gcreated_by: "1", //user_id
+    gcreated_by: user_id, 
     team_member: [],
     imemail: [],
   });
@@ -45,7 +54,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
     useEffect(() => {
       const fetchAllHistoryData = async () => {
         try {
-          const response = await getAccepted_PortTM_GoalList("2", id); //portfolio_id
+          const response = await getAccepted_PortTM_GoalList(storedPorfolioId, id);
           if (response) {
             setmemberData(response);
           }
@@ -55,7 +64,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
       };
 
       fetchAllHistoryData();
-    }, []);
+    }, [storedPorfolioId, id]);
   }
 
   useEffect(() => {

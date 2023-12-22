@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,memo } from "react";
 import TaskTable from "./TaskTable";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
@@ -8,8 +8,7 @@ import Loader from "../../common/Loader";
 import NoListTaskFound from "./NoListTaskFound";
 import MyPagination from "../../common/MyPagination";
 
-const PortfolioListSection = () => {
-  const [rows, setRows] = useState([]);
+const PortfolioListSection = ({ rows, setRows }) => {
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
   // const regId = user?.reg_id;
@@ -50,17 +49,10 @@ const PortfolioListSection = () => {
   return (
     <Grid container mt={2}>
       <Grid item xs={12}>
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
-            {rows?.length > 0 && <MyPagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
-          </>
-        )}
+        {loading ? <Loader /> : <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />}
       </Grid>
     </Grid>
   );
 };
 
-export default PortfolioListSection;
+export default memo(PortfolioListSection);

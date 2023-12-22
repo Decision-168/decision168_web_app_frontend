@@ -5,29 +5,66 @@ import { Send } from "@mui/icons-material";
 import ScrollBar from "react-perfect-scrollbar";
 import mentionsInputStyle from "./mentionInputStyle";
 import MessagesByDate from "./MessagesByDate";
-const CommentSection = ({ projectId }) => {
+import {
+  getMentionList,
+  getProjectComments,
+  insertComments,
+} from "../../../../api/modules/ProjectModule";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+const CommentSection = ({ projectId, taskId, subtaskId }) => {
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [mentionList, setMentionList] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [mentionInput, setMentionInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const fetchCommentData = async () => {
+    setLoading(true)
+    try {
+      if(projectId && userID){
+        const response = await getProjectComments(projectId, userID);
+        setMessages(response.projectCommentDetail);
+      }      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false)
+    }
+  };
 
   useEffect(() => {
-    const storedMessages = localStorage.getItem(`project_${projectId}_messages`);
-    if (storedMessages) {
-      setMessages(JSON.parse(storedMessages));
-    }
-  }, [projectId]);
+    fetchCommentData();
+  }, [projectId, userID]);
+
+  // useEffect(() => {
+  //   const storedMessages = localStorage.getItem(`project_${projectId}_messages`);
+  //   if (storedMessages) {
+  //     setMessages(JSON.parse(storedMessages));
+  //   }
+  // }, [projectId]);
 
   const saveMessagesToLocalStorage = (messages) => {
-    localStorage.setItem(`project_${projectId}_messages`, JSON.stringify(messages));
+    // localStorage.setItem(`project_${projectId}_messages`, JSON.stringify(messages));
   };
 
   const getCurrentDate = () => {
     return new Date().toLocaleDateString();
   };
 
+  const [formValues, setFormValues] = useState({});
   const handleSendMessage = () => {
+    // alert(`${JSON.stringify({
+    //   project_id: projectId,
+    //   tid: taskId,
+    //   stid: subtaskId,
+    //   message: newMessage
+    // })}`)
     if (newMessage.trim() !== "") {
       const currentDate = getCurrentDate();
       const timestamp = new Date().toLocaleTimeString();
@@ -39,24 +76,54 @@ const CommentSection = ({ projectId }) => {
         date: currentDate,
         isMe: true,
       };
-
+      const msg = {
+        project_id: projectId,
+        tid: taskId,
+        stid: subtaskId,
+        message: newMessage,
+      };
+      // setFormValues();
       setMessages((prevMessages) => [...prevMessages, message]);
       setNewMessage("");
       setAnchorEl(null);
       setMentionInput("");
-      saveMessagesToLocalStorage([...messages, message]);
+      insertMessage(msg);
+      // saveMessagesToLocalStorage([...messages, message]);
     }
   };
+
+  const insertMessage = async (mssg) => {
+    console.log(mssg);
+    try {
+      const response = await insertComments(userID, mssg);
+      fetchCommentData();
+      // console.log(response)
+      toast.success(`${response.message}`);
+    } catch (error) {
+      // console.error(error);
+      toast.error(`${error.response?.error}`);
+    }
+  };
+
+  const [mentionData, setMentionData] = useState([]);
+  const fetchMentionData = async () => {
+    try {
+      const response = await getMentionList(projectId);
+      setMentionData(response.mentionDetail);
+    } catch (error) {
+      // console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMentionData();
+  }, [projectId]);
 
   const handleInputChange = (event) => {
     const inputText = event.target.value;
     let mentionedUser = "";
     if (inputText.includes("@")) {
-      setMentionList([
-        { id: 1, display: "Alim Mohammad" },
-        { id: 2, display: "Syed Jammel" },
-        { id: 3, display: "Arshad Khan" },
-      ]);
+      setMentionList(mentionData);
       setAnchorEl(event.currentTarget);
       mentionedUser = inputText
         .split("@")[1]
@@ -102,7 +169,12 @@ const CommentSection = ({ projectId }) => {
 
     return Object.keys(groupedMessages).map((date, index) => (
       <Fragment key={index}>
-        <MessagesByDate date={date} groupedMessages={groupedMessages} setMessages={setMessages} saveMessagesToLocalStorage={saveMessagesToLocalStorage} />
+        <MessagesByDate
+          date={date}
+          groupedMessages={groupedMessages}
+          setMessages={setMessages}
+          saveMessagesToLocalStorage={saveMessagesToLocalStorage}
+        />
       </Fragment>
     ));
   };
@@ -121,7 +193,14 @@ const CommentSection = ({ projectId }) => {
     >
       <Typography sx={{ color: "#495057", fontSize: 15, fontWeight: "600", textAlign: "left" }}>Comment Section</Typography>
       <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
-        {messages.length > 0 ? (
+        {loading ? (
+          <Box sx={{width:"100%", textAlign:"center"}}>
+            <Typography sx={{
+                color: "#495057",
+                fontSize: 13,
+              }}>Loading...</Typography>
+          </Box>
+        ) : messages.length > 0 ? (
           <ScrollBar>
             <Box sx={{ height: "100%" }}>{renderMessagesByDate()}</Box>
           </ScrollBar>
