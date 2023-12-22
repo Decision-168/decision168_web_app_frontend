@@ -8,12 +8,12 @@ import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import SubTaskOverviewCardHeader from "./SubTaskOverviewCardHeader";
 import SubtakOverviewCardBody from "./SubtakOverviewCardBody";
-import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 import { patchDeleteSubtask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fileItSubTask } from "../../../../api/modules/taskModule";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
 const SubtaskOverviewCard = ({ styles, subtask }) => {
   const dispatch = useDispatch();
@@ -86,7 +86,7 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
       </Grid>
 
       <ReduxDialog value="edit-subtask" modalTitle="Edit Subtask" showModalButton={false} modalSize="md">
-        <EditSubTasksForm />
+      <CreateEditSubTasksForm editMode={true} taskData={{}} subtaskData={subtask}/>
       </ReduxDialog>
 
       <ReduxDialog value="duplicate-overview-subtask" modalTitle="Copy Task" showModalButton={false} modalSize="sm">

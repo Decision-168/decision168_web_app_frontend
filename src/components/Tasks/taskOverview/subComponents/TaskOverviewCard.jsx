@@ -9,7 +9,7 @@ import ReduxDialog from "../../../common/ReduxDialog";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import OverviewCardBody from "./TaskOverviewCardBody";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
-import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 import { patchDeleteTask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -99,11 +99,11 @@ const TaskOverviewCard = ({ styles, task }) => {
       </ReduxDialog>
 
       <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} />
+        <CreateEditTaskForm editMode={true} taskEditData={task}/>
       </ReduxDialog>
 
       <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm taskData={task} />
+        <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
 

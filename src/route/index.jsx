@@ -52,7 +52,7 @@ const DashboardTasks = lazy(() => import("../components/Tasks/DashboardTasks"));
 const PortfolioTasksList = lazy(() => import("../components/Tasks")); //side bar
 const PortfolioTasks = lazy(() => import("../components/Tasks/PortfolioTasks")); // from the porfolio page
 
-const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
+// const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
 const AccountVerification = lazy(() =>
@@ -231,14 +231,14 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
+          {/* <Route
             path="/tasks-create"
             element={
               <DashboardLayout>
                 <CreateEditTask />
               </DashboardLayout>
             }
-          />
+          /> */}
           <Route
             path="/tasks-overview/:taskId"
             element={

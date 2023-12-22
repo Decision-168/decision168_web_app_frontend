@@ -1,21 +1,18 @@
-import { useMemo, memo, useEffect, useState } from "react";
+import { useMemo, memo,useState } from "react";
 import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button} from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import {
-  getPortfolioTeamMemberName,
   updatePortfolioMemberStatus,
 } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import CustomDialog from "../../../common/CustomDialog";
 import AssignToSomeoneDailogContent from "./AssignToSomeoneDailogContent";
 import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import {
   getPortfolioTeamMembersAsync,
-  selectPorfolioTeamMembers,
 } from "../../../../redux/action/portfolioSlice";
 
 const AllMembersTable = ({ data }) => {
@@ -36,20 +33,6 @@ const AllMembersTable = ({ data }) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const fetchTeamMembers = async () => {
-  //   try {
-  //     dispatch(getPortfolioTeamMembersAsync(storedPorfolioId));
-  //   } catch (fetchError) {
-  //     console.error("Error fetching portfolio team members:", fetchError);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchTeamMembers();
-  // }, [storedPorfolioId]);
-
-  console.log(data);
 
   const handleReopen = (member, regId, primaryId, status) => {
     setMemberName(member);
@@ -89,7 +72,6 @@ const AllMembersTable = ({ data }) => {
     }
   };
 
-  console.log("result", result);
 
   const columns = useMemo(
     () => [

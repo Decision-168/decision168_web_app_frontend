@@ -230,6 +230,7 @@ const api = {
   //get portfolio count by portfolioId
   getPortfolioCount: "portfolio/get-portfolio-count/",
 
+
   //-----------------------------Task Modlue Start----------------
 
   //Dashboard All tasks (List View)
@@ -303,6 +304,22 @@ const api = {
 
   //Change Subtask Status in Grid View (Drag and Drop) by user id
   changeSubtaskStatusDND: "subtask/change-status/",
+
+
+  //get all accepted active portfolio team members(Assignee dropdown) by portfolio id
+  activePotfolioTeamMembers: "portfolio/get-all-accepted-active-portfolio-team-members/",
+
+  //get all Goal team members without read_more status (Assignee dropdown) by gid
+  getGoalTeamMembers:"goal/goal-team-member/",
+  
+  //get goal details for (Date Picker Date) by gid
+  getGoalDetails:"goal/goal-details/",
+
+  //insert Task file by user id
+  insertTaskFile:"task/insert-task-file/",
+
+  //insert Subtask file by user id
+  insertSubtaskFile:"task/insert-subtask-file/",
 
   //-----------------------------File Cabinet Module Start----------------
 

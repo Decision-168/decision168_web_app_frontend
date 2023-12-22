@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Paper,
   Tooltip,
   Stack,
   FormGroup,
@@ -32,7 +31,6 @@ import ReorderIcon from "@mui/icons-material/Reorder";
 import SubdirectoryArrowRightRoundedIcon from "@mui/icons-material/SubdirectoryArrowRightRounded";
 import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import Chip from "@mui/material/Chip";
-import MyDatePicker from "./MyDatePicker ";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
@@ -46,11 +44,10 @@ import {
 } from "../../../api/modules/taskModule";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { toast } from "react-toastify";
-import { formatAssigneeText, formatPriority, formatStatus } from "../../../helpers/tasks";
+import { formatPriority, formatStatus } from "../../../helpers/tasks";
 import CustomDialog from "../../common/CustomDialog";
 import TaskPreview from "../taskOverview/subComponents/TaskPreview";
 import SubtaskPreview from "../subtaskOverview/subComponent/SubtaskPreview";
-import NoListTaskFound from "./NoListTaskFound";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentIcon from "@mui/icons-material/Comment";
 import { openModal } from "../../../redux/action/modalSlice";
@@ -60,6 +57,10 @@ import ReduxDialog from "../../common/ReduxDialog";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import CustomFileInput from "../../common/CustomFileInput";
 import Badge from "@mui/material/Badge";
+import SelectAssignee from "./SelectAssignee";
+import TasksModuleDatePicker from "./TasksModuleDatePicker";
+import AttachTaskFile from "./AttachTaskFile";
+import AttachSubtaskFile from "./AttachSubtaskFile";
 
 export default function TaskTable({ rows, setRows, fetchData }) {
   const theme = useTheme();
@@ -77,13 +78,12 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   const [rowStates, setRowStates] = useState({});
   const [taskName, setTaskName] = useState("");
   const [subTaskName, setSubTaskName] = useState("");
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [taskToEdit, setTaskToEdit] = useState({});
+  const [subTaskToEdit, setSubTaskToEdit] = useState({});
+  const [openTaskMenu, setOpenTaskMenu] = useState(null);
+  const [openSubtaskMenu, setOpenSubtaskMenu] = useState(null);
 
   //assingnee
-  const [assignees, setAssignees] = useState([]);
-  const [selectedAssignees, setSelectedAssignees] = useState({});
-  const [editTaskAssignee, setEditTaskAssignee] = useState(null);
-  const [editSubTaskAssignee, setEditSubTaskAssignee] = useState(null);
   const [taskAssignee, setTaskAssignee] = useState(null);
   const [subTaskAssignee, setSubTaskAssignee] = useState(null);
   //priority
@@ -94,19 +94,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   const [selectedStatuses, setSelectedStatuses] = useState({});
   const [editTaskStatus, setEditTaskStatus] = useState(null);
   const [editSubTaskStatus, setEditSubTaskStatus] = useState(null);
-  //Duedate
-  const [selectedDueDate, setSelectedDueDate] = useState({});
-  const [selectedTaskDueDate, setSelectedTaskDueDate] = useState(null);
-  const [selectedSubTaskDueDate, setSelectedSubTaskDueDate] = useState(null);
-
-  // Fetch taskAssignees from API or another source
-  useEffect(() => {
-    const fetchedAssignees = [
-      { value: regId, text: "To Me" },
-      { value: 2, text: "john" },
-    ];
-    setAssignees(fetchedAssignees);
-  }, []);
 
   // Set the initial selectedPriorities based on rows
   useEffect(() => {
@@ -152,29 +139,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
     });
 
     setSelectedStatuses(initialSelectedStatuses);
-  }, [rows]);
-
-  // Set the initial selectedTaskAssignees based on rows
-  useEffect(() => {
-    const initialSelectedAssignees = {};
-
-    rows?.forEach((row) => {
-      // Check for the main row's task assignee
-      if (row?.tassignee) {
-        initialSelectedAssignees[row.tid] = row.tassignee;
-      }
-
-      // Check for subrows and their task assignees
-      if (row.subTasks && Array.isArray(row.subTasks)) {
-        row.subTasks.forEach((subrow) => {
-          if (subrow.stassignee) {
-            initialSelectedAssignees[subrow.stid] = subrow.stassignee;
-          }
-        });
-      }
-    });
-
-    setSelectedAssignees(initialSelectedAssignees);
   }, [rows]);
 
   const handleDragEnd = (e) => {
@@ -403,38 +367,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
     }
   };
 
-  // Task Assignee
-  const handleTaskAssignee = (event, taskId) => {
-    const newAssignee = event.target.value;
-    // Update the selected assignees
-    setSelectedAssignees((prevSelected) => ({
-      ...prevSelected,
-      [taskId]: newAssignee,
-    }));
-    // Close the assignee editing
-    setEditTaskAssignee(null);
-  };
-
-  const handleEditTaskAssignee = (taskId) => {
-    setEditTaskAssignee(taskId);
-  };
-
-  // SubTask Assignee
-  const handleSubTaskAssignee = (event, subtaskId) => {
-    const newAssignee = event.target.value;
-    // Update the selected assignees
-    setSelectedAssignees((prevSelected) => ({
-      ...prevSelected,
-      [subtaskId]: newAssignee,
-    }));
-    // Close the assignee editing
-    setEditSubTaskAssignee(null);
-  };
-
-  const handleEditSubTaskAssignee = (subtaskId) => {
-    setEditSubTaskAssignee(subtaskId);
-  };
-
   //Task Priority
   const updateTaskPriority = async (taskId, newPriority) => {
     try {
@@ -650,7 +582,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
   //Task Duedate
   const handleSubTaskDueDate = (subtaskId) => async (date) => {
-    alert(`${subtaskId}--${date} `);
+    // alert(`${subtaskId}--${date} `);
     try {
       const newDate = date;
       await updateSubTaskDueDate(subtaskId, newDate);
@@ -698,42 +630,27 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   };
 
   //Task Attache file
-  const handleTaskAttachFileDialog = (rowId) => {
+  const handleTaskAttachFileDialog = (rowId, row) => {
+    setRowId(rowId);
+    setTaskToEdit(row);
     dispatch(openModal("task-attach-file"));
   };
 
-  const [taskFiles, setTaskFiles] = useState(null);
-
-  const handleTaskFilesChange = (newValue, info) => {
-    setTaskFiles(newValue); // Concatenate the new files with the existing ones
-  };
-
-  // const displayTaskFilesInAlert = () => {
-  //   const fileNames = taskFiles.map((file) => file.name).join(", "); // Create a comma-separated list of file names
-  //   alert(`Selected files: ${fileNames}`);
-  // };
-
   //Subtask Attach file
-  const handleSubTaskAttachFileDialog = (subrowId) => {
+  const handleSubTaskAttachFileDialog = (subrowId, subrow) => {
     setSubRowId(subrowId);
+    setSubTaskToEdit(subrow);
     dispatch(openModal("subtask-attach-file"));
   };
 
   const [subTaskFiles, setSubTaskFiles] = useState(null);
-
+  //to send DB
+  const subtaskFilesArray = subTaskFiles?.map((file, index) => ({ [index]: file.name }));
   const handleSubTaskFilesChange = (newValue, info) => {
-    setSubTaskFiles(newValue); // Concatenate the new files with the existing ones
+    setSubTaskFiles(newValue);
   };
 
-  // const displaySubTaskFilesInAlert = () => {
-  //   const fileNames = subTaskFiles.map((file) => file.name).join(", "); // Create a comma-separated list of file names
-  //   alert(`Selected files: ${fileNames}`);
-  // };
 
-  const [taskToEdit, setTaskToEdit] = useState({});
-  const [subTaskToEdit, setSubTaskToEdit] = useState({});
-  const [openTaskMenu, setOpenTaskMenu] = useState(null);
-  const [openSubtaskMenu, setOpenSubtaskMenu] = useState(null);
 
   //Task More
   const handleTaskMoreClick = (event, taskId, task) => {
@@ -743,7 +660,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   };
 
   //SubTask More
-  const handleSubTaskMoreClick = (event, subtaskId,row, subrow) => {
+  const handleSubTaskMoreClick = (event, subtaskId, row, subrow) => {
     setTaskToEdit(row);
     setSubTaskToEdit(subrow);
     setSubRowId(subtaskId);
@@ -753,7 +670,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <TableContainer sx={{ minHeight: "72vh" }}>
+        <TableContainer sx={{ minHeight: "62vh", maxHeight:"100vh" }}>
           <Table sx={{ minWidth: "650px" }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ width: "100%", bgcolor: "#FFFFFF" }}>
@@ -986,49 +903,12 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                             {/* Assignee */}
                             <TableCell sx={{ width: "10%" }} align="center">
-                              <Box sx={{ minWidth: 120 }}>
-                                {editTaskAssignee === row.tid ? (
-                                  <FormControl fullWidth>
-                                    <Select
-                                      value={selectedAssignees[row.tid] || regId}
-                                      onChange={(event) => handleTaskAssignee(event, row.tid)}
-                                    >
-                                      {assignees.map((assignee, index) => (
-                                        <MenuItem key={index} value={assignee.value}>
-                                          <Typography
-                                            component="p"
-                                            variant="caption"
-                                            display="block"
-                                          >
-                                            {assignee.text}
-                                          </Typography>
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                                ) : (
-                                  <Box>
-                                    <Chip
-                                      label={formatAssigneeText(
-                                        selectedAssignees[row?.tid] || row?.tassignee,
-                                        regId,
-                                        assignees
-                                      )}
-                                      variant="contained"
-                                      sx={{
-                                        minWidth: "80px",
-                                        maxWidth: "85px",
-                                      }}
-                                    />
-                                    <IconButton
-                                      size="small"
-                                      onClick={() => handleEditTaskAssignee(row.tid)}
-                                    >
-                                      <ExpandMoreIcon />
-                                    </IconButton>
-                                  </Box>
-                                )}
-                              </Box>
+                              <SelectAssignee
+                                rowID={row?.tid}
+                                assigneeID={row?.tassignee}
+                                gID={row?.gid}
+                                type="task"
+                              />
                             </TableCell>
 
                             {/* Priority */}
@@ -1126,15 +1006,15 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                             {/* Due Date */}
                             <TableCell sx={{ width: "10%" }} align="center">
-                              <MyDatePicker
+                              <TasksModuleDatePicker
                                 label=""
                                 required={false}
                                 sizeWidth="132px"
                                 showBorder={false}
-                                minDate={new Date()} // Set the minimum date to today
-                                maxDate={new Date(new Date().getFullYear() + 1, 11, 31)} // Set the maximum date to one year from today
-                                value={row?.tdue_date ? new Date(row.tdue_date) : null}
+                                value={row?.tdue_date ? new Date(row?.tdue_date) : null}
                                 onChange={handleTaskDueDate(row?.tid)}
+                                type="task"
+                                gid={row?.gid}
                               />
                             </TableCell>
 
@@ -1178,7 +1058,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                     size="small"
                                     type="button"
                                     sx={{ fontSize: "1.2rem" }}
-                                    onClick={() => handleTaskAttachFileDialog(rowId)}
+                                    onClick={() => handleTaskAttachFileDialog(row?.tid, row)}
                                   >
                                     <AttachmentIcon fontSize="inherit" />
                                   </IconButton>
@@ -1187,24 +1067,12 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                 {rowId === row?.tid && (
                                   <ReduxDialog
                                     value="task-attach-file"
-                                    modalTitle="Task"
+                                    modalTitle={row?.tname}
                                     showModalButton={true}
                                     redirectPath={`/tasks-overview/${rowId}`}
                                     modalSize="sm"
                                   >
-                                    <DialogContent dividers>
-                                      <Box sx={{ p: 2 }}>
-                                        <CustomFileInput
-                                          label="Attached File(s)"
-                                          placeholder="Choose files..."
-                                          multiple
-                                          required={false}
-                                          name="file"
-                                          value={taskFiles}
-                                          handleFilesChange={handleTaskFilesChange}
-                                        />
-                                      </Box>
-                                    </DialogContent>
+                                    <AttachTaskFile task={taskToEdit}/>
                                   </ReduxDialog>
                                 )}
 
@@ -1407,51 +1275,12 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                                 {/* SubTask Assignee */}
                                 <TableCell sx={{ width: "10%" }} align="center">
-                                  <Box sx={{ minWidth: 120 }}>
-                                    {editSubTaskAssignee === subrow?.stid ? (
-                                      <FormControl fullWidth>
-                                        <Select
-                                          value={selectedAssignees[subrow?.stid] || ""}
-                                          onChange={(event) =>
-                                            handleSubTaskAssignee(event, subrow?.stid)
-                                          }
-                                        >
-                                          {assignees.map((assignee, index) => (
-                                            <MenuItem key={index} value={assignee.value}>
-                                              <Typography
-                                                component="p"
-                                                variant="caption"
-                                                display="block"
-                                              >
-                                                {assignee.text}
-                                              </Typography>
-                                            </MenuItem>
-                                          ))}
-                                        </Select>
-                                      </FormControl>
-                                    ) : (
-                                      <Box>
-                                        <Chip
-                                          label={formatAssigneeText(
-                                            selectedAssignees[subrow?.stid] || subrow?.stassignee,
-                                            regId,
-                                            assignees
-                                          )}
-                                          variant="contained"
-                                          sx={{
-                                            minWidth: "80px",
-                                            maxWidth: "85px",
-                                          }}
-                                        />
-                                        <IconButton
-                                          size="small"
-                                          onClick={() => handleEditSubTaskAssignee(subrow?.stid)}
-                                        >
-                                          <ExpandMoreIcon />
-                                        </IconButton>
-                                      </Box>
-                                    )}
-                                  </Box>
+                                  <SelectAssignee
+                                    rowID={subrow?.stid}
+                                    assigneeID={subrow?.stassignee}
+                                    gID={subrow?.gid}
+                                    type="subtask"
+                                  />
                                 </TableCell>
 
                                 {/* SubTask Priority */}
@@ -1554,15 +1383,15 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                                 {/* Due Date */}
                                 <TableCell sx={{ width: "10%" }} align="center">
-                                  <MyDatePicker
+                                  <TasksModuleDatePicker
                                     label=""
                                     required={false}
                                     sizeWidth="132px"
                                     showBorder={false}
-                                    minDate={new Date()} // Set the minimum date to today
-                                    maxDate={new Date(new Date().getFullYear() + 1, 11, 31)} // Set the maximum date to one year from today
                                     value={subrow?.stdue_date ? new Date(subrow?.stdue_date) : null}
                                     onChange={handleSubTaskDueDate(subrow?.stid)}
+                                    type="subtask"
+                                    parentTaskDueDate={row?.tdue_date}
                                   />
                                 </TableCell>
 
@@ -1611,7 +1440,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                         size="small"
                                         type="button"
                                         sx={{ fontSize: "1.2rem" }}
-                                        onClick={() => handleSubTaskAttachFileDialog(subrow?.stid)}
+                                        onClick={() => handleSubTaskAttachFileDialog(subrow?.stid, subrow)}
                                       >
                                         <AttachmentIcon fontSize="inherit" />
                                       </IconButton>
@@ -1620,24 +1449,12 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                     {subRowId === subrow?.stid && (
                                       <ReduxDialog
                                         value="subtask-attach-file"
-                                        modalTitle="Subtask"
+                                        modalTitle={subrow?.stname}
                                         showModalButton={true}
                                         redirectPath={`/subtasks-overview/${subRowId}`}
                                         modalSize="sm"
                                       >
-                                        <DialogContent dividers>
-                                          <Box sx={{ p: 2 }}>
-                                            <CustomFileInput
-                                              label="Attached File(s)"
-                                              placeholder="Choose files..."
-                                              multiple
-                                              required={false}
-                                              name="file"
-                                              value={subTaskFiles}
-                                              handleFilesChange={handleSubTaskFilesChange}
-                                            />
-                                          </Box>
-                                        </DialogContent>
+                                       <AttachSubtaskFile subtask={subTaskToEdit}/>
                                       </ReduxDialog>
                                     )}
 

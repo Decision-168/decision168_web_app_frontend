@@ -1,4 +1,4 @@
-import { useMemo, memo, useEffect, useState } from "react";
+import { useMemo, memo, useState } from "react";
 import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
 import { Box, Button, Typography, IconButton, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -8,44 +8,23 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import {
-  getPortfolioTeamMemberName,
   updatePortfolioDepartment,
-  updatePortfolioMemberStatus,
 } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
-import CustomDialog from "../../../common/CustomDialog";
-import AssignToSomeoneDailogContent from "./AssignToSomeoneDailogContent";
 import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import {
   getPortfolioDeparmentsAsync,
-  getPortfolioTeamMembersAsync,
-  selectPorfolioDepartments,
-  selectPorfolioTeamMembers,
 } from "../../../../redux/action/portfolioSlice";
 
 const ViewDepartmentTable = ({ data }) => {
   const dispatch = useDispatch();
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [depId, setDeptId] = useState(null);
-  const [memberName, setMemberName] = useState("");
-  const [memberRegId, setMemberRegId] = useState(null);
-  const [pimId, setPimId] = useState(null);
   const [deptStatus, setdDeptStatus] = useState("");
-  const [open, setOpen] = useState(false);
-  const [result, setResult] = useState({});
   // New state variables for editing
   const [isEditing, setIsEditing] = useState(false);
   const [editDeptName, setEditDeptName] = useState("");
   const theme = useTheme();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleReopen = (departmentId, department, status) => {
     setDeptId(departmentId);

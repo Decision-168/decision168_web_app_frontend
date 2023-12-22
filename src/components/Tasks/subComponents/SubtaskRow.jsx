@@ -9,6 +9,7 @@ import {
   TextField,
   IconButton,
   Tooltip,
+  DialogContent,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
@@ -24,7 +25,6 @@ import SubdirectoryArrowRightRoundedIcon from "@mui/icons-material/SubdirectoryA
 import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Chip from "@mui/material/Chip";
-import MyDatePicker from "./MyDatePicker ";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
@@ -40,6 +40,13 @@ import { formatAssigneeText, formatPriority, formatStatus } from "../../../helpe
 import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SelectAssignee from "./SelectAssignee";
+import TasksModuleDatePicker from "./TasksModuleDatePicker";
+import AttachSubtaskFile from "./AttachSubtaskFile";
+import { openModal } from "../../../redux/action/modalSlice";
+import ReduxDialog from "../../common/ReduxDialog";
+import CommentSection from "../../project/projects-overview/comment-section";
+import More from "./More";
 
 export default function SubtaskRow({ task, fetchTaskDetails }) {
   const theme = useTheme();
@@ -55,11 +62,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   const [subTaskAssignee, setSubTaskAssignee] = useState(null);
   const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
   const [parentTaskName, setParentTaskName] = useState("");
+  const [subTaskToEdit, setSubTaskToEdit] = useState({});
+  const [openSubtaskMenu, setOpenSubtaskMenu] = useState(null);
 
-  //assingnee
-  const [assignees, setAssignees] = useState([]);
-  const [selectedAssignees, setSelectedAssignees] = useState({});
-  const [editSubTaskAssignee, setEditSubTaskAssignee] = useState(null);
   //priority
   const [selectedPriorities, setSelectedPriorities] = useState({});
   const [editSubTaskPriority, setEditSubTaskPriority] = useState(null);
@@ -68,12 +73,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   const [editSubTaskStatus, setEditSubTaskStatus] = useState(null);
   //Duedate
   const [selectedSubTaskDueDate, setSelectedSubTaskDueDate] = useState(null);
-
-  // Fetch taskAssignees from API or another source
-  useEffect(() => {
-    const fetchedAssignees = [{ value: regId, text: "To Me" }];
-    setAssignees(fetchedAssignees);
-  }, []);
 
   // Set the initial selectedPriorities based on rows
   useEffect(() => {
@@ -101,20 +100,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       });
     }
     setSelectedStatuses(initialSelectedStatuses);
-  }, [task]);
-
-  // Set the initial selectedTaskAssignees based on rows
-  useEffect(() => {
-    const initialSelectedAssignees = {};
-    // Check for subrows and their task assignees
-    if (task.subTasks && Array.isArray(task.subTasks)) {
-      task.subTasks.forEach((subrow) => {
-        if (subrow.stassignee) {
-          initialSelectedAssignees[subrow.stid] = subrow.stassignee;
-        }
-      });
-    }
-    setSelectedAssignees(initialSelectedAssignees);
   }, [task]);
 
   // Subtask Code checkbox
@@ -221,24 +206,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
     } catch (error) {
       console.error("Error handling save SubTask click:", error);
     }
-  };
-
-  // SubTask Assignee
-  const handleSubTaskAssignee = (event, subtaskId) => {
-    const newAssignee = event.target.value;
-    // Update the selected assignees
-    setSelectedAssignees((prevSelected) => ({
-      ...prevSelected,
-      [subtaskId]: newAssignee,
-    }));
-    // Handle the logic to update the assignee in the database, if needed
-
-    // Close the assignee editing
-    setEditSubTaskAssignee(null);
-  };
-
-  const handleEditSubTaskAssignee = (subtaskId) => {
-    setEditSubTaskAssignee(subtaskId);
   };
 
   //SubTask Priority
@@ -349,6 +316,26 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
 
   const handleCloseSubTaskPreviewDialog = () => {
     setOpenSubTaskPreviewDialog(false);
+  };
+
+  //Subtask Attach file
+  const handleSubTaskAttachFileDialog = (subrowId, subrow) => {
+    setSubRowId(subrowId);
+    setSubTaskToEdit(subrow);
+    dispatch(openModal("subtask-attach-file"));
+  };
+
+  //SubTask More
+  const handleSubTaskMoreClick = (event, subtaskId, subrow) => {
+    setSubTaskToEdit(subrow);
+    setSubRowId(subtaskId);
+    setOpenSubtaskMenu(event.currentTarget);
+  };
+
+  //Subtask comment
+  const handleSubTaskCommentsDialog = (subrowId) => {
+    setSubRowId(subrowId);
+    dispatch(openModal("send-comments"));
   };
 
   return (
@@ -495,45 +482,12 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
 
             {/* SubTask Assignee */}
             <TableCell sx={{ width: "10%" }} align="center">
-              <Box sx={{ minWidth: 120 }}>
-                {editSubTaskAssignee === subrow?.stid ? (
-                  <FormControl fullWidth>
-                    <Select
-                      value={selectedAssignees[subrow?.stid] || ""}
-                      onChange={(event) => handleSubTaskAssignee(event, subrow?.stid)}
-                    >
-                      {assignees.map((assignee, index) => (
-                        <MenuItem key={index} value={assignee.value}>
-                          <Typography component="p" variant="caption" display="block">
-                            {assignee.text}
-                          </Typography>
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                ) : (
-                  <Box>
-                    <Chip
-                      label={formatAssigneeText(
-                        selectedAssignees[subrow?.stid] || subrow?.stassignee,
-                        regId,
-                        assignees
-                      )}
-                      variant="contained"
-                      sx={{
-                        minWidth: "80px",
-                        maxWidth: "85px",
-                      }}
-                    />
-                    <IconButton
-                      size="small"
-                      onClick={() => handleEditSubTaskAssignee(subrow?.stid)}
-                    >
-                      <ExpandMoreIcon />
-                    </IconButton>
-                  </Box>
-                )}
-              </Box>
+              <SelectAssignee
+                rowID={subrow?.stid}
+                assigneeID={subrow?.stassignee}
+                gID={subrow?.gid}
+                type="subtask"
+              />
             </TableCell>
 
             {/* SubTask Priority */}
@@ -617,13 +571,15 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
 
             {/* Due Date */}
             <TableCell sx={{ width: "10%" }} align="center">
-              <MyDatePicker
+              <TasksModuleDatePicker
                 label=""
                 required={false}
                 sizeWidth="132px"
                 showBorder={false}
-                value={subrow?.tdue_date ? new Date(subrow?.tdue_date) : null}
+                value={subrow?.stdue_date ? new Date(subrow?.stdue_date) : null}
                 onChange={handleSubTaskDueDateChange}
+                type="subtask"
+                parentTaskDueDate={task?.tdue_date}
               />
             </TableCell>
 
@@ -641,11 +597,10 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     <CommentIcon fontSize="inherit" />
                   </IconButton>
                 </Tooltip>
-
                 {subRowId === subrow?.stid && (
                   <ReduxDialog
                     value="send-comments"
-                    modalTitle="Subtask"
+                    modalTitle={subrow?.stname}
                     showModalButton={true}
                     redirectPath={`/subtasks-overview/${subRowId}`}
                     modalSize="sm"
@@ -662,33 +617,20 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     size="small"
                     type="button"
                     sx={{ fontSize: "1.2rem" }}
-                    onClick={() => handleSubTaskAttachFileDialog(subrow?.stid)}
+                    onClick={() => handleSubTaskAttachFileDialog(subrow?.stid, subrow)}
                   >
                     <AttachmentIcon fontSize="inherit" />
                   </IconButton>
                 </Tooltip>
-
                 {subRowId === subrow?.stid && (
                   <ReduxDialog
                     value="subtask-attach-file"
-                    modalTitle="Subtask"
+                    modalTitle={subrow?.stname}
                     showModalButton={true}
                     redirectPath={`/subtasks-overview/${subRowId}`}
                     modalSize="sm"
                   >
-                    <DialogContent dividers>
-                      <Box sx={{ p: 2 }}>
-                        <CustomFileInput
-                          label="Attached File(s)"
-                          placeholder="Choose files..."
-                          multiple
-                          required={false}
-                          name="file"
-                          value={subTaskFiles}
-                          handleFilesChange={handleSubTaskFilesChange}
-                        />
-                      </Box>
-                    </DialogContent>
+                    <AttachSubtaskFile subtask={subTaskToEdit} />
                   </ReduxDialog>
                 )}
 
@@ -702,7 +644,7 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     aria-controls={open ? "fade-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={(event) => handleSubTaskMoreClick(event, subrow?.stid)}
+                    onClick={(event) => handleSubTaskMoreClick(event, subrow?.stid, subrow)}
                   >
                     <MoreVertIcon fontSize="inherit" />
                   </IconButton>
@@ -711,10 +653,12 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                 {subRowId === subrow?.stid && (
                   <More
                     rowId={subRowId}
+                    task={task}
+                    subTask={subTaskToEdit}
                     isParentRow={false}
-                    fetchData={fetchData}
-                    anchorEl={anchorEl}
-                    setAnchorEl={setAnchorEl}
+                    fetchData={fetchTaskDetails}
+                    anchorEl={openSubtaskMenu}
+                    setAnchorEl={setOpenSubtaskMenu}
                   />
                 )}
               </Stack>

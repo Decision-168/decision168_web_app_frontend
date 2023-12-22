@@ -29,14 +29,6 @@ export const getPortfolioTeamMembers = async (portfolioId) => {
   }
 };
 
-export const getPortfolioTeamMemberName = async (email_address) => {
-  try {
-    const response = await axios.get(`${apiUrl}${api.portfolioTeamMemberName}${email_address}`);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
 
 export const updatePortfolioMemberStatus = async (primaryId, portfolioId, status) => {
   try {

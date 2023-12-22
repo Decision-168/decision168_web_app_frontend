@@ -6,7 +6,7 @@ import TaskInfo from "./TaskInfo";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
-import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 import { useDispatch } from "react-redux";
 import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
@@ -240,7 +240,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
       </ReduxDialog>
 
       <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} />
+        <CreateEditTaskForm editMode={true} taskEditData={task}/>
       </ReduxDialog>
 
       <ReduxDialog
@@ -249,7 +249,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
         showModalButton={false}
         modalSize="md"
       >
-          <CreateSubTasksForm taskData={task} />
+          <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
       <ReduxDialog

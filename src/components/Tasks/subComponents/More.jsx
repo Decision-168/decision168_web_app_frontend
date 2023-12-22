@@ -4,8 +4,7 @@ import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
 import ReduxDialog from "../../common/ReduxDialog";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/action/modalSlice";
-import CreateSubTasksForm from "../createEditSubtasks/CreateSubTasksForm";
-import EditSubTasksForm from "../createEditSubtasks/EditSubTasksForm";
+import CreateEditSubTasksForm from "../createEditSubtasks/CreateEditSubTasksForm";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
 import { patchDeleteSubtask, patchDeleteTask } from "../../../api/modules/TrashModule";
@@ -209,7 +208,7 @@ export default function More({ rowId, task, subTask, isParentRow, fetchData, anc
         showModalButton={false}
         modalSize="md"
       >
-        <CreateSubTasksForm taskData={task} />
+        <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -218,8 +217,7 @@ export default function More({ rowId, task, subTask, isParentRow, fetchData, anc
         showModalButton={false}
         modalSize="md"
       >
-        {/* <EditSubTasksForm /> */}
-        <CreateSubTasksForm editMode={true} taskData={task} subtaskData={subTask}/>
+        <CreateEditSubTasksForm editMode={true} taskData={task} subtaskData={subTask}/>
       </ReduxDialog>
 
       <ReduxDialog
