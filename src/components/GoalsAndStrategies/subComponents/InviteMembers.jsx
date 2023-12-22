@@ -6,8 +6,11 @@ const InviteMembers = ({ formValues, setFormValues }) => {
   const handleInputChange = (event, index) => {
     setFormValues((prevFormValues) => {
       const updatedImEmail = [...prevFormValues.imemail];
-      updatedImEmail[index] = { ...updatedImEmail[index], [event.target.name]: event.target.value };
-     
+      updatedImEmail[index] = {
+        ...updatedImEmail[index],
+        [event.target.name]: event.target.value,
+      };
+
       return {
         ...prevFormValues,
         imemail: updatedImEmail,
@@ -36,7 +39,7 @@ const InviteMembers = ({ formValues, setFormValues }) => {
 
   return (
     <>
-      <Grid item xs={3} alignSelf={"top"}>
+      <Grid item xs={12} sm={4} md={3} lg={3} alignSelf={"center"}>
         <Button
           fullWidth
           variant="contained"
@@ -49,8 +52,8 @@ const InviteMembers = ({ formValues, setFormValues }) => {
       </Grid>
       {formValues?.imemail?.map((inputField, index) => (
         <Fragment key={index}>
-          <Grid item xs={2}></Grid>
-          <Grid item xs={7} textAlign="start">
+          <Grid item xs={12} sm={2} md={2} lg={2}></Grid>
+          <Grid item xs={10} sm={7} md={7} lg={7} textAlign="start">
             <TextField
               fullWidth
               name="email"
@@ -60,7 +63,7 @@ const InviteMembers = ({ formValues, setFormValues }) => {
               variant="outlined"
             />
           </Grid>
-          <Grid item xs={3} alignSelf={"top"}>
+          <Grid item xs={2} sm={3} md={3} lg={3} alignSelf={"top"}>
             <IconButton onClick={() => handleRemoveClick(index)}>
               <RemoveCircleRounded />
             </IconButton>

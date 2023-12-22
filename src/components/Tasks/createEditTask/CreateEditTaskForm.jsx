@@ -11,12 +11,7 @@ import SelectOption from "../../common/SelectOption";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPorfolioDepartments, getPortfolios } from "../../../api/modules/porfolioModule";
-import {
-  getProjectTeamMembers,
-  getProjectsForSelectMenu,
-  insertTask,
-  updateTask,
-} from "../../../api/modules/taskModule";
+import { getProjectTeamMembers, getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -91,18 +86,26 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   }, [editMode, taskEditData]);
 
   useEffect(() => {
-    // Split the comma-separated strings into arrays
-    const linksArray = taskEditData?.tlink?.split(",");
-    const commentsArray = taskEditData?.tlink_comment?.split(",");
+    if (editMode && taskEditData?.tlink && taskEditData?.tlink_comment) {
+      const linksArray = taskEditData.tlink.split(",");
+      const commentsArray = taskEditData.tlink_comment.split(",");
 
-    // Combine the arrays into an array of objects
-    const resultArray =
-      linksArray?.map((link, index) => ({
-        link,
-        linkComment: commentsArray[index],
-      })) || [];
+      const resultArray =
+        linksArray.map((link, index) => ({
+          link,
+          linkComment: commentsArray[index],
+        })) || [];
 
-    setFields(resultArray);
+      setFields(resultArray);
+    } else {
+      // Handle the case where editMode is false or tlink/tlink_comment is undefined
+      setFields([
+        {
+          link: "",
+          linkComment: "",
+        },
+      ]);
+    }
   }, [editMode, taskEditData?.tlink, taskEditData?.tlink_comment]);
 
   useEffect(() => {
@@ -152,9 +155,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
 
   useEffect(() => {
     // it will return the object of the selected project id from that we require dept_id
-    const selectedProjectObject = projects?.find(
-      (p) => p.pid === selectedProjectIdObject?.project_id
-    );
+    const selectedProjectObject = projects?.find((p) => p.pid === selectedProjectIdObject?.project_id);
     // console.log("selectedProjectObject", selectedProjectObject);
     setSelectedProjectDeptId(selectedProjectObject?.dept_id);
   }, [projects, selectedProjectIdObject?.project_id]);
@@ -162,10 +163,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     // Update filtered departments based on selected project
     if (selectedProjectDeptId !== undefined && selectedProjectDeptId !== null) {
-      const filteredDepts =
-        selectedProjectDeptId !== 0
-          ? departments.filter((d) => d.portfolio_dept_id === selectedProjectDeptId)
-          : [];
+      const filteredDepts = selectedProjectDeptId !== 0 ? departments.filter((d) => d.portfolio_dept_id === selectedProjectDeptId) : [];
       setFilteredDepartments(filteredDepts);
     }
   }, [selectedProjectDeptId, departments]);
@@ -240,6 +238,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       link_comments: commentsData,
     };
 
+
     const fieldLabels = {
       tname: "Task Name",
       portfolio_id: "Portfolio",
@@ -248,6 +247,8 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       tpriority: "Task Priority",
       team_member2: "Assignee",
     };
+
+    alert(`${JSON.stringify(formData)}`)
 
     // Check for empty required fields
     const requiredFields = Object.keys(formData);
@@ -263,9 +264,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     try {
       setLoading(true);
 
-      const response = editMode
-        ? await updateTask({ user_id: userId, data: { ...formData, tid: taskEditData?.tid } })
-        : await insertTask({ regId: userId, data: formData });
+      const response = editMode ? await updateTask({ user_id: userId, data: { ...formData, tid: taskEditData?.tid } }) : await insertTask({ regId: userId, data: formData });
 
       dispatch(closeModal(`${editMode ? "edit-task" : "create-new-task"}`));
       navigate(`/tasks-overview/${editMode ? (taskEditData || {}).tid : response?.taskInsertedId}`);
@@ -283,14 +282,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       <DialogContent dividers>
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField
-              label="Task"
-              required={true}
-              placeholder="Enter Task Name"
-              name="tname"
-              value={formValues.tname}
-              onChange={handleChange("tname")}
-            />
+            <CustomLabelTextField label="Task" required={true} placeholder="Enter Task Name" name="tname" value={formValues.tname} onChange={handleChange("tname")} />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <SelectOption
@@ -308,35 +300,12 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField
-              label="Description"
-              required={false}
-              placeholder="Enter Task Description..."
-              name="tdes"
-              value={formValues.tdes}
-              onChange={handleChange("tdes")}
-            />
+            <CustomMultilineTextField label="Description" required={false} placeholder="Enter Task Description..." name="tdes" value={formValues.tdes} onChange={handleChange("tdes")} />
           </Grid>
           <Grid item xs={12} sm={6} px={2}>
             <Grid container>
               <Grid item xs={12} py={1}>
-                <SelectOption
-                  label="Department"
-                  required={true}
-                  field="dept"
-                  idKey="portfolio_dept_id"
-                  getOptionLabel={(option) => option.department}
-                  dynamicOptions={false}
-                  staticOptions={
-                    selectedProjectDeptId !== undefined &&
-                    selectedProjectDeptId !== null &&
-                    selectedProjectDeptId !== 0
-                      ? filteredDepartments
-                      : departments
-                  }
-                  formValues={formValues}
-                  setFormValues={setFormValues}
-                />
+                <SelectOption label="Department" required={true} field="dept" idKey="portfolio_dept_id" getOptionLabel={(option) => option.department} dynamicOptions={false} staticOptions={selectedProjectDeptId !== undefined && selectedProjectDeptId !== null && selectedProjectDeptId !== 0 ? filteredDepartments : departments} formValues={formValues} setFormValues={setFormValues} />
               </Grid>
               <Grid item xs={12} py={1}>
                 <SelectOption
@@ -358,14 +327,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField
-              label="Note"
-              required={false}
-              placeholder="Enter Task Note..."
-              name="tnote"
-              value={formValues.tnote}
-              onChange={handleChange("tnote")}
-            />
+            <CustomMultilineTextField label="Note" required={false} placeholder="Enter Task Note..." name="tnote" value={formValues.tnote} onChange={handleChange("tnote")} />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2}>
@@ -399,15 +361,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomFileInput
-              label="Attached File(s)"
-              placeholder="Choose files..."
-              multiple
-              required={false}
-              name="file"
-              value={files}
-              handleFilesChange={handleFilesChange}
-            />
+            <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <CustomDatePicker
@@ -430,6 +384,8 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             >
               Task Link(s) & Comment(s)
             </InputLabel>
+
+            {/* <AddAnotherLink fields={fields} setFields={setFields} /> */}
             <AddAnotherLink fields={fields} setFields={setFields} />
           </Grid>
         </Grid>
@@ -450,13 +406,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             >
               Close
             </Button>
-            <Button
-              onClick={handleSubmit}
-              size="small"
-              type="button"
-              variant="contained"
-              sx={{ ml: 1 }}
-            >
+            <Button onClick={handleSubmit} size="small" type="button" variant="contained" sx={{ ml: 1 }}>
               {loading ? <CircularLoader /> : editMode ? "Save Changes" : "Create"}
             </Button>
           </Grid>

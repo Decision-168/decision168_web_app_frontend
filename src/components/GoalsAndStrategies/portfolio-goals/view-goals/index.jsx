@@ -132,7 +132,7 @@ const ViewGoalsIndex = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={10} sm={6} md={6} lg={7}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
               display: "flex",
@@ -173,7 +173,8 @@ const ViewGoalsIndex = () => {
           xs={2}
           sm={align ? 6 : 2}
           md={align ? 6 : 2}
-          lg={align ? 6 : 2}
+          lg={align ? 5 : 2}
+          xl={align ? 5 : 2}
           alignSelf={"center"}
         >
           <Box
@@ -192,12 +193,12 @@ const ViewGoalsIndex = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={12} sm={4} md={4} lg={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={4} md={4} lg={3} xl={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {align ? (
             <ListSection
               handleGoalOpen={handleGoalOpen}

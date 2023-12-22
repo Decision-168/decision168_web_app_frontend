@@ -69,7 +69,7 @@ const ProjectListViewTable = ({
                 sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
                 aria-label="project"
               >
-                {...stringAvatar(row.original.project.name)}
+                {...stringAvatar(row.original?.project?.name)}
               </Avatar>
               <Box>
                 <Typography
@@ -125,7 +125,7 @@ const ProjectListViewTable = ({
             }}
           >
             <AvatarGroup max={5}>
-              {row?.original?.acceptedTeam.map((item, index) => {
+              {row?.original?.acceptedTeam?.map((item, index) => {
                 return (
                   <Avatar
                     key={index}
@@ -162,7 +162,7 @@ const ProjectListViewTable = ({
             }}
           >
             <AvatarGroup max={5}>
-              {row?.original?.invitedTeam.map((item, index) => {
+              {row?.original?.invitedTeam?.map((item, index) => {
                 return (
                   <Avatar
                     key={index}

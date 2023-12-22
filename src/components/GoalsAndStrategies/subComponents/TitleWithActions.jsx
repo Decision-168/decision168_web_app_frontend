@@ -70,49 +70,46 @@ const TitleWithActions = ({
       </Grid>
       {(displayBtns === "all" || displayBtns === "some") && (
         <>
-          <Grid item xs={12} sm={6} md={6} lg={8}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: !matches ? "center" : "start",
-                pt: 1,
-                pb: 1,
-              }}
-            >
-              <Button
-                variant="contained"
-                startIcon={btn1Icon}
-                size="small"
-                sx={{ mr: 1 }}
-                onClick={handleClick1}
-              >
-                {btn1Text}
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={btn2Icon}
-                size="small"
-                sx={{ mr: 1 }}
-                onClick={handleClick2}
-              >
-                {btn2Text}
-              </Button>
-              {btn3Text && (
+          <Grid item xs={12} sm={7} md={7} lg={7}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
                 <Button
                   variant="contained"
-                  startIcon={btn3Icon}
+                  startIcon={btn1Icon}
                   size="small"
-                  sx={{ mr: 1 }}
-                  onClick={handleClick3}
+                  sx={{ mr: 1, width: "100%" }}
+                  onClick={handleClick1}
                 >
-                  {btn3Text}
+                  {btn1Text}
                 </Button>
-              )}
-            </Box>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                <Button
+                  variant="contained"
+                  startIcon={btn2Icon}
+                  size="small"
+                  sx={{ mr: 1, width: "100%" }}
+                  onClick={handleClick2}
+                >
+                  {btn2Text}
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4} lg={4}>
+                {btn3Text && (
+                  <Button
+                    variant="contained"
+                    startIcon={btn3Icon}
+                    size="small"
+                    sx={{ mr: 1, width: "100%" }}
+                    onClick={handleClick3}
+                  >
+                    {btn3Text}
+                  </Button>
+                )}
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} md={6} lg={4}>
+          <Grid item xs={12} sm={5} md={5} lg={5}>
             <Box
               sx={{
                 display: "flex",

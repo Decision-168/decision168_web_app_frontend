@@ -8,8 +8,11 @@ import { selectUserDetails } from "../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import { taskOverviewStyles } from "../taskOverview/styles";
+import TaskFiles from "../taskOverview/subComponents/TaskFiles";
 
 const AttachTaskFile = ({ task }) => {
+  const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   // const user_id = user?.reg_id;
@@ -25,10 +28,12 @@ const AttachTaskFile = ({ task }) => {
     //   return;
     // }
     setTaskFiles(newValue);
-    const taskFilesArray = newValue?.map((file, index) => ({ [index]: file.name }));
-    alert(`${JSON.stringify(taskFilesArray)}`);
+    const time = Math.floor(Date.now() / 1000);
+    const taskFilesArray = newValue?.map((file, index) => `${time}_${file.name.toLowerCase()}`);
+    const stringFormat = taskFilesArray.join(",");
+    alert(`${JSON.stringify(stringFormat)}`);
     try {
-      const data = { tid: task?.tid, task_file: taskFilesArray, tcode: task?.tcode };
+      const data = { tid: task?.tid, task_file: stringFormat, tcode: task?.tcode };
       const response = await insertTaskFile(user_id, data);
       dispatch(closeModal("task-attach-file"));
       toast.success(response.message);
@@ -46,15 +51,9 @@ const AttachTaskFile = ({ task }) => {
           pb: 4,
         }}
       >
-        <CustomFileInput
-          label="Attached File(s)"
-          placeholder="Choose files..."
-          multiple
-          required={false}
-          name="file"
-          value={taskFiles}
-          handleFilesChange={handleTaskFilesChange}
-        />
+        <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={taskFiles} handleFilesChange={handleTaskFilesChange} />
+
+        {task?.tfile && <TaskFiles styles={styles} files={task?.tfile} />}
       </Box>
     </DialogContent>
   );

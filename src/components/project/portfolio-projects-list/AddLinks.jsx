@@ -32,25 +32,28 @@ export default function AddLinks({ fields, setFields }) {
 
   return (
     <>
-      <Grid item xs={2}>
+      <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
         <InputLabel
           sx={{
             fontSize: "14px",
             mb: 1,
             mt: 2,
+            textAlign: "start",
           }}
         >
           Task Link(s) & Comment(s)
         </InputLabel>
       </Grid>
-      <Grid item xs={10} sm={10}>
+      <Grid item xs={12} sm={10} md={10} lg={10}>
         {fields?.map((inputField, index) => (
           <Grid
             container
+            spacing={2}
             key={index}
             xs={12}
             sm={12}
-            sx={{ my: 1, px: 1, bgcolor: "#F7F7F7" }}
+            md={12}
+            lg={12}
           >
             <Grid item xs={12} sm={5} py={2} textAlign="start">
               <TextField

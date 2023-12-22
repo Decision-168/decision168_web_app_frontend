@@ -28,16 +28,14 @@ export default function SelectGoalManager({
 
   return (
     <>
-      {
-        moduleType == 'project' ?
-        (
-          <>
-          <Grid item xs={2} alignSelf={"center"}>
-            <InputLabel sx={{ fontSize: "14px" }}>
+      {moduleType == "project" ? (
+        <>
+          <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+            <InputLabel sx={{ fontSize: "14px", textAlign: "start" }}>
               Project Manager
             </InputLabel>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12} sm={10} md={10} lg={10}>
             <Autocomplete
               sx={{ marginTop: "8px", width: "100%" }}
               options={managers}
@@ -53,14 +51,11 @@ export default function SelectGoalManager({
               )}
             />
           </Grid>
-          </>
-        ) :
-        (
-          <>
+        </>
+      ) : (
+        <>
           <Grid item xs={2} alignSelf={"center"}>
-            <InputLabel sx={{ fontSize: "14px" }}>
-              Goal Manager
-            </InputLabel>
+            <InputLabel sx={{ fontSize: "14px" }}>Goal Manager</InputLabel>
           </Grid>
           <Grid item xs={10}>
             <Autocomplete
@@ -78,9 +73,8 @@ export default function SelectGoalManager({
               )}
             />
           </Grid>
-          </>
-        )
-      }
+        </>
+      )}
     </>
   );
 }

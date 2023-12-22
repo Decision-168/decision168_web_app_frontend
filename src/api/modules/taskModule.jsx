@@ -35,9 +35,7 @@ export const getPortfolioTasksListView = async (portfolioId, page, pageSize) => 
 //Portfolio Tasks List (LIST VIEW)
 export const getPortfolioTasksSubtasksListView = async (portfolioId, regId, page, pageSize) => {
   try {
-    const response = await axios.get(
-      `${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}?page=${page}&pageSize=${pageSize}`
-    );
+    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}?page=${page}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -47,9 +45,7 @@ export const getPortfolioTasksSubtasksListView = async (portfolioId, regId, page
 //Portfolio Tasks List (Grid VIEW)
 export const getPortfolioTasksSubtasksGridView = async (portfolioId, regId) => {
   try {
-    const response = await axios.get(
-      `${apiUrl}${api.getPortfolioTasksSubtasksGridView}${portfolioId}/${regId}`
-    );
+    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksSubtasksGridView}${portfolioId}/${regId}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -169,10 +165,7 @@ export const updateTask = async ({ user_id, data }) => {
 // Insert Subtask by portfolio id user id
 export const insertSubtask = async ({ user_id, portfolio_id, data }) => {
   try {
-    const response = await axios.post(
-      `${apiUrl}${api.insertSubtask}${user_id}/${portfolio_id}`,
-      data
-    );
+    const response = await axios.post(`${apiUrl}${api.insertSubtask}${user_id}/${portfolio_id}`, data);
     return response.data;
   } catch (error) {
     throw error;
@@ -182,10 +175,7 @@ export const insertSubtask = async ({ user_id, portfolio_id, data }) => {
 // Insert Task by user id and portfolio id
 export const updateSubtask = async ({ user_id, portfolio_id, data }) => {
   try {
-    const response = await axios.post(
-      `${apiUrl}${api.updateSubtask}${user_id}/${portfolio_id}`,
-      data
-    );
+    const response = await axios.post(`${apiUrl}${api.updateSubtask}${user_id}/${portfolio_id}`, data);
     return response.data;
   } catch (error) {
     throw error;
@@ -195,9 +185,7 @@ export const updateSubtask = async ({ user_id, portfolio_id, data }) => {
 //Projects by portfolio_id and user_id
 export const getProjectsForSelectMenu = async ({ portfolio_id, user_id }) => {
   try {
-    const response = await axios.get(
-      `${apiUrl}${api.getProjectsForSelectMenu}${portfolio_id}/${user_id}`
-    );
+    const response = await axios.get(`${apiUrl}${api.getProjectsForSelectMenu}${portfolio_id}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -284,20 +272,40 @@ export const getGoalDetails = async (gid) => {
   }
 };
 
- //insert Task file by user id
+//insert Task file by user id
 export const insertTaskFile = async (user_id, data) => {
   try {
-    const response = await axios.post(`${apiUrl}${api.insertTaskFile}${user_id}`, data);
+    const response = await axios.patch(`${apiUrl}${api.insertTaskFile}${user_id}`, data);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
 
- //insert Subtask file by user id
- export const insertSubtaskFile = async (user_id, data) => {
+//insert Subtask file by user id
+export const insertSubtaskFile = async (user_id, data) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.insertSubtaskFile}${user_id}`, data);
+    const response = await axios.patch(`${apiUrl}${api.insertSubtaskFile}${user_id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get Task comments by tid and userid
+export const getTaskComments = async (tid, user_id) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getTaskComments}${tid}/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get Subtask comments by tid and userid
+export const getSubtaskComments = async (stid, user_id) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.geSubtaskComments}${stid}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;

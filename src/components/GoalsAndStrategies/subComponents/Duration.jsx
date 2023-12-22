@@ -25,15 +25,17 @@ const Duration = ({
   };
   return (
     <>
-      <Grid item xs={2} alignSelf={"center"}>
-        <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
+      <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+        <InputLabel
+          sx={{ fontSize: "14px", color: labelColor, textAlign: "start" }}
+        >
           {label}
           {required && (
             <span style={{ color: theme.palette.error.main }}> *</span>
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} sm={10} md={10} lg={10}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div style={{ display: "flex", flexDirection: "row" }}>
             {individual ? (

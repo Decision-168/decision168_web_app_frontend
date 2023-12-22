@@ -1,7 +1,16 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Button, Popover, Typography, Box, Grid, IconButton } from "@mui/material";
+import {
+  Button,
+  Popover,
+  Typography,
+  Box,
+  Grid,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 import { MentionsInput, Mention } from "react-mentions";
-import { Send } from "@mui/icons-material";
+import { ArrowUpward, Send } from "@mui/icons-material";
 import ScrollBar from "react-perfect-scrollbar";
 import mentionsInputStyle from "./mentionInputStyle";
 import MessagesByDate from "./MessagesByDate";
@@ -13,9 +22,17 @@ import {
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
+import {
+  getSubtaskComments,
+  getTaskComments,
+} from "../../../../api/modules/taskModule";
 const CommentSection = ({ projectId, taskId, subtaskId }) => {
+  console.log("projectId", projectId);
+  console.log("taskId", taskId);
+  console.log("subtaskId", subtaskId);
   const user = useSelector(selectUserDetails);
-  const userID = user?.reg_id;
+  // const userID = user?.reg_id;
+  const userID = 1; //for testing
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -24,26 +41,42 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
   const [mentionInput, setMentionInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+
   const fetchCommentData = async () => {
-    setLoading(true)
+    setLoading(true);
+
     try {
-      if(projectId && userID){
-        const response = await getProjectComments(projectId, userID);
-        setMessages(response.projectCommentDetail);
-      }    
+      let comments = [];
+
+      if (projectId && userID) {
+        const projectResponse = await getProjectComments(projectId, userID);
+        comments = projectResponse.projectCommentDetail;
+      }
+
+      if (taskId && userID) {
+        const taskResponse = await getTaskComments(taskId, userID);
+        comments = taskResponse.taskCommentDetail;
+      }
+
+      if (subtaskId && userID) {
+        const subtaskResponse = await getSubtaskComments(subtaskId, userID);
+        comments = subtaskResponse.subtaskCommentDetail;
+      }
+
+      setMessages(comments);
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching comment data:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCommentData();
-  }, [projectId, userID]);
+  }, [projectId, taskId, userID]);
 
-  const saveMessagesToLocalStorage = (messages) => {
-  };
+  const saveMessagesToLocalStorage = (messages) => {};
 
   const getCurrentDate = () => {
     return new Date().toLocaleDateString();
@@ -92,8 +125,7 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
     try {
       const response = await getMentionList(projectId);
       setMentionData(response.mentionDetail);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -172,14 +204,27 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
       }}
       mb={2}
     >
-      <Typography sx={{ color: "#495057", fontSize: 15, fontWeight: "600", textAlign: "left" }}>Comment Section</Typography>
+      <Typography
+        sx={{
+          color: "#495057",
+          fontSize: 15,
+          fontWeight: "600",
+          textAlign: "left",
+        }}
+      >
+        Comment Section
+      </Typography>
       <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
         {loading ? (
-          <Box sx={{width:"100%", textAlign:"center"}}>
-            <Typography sx={{
+          <Box sx={{ width: "100%", textAlign: "center" }}>
+            <Typography
+              sx={{
                 color: "#495057",
                 fontSize: 13,
-              }}>Loading...</Typography>
+              }}
+            >
+              Loading...
+            </Typography>
           </Box>
         ) : messages.length > 0 ? (
           <ScrollBar>
@@ -190,9 +235,11 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
             sx={{
               // maxHeight: "380px",
               display: "flex",
-              alignItems: "center",
+              alignItems: "top",
               flexDirection: "row",
               justifyContent: "center",
+              padding: "10px",
+              minHeight: "300px",
             }}
           >
             <Typography
@@ -209,32 +256,88 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
 
         <Box
           sx={{
-            p: 2,
+            p: 1,
             boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
             backgroundColor: "#F5F5F5",
-            padding: "16px",
+            padding: "2px 4px",
+            margin: "3px",
+            border: "1px solid #B9B8B9",
+            borderRadius: "25px",
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={10}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Box sx={{ width: isSmallScreen ? "100%" : "80%" }}>
               {/* Your first section */}
-              <MentionsInput value={newMessage} onChange={handleInputChange} onKeyDown={handleKeyDown} style={mentionsInputStyle} placeholder="Enter Comment...">
-                <Mention trigger="@" data={mentionList} renderSuggestion={(suggestion, search, highlightedDisplay) => <Box>{highlightedDisplay}</Box>} onAdd={handleMentionClick} />
+              <MentionsInput
+                value={newMessage}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                style={mentionsInputStyle}
+                placeholder="Enter Comment..."
+              >
+                <Mention
+                  trigger="@"
+                  data={mentionList}
+                  renderSuggestion={(
+                    suggestion,
+                    search,
+                    highlightedDisplay
+                  ) => <Box>{highlightedDisplay}</Box>}
+                  onAdd={handleMentionClick}
+                />
               </MentionsInput>
-            </Grid>
-            <Grid item xs={2}>
+            </Box>
+            <Box>
               {/* Your second section */}
-              <Button sx={{ width: "100%", height: "100%" }} onClick={handleSendMessage} variant="contained" color="primary" size="small" endIcon={<Send sx={{ fontSize: 7 }} />}>
-                Send
-              </Button>
-            </Grid>
-          </Grid>
+              {isSmallScreen ? (
+                <IconButton
+                  onClick={handleSendMessage}
+                  color="primary"
+                  size="small"
+                >
+                  <ArrowUpward sx={{ fontSize: 20 }} />
+                </IconButton>
+              ) : (
+                // <Button sx={{ width: "20%", height: "100%" }} onClick={handleSendMessage} variant="contained" color="primary" size="small" endIcon={<Send sx={{ fontSize: 7 }} />}>
+                //   Send
+                // </Button>
+
+                <IconButton
+                  onClick={handleSendMessage}
+                  size="small"
+                  type="button"
+                  sx={{
+                    fontSize: "1.2rem",
+                    bgcolor: "#B9B8B9",
+                    color: "#000000",
+                  }}
+                >
+                  <SendIcon fontSize="inherit" />
+                </IconButton>
+              )}
+            </Box>
+          </Box>
         </Box>
 
-        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handlePopoverClose}>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+        >
           <Typography>
             {mentionList.map((mention) => (
-              <Box key={mention.id} onClick={() => handleMentionClick(mention)} style={{ cursor: "pointer" }}>
+              <Box
+                key={mention.id}
+                onClick={() => handleMentionClick(mention)}
+                style={{ cursor: "pointer" }}
+              >
                 {mention.display}
               </Box>
             ))}

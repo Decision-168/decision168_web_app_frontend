@@ -48,15 +48,15 @@ export default function MultiSelectOptionGrid({
 
   return (
     <>
-      <Grid item xs={2} alignSelf={"center"}>
-        <InputLabel sx={{ fontSize: "14px" }}>
+      <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+        <InputLabel sx={{ fontSize: "14px", textAlign: "start" }}>
           {label}
           {required && (
             <span style={{ color: theme.palette.error.main }}> *</span>
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={12} sm={6} md={7} lg={7}>
         <Autocomplete
           multiple
           sx={{ marginTop: "5px", width: "100%" }}

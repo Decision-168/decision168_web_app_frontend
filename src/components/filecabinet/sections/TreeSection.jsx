@@ -44,11 +44,11 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value, data }) => {
 
           <Typography sx={{ fontSize: "13px", ml: 1 }}>
             {nodes.name}
-            {(nodes.type != "project-file" &&
-            nodes.type != "task-file" &&
-            nodes.type != "subtask-file" &&
-            nodes.type != "content-file") && (` (${nodes.children ? nodes.children.length : 0})`)}
-           
+            {nodes.type != "project-file" &&
+              nodes.type != "task-file" &&
+              nodes.type != "subtask-file" &&
+              nodes.type != "content-file" &&
+              ` (${nodes.children ? nodes.children.length : 0})`}
           </Typography>
 
           {(nodes.type == "goal-content" ||
