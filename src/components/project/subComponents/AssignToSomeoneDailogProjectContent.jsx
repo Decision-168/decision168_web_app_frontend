@@ -15,7 +15,7 @@ export default function AssignToSomeoneDailogProjectContent({
   memberRegId,
   pm_id,
   handleClose,
-  fetchAllGMembersData,
+  fetchAllPMembersData,
 }) {
   const [selectedMember, setSelectedMember] = useState({ memberID: null });
   const [otherTeamMembers, setOtherTeamMembers] = useState([]);
@@ -42,7 +42,7 @@ export default function AssignToSomeoneDailogProjectContent({
         };
 
         const response = await UpdateProjectOpenWorkNewAssignee(SendData);
-        fetchAllGMembersData();
+        fetchAllPMembersData();
         handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
@@ -72,25 +72,6 @@ export default function AssignToSomeoneDailogProjectContent({
       </Typography>
 
       <Box sx={{ mb: 2 }}>
-        {result?.strategies_countResult !== 0 && (
-          <Typography
-            component="p"
-            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
-          >
-            {result?.strategies_countResult} KPI(s)
-          </Typography>
-        )}
-
-        {result?.only_pro_countResult + result?.pro_tm_countResult !== 0 && (
-          <Typography
-            component="p"
-            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
-          >
-            {result?.only_pro_countResult + result?.pro_tm_countResult}{" "}
-            Project(s)
-          </Typography>
-        )}
-
         {result?.task_countResult !== 0 && (
           <Typography
             component="p"

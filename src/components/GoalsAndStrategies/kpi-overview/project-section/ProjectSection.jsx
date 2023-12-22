@@ -12,7 +12,7 @@ import { getStrategyDetail } from "../../../../api/modules/goalkpiModule";
 import { SearchWithFuse } from "../../../../helpers/SearchWithFuse";
 const ProjectSection = ({ kpi_id }) => {
   const dispatch = useDispatch();
-
+  const [goalId, setGoalId] = useState(null);
   const [kpiProDetails, setkpiProDetails] = useState([]);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ const ProjectSection = ({ kpi_id }) => {
       try {
         const response = await getStrategyDetail(kpi_id);
         setkpiProDetails(response.projectRes);
+        setGoalId(response.goalId);
       } catch (error) {
         console.error(error);
       }
@@ -84,7 +85,7 @@ const ProjectSection = ({ kpi_id }) => {
           showModalButton={false}
           modalSize="md"
         >
-          <CreateProject flag="add" />
+          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={"0"}/>
         </ReduxDialog>
       </Box>
     </PerfectScrollbar>

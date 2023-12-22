@@ -9,6 +9,7 @@ export default function SelectGoalManager({
   managers,
   formValues,
   setFormValues,
+  moduleType,
 }) {
   const theme = useTheme();
 
@@ -27,27 +28,59 @@ export default function SelectGoalManager({
 
   return (
     <>
-      <Grid item xs={2} alignSelf={"center"}>
-        <InputLabel sx={{ fontSize: "14px" }}>
-          Goal Manager
-        </InputLabel>
-      </Grid>
-      <Grid item xs={10}>
-        <Autocomplete
-          sx={{ marginTop: "8px", width: "100%" }}
-          options={managers}
-          value={
-            managers.find(
-              (option) => option.member_reg_id === formValues.gmanager
-            ) || null
-          }
-          onChange={handleChange("gmanager")}
-          getOptionLabel={(option) => option.label}
-          renderInput={(params) => (
-            <TextField {...params} placeholder="Assign Goal Manager" />
-          )}
-        />
-      </Grid>
+      {
+        moduleType == 'project' ?
+        (
+          <>
+          <Grid item xs={2} alignSelf={"center"}>
+            <InputLabel sx={{ fontSize: "14px" }}>
+              Project Manager
+            </InputLabel>
+          </Grid>
+          <Grid item xs={10}>
+            <Autocomplete
+              sx={{ marginTop: "8px", width: "100%" }}
+              options={managers}
+              value={
+                managers.find(
+                  (option) => option.member_reg_id === formValues.pmanager
+                ) || null
+              }
+              onChange={handleChange("pmanager")}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Assign Project Manager" />
+              )}
+            />
+          </Grid>
+          </>
+        ) :
+        (
+          <>
+          <Grid item xs={2} alignSelf={"center"}>
+            <InputLabel sx={{ fontSize: "14px" }}>
+              Goal Manager
+            </InputLabel>
+          </Grid>
+          <Grid item xs={10}>
+            <Autocomplete
+              sx={{ marginTop: "8px", width: "100%" }}
+              options={managers}
+              value={
+                managers.find(
+                  (option) => option.member_reg_id === formValues.gmanager
+                ) || null
+              }
+              onChange={handleChange("gmanager")}
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Assign Goal Manager" />
+              )}
+            />
+          </Grid>
+          </>
+        )
+      }
     </>
   );
 }

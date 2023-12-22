@@ -36,6 +36,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [projectData, setProjectData] = useState([]);
+  const [projectDel, setProjectDel] = useState([]);
   const [userData, setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(null);
 
@@ -51,6 +52,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
+      setProjectDel(response.project);
     } catch (error) {
       console.error(error);
     }
@@ -59,21 +61,20 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
-  const projectDetail = projectData?.project;
-  const projectName = projectDetail?.pname;
-  const projectDescription = projectDetail?.pdes;
+  const projectName = projectDel?.pname;
+  const projectDescription = projectDel?.pdes;
   const AllTaskCount = projectData?.allTaskCount;
   const DoneTaskCount = projectData?.doneTaskCount;
-  const links = projectDetail?.plink;
-  const link_comments = projectDetail?.plink_comment;
-  const projectStartDate = new Date(projectDetail?.pcreated_date);
+  const links = projectDel?.plink;
+  const link_comments = projectDel?.plink_comment;
+  const projectStartDate = new Date(projectDel?.pcreated_date);
   const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
-  const projectType = projectDetail?.ptype;
+  const projectType = projectDel?.ptype;
 
   // Creater (User) Data ----------------------------------------------
   const fetchUserData = async () => {
     try {
-      const response = await getUserData(projectDetail?.pcreated_by);
+      const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
     } catch (error) {
       console.error(error);
@@ -182,11 +183,11 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   useEffect(() => {
     const DisplayAccordionActions = async () => {
       try {
-        if (projectDetail.pcreated_by == userID) {
+        if (projectDel.pcreated_by == userID) {
           setAccdisplayBtns("all");
         } else if (
-          projectDetail.get_portfolio_createdby_id == userID ||
-          projectDetail.pmanager == userID
+          projectDel.get_portfolio_createdby_id == userID ||
+          projectDel.pmanager == userID
         ) {
           setAccdisplayBtns("some");
         } else {
@@ -199,7 +200,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
     };
 
     DisplayAccordionActions();
-  }, [projectDetail, userID]);
+  }, [projectDel, userID]);
 
   const CommonLinks = ({ link, linkName }) => {
     return (
@@ -345,7 +346,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="edit" />
+        <CreateProject flag="edit" gid={projectDel?.gid} sid={projectDel?.sid} passPID={pid} refreshData={fetchProjectData} />
       </ReduxDialog>
       <ReduxDialog
         value="create-new-task"

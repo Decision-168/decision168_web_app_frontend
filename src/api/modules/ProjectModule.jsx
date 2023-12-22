@@ -285,10 +285,10 @@ export const DirectlyRemoveProjectManager = async (pid, pmember_id) => {
   }
 };
 
-export const getAccepted_PortTM_ProjectList = async (portfolio_id, pid) => {
+export const getAccepted_PortTM_ProjectList = async (portfolio_id, pid, user_id) => {
   try {
     const response = await axios.get(
-      `${apiUrl}${api.Accepted_PortTM_ProjectList}${portfolio_id}/${pid}`
+      `${apiUrl}${api.Accepted_PortTM_ProjectList}${portfolio_id}/${pid}/${user_id}`
     );
     return response.data;
   } catch (error) {
@@ -296,9 +296,9 @@ export const getAccepted_PortTM_ProjectList = async (portfolio_id, pid) => {
   }
 };
 
-export const getAccepted_GoalTM_ProjectList = async (gid, pid) => {
+export const getAccepted_GoalTM_ProjectList = async (portfolio_id, pid, gid, user_id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.Accepted_GoalTM_ProjectList}${gid}/${pid}`);
+    const response = await axios.get(`${apiUrl}${api.Accepted_GoalTM_ProjectList}${portfolio_id}/${pid}/${gid}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -332,6 +332,44 @@ export const UpdateProjectOpenWorkNewAssignee = async (formdata) => {
       `${apiUrl}${api.ProjectOpenWorkNewAssignee}`,
       formdata
     );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProjectCreateDD = async (portfolio_id, gid, user_id) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.ProjectCreateDD}${portfolio_id}/${gid}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const EditProject = async (formdata) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.UpdateProject}`, formdata);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const InsertProjectData = async (formdata) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.InsertProject}`, formdata);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateProjectLinkData = async (formdata) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.updateProjectLink}`, formdata);
     return response.data;
   } catch (error) {
     throw error;

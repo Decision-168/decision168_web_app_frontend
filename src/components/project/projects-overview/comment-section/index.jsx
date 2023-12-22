@@ -30,7 +30,7 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
       if(projectId && userID){
         const response = await getProjectComments(projectId, userID);
         setMessages(response.projectCommentDetail);
-      }      
+      }    
     } catch (error) {
       console.error(error);
     } finally {
@@ -42,15 +42,7 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
     fetchCommentData();
   }, [projectId, userID]);
 
-  // useEffect(() => {
-  //   const storedMessages = localStorage.getItem(`project_${projectId}_messages`);
-  //   if (storedMessages) {
-  //     setMessages(JSON.parse(storedMessages));
-  //   }
-  // }, [projectId]);
-
   const saveMessagesToLocalStorage = (messages) => {
-    // localStorage.setItem(`project_${projectId}_messages`, JSON.stringify(messages));
   };
 
   const getCurrentDate = () => {
@@ -59,12 +51,6 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
 
   const [formValues, setFormValues] = useState({});
   const handleSendMessage = () => {
-    // alert(`${JSON.stringify({
-    //   project_id: projectId,
-    //   tid: taskId,
-    //   stid: subtaskId,
-    //   message: newMessage
-    // })}`)
     if (newMessage.trim() !== "") {
       const currentDate = getCurrentDate();
       const timestamp = new Date().toLocaleTimeString();
@@ -82,13 +68,11 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
         stid: subtaskId,
         message: newMessage,
       };
-      // setFormValues();
       setMessages((prevMessages) => [...prevMessages, message]);
       setNewMessage("");
       setAnchorEl(null);
       setMentionInput("");
       insertMessage(msg);
-      // saveMessagesToLocalStorage([...messages, message]);
     }
   };
 
@@ -97,10 +81,8 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
     try {
       const response = await insertComments(userID, mssg);
       fetchCommentData();
-      // console.log(response)
       toast.success(`${response.message}`);
     } catch (error) {
-      // console.error(error);
       toast.error(`${error.response?.error}`);
     }
   };
@@ -111,7 +93,6 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
       const response = await getMentionList(projectId);
       setMentionData(response.mentionDetail);
     } catch (error) {
-      // console.error(error);
     }
   };
 

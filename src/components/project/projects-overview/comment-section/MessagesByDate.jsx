@@ -52,9 +52,6 @@ const MessagesByDate = ({
     }
   };
 
-  // console.log(groupedMessages)
-  // console.log(groupedMessages[date])
-
   return (
     <Box p={2}>
       <Divider>

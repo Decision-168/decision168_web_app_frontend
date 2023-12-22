@@ -49,7 +49,7 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
       const fetchAllHistoryData = async () => {
         if(gid != 0){
           try {
-            const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id);
+            const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id, gid, userID);
             if (response) {
               setmemberData(response);
             }
@@ -58,7 +58,7 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
           }
         }else{
           try {
-            const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id);
+            const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id, userID);
             if (response) {
               setmemberData(response);
             }
