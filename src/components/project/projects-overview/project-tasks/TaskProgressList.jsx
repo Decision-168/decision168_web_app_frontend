@@ -15,19 +15,13 @@ const TaskProgressList = ({ item }) => {
             alignItems: "center",
           }}
         >
-          {item?.profileImage ? (
-            <Avatar
-              alt={stringAvatar(item?.name)}
-              src={`/src/assets/student_photos/${item?.profileImage}`}
-              sx={{ width: "2rem", height: "2rem" }}
-            />
-          ) : (
-            <Avatar
-              alt="user name"
-              src="/src/assets/images/avatar-7.jpg"
-              sx={{ width: "2rem", height: "2rem" }}
-            />
-          )}
+          <Avatar
+            alt={item?.profileImage && stringAvatar(item?.name)}
+            src={`/src/assets/student_photos/${item?.profileImage}`}
+            sx={{ width: "2rem", height: "2rem" }}
+          >
+            {item?.profileImage && stringAvatar(item?.name)}
+          </Avatar>
 
           <Typography sx={{ fontSize: 14, ml: 2, color: "#343a40" }}>
             {item.name}

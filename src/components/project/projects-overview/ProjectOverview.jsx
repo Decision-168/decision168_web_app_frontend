@@ -31,7 +31,7 @@ const ProjectOverview = () => {
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
@@ -116,12 +116,12 @@ const ProjectOverview = () => {
                 startIcon={<ArrowBack />}
                 size="small"
                 sx={{ background: "#383838", color: "#fff" }}
-                onClick={() => navigate("/portfolio-projects-list")}
+                onClick={() => navigate(-1)}
               >
                 Back
               </Button>
-              { (projectDel?.gid != 0) ?
-                (<Button
+              {projectDel?.gid != 0 ? (
+                <Button
                   variant="contained"
                   startIcon={<ArrowBack />}
                   size="small"
@@ -129,10 +129,12 @@ const ProjectOverview = () => {
                   onClick={() => navigate("/goal-overview")}
                 >
                   Go To Goal
-                </Button>) : <></>
-              }
-              { (projectDel?.sid != 0) ?
-                (<Button
+                </Button>
+              ) : (
+                <></>
+              )}
+              {projectDel?.sid != 0 ? (
+                <Button
                   variant="contained"
                   startIcon={<ArrowBack />}
                   size="small"
@@ -140,8 +142,10 @@ const ProjectOverview = () => {
                   onClick={() => navigate("/kpi-overview")}
                 >
                   Go TO KPI
-                </Button>) : <></>
-              }              
+                </Button>
+              ) : (
+                <></>
+              )}
             </Box>
           </Box>
         </Grid>
@@ -149,10 +153,10 @@ const ProjectOverview = () => {
         <Grid item xs={12} lg={8}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-              <ViewProjectPopup pid={pid} refreshData={fetchProjectData}/>
+              <ViewProjectPopup pid={pid} refreshData={fetchProjectData} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <TaskContainer pid={pid}/>
+              <TaskContainer pid={pid} />
             </Grid>
             <Grid item xs={12} lg={12}>
               <LinkContainer pid={pid} />
@@ -165,13 +169,13 @@ const ProjectOverview = () => {
         <Grid item xs={12} lg={4}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-              <MembersAccordion pid={pid} displayBtns={AccdisplayBtns}/>
+              <MembersAccordion pid={pid} displayBtns={AccdisplayBtns} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <CommentSection projectId={pid} taskId={"0"} subtaskId={"0"}/>
+              <CommentSection projectId={pid} taskId={"0"} subtaskId={"0"} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <RecentHistory id={pid} type={"project"}/>
+              <RecentHistory id={pid} type={"project"} />
             </Grid>
           </Grid>
         </Grid>
