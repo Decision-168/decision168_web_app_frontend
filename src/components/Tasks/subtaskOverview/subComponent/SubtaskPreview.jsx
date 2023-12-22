@@ -7,7 +7,6 @@ import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmati
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
-import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 import SubTaskOverviewCardHeader from "./SubTaskOverviewCardHeader";
 import CommentSection from "../../../project/projects-overview/comment-section";
 import { fileItSubTask, getSubTaskDetails } from "../../../../api/modules/taskModule";
@@ -15,6 +14,7 @@ import SubTaskInfo from "./SubTaskInfo";
 import { patchDeleteSubtask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
 export default function SubtaskPreview({
   styles,
@@ -195,7 +195,7 @@ export default function SubtaskPreview({
         showModalButton={false}
         modalSize="lg"
       >
-        <EditSubTasksForm />
+        <CreateEditSubTasksForm editMode={true} taskData={task} subtaskData={subTask}/>
       </ReduxDialog>
 
       <ReduxDialog
@@ -204,7 +204,10 @@ export default function SubtaskPreview({
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateSubtaskDialog subtaskData={subTask} closeModalName={"duplicate-preview-subtask"}/>
+        <DuplicateSubtaskDialog
+          subtaskData={subTask}
+          closeModalName={"duplicate-preview-subtask"}
+        />
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItSubTaskInPreview"} handleYes={handleFileItSubTaskYes} />

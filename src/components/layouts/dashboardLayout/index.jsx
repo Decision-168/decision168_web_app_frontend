@@ -97,12 +97,19 @@ export default function DashboardLayout({ children }) {
           <Container maxWidth="xl">
             <Box
               sx={{
-                padding: "10px",
-                width: "100%",
-                minHeight: "85vh",
-                my: 3,
+                // padding: "10px",
+                // width: "100%",
+                // // minHeight: "80vh",
+                // mt: 3,
+                minheight: "100vh", /* Ensure the body takes at least the full height of the viewport */
+                margin: 0,
+                padding: 0,
+                dispatch:"flex",
+                flexDirection: "column",
+                boxSizing:"border-box"
               }}>
               {children}
+            
             </Box>
           </Container>
           <Copyright />

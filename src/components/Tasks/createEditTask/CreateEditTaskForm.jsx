@@ -11,7 +11,12 @@ import SelectOption from "../../common/SelectOption";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPorfolioDepartments, getPortfolios } from "../../../api/modules/porfolioModule";
-import { getProjectTeamMembers, getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
+import {
+  getProjectTeamMembers,
+  getProjectsForSelectMenu,
+  insertTask,
+  updateTask,
+} from "../../../api/modules/taskModule";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +70,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   const filesArray = files?.map((file, index) => ({ [index]: file.name }));
 
   const handleFilesChange = (newValue, info) => {
-    setFiles(newValue); 
+    setFiles(newValue);
   };
 
   useEffect(() => {
@@ -84,7 +89,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       setSelectedProjectIdObject({ project_id: taskEditData?.tproject_assign });
     }
   }, [editMode, taskEditData]);
-
 
   useEffect(() => {
     // Split the comma-separated strings into arrays
@@ -129,9 +133,8 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     fetchProjects();
   }, [storedPortfolioId, userId]);
 
-  
-  console.log("projects",projects)
-  console.log("tproject_assign",taskEditData?.tproject_assign)
+  console.log("projects", projects);
+  console.log("tproject_assign", taskEditData?.tproject_assign);
 
   //fetch departments
   useEffect(() => {
@@ -149,16 +152,20 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
 
   useEffect(() => {
     // it will return the object of the selected project id from that we require dept_id
-    const selectedProjectObject = projects?.find((p) => p.pid === selectedProjectIdObject?.project_id);
+    const selectedProjectObject = projects?.find(
+      (p) => p.pid === selectedProjectIdObject?.project_id
+    );
     // console.log("selectedProjectObject", selectedProjectObject);
     setSelectedProjectDeptId(selectedProjectObject?.dept_id);
   }, [projects, selectedProjectIdObject?.project_id]);
 
-
   useEffect(() => {
     // Update filtered departments based on selected project
     if (selectedProjectDeptId !== undefined && selectedProjectDeptId !== null) {
-      const filteredDepts = selectedProjectDeptId !== 0 ? departments.filter((d) => d.portfolio_dept_id === selectedProjectDeptId) : [];
+      const filteredDepts =
+        selectedProjectDeptId !== 0
+          ? departments.filter((d) => d.portfolio_dept_id === selectedProjectDeptId)
+          : [];
       setFilteredDepartments(filteredDepts);
     }
   }, [selectedProjectDeptId, departments]);
@@ -256,9 +263,11 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     try {
       setLoading(true);
 
-      const response = editMode ? await updateTask({ user_id: userId, data: { ...formData, tid: taskEditData?.tid } }) : await insertTask({ regId: userId, data: formData });
+      const response = editMode
+        ? await updateTask({ user_id: userId, data: { ...formData, tid: taskEditData?.tid } })
+        : await insertTask({ regId: userId, data: formData });
 
-      dispatch(closeModal(`${editMode ? "edit-task" : "create-new-task" }`));
+      dispatch(closeModal(`${editMode ? "edit-task" : "create-new-task"}`));
       navigate(`/tasks-overview/${editMode ? (taskEditData || {}).tid : response?.taskInsertedId}`);
       toast.success(response.message);
     } catch (error) {
@@ -274,7 +283,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       <DialogContent dividers>
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField label="Task" required={true} placeholder="Enter Task Name" name="tname" value={formValues.tname} onChange={handleChange("tname")} />
+            <CustomLabelTextField
+              label="Task"
+              required={true}
+              placeholder="Enter Task Name"
+              name="tname"
+              value={formValues.tname}
+              onChange={handleChange("tname")}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <SelectOption
@@ -292,7 +308,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField label="Description" required={false} placeholder="Enter Task Description..." name="tdes" value={formValues.tdes} onChange={handleChange("tdes")} />
+            <CustomMultilineTextField
+              label="Description"
+              required={false}
+              placeholder="Enter Task Description..."
+              name="tdes"
+              value={formValues.tdes}
+              onChange={handleChange("tdes")}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2}>
             <Grid container>
@@ -304,7 +327,13 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
                   idKey="portfolio_dept_id"
                   getOptionLabel={(option) => option.department}
                   dynamicOptions={false}
-                  staticOptions={selectedProjectDeptId !== undefined && selectedProjectDeptId !== null && selectedProjectDeptId !== 0 ? filteredDepartments : departments}
+                  staticOptions={
+                    selectedProjectDeptId !== undefined &&
+                    selectedProjectDeptId !== null &&
+                    selectedProjectDeptId !== 0
+                      ? filteredDepartments
+                      : departments
+                  }
                   formValues={formValues}
                   setFormValues={setFormValues}
                 />
@@ -329,7 +358,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField label="Note" required={false} placeholder="Enter Task Note..." name="tnote" value={formValues.tnote} onChange={handleChange("tnote")} />
+            <CustomMultilineTextField
+              label="Note"
+              required={false}
+              placeholder="Enter Task Note..."
+              name="tnote"
+              value={formValues.tnote}
+              onChange={handleChange("tnote")}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2}>
@@ -363,7 +399,15 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
+            <CustomFileInput
+              label="Attached File(s)"
+              placeholder="Choose files..."
+              multiple
+              required={false}
+              name="file"
+              value={files}
+              handleFilesChange={handleFilesChange}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <CustomDatePicker
@@ -406,7 +450,13 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             >
               Close
             </Button>
-            <Button onClick={handleSubmit} size="small" type="button" variant="contained" sx={{ ml: 1 }}>
+            <Button
+              onClick={handleSubmit}
+              size="small"
+              type="button"
+              variant="contained"
+              sx={{ ml: 1 }}
+            >
               {loading ? <CircularLoader /> : editMode ? "Save Changes" : "Create"}
             </Button>
           </Grid>

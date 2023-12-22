@@ -3,9 +3,9 @@ import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 //Dashboard All Tasks (List View)
-export const getDashboardAlltaskListView = async (regId) => {
+export const getDashboardAlltaskListView = async (regId, page, pageSize) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.getDashboardAlltaskListView}${regId}`);
+    const response = await axios.get(`${apiUrl}${api.getDashboardAlltaskListView}${regId}?page=${page}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -23,9 +23,9 @@ export const getDashboardAlltaskGridView = async (regId) => {
 };
 
 //Portfolio Tasks
-export const getPortfolioTasksListView = async (portfolioId) => {
+export const getPortfolioTasksListView = async (portfolioId, page, pageSize) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksListView}${portfolioId}`);
+    const response = await axios.get(`${apiUrl}${api.getPortfolioTasksListView}${portfolioId}?page=${page}&pageSize=${pageSize}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -33,10 +33,10 @@ export const getPortfolioTasksListView = async (portfolioId) => {
 };
 
 //Portfolio Tasks List (LIST VIEW)
-export const getPortfolioTasksSubtasksListView = async (portfolioId, regId) => {
+export const getPortfolioTasksSubtasksListView = async (portfolioId, regId, page, pageSize) => {
   try {
     const response = await axios.get(
-      `${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}`
+      `${apiUrl}${api.getPortfolioTasksSubtasksListView}${portfolioId}/${regId}?page=${page}&pageSize=${pageSize}`
     );
     return response.data;
   } catch (error) {
@@ -249,6 +249,56 @@ export const changeSubtaskStatusDND = async ({ user_id, data }) => {
   try {
     const response = await axios.patch(`${apiUrl}${api.changeSubtaskStatusDND}${user_id}`, data);
     return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get all accepted active portfolio team members(Assignee dropdown) by portfolio id
+export const activePotfolioTeamMembers = async (portfolio_id) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.activePotfolioTeamMembers}${portfolio_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get all Goal team members without read_more status (Assignee dropdown) by gid
+export const getGoalTeamMembers = async (gid) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getGoalTeamMembers}${gid}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get goal details by gid for task Date picker
+export const getGoalDetails = async (gid) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getGoalDetails}${gid}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+ //insert Task file by user id
+export const insertTaskFile = async (user_id, data) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.insertTaskFile}${user_id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+ //insert Subtask file by user id
+ export const insertSubtaskFile = async (user_id, data) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.insertSubtaskFile}${user_id}`, data);
+    return response.data;
   } catch (error) {
     throw error;
   }

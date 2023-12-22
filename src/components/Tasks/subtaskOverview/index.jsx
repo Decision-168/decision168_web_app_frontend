@@ -53,7 +53,7 @@ export default function SubtaskOverview() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
-          <SubtaskOverviewCard styles={styles} subtask={subTask} />
+          <SubtaskOverviewCard styles={styles} subtask={subTask}/>
           <SubtaskLinks styles={styles} links={subTask?.stlink} LinkComments={subTask?.stlink_comment} />
           <SubtaskFiles styles={styles} files={subTask?.stfile} />
         </Grid>

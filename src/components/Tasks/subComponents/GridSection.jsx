@@ -28,6 +28,8 @@ const GridSection = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
+      // Introduce a delay of 1 second (1000 milliseconds)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await getDashboardAlltaskGridView(regId);
       setRows(response);
     } catch (error) {

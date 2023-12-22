@@ -45,7 +45,7 @@ const priorities = [
   { name: "Low", value: "low" },
 ];
 
-export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) {
+export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData }) {
   console.log("editMode", editMode);
   console.log("taskData", taskData);
   console.log("subtaskData", subtaskData);

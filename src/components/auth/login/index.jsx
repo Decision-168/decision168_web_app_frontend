@@ -16,7 +16,7 @@ export default function Login() {
   const theme = useTheme();
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid container component="main" sx={{ maxHeight: "100vh", minHeight:"100vh", maxWidth:"100vw", boxSizing:"border-box" }}>
       <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
         <BackImage />
       </Grid>
@@ -31,7 +31,7 @@ export default function Login() {
         elevation={6}
         square
         bgcolor={theme.palette.secondary.main}
-        sx={{ position: "relative" }}
+        sx={{ position: "relative"}}
       >
         <Hidden mdDown>
           <Ribbon />

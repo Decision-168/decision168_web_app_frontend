@@ -7,6 +7,7 @@ import Loader from "../../common/Loader";
 import NoListTaskFound from "./NoListTaskFound";
 import { useParams } from "react-router-dom";
 import PortfolioTaskTable from "./PortfolioTaskTable";
+import MyPagination from "../../common/MyPagination";
 
 const PortfolioTaskListSection = () => {
   const [rows, setRows] = useState([]);
@@ -14,11 +15,19 @@ const PortfolioTaskListSection = () => {
   const user = useSelector(selectUserDetails);
   const { portfolioId } = useParams();
 
-  const fetchData = async () => {
+  // Pagination settings
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 6;
+
+  const fetchData = async (page) => {
     setLoading(true);
     try {
-      const response = await getPortfolioTasksListView(portfolioId);
-      setRows(response);
+      // Introduce a delay of 1 second (1000 milliseconds)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await getPortfolioTasksListView(portfolioId, page, pageSize);
+      setRows(response?.data);
+      setTotalPages(response?.totalPages);
     } catch (error) {
       console.error(error);
     } finally {
@@ -27,13 +36,24 @@ const PortfolioTaskListSection = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [portfolioId]);
+    fetchData(currentPage);
+  }, [portfolioId, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Grid container mt={2}>
       <Grid item xs={12}>
-        {loading ? <Loader /> : <PortfolioTaskTable rows={rows} setRows={setRows} fetchData={fetchData} />}
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <PortfolioTaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
+            {rows?.length > 0 && <MyPagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+          </>
+        )}
       </Grid>
     </Grid>
   );
