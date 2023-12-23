@@ -223,21 +223,21 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           progressPercentage={gdetail.progress}
           displayBtns={displayBtns}
         />
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
             info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
             info={formatDate(gdetail.gend_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
@@ -246,7 +246,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
             info={gdetail.get_dept_name}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}

@@ -333,8 +333,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   };
 
   //Subtask comment
-  const handleSubTaskCommentsDialog = (subrowId) => {
+  const handleSubTaskCommentsDialog = (subrowId, subrow) => {
     setSubRowId(subrowId);
+    setSubTaskToEdit(subrow)
     dispatch(openModal("send-comments"));
   };
 
@@ -592,7 +593,7 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     size="small"
                     type="button"
                     sx={{ fontSize: "1.2rem" }}
-                    onClick={() => handleSubTaskCommentsDialog(subrow?.stid)}
+                    onClick={() => handleSubTaskCommentsDialog(subrow?.stid, subrow)}
                   >
                     <CommentIcon fontSize="inherit" />
                   </IconButton>
@@ -606,7 +607,7 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     modalSize="sm"
                   >
                     <DialogContent dividers>
-                      <CommentSection />
+                    <CommentSection projectId={subTaskToEdit?.stproject_assign} taskId={"0"} subtaskId={subTaskToEdit?.stid}/>
                     </DialogContent>
                   </ReduxDialog>
                 )}

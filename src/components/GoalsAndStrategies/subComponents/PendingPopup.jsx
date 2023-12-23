@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 
-const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {  
+const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
   const gid = goalID;
 
   //get user id
@@ -53,7 +53,6 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
 
     checkMemberToDisplay();
   }, [user_id, gid]);
-
 
   const formatDate = (timestamp) => {
     // Check if the timestamp is valid
@@ -123,7 +122,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
       mb={2}
     >
       <Grid container spacing={2}>
-        <Grid item xs={6} md={6} lg={6} alignSelf={"center"}>
+        <Grid item xs={12} sm={6} md={6} lg={6} alignSelf={"center"}>
           <Box
             sx={{
               display: "flex",
@@ -147,23 +146,28 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={6} md={6} lg={6} alignSelf={"center"}>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ mr: 1 }}
-            onClick={() => handleRequestPerform("1")}
-          >
-            Accept Request
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ background: "#383838", color: "#fff" }}
-            onClick={() => handleRequestPerform("2")}
-          >
-            Request More Info
-          </Button>
+        <Grid item xs={12} sm={6} md={6} lg={6} alignSelf={"center"}>
+          <Grid container spacing={1}>
+            <Grid item xs={6} sm={6} md={6} lg={6}>
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => handleRequestPerform("1")}
+              >
+                Accept Request
+              </Button>
+            </Grid>
+            <Grid item xs={6} sm={6} md={6} lg={6}>
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ background: "#383838", color: "#fff" }}
+                onClick={() => handleRequestPerform("2")}
+              >
+                Request More Info
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography
@@ -183,21 +187,21 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
             {gdetail?.gdes ? gdetail?.gdes : "No Description!"}
           </Typography>
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
             info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
             info={formatDate(gdetail.gend_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
@@ -206,7 +210,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
             info={gdetail.get_dept_name}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}

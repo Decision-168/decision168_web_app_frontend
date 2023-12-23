@@ -1,11 +1,12 @@
 import React from "react";
-import { Box, Grid} from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import { useDispatch } from "react-redux";
 import CustomSearchField from "../../common/CustomSearchField";
 import CustomFilter from "../../common/CustomFilter";
 import PortfolioTaskListSection from "../subComponents/PortfolioTaskListSection";
+import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
 
 const filterOption = [
   {
@@ -44,14 +45,22 @@ const PortfolioTasks = () => {
   const dispatch = useDispatch();
 
   const handleChange = (event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   };
 
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
+
+  const [rows, setRows] = useState([]);
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(
+    ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
+    query,
+    rows
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
@@ -66,7 +75,7 @@ const PortfolioTasks = () => {
               flexDirection: "row",
             }}
           >
-            <BasicBreadcrumbs currentPage="Tasks" showBackButton={true}/>
+            <BasicBreadcrumbs currentPage="Tasks" showBackButton={true} />
           </Box>
         </Grid>
 
@@ -81,7 +90,11 @@ const PortfolioTasks = () => {
               padding: "5px",
             }}
           >
-            <CustomFilter value={value} handleChange={handleChangeRadio} filterOption={filterOption} />
+            <CustomFilter
+              value={value}
+              handleChange={handleChangeRadio}
+              filterOption={filterOption}
+            />
           </Box>
         </Grid>
 
@@ -95,12 +108,12 @@ const PortfolioTasks = () => {
               flexDirection: "row",
             }}
           >
-            <CustomSearchField />
+            <CustomSearchField query={query} setQuery={setQuery} />
           </Box>
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          <PortfolioTaskListSection/>
+          <PortfolioTaskListSection setRows={setRows} rows={newResults} />
         </Grid>
       </Grid>
     </Box>

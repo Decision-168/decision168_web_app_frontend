@@ -5,8 +5,14 @@ import { stringAvatar } from "../../../../helpers/stringAvatar";
 
 const TaskProgressList = ({ item }) => {
   return (
-    <Grid container px={2} py={1} sx={{ borderBottom: "1px solid #f6f6f6" }}>
-      <Grid item xs={6} lg={6}>
+    <Grid
+      container
+      px={2}
+      spacing={1}
+      py={1}
+      sx={{ borderBottom: "1px solid #f6f6f6" }}
+    >
+      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
         <Box
           sx={{
             display: "flex",
@@ -28,7 +34,7 @@ const TaskProgressList = ({ item }) => {
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={6} lg={6}>
+      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
         <Box
           sx={{
             display: "flex",

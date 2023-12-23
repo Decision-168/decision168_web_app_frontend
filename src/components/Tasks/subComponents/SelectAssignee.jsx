@@ -1,10 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { FormControl, Select, MenuItem, Typography, Box, IconButton, Chip } from "@mui/material";
-import {
-  activePotfolioTeamMembers,
-  editTaskAndSubtask,
-  getGoalTeamMembers,
-} from "../../../api/modules/taskModule";
+import { activePotfolioTeamMembers, editTaskAndSubtask, getGoalTeamMembers } from "../../../api/modules/taskModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -73,9 +69,7 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
         }
 
         // Sort the array so that "Assign to me" is always the first option
-        teamMembers.sort((a, b) =>
-          a.name === "Assign to me" ? -1 : b.name === "Assign to me" ? 1 : 0
-        );
+        teamMembers.sort((a, b) => (a.name === "Assign to me" ? -1 : b.name === "Assign to me" ? 1 : 0));
 
         setAssignees(teamMembers);
       } catch (error) {
@@ -110,10 +104,7 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
       };
 
       // Assuming editTaskAndSubtask returns a Promise
-      const response =
-        type === "task"
-          ? await editTaskAndSubtask(portfolioId, taskData)
-          : await editTaskAndSubtask(portfolioId, subtaskData);
+      const response = type === "task" ? await editTaskAndSubtask(portfolioId, taskData) : await editTaskAndSubtask(portfolioId, subtaskData);
       toast.success(`${response?.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
@@ -162,8 +153,8 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
               maxWidth: "85px",
             }}
           />
-          <IconButton size="small" onClick={() => handleEditAssignee(rowID)}>
-            <ExpandMoreIcon />
+          <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={() => handleEditAssignee(rowID)}>
+            <ExpandMoreIcon fontSize="inherit" />
           </IconButton>
         </Box>
       )}

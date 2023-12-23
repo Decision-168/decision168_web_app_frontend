@@ -184,7 +184,7 @@ export default function SubtaskPreview({
 
         <Grid item xs={12} lg={4}>
           <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
-            <CommentSection />
+          <CommentSection projectId={subTask?.stproject_assign} taskId={"0"} subtaskId={subTask?.stid}/>
           </Paper>
         </Grid>
       </Grid>

@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Grid, Paper, Typography } from "@mui/material";
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import React, { useEffect, useState } from "react";
 import { getRecentFilesData } from "../../../api/modules/FileCabinetModule";
 // const data = [
@@ -42,19 +42,19 @@ import { getRecentFilesData } from "../../../api/modules/FileCabinetModule";
 // ];
 const RecentFiles = ({ handleFileOpen, regId, portfolioId }) => {
   const [recentFilesData, setRecentFilesData] = useState([]);
-    // Recent Files Data ----------------------------------------------
-const fetchRecentFilesData = async () => {
-  try {
-    const response = await getRecentFilesData(regId, portfolioId);
-    setRecentFilesData(response);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  // Recent Files Data ----------------------------------------------
+  const fetchRecentFilesData = async () => {
+    try {
+      const response = await getRecentFilesData(regId, portfolioId);
+      setRecentFilesData(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-useEffect(() => {
-  fetchRecentFilesData();
-}, [regId]);
+  useEffect(() => {
+    fetchRecentFilesData();
+  }, [regId]);
 
   return (
     <Paper elevation={0} sx={{ m: 1 }}>
@@ -62,23 +62,26 @@ useEffect(() => {
         sx={{
           p: 1,
           textAlign: "left",
-          '& .MuiCardContent-root:last-child': {
-            pb: 1
-          }
+          "& .MuiCardContent-root:last-child": {
+            pb: 1,
+          },
         }}
       >
         <Typography sx={{ fontSize: 16, p: 1 }}>Recent Files</Typography>
         {recentFilesData.map((filedata) => (
-          <Card key={filedata.id} variant="outlined" sx={{ mb: 1, cursor: "pointer" }} onClick={() => handleFileOpen(filedata)}>
+          <Card
+            key={filedata.id}
+            variant="outlined"
+            sx={{ mb: 1, cursor: "pointer" }}
+            onClick={() => handleFileOpen(filedata)}
+          >
             <CardContent>
               <Grid container>
                 <Grid item xs={12} lg={3}>
-                    <TextSnippetIcon/>
+                  <TextSnippetIcon />
                 </Grid>
-                <Grid item xs={12} lg={9} sx={{textAlign: "left"}}>
-                  <Typography sx={{ fontSize: 13 }}>
-                    {filedata.name}
-                  </Typography>
+                <Grid item xs={12} lg={9} sx={{ textAlign: "left" }}>
+                  <Typography sx={{ fontSize: 13 }}>{filedata.name}</Typography>
                   <Typography sx={{ color: "#c7df19", fontSize: 11 }}>
                     {filedata.label}
                   </Typography>

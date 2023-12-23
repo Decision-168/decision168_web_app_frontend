@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Grid, Typography } from '@mui/material';
-import React,{memo} from 'react'
-import { Link } from 'react-router-dom';
+import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
+import React, { memo } from "react";
+import { Link } from "react-router-dom";
 import LinkIcon from "@mui/icons-material/Link";
-const LinksList = ({item}) => {
+const LinksList = ({ item }) => {
   return (
     <Grid container px={2} py={1} sx={{ borderBottom: "1px solid #f6f6f6" }}>
       <Grid item xs={6} lg={6}>
@@ -23,19 +23,12 @@ const LinksList = ({item}) => {
             component={Link}
             sx={{ fontSize: 14, ml: 2, color: "#343a40" }}
           >
-            {item.link}
+            {item.screen}
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={6} lg={6} alignSelf={"center"}>
-        <Typography
-          sx={{ fontSize: 14, color: "#343a40", textAlign: "center" }}
-        >
-          {item.screen}
-        </Typography>
-      </Grid>
     </Grid>
   );
-}
+};
 
-export default memo(LinksList)
+export default memo(LinksList);

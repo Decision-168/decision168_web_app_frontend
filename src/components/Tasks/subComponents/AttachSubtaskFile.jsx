@@ -7,8 +7,11 @@ import { toast } from "react-toastify";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import { insertSubtaskFile } from "../../../api/modules/taskModule";
+import { taskOverviewStyles } from "../taskOverview/styles";
+import SubtaskFiles from "../subtaskOverview/subComponent/SubtaskFiles";
 
 const AttachSubtaskFile = ({ subtask }) => {
+  const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   // const user_id = user?.reg_id;
@@ -17,6 +20,8 @@ const AttachSubtaskFile = ({ subtask }) => {
   const [loading, setLoading] = useState(false);
   //to send DB convert files data structure
 
+  
+
   const handleSubtaskFilesChange = async (newValue, info) => {
     // if (!newValue || newValue.length === 0) {
     //   // Show an error message if it is empty
@@ -24,14 +29,18 @@ const AttachSubtaskFile = ({ subtask }) => {
     //   return;
     // }
     setSubtaskFiles(newValue);
-    const subtaskFilesArray = newValue?.map((file, index) => ({ [index]: file.name }));
-    alert(`${JSON.stringify(subtaskFilesArray)}`);
+    const time = Math.floor(Date.now() / 1000);
+    const taskFilesArray = newValue?.map((file, index) => (`${time}_${file.name.toLowerCase()}`));
+    const stringFormat = taskFilesArray.join(',')
+    
+    alert(`${JSON.stringify(stringFormat)}`);
     try {
       const data = {
         stid: subtask?.stid,
-        subtask_file: subtaskFilesArray,
+        stask_file: stringFormat,
         stcode: subtask?.stcode,
       };
+
       const response = await insertSubtaskFile(user_id, data);
       dispatch(closeModal("subtask-attach-file"));
       toast.success(response.message);
@@ -58,6 +67,10 @@ const AttachSubtaskFile = ({ subtask }) => {
           value={subtaskFiles}
           handleFilesChange={handleSubtaskFilesChange}
         />
+
+         {
+          subtask?.stfile &&   <SubtaskFiles styles={styles} files={subtask?.stfile} />
+         }
       </Box>
     </DialogContent>
   );

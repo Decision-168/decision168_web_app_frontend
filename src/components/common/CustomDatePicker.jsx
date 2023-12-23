@@ -35,8 +35,8 @@ function CustomDatePicker({
   };
 
   return (
-    <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
+    <>
+      <InputLabel sx={{ fontSize: "14px", mb: 1, textAlign: "start" }}>
         {label}
         {required && (
           <span style={{ color: theme.palette.error.main }}> *</span>
@@ -46,7 +46,7 @@ function CustomDatePicker({
         variant="outlined"
         disabled
         fullWidth
-        value={moment(startDate).format("YYYY-MM-DD")}
+        value={value ? moment(startDate).format("YYYY-MM-DD") : label}
         sx={{
           width: "100%",
           "& .MuiOutlinedInput-notchedOutline": {
@@ -78,7 +78,7 @@ function CustomDatePicker({
           ),
         }}
       />
-    </Box>
+    </>
   );
 }
 

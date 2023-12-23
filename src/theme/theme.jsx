@@ -157,8 +157,10 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          marginTop: "8px",
-          height: "37px",
+          // marginTop: "8px",
+          // height: "37px",
+          height: "25px",
+          borderRadius:"25px"
         },
       },
     },

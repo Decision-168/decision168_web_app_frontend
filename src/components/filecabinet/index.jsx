@@ -46,9 +46,9 @@ const FileCabinet = () => {
   const [value, setValue] = useState("department");
 
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -97,8 +97,8 @@ const FileCabinet = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <Grid container>
-        <Grid item xs={12} sm={12} md={4} lg={4}>
+      <Grid container spacing={1}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
               display: "flex",
@@ -125,32 +125,28 @@ const FileCabinet = () => {
             </ToggleButtonGroup>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={12} md={8} lg={8}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf={"center"}>
           {alignment === "list" && (
-            <Grid container>
-              <Grid item xs={12} lg={8}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "end",
-                    flexDirection: "row",
-                  }}
-                >
-                  <CustomFilter
-                    value={value}
-                    handleChange={handleChangeRadio}
-                    filterOption={filterOption}
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <CustomSearchField query={query} setQuery={setQuery} />
-              </Grid>
-            </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
+                flexDirection: "row",
+              }}
+            >
+              <CustomFilter
+                value={value}
+                handleChange={handleChangeRadio}
+                filterOption={filterOption}
+              />
+            </Box>
           )}
         </Grid>
-        <Grid item xs={12} lg={9}>
+        <Grid item xs={12} sm={4} md={4} lg={3} xl={3} alignSelf={"center"}>
+          <CustomSearchField query={query} setQuery={setQuery} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
           {alignment === "list" ? (
             <TreeSection
               handleModuleOpen={handleModuleOpen}
@@ -167,7 +163,7 @@ const FileCabinet = () => {
             />
           )}
         </Grid>
-        <Grid item xs={12} lg={3}>
+        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
           <RecentFiles
             handleFileOpen={handleFileOpen}
             regId={userID}

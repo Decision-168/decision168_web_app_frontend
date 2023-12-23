@@ -9,7 +9,7 @@ export default function CustomMultilineTextField({
   placeholder,
   required,
   value,
-  onChange
+  onChange,
 }) {
   const theme = useTheme();
   const placeholderStyles = {
@@ -19,15 +19,17 @@ export default function CustomMultilineTextField({
 
   return (
     <>
-      <Grid item xs={2} alignSelf={"center"}>
-        <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
+      <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+        <InputLabel
+          sx={{ fontSize: "14px", color: labelColor, textAlign: "start" }}
+        >
           {label}
           {required && (
             <span style={{ color: theme.palette.error.main }}> *</span>
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} sm={10} md={10} lg={10}>
         <TextField
           id="outlined-multiline-static"
           sx={{

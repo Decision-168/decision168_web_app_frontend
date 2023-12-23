@@ -44,7 +44,7 @@ const ProjectSection = ({ kpi_id }) => {
         mb={2}
       >
         <Grid container>
-          <Grid item xs={8} alignSelf={"center"}>
+          <Grid item xs={12} sm={6} md={8} lg={8} alignSelf={"center"}>
             <Typography
               sx={{
                 color: "#495057",
@@ -56,7 +56,7 @@ const ProjectSection = ({ kpi_id }) => {
               Projects
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={6} md={4} lg={4}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
           <Grid item xs={12} mt={2}>
@@ -85,7 +85,7 @@ const ProjectSection = ({ kpi_id }) => {
           showModalButton={false}
           modalSize="md"
         >
-          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={"0"}/>
+          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={"0"} />
         </ReduxDialog>
       </Box>
     </PerfectScrollbar>
