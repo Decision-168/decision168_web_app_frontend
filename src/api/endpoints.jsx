@@ -511,7 +511,6 @@ const api = {
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
 
-
   //-----------------------------Project Module Start----------------
 
   // Project List / Grid
@@ -584,16 +583,19 @@ const api = {
   AddSuggestedProjectMember: "project/add-suggested-project-member/",
 
   //Add Suggested Project Invited Member
-  AddSuggestedInvitedProjectMember: "project/add-invited-suggested-project-member/",
+  AddSuggestedInvitedProjectMember:
+    "project/add-invited-suggested-project-member/",
 
   //Direct Remove Project Manager
   DirectRemoveProjectManager: "project/direct-remove-project-manager/",
 
   //Accepted Portfolio team member project list
-  Accepted_PortTM_ProjectList: "project/get-all-accepted-portfolio-team-member-project-list/",
+  Accepted_PortTM_ProjectList:
+    "project/get-all-accepted-portfolio-team-member-project-list/",
 
   //Accepted Goal team member project list
-  Accepted_GoalTM_ProjectList: "project/get-all-accepted-goal-team-member-project-list/",
+  Accepted_GoalTM_ProjectList:
+    "project/get-all-accepted-goal-team-member-project-list/",
 
   //Insert Project Member
   InsertProjectMember: "project/insert-project-member",
@@ -603,6 +605,35 @@ const api = {
 
   //project_open_work_new_assignee
   ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
+
+  //-----------------------------Upgrade Plan Modlue Start----------------
+
+  //getAllPack
+  AllPack: "upgrade-plan/get-all-pack/",
+
+  //get_active_coupons
+  ActiveCoupons: "upgrade-plan/get-active-coupons",
+
+  //free_trial_account_access
+  FreeTrialAccountAccess: "upgrade-plan/free-trial-account-access",
+
+  //insert_ContactSales
+  InsertContactSales: "upgrade-plan/insert-contact-sales",
+
+  //checkout_payment_session_initialize
+  CheckoutPaymentSessionInitialize: "upgrade-plan/create-checkout-session",
+
+  //insert_checkout_payment_data
+  InsertCheckoutPaymentData: "upgrade-plan/insert-checkout-payment-data",
+
+  //update_subscription
+  UpdateSubscription: "upgrade-plan/update-subscription",
+
+  //downgrade_plan
+  DowngradePlan: "upgrade-plan/downgrade-plan",
+
+  //UpdateAllUsersPackageDetails
+  UpdateAllUsersPackageDetails: "updtae-all-users-package-details",
 
 };
 export default api;

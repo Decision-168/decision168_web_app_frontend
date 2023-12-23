@@ -1,18 +1,44 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Box, Typography, Button, useTheme } from "@mui/material";
 
-const Price = ({ price, validity, index, btnIndex }) => {
+const Price = ({
+  priceID,
+  price,
+  validity,
+  packID,
+  selectedPackID,
+  packPrice,
+  selectedPackPrice,
+}) => {
   const theme = useTheme();
 
-  const renderButtonText = () => {
-    if (btnIndex === index) {
-      return "Selected";
-    } else if (btnIndex > index) {
-      return "Downgrade";
+  // console.log('priceID',priceID);
+  // console.log('packID',packID);
+  // console.log('selectedPackID',selectedPackID);
+  // console.log('packPrice',packPrice);
+  // console.log('selectedPackPrice',selectedPackPrice);
+
+  const [btnVal, setBtnVal] = useState();
+
+  useEffect(() => {
+    if (packID == selectedPackID) {
+      setBtnVal("Selected");
     } else {
-      return "Upgrade";
+      if (selectedPackPrice < packPrice) {
+        console.log('1');
+        setBtnVal("Upgrade");
+      } else if (packID == "1") {
+        setBtnVal("Downgrade");
+      } else {
+        setBtnVal("");
+      }
     }
+  }, [packID, selectedPackID, selectedPackPrice, packPrice]);
+
+  const handleSelectAction = async (getbtnVal) => {
+    console.log("clicked", getbtnVal);
   };
+
   return (
     <Box
       sx={{
@@ -48,20 +74,23 @@ const Price = ({ price, validity, index, btnIndex }) => {
         </Typography>
       </Box>
 
-      <Button
-        fullWidth
-        size="small"
-        variant="contained"
-        sx={{
-          ":disabled": {
-            background: theme.palette.secondary.main,
-            color: "white",
-          },
-        }}
-        disabled={btnIndex === index}
-      >
-        {renderButtonText()}
-      </Button>
+      {btnVal && (
+        <Button
+          fullWidth
+          size="small"
+          variant="contained"
+          sx={{
+            ":disabled": {
+              background: theme.palette.secondary.main,
+              color: "white",
+            },
+          }}
+          onClick={() => handleSelectAction(btnVal)}
+          disabled={btnVal === "Selected"}
+        >
+          {btnVal}
+        </Button>
+      )}
     </Box>
   );
 };
