@@ -11,32 +11,24 @@ const Price = ({
   selectedPackPrice,
 }) => {
   const theme = useTheme();
+  // const selectedPackID = 1;
+  // const selectedPackPrice = 0;
 
-  // console.log('priceID',priceID);
-  // console.log('packID',packID);
-  // console.log('selectedPackID',selectedPackID);
-  // console.log('packPrice',packPrice);
-  // console.log('selectedPackPrice',selectedPackPrice);
+  // const handleSelectAction = async (getbtnVal) => {
+  //   console.log("clicked", getbtnVal);
+  // };
 
-  const [btnVal, setBtnVal] = useState();
-
-  useEffect(() => {
+  const getButtonText = () => {
     if (packID == selectedPackID) {
-      setBtnVal("Selected");
+      return "Selected";
     } else {
-      if (selectedPackPrice < packPrice) {
-        console.log('1');
-        setBtnVal("Upgrade");
-      } else if (packID == "1") {
-        setBtnVal("Downgrade");
-      } else {
-        setBtnVal("");
+      if (selectedPackPrice <= packPrice) {
+        return "Upgrade";
+      }
+      if (packID == 1) {
+        return "Downgrade";
       }
     }
-  }, [packID, selectedPackID, selectedPackPrice, packPrice]);
-
-  const handleSelectAction = async (getbtnVal) => {
-    console.log("clicked", getbtnVal);
   };
 
   return (
@@ -74,7 +66,7 @@ const Price = ({
         </Typography>
       </Box>
 
-      {btnVal && (
+      {getButtonText() && (
         <Button
           fullWidth
           size="small"
@@ -85,10 +77,10 @@ const Price = ({
               color: "white",
             },
           }}
-          onClick={() => handleSelectAction(btnVal)}
-          disabled={btnVal === "Selected"}
+          // onClick={() => handleSelectAction(btnVal)}
+          disabled={getButtonText() === "Selected"}
         >
-          {btnVal}
+          {getButtonText()}
         </Button>
       )}
     </Box>
