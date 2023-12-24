@@ -648,5 +648,34 @@ const api = {
 
   //Insert Project Links
   updateProjectLink: "project/update-project-links",
+
+  //-----------------------------Upgrade Plan Modlue Start----------------
+
+  //getAllPack
+  AllPack: "upgrade-plan/get-all-pack/",
+
+  //get_active_coupons
+  ActiveCoupons: "upgrade-plan/get-active-coupons",
+
+  //free_trial_account_access
+  FreeTrialAccountAccess: "upgrade-plan/free-trial-account-access",
+
+  //insert_ContactSales
+  InsertContactSales: "upgrade-plan/insert-contact-sales",
+
+  //checkout_payment_session_initialize
+  CheckoutPaymentSessionInitialize: "upgrade-plan/create-checkout-session",
+
+  //insert_checkout_payment_data
+  InsertCheckoutPaymentData: "upgrade-plan/insert-checkout-payment-data",
+
+  //update_subscription
+  UpdateSubscription: "upgrade-plan/update-subscription",
+
+  //downgrade_plan
+  DowngradePlan: "upgrade-plan/downgrade-plan",
+
+  //UpdateAllUsersPackageDetails
+  UpdateAllUsersPackageDetails: "updtae-all-users-package-details",
 };
 export default api;

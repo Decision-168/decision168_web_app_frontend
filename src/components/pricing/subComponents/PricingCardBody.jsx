@@ -9,12 +9,16 @@ import LetUsTalk from "./LetUsTalk";
 const PricingCardBody = ({
   styles,
   features,
+  priceID,
   price,
   validity,
   isSpecialOffer,
-  name,
-  index,
-  btnIndex,
+  contactUs,
+  packID,
+  selectedPackID,
+  packPrice,
+  selectedPackPrice,
+  CouponPack
 }) => {
   const theme = useTheme();
   return (
@@ -24,14 +28,18 @@ const PricingCardBody = ({
       ) : (
         <Box sx={{ height: "100px", margin: "-16px" }}>&nbsp;</Box>
       )}
-      {name === "Enterprise" ? (
+      {contactUs ? (
         <LetUsTalk />
       ) : (
         <Price
+          priceID={priceID}
           price={price}
           validity={validity}
-          index={index}
-          btnIndex={btnIndex}
+          packID={packID}
+          selectedPackID={selectedPackID}
+          packPrice={packPrice}
+          selectedPackPrice={selectedPackPrice}
+          CouponPack={CouponPack}
         />
       )}
 
