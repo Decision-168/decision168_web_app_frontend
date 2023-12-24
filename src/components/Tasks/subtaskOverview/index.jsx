@@ -9,6 +9,7 @@ import SubtaskOverviewCard from "./subComponent/SubtaskOverviewCard";
 import SubtaskLinks from "./subComponent/SubtaskLinks";
 import SubtaskFiles from "./subComponent/SubtaskFiles";
 import { getSubTaskDetails } from "../../../api/modules/taskModule";
+import CommentSection from "../../project/projects-overview/comment-section";
 
 export default function SubtaskOverview() {
   const theme = useTheme();
@@ -58,8 +59,8 @@ export default function SubtaskOverview() {
           <SubtaskFiles styles={styles} files={subTask?.stfile} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0}>
-            <Typography variant="h6">Comments Section</Typography>
+          <Paper elevation={0} sx={{height:"100%"}}>
+          <CommentSection projectId={subTask?.stproject_assign} taskId={0} subtaskId={subTask?.stid} commentModule={"subtask"}/>
           </Paper>
         </Grid>
       </Grid>

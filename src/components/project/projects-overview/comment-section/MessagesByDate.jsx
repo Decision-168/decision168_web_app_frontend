@@ -2,7 +2,7 @@ import React, { memo, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Box, Divider, IconButton, MenuItem, Popover } from "@mui/material";
 import { DoDisturb, MoreVert, Schedule } from "@mui/icons-material";
-import moment from "moment/moment";
+import moment from "moment";
 import { deleteComment } from "../../../../api/modules/ProjectModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
@@ -47,7 +47,7 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
     <Box p={2}>
       <Divider>
         <Typography my={1} sx={{ fontSize: 13, color: "#495057" }}>
-          {moment(date).format("ll")}
+          {moment(date, "DD/MM/YYYY").format("Do MMMM, YYYY")}
         </Typography>
       </Divider>
       {groupedMessages[date].map((message) => (

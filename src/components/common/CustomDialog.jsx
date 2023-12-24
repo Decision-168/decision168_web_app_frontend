@@ -18,23 +18,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function CustomDialog({
-  children,
-  handleClose,
-  open,
-  modalTitle,
-  showModalButton,
-  modalSize,
-  redirectPath,
-}) {
+export default function CustomDialog({ children, handleClose, open, modalTitle, showModalButton, modalSize, redirectPath }) {
   const theme = useTheme();
   return (
     <div>
       <BootstrapDialog
-        maxWidth={modalSize}
+        maxWidth={modalSize} // Set the initial width
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={open}>
+        open={open}
+      >
         <DialogTitle
           sx={{
             m: 0,
@@ -44,7 +37,8 @@ export default function CustomDialog({
             alignItems: "center",
             borderTop: `5px solid ${theme.palette.primary.main} `,
           }}
-          id="customized-dialog-title">
+          id="customized-dialog-title"
+        >
           <Typography component="h6" variant="subtitle2" mr={2}>
             {modalTitle}
           </Typography>
@@ -58,7 +52,8 @@ export default function CustomDialog({
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
-          }}>
+          }}
+        >
           <CloseIcon />
         </IconButton>
 

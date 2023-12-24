@@ -2,44 +2,44 @@ import { Box, Card, CardContent, Grid, Paper, Typography } from "@mui/material";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import React, { useEffect, useState } from "react";
 import { getRecentFilesData } from "../../../api/modules/FileCabinetModule";
-// const data = [
-//   {
-//     id: "0",
-//     name: "docx_file.docx",
-//     type: "subtask-file",
-//     label: "Subtask",
-//     color: "#004225",
-//     overview: "yes",
-//     section: "1",
-//   },
-//   {
-//     id: "1",
-//     name: "excel_file.xlsx",
-//     type: "project-file",
-//     label: "Project",
-//     color: "#004225",
-//     overview: "yes",
-//     section: "1",
-//   },
-//   {
-//     id: "2",
-//     name: "img_file.png",
-//     type: "task-file",
-//     label: "Task",
-//     color: "#004225",
-//     overview: "yes",
-//     section: "1",
-//   },
-//   {
-//     id: "23",
-//     name: "pdf_file.pdf",
-//     type: "task-file",
-//     label: "Task",
-//     color: "#004225",
-//     overview: "yes",
-//     section: "1",
-//   },
-// ];
+const data = [
+  {
+    id: "0",
+    name: "docx_file.docx",
+    type: "subtask-file",
+    label: "Subtask",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
+  },
+  {
+    id: "1",
+    name: "excel_file.xlsx",
+    type: "project-file",
+    label: "Project",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
+  },
+  {
+    id: "2",
+    name: "img_file.png",
+    type: "task-file",
+    label: "Task",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
+  },
+  {
+    id: "23",
+    name: "pdf_file.pdf",
+    type: "task-file",
+    label: "Task",
+    color: "#004225",
+    overview: "yes",
+    section: "1",
+  },
+];
 const RecentFiles = ({ handleFileOpen, regId, portfolioId }) => {
   const [recentFilesData, setRecentFilesData] = useState([]);
   // Recent Files Data ----------------------------------------------

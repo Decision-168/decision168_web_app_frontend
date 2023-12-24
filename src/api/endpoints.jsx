@@ -323,8 +323,8 @@ const api = {
   //get Task comments by tid and userid
   getTaskComments: "task/get-task-comments/",
 
-  //get Subask comments by tid and userid
-  geSubtaskComments: "task/get-subtask-comments/",
+  //get Subask comments by stid and userid
+  geSubtaskComments: "subtask/get-subtask-comments/",
 
   //-----------------------------File Cabinet Module Start----------------
 

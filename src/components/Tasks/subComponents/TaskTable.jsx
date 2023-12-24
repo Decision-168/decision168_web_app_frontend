@@ -136,7 +136,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
     setOpenSubrows(false);
   };
 
-  
   //Task Code checkbox
   const handleTaskCodeCheckBoxDialog = (event, rowId, tAssignee, tStatus) => {
     setRowId(rowId);
@@ -576,7 +575,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   //Task PreviewDialog code
   const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
   const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
-  const [parentTaskName, setParentTaskName] = useState("");
+
 
   // Task prview Dailog Code
   const handleOpenTaskPreviewDialog = (rowId) => {
@@ -589,8 +588,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   };
 
   // Sub Task prview Dailog Code
-  const handleOpenSubTaskPreviewDialog = (subrowId, parent_tname) => {
-    setParentTaskName(parent_tname);
+  const handleOpenSubTaskPreviewDialog = (subrowId, parent_tname, row) => {
     setSubRowId(subrowId);
     setOpenSubTaskPreviewDialog(true);
   };
@@ -603,14 +601,14 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   const handleTaskCommentsDialog = (rowId, row) => {
     setRowId(rowId);
     setTaskToEdit(row);
-    dispatch(openModal("send-comments"));
+    dispatch(openModal("send-task-comments"));
   };
 
   //Subtask comment
   const handleSubTaskCommentsDialog = (subrowId, subrow) => {
     setSubRowId(subrowId);
     setSubTaskToEdit(subrow);
-    dispatch(openModal("send-comments"));
+    dispatch(openModal("send-subtask-comments"));
   };
 
   //Task Attache file
@@ -652,7 +650,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   return (
     <>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <TableContainer sx={{ minHeight: "62vh", maxHeight: "100vh" }}>
+        <TableContainer>
           <Table sx={{ minWidth: "650px" }} aria-label="simple table">
             <TableHead>
               <TableRow sx={{ width: "100%", bgcolor: "#FFFFFF" }}>
@@ -905,9 +903,9 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                 </Tooltip>
 
                                 {rowId === row?.tid && (
-                                  <ReduxDialog value="send-comments" modalTitle="Task" showModalButton={true} redirectPath={`/tasks-overview/${rowId}`} modalSize="sm">
+                                  <ReduxDialog value="send-task-comments" modalTitle="Task" showModalButton={true} redirectPath={`/tasks-overview/${rowId}`} modalSize="sm">
                                     <DialogContent dividers>
-                                      <CommentSection projectId={taskToEdit?.tproject_assign} taskId={taskToEdit?.tid} subtaskId={"0"} />
+                                      <CommentSection projectId={taskToEdit?.tproject_assign} taskId={taskToEdit?.tid} subtaskId={0} commentModule={"task"} />
                                     </DialogContent>
                                   </ReduxDialog>
                                 )}
@@ -1013,7 +1011,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                                         {subRowId === subrow?.stid && (
                                           <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg">
-                                            <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} parentTaskName={row?.tname} />
+                                            <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData}  taskData={row} />
                                           </CustomDialog>
                                         )}
                                       </>
@@ -1133,9 +1131,9 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                     </Tooltip>
 
                                     {subRowId === subrow?.stid && (
-                                      <ReduxDialog value="send-comments" modalTitle="Subtask" showModalButton={true} redirectPath={`/subtasks-overview/${subRowId}`} modalSize="sm">
+                                      <ReduxDialog value="send-subtask-comments" modalTitle="Subtask" showModalButton={true} redirectPath={`/subtasks-overview/${subRowId}`} modalSize="sm">
                                         <DialogContent dividers>
-                                          <CommentSection projectId={subTaskToEdit?.stproject_assign} taskId={"0"} subtaskId={subTaskToEdit?.stid} />
+                                          <CommentSection projectId={subTaskToEdit?.stproject_assign} taskId={0} subtaskId={subTaskToEdit?.stid} commentModule={"subtask"}/>
                                         </DialogContent>
                                       </ReduxDialog>
                                     )}
