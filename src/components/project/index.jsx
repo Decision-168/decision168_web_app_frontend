@@ -60,7 +60,7 @@ const filterOption = [
 const ProjectIndex = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
-  const {portfolioId} = useParams();
+  const { portfolioId } = useParams();
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
   const [projectTitle, setProjectTitle] = useState("");
@@ -266,7 +266,7 @@ const ProjectIndex = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={3} md={3} lg={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
