@@ -144,3 +144,12 @@ export const getPorfolioCount = async (portfolioId) => {
     throw error;
   }
 };
+
+export const allPortfolios = async (email, user_id) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getAllPorfolios}${email}/${user_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

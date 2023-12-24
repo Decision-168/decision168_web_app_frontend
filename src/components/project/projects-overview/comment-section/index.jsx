@@ -1,23 +1,37 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Button, Popover, Typography, Box, Grid, IconButton, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  Popover,
+  Typography,
+  Box,
+  Grid,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { MentionsInput, Mention } from "react-mentions";
 import { ArrowUpward, Send } from "@mui/icons-material";
 import ScrollBar from "react-perfect-scrollbar";
 import mentionsInputStyle from "./mentionInputStyle";
 import MessagesByDate from "./MessagesByDate";
-import { getMentionList, getProjectComments, insertComments } from "../../../../api/modules/ProjectModule";
+import {
+  getMentionList,
+  getProjectComments,
+  insertComments,
+} from "../../../../api/modules/ProjectModule";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
-import { getSubtaskComments, getTaskComments } from "../../../../api/modules/taskModule";
+import {
+  getSubtaskComments,
+  getTaskComments,
+} from "../../../../api/modules/taskModule";
 const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   console.log("projectId", projectId);
   console.log("taskId", taskId);
   console.log("subtaskId", subtaskId);
   const user = useSelector(selectUserDetails);
-  // const userID = user?.reg_id;
-  const userID = 1; //for testing
+  const userID = user?.reg_id;
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -176,7 +190,12 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
 
     return Object.keys(groupedMessages).map((date, index) => (
       <Fragment key={index}>
-        <MessagesByDate date={date} groupedMessages={groupedMessages} setMessages={setMessages} saveMessagesToLocalStorage={saveMessagesToLocalStorage} />
+        <MessagesByDate
+          date={date}
+          groupedMessages={groupedMessages}
+          setMessages={setMessages}
+          saveMessagesToLocalStorage={saveMessagesToLocalStorage}
+        />
       </Fragment>
     ));
   };
@@ -264,14 +283,33 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           >
             <Box sx={{ width: isSmallScreen ? "100%" : "80%" }}>
               {/* Your first section */}
-              <MentionsInput value={newMessage} onChange={handleInputChange} onKeyDown={handleKeyDown} style={mentionsInputStyle} placeholder="Write Comment...">
-                <Mention trigger="@" data={mentionList} renderSuggestion={(suggestion, search, highlightedDisplay) => <Box>{highlightedDisplay}</Box>} onAdd={handleMentionClick} />
+              <MentionsInput
+                value={newMessage}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                style={mentionsInputStyle}
+                placeholder="Write Comment..."
+              >
+                <Mention
+                  trigger="@"
+                  data={mentionList}
+                  renderSuggestion={(
+                    suggestion,
+                    search,
+                    highlightedDisplay
+                  ) => <Box>{highlightedDisplay}</Box>}
+                  onAdd={handleMentionClick}
+                />
               </MentionsInput>
             </Box>
             <Box>
               {/* Your second section */}
               {isSmallScreen ? (
-                <IconButton onClick={handleSendMessage} color="primary" size="small">
+                <IconButton
+                  onClick={handleSendMessage}
+                  color="primary"
+                  size="small"
+                >
                   <ArrowUpward sx={{ fontSize: 20 }} />
                 </IconButton>
               ) : (
@@ -296,10 +334,18 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           </Box>
         </Box>
 
-        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handlePopoverClose}>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handlePopoverClose}
+        >
           <Typography>
             {mentionList.map((mention) => (
-              <Box key={mention.id} onClick={() => handleMentionClick(mention)} style={{ cursor: "pointer" }}>
+              <Box
+                key={mention.id}
+                onClick={() => handleMentionClick(mention)}
+                style={{ cursor: "pointer" }}
+              >
                 {mention.display}
               </Box>
             ))}

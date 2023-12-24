@@ -175,7 +175,7 @@ const ProjectOverview = () => {
               <MembersAccordion pid={pid} displayBtns={AccdisplayBtns} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <CommentSection projectId={pid} taskId={"0"} subtaskId={"0"} />
+            <CommentSection projectId={pid} taskId={0} subtaskId={0} commentModule={"project"} />
             </Grid>
             <Grid item xs={12} lg={12}>
               <RecentHistory id={pid} type={"project"} />

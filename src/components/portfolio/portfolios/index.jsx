@@ -7,65 +7,36 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import { useNavigate } from "react-router-dom";
 import CustomSearchField from "../../common/CustomSearchField";
 import PortfolioListView from "./subComponents/views/PortfolioListView";
 import PortfolioCardView from "./subComponents/views/PortfolioCardView";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
-const data = [
-  {
-    name: "Owais",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Jameel",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Alim",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Zaheer",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Owais",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Jameel",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Alim",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Arshad",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-];
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { allPortfolios } from "../../../api/modules/porfolioModule";
 // Define the AllPortfolios component
 const AllPortfolios = () => {
+  const user = useSelector(selectUserDetails);
+  const [portfolioData, setPortfolioData] = useState([]);
+  const userID = user?.reg_id;
+  const userEmail = user?.email_address;
+
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await allPortfolios(userEmail, userID);
+      setPortfolioData(response.portfolioGrid);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolioData();
+  }, [userEmail]);
+
   // State to manage the view alignment (list or grid)
   const [alignment, setAlignment] = useState("list");
   // React Router hook for navigation
@@ -81,7 +52,7 @@ const AllPortfolios = () => {
   // Render the component
 
   const [query, setQuery] = useState("");
-  const newResults = SearchWithFuse(["name", "company"], query, data);
+  const newResults = SearchWithFuse(["name", "company"], query, portfolioData);
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>

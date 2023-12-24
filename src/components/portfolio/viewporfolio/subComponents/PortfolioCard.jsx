@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Box, Button, Grid, Paper, Typography, Menu, MenuItem, useMediaQuery, Stack } from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
@@ -27,7 +27,7 @@ import CardAvatar from "../../../common/CardAvatar";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 import { patchArchivePortfolio } from "../../../../api/modules/ArchiveModule";
-import { patchDeleteGoal } from "../../../../api/modules/TrashModule";
+import { patchDeleteGoal, patchDeletePortfolio } from "../../../../api/modules/TrashModule";
 
 export default function PortfolioCard({ regId }) {
   const theme = useTheme();
@@ -39,8 +39,8 @@ export default function PortfolioCard({ regId }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const dispatch = useDispatch();
-  const [module, setModule] = React.useState(null);
   const userID = user?.reg_id;
+  const [portfId, setPortfId] = useState(null);
 
   useEffect(() => {
     if (storedPortfolioId) {
@@ -116,19 +116,9 @@ export default function PortfolioCard({ regId }) {
     setOpenViewDepartmentDialog(false);
   };
 
-  //Delete Dailog code
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-
-  const handleOpenDeleteDialog = () => {
-    setOpenDeleteDialog(true);
-    handleClose();
-  };
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-  };
-
-  const handleArchive = () => {
-    setModule("archive");
+  // Handler for clicking the "Archive" button
+  const handleArchive = (portId) => {
+    setPortfId(portId);
     dispatch(
       openCnfModal({
         modalName: "archivePortfolio",
@@ -138,26 +128,47 @@ export default function PortfolioCard({ regId }) {
     );
   };
 
-  const handleYes = async () => {
-    if (module == "archive") {
-      try {
-        const response = await patchArchivePortfolio(storedPortfolioId, userID);
-        dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-        toast.success(`${response.message}`);
-      } catch (error) {
-        dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-        console.log(error.response.data);
-        toast.error(`${error.response.data?.error}`);
+  // Handler for clicking the "Delete" button
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const handleDelete = (portId) => {
+    setOpenDeleteDialog(true);
+    setPortfId(portId);
+    handleClose();
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleArchiveYes = async () => {
+    try {
+      const response = await patchArchivePortfolio(portfId, userID);
+      dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
+      if(storedPortfolioId == portfId){
+        localStorage.removeItem("portfolioId");
+        navigate(`/portfolio`)
       }
-    } else if (module == "delete") {
-      try {
-        const response = await patchDeleteGoal(storedPortfolioId, userID);
-        dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
-        toast.success(`${response.message}`);
-      } catch (error) {
-        dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
-        toast.error(`${error.response?.error}`);
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
+      console.log(error.response.data);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
+  const handleDeleteYes = async (portfolioid) => {
+    try {
+      const response = await patchDeletePortfolio(portfolioid, userID);
+      dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
+      if(storedPortfolioId == portfolioid){
+        localStorage.removeItem("portfolioId");
+        navigate(`/portfolio`)
       }
+      toast.success(`${response.message}`);
+      handleCloseDeleteDialog();
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
+      toast.error(`${error.response?.error}`);
+      handleCloseDeleteDialog();
     }
   };
 
@@ -270,8 +281,8 @@ export default function PortfolioCard({ regId }) {
               <MenuItem component={Link} to={`/portfolio-edit/${storedPortfolioId}`} onClick={handleClose}>
                 Edit
               </MenuItem>
-              <MenuItem onClick={handleArchive}>Archive</MenuItem>
-              <MenuItem onClick={handleOpenDeleteDialog}>Delete</MenuItem>
+              <MenuItem onClick={() => handleArchive(storedPortfolioId)}>Archive</MenuItem>
+              <MenuItem onClick={() => handleDelete(storedPortfolioId)}>Delete</MenuItem>
             </Menu>
 
             <CustomDialog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="md">
@@ -283,10 +294,10 @@ export default function PortfolioCard({ regId }) {
             </CustomDialog>
 
             <CustomDialog handleClose={handleCloseDeleteDialog} open={openDeleteDialog} modalTitle="Delete Portfolio" showModalButton={false} modalSize="sm">
-              <DeleteDailogContent handleClose={handleCloseDeleteDialog} />
+              <DeleteDailogContent handleClose={handleCloseDeleteDialog} portfolio_id={portfId} handleDelete={handleDeleteYes} />
             </CustomDialog>
             <ReduxDialog value="create-project" modalTitle="Create New Project" showModalButton={false} modalSize="md">
-            <CreateProject flag="add" gid={"0"} sid={"0"} passPID={"0"}/>
+            <CreateProject flag="add" gid={0} sid={0} passPID={0}/>
             </ReduxDialog>
           </Box>
         </Grid>
@@ -295,7 +306,8 @@ export default function PortfolioCard({ regId }) {
           <CustomAvatarGroup data={members} />
         </Grid>
       </Grid>
-      <ConfirmationDialog value={"archivePortfolio"} handleYes={handleYes} />
+      <ConfirmationDialog value={"archivePortfolio"} handleYes={handleArchiveYes} />
+      <ConfirmationDialog value={"deletePortfolio"} handleYes={handleDeleteYes} />
     </Paper>
   );
 }

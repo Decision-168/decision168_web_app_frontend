@@ -257,7 +257,7 @@ const PortfolioProjects = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" />
+        <CreateProject flag="add" gid={0} sid={0} passPID={0} />
       </ReduxDialog>
       <CustomDialog
         handleClose={handleProjectPreviewClose}
