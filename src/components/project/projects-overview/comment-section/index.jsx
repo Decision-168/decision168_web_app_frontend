@@ -1,32 +1,17 @@
 import React, { useState, useEffect, Fragment } from "react";
-import {
-  Button,
-  Popover,
-  Typography,
-  Box,
-  Grid,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material";
+import { Button, Popover, Typography, Box, Grid, IconButton, useMediaQuery } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { MentionsInput, Mention } from "react-mentions";
 import { ArrowUpward, Send } from "@mui/icons-material";
 import ScrollBar from "react-perfect-scrollbar";
 import mentionsInputStyle from "./mentionInputStyle";
 import MessagesByDate from "./MessagesByDate";
-import {
-  getMentionList,
-  getProjectComments,
-  insertComments,
-} from "../../../../api/modules/ProjectModule";
+import { getMentionList, getProjectComments, insertComments } from "../../../../api/modules/ProjectModule";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
-import {
-  getSubtaskComments,
-  getTaskComments,
-} from "../../../../api/modules/taskModule";
-const CommentSection = ({ projectId, taskId, subtaskId }) => {
+import { getSubtaskComments, getTaskComments } from "../../../../api/modules/taskModule";
+const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   console.log("projectId", projectId);
   console.log("taskId", taskId);
   console.log("subtaskId", subtaskId);
@@ -45,36 +30,45 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
 
   const fetchCommentData = async () => {
     setLoading(true);
-
-    try {
-      let comments = [];
-
+    if (commentModule == "project") {
       if (projectId && userID) {
-        const projectResponse = await getProjectComments(projectId, userID);
-        comments = projectResponse.projectCommentDetail;
+        try {
+          const response = await getProjectComments(projectId, userID);
+          setMessages(response.projectCommentDetail);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
       }
-
+    } else if (commentModule == "task") {
       if (taskId && userID) {
-        const taskResponse = await getTaskComments(taskId, userID);
-        comments = taskResponse.taskCommentDetail;
+        try {
+          const response = await getTaskComments(taskId, userID);
+          setMessages(response.taskCommentDetail);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
       }
-
+    } else if (commentModule == "subtask") {
       if (subtaskId && userID) {
-        const subtaskResponse = await getSubtaskComments(subtaskId, userID);
-        comments = subtaskResponse.subtaskCommentDetail;
+        try {
+          const response = await getSubtaskComments(subtaskId, userID);
+          setMessages(response.subtaskCommentDetail);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      setMessages(comments);
-    } catch (error) {
-      console.error("Error fetching comment data:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchCommentData();
-  }, [projectId, taskId, userID]);
+  }, [subtaskId, taskId, projectId, userID]);
 
   const saveMessagesToLocalStorage = (messages) => {};
 
@@ -182,12 +176,7 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
 
     return Object.keys(groupedMessages).map((date, index) => (
       <Fragment key={index}>
-        <MessagesByDate
-          date={date}
-          groupedMessages={groupedMessages}
-          setMessages={setMessages}
-          saveMessagesToLocalStorage={saveMessagesToLocalStorage}
-        />
+        <MessagesByDate date={date} groupedMessages={groupedMessages} setMessages={setMessages} saveMessagesToLocalStorage={saveMessagesToLocalStorage} />
       </Fragment>
     ));
   };
@@ -275,33 +264,14 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
           >
             <Box sx={{ width: isSmallScreen ? "100%" : "80%" }}>
               {/* Your first section */}
-              <MentionsInput
-                value={newMessage}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                style={mentionsInputStyle}
-                placeholder="Enter Comment..."
-              >
-                <Mention
-                  trigger="@"
-                  data={mentionList}
-                  renderSuggestion={(
-                    suggestion,
-                    search,
-                    highlightedDisplay
-                  ) => <Box>{highlightedDisplay}</Box>}
-                  onAdd={handleMentionClick}
-                />
+              <MentionsInput value={newMessage} onChange={handleInputChange} onKeyDown={handleKeyDown} style={mentionsInputStyle} placeholder="Write Comment...">
+                <Mention trigger="@" data={mentionList} renderSuggestion={(suggestion, search, highlightedDisplay) => <Box>{highlightedDisplay}</Box>} onAdd={handleMentionClick} />
               </MentionsInput>
             </Box>
             <Box>
               {/* Your second section */}
               {isSmallScreen ? (
-                <IconButton
-                  onClick={handleSendMessage}
-                  color="primary"
-                  size="small"
-                >
+                <IconButton onClick={handleSendMessage} color="primary" size="small">
                   <ArrowUpward sx={{ fontSize: 20 }} />
                 </IconButton>
               ) : (
@@ -326,18 +296,10 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
           </Box>
         </Box>
 
-        <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handlePopoverClose}
-        >
+        <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handlePopoverClose}>
           <Typography>
             {mentionList.map((mention) => (
-              <Box
-                key={mention.id}
-                onClick={() => handleMentionClick(mention)}
-                style={{ cursor: "pointer" }}
-              >
+              <Box key={mention.id} onClick={() => handleMentionClick(mention)} style={{ cursor: "pointer" }}>
                 {mention.display}
               </Box>
             ))}

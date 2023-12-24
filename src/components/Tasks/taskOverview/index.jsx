@@ -59,7 +59,9 @@ export default function TaskOverview() {
           <TaskFiles styles={styles} files={task?.tfile} />
         </Grid>
         <Grid item xs={12} lg={4}>
-        <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={"0"}/>
+        <Paper elevation={0} sx={{height:"100%"}}>
+        <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={0} commentModule={"task"}/>
+        </Paper>
         </Grid>
       </Grid>
       <Grid item xs={12} lg={12}>

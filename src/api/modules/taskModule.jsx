@@ -303,9 +303,9 @@ export const getTaskComments = async (tid, user_id) => {
 };
 
 //get Subtask comments by tid and userid
-export const getSubtaskComments = async (stid, user_id) => {
+export const getSubtaskComments = async (subtask_id, user_id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.geSubtaskComments}${stid}/${user_id}`);
+    const response = await axios.get(`${apiUrl}${api.geSubtaskComments}${subtask_id}/${user_id}`);
     return response.data;
   } catch (error) {
     throw error;

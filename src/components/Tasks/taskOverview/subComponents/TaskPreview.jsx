@@ -131,9 +131,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={12}  lg={8}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
+      <Grid container >
+        <Grid item xs={12} lg={8}>
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width:"700px"}}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <OverviewCardHeader
@@ -209,10 +209,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                         task?.subTasks?.map((subTask, index) => (
                           <Box key={index} sx={styles.subtaskLinkWrapper}>
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
-                            <Typography
-                              onClick={() => handleSubTaskPreviewDialog(subTask?.stid)}
-                              sx={styles.subtaskLinkText}
-                            >
+                            <Typography onClick={() => handleSubTaskPreviewDialog(subTask?.stid)} sx={styles.subtaskLinkText}>
                               {subTask?.stcode} : {subTask?.stname}
                             </Typography>
                           </Box>
@@ -228,51 +225,36 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs={12}  lg={4}>
-          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
-          <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={"0"}/>
+        <Grid item xs={12} lg={4}>
+          <Paper elevation={0} sx={{ height: "100%", width:"350px"}}>
+            <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={0} commentModule={"task"} />
           </Paper>
         </Grid>
       </Grid>
+
+     
 
       <ReduxDialog value="add-task" modalTitle="Add Task" showModalButton={false} modalSize="md">
         <CreateEditTaskForm editMode={false} />
       </ReduxDialog>
 
       <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} taskEditData={task}/>
+        <CreateEditTaskForm editMode={true} taskEditData={task} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="add-sub-tasks"
-        modalTitle="Add Sub Task"
-        showModalButton={false}
-        modalSize="md"
-      >
-          <CreateEditSubTasksForm taskData={task} />
+      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
+        <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="duplicate-preview-task"
-        modalTitle="Copy Task"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-preview-task"}/>
+      <ReduxDialog value="duplicate-preview-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-preview-task"} />
       </ReduxDialog>
 
       <ConfirmationDialog value={"fileItTaskInPreview"} handleYes={handleFileItTaskYes} />
 
       <ConfirmationDialog value={"deleteTaskInPreview"} handleYes={handleDeleteTaskYes} />
 
-      <CustomDialog
-        handleClose={handleCloseTaskPreviewDailog}
-        open={openSubTaskPreviewDailog}
-        modalTitle="Subtask"
-        redirectPath={`/subtasks-overview/${subTaskId}`}
-        showModalButton={true}
-        modalSize="lg"
-      >
+      <CustomDialog handleClose={handleCloseTaskPreviewDailog} open={openSubTaskPreviewDailog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subTaskId}`} showModalButton={true} modalSize="lg">
         <SubtaskPreview styles={styles} subtaskId={subTaskId} parentTaskName={task?.tname} />
       </CustomDialog>
     </>

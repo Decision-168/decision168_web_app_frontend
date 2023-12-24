@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }) {
         const userId = user?.reg_id;
         dispatch(getAlertNotificationsAsync(userId));
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     };
 
@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <Box sx={{ display: "flex", overflow: "hidden", maxHeight: "100vh" }}>
+    <Box sx={{ display: "flex", overflow: "hidden", maxHeight: "100vh", minHeight: "100vh", maxWidth: "100vw", overflowX: "hidden" }}>
       {/* Render Desktop App Bar for larger screens */}
       <Hidden mdDown>
         <DesktopAppBar open={open} toggleDrawer={toggleDrawer} />
@@ -86,33 +86,26 @@ export default function DashboardLayout({ children }) {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.secondary.light
-              : theme.palette.secondary.dark,
+          backgroundColor: (theme) => (theme.palette.mode === "light" ? theme.palette.secondary.light : theme.palette.secondary.dark),
           flexGrow: 1,
-        }}>
+        }}
+      >
         <PerfectScrollbar>
-          <Toolbar sx={{ my: 1 }} />
-          <Container maxWidth="xl">
-            <Box
-              sx={{
-                // padding: "10px",
-                // width: "100%",
-                // // minHeight: "80vh",
-                // mt: 3,
-                minheight: "100vh", /* Ensure the body takes at least the full height of the viewport */
-                margin: 0,
-                padding: 0,
-                dispatch:"flex",
-                flexDirection: "column",
-                boxSizing:"border-box"
-              }}>
-              {children}
-            
-            </Box>
-          </Container>
-          <Copyright />
+          {/* <Toolbar sx={{ my: 1 }} /> */}
+          {/* <Container maxWidth="xl"> */}
+          <Box
+            sx={{
+              minHeight: "90vh",
+              marginTop: "10vh",
+              padding: "0",
+              boxSizing: "border-box",
+            }}
+          >
+            <Box sx={{ width: "100%", minHeight: "90vh", overflowX: "auto", p: 2.5 }}>{children}</Box>
+
+            <Copyright />
+          </Box>
+          {/* </Container> */}
         </PerfectScrollbar>
       </Box>
     </Box>

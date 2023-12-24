@@ -81,7 +81,7 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <SubTaskOverviewCardHeader title={`Subtask: ${subtask?.stname}`} btn1Text={"Edit Task"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <SubTaskOverviewCardHeader title={`Subtask: ${subtask?.stname}`} btn1Text={"Edit Subtask"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
         <SubtakOverviewCardBody styles={styles} subtask={subtask} />
       </Grid>
 

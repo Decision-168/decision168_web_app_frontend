@@ -134,34 +134,30 @@ const PortfolioGridSection = ({ rows, setRows }) => {
     if (removed?.content?.type === "task") {
       console.log("This is a task");
       try {
-        const response = await updateTaskStatus(
-          tid,
-          tassignee,
-          destColumn?.value
-        );
+        const response = await updateTaskStatus(tid, tassignee, destColumn?.value);
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update task status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
         console.error("Error handling the task status:", error);
       }
     } else {
       console.log("This is a subtask");
       try {
-        const response = await updateSubtaskStatus(
-          tid,
-          tassignee,
-          destColumn?.value
-        );
+        const response = await updateSubtaskStatus(tid, tassignee, destColumn?.value);
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update subtask status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
         console.error("Error handling the subtask status:", error);
       }
@@ -220,9 +216,7 @@ const PortfolioGridSection = ({ rows, setRows }) => {
             gridTemplateColumns: "repeat(4, 1fr)",
           }}
         >
-          <DragDropContext
-            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
-          >
+          <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
             {Object.entries(columns).map(([columnId, column], index) => {
               return (
                 <Droppable droppableId={columnId} key={columnId}>
@@ -232,9 +226,7 @@ const PortfolioGridSection = ({ rows, setRows }) => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                          background: snapshot.isDraggingOver
-                            ? "#DEE1E6"
-                            : "#FFFFFF",
+                          background: snapshot.isDraggingOver ? "#DEE1E6" : "#FFFFFF",
                           padding: 14,
                           width: "100%",
                           minHeight: 500,
@@ -243,13 +235,7 @@ const PortfolioGridSection = ({ rows, setRows }) => {
                         }}
                       >
                         {/* Column Header */}
-                        <KanbanColumnHeader
-                          status={column.name}
-                          color={column.color}
-                          count={
-                            column.items.length > 0 ? column.items.length : 0
-                          }
-                        />
+                        <KanbanColumnHeader status={column.name} color={column.color} count={column.items.length > 0 ? column.items.length : 0} />
 
                         {/* Column Body */}
                         <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
@@ -258,11 +244,7 @@ const PortfolioGridSection = ({ rows, setRows }) => {
                               {column?.items?.length > 0 ? (
                                 column?.items?.map((item, index) => {
                                   return (
-                                    <Draggable
-                                      key={item.id}
-                                      draggableId={item.id}
-                                      index={index}
-                                    >
+                                    <Draggable key={item.id} draggableId={item.id} index={index}>
                                       {(provided) => {
                                         return (
                                           <div
@@ -278,10 +260,7 @@ const PortfolioGridSection = ({ rows, setRows }) => {
                                               ...provided.draggableProps.style,
                                             }}
                                           >
-                                            <KanbanCard
-                                              cardData={item.content}
-                                              fetchData={fetchData}
-                                            />
+                                            <KanbanCard cardData={item.content} fetchData={fetchData} />
                                           </div>
                                         );
                                       }}

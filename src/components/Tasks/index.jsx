@@ -60,6 +60,8 @@ const PortfolioTasksList = () => {
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
+
+
   const [rows, setRows] = useState([]);
   const [query, setQuery] = useState("");
   const newResults = SearchWithFuse(
@@ -67,6 +69,8 @@ const PortfolioTasksList = () => {
     query,
     rows
   );
+
+  
   const align = alignment === "list";
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>

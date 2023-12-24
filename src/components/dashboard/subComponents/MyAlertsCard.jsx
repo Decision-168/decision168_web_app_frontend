@@ -37,7 +37,7 @@ export default function MyAlertsCard() {
               My Alerts
             </Typography>
             {!areAllArraysEmpty && (
-              <Button component={Link} to="/dashboard" variant="outlined" size="small" startIcon={<ArrowForwardIcon />}>
+              <Button component={Link} to="/my-alerts" variant="outlined" size="small" startIcon={<ArrowForwardIcon />}>
                 view all
               </Button>
             )}

@@ -39,7 +39,7 @@ export default function BasicBreadcrumbs({ currentPage, showBackButton }) {
             backgroundColor: theme.palette.secondary.main,
             color: theme.palette.secondary.light,
             "&:hover": { backgroundColor: theme.palette.secondary.dark },
-            mx: 2,
+            ml: 2,
           }}
           onClick={handleGoBack}
         >
