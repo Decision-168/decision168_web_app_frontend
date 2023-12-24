@@ -16,6 +16,9 @@ const api = {
   //user change-password api
   userChangePass: "user/change-password/",
 
+  //update Auth User Password inside the App by user id
+  updateAuthUserPassword:"user/update-password/",
+
   //-----------------------------Dashboard Module Start----------------
 
   //user details by user id

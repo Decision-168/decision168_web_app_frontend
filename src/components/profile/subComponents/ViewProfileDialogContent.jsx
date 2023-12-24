@@ -22,6 +22,8 @@ export default function ViewProfileDialogContent() {
   const handleCloseChangePasswordDailog = () => {
     setOpenChangePasswordDialog(false);
   };
+
+
   return (
     <Paper elevation={0} sx={{ height: "80vh" }}>
       <Grid container>
@@ -67,7 +69,7 @@ export default function ViewProfileDialogContent() {
           <PersonalInfo />
         </Grid>
       </Grid>
-      <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="sm">
+      <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="md">
         <ChangePasswordForm handleClose={handleCloseChangePasswordDailog} />
       </CustomDialog>
     </Paper>
