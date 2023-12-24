@@ -18,6 +18,7 @@ const PricingCardBody = ({
   selectedPackID,
   packPrice,
   selectedPackPrice,
+  CouponPack
 }) => {
   const theme = useTheme();
   return (
@@ -38,6 +39,7 @@ const PricingCardBody = ({
           selectedPackID={selectedPackID}
           packPrice={packPrice}
           selectedPackPrice={selectedPackPrice}
+          CouponPack={CouponPack}
         />
       )}
 

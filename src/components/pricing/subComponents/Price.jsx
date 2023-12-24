@@ -1,5 +1,14 @@
 import React, { memo, useEffect, useState } from "react";
 import { Box, Typography, Button, useTheme } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { toast } from "react-toastify";
+import {
+  CheckoutPaymentSessionCreate,
+  DowngradePackage,
+  UpgradeSubscription,
+} from "../../../api/modules/upgradeplanModule";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Price = ({
   priceID,
@@ -9,26 +18,93 @@ const Price = ({
   selectedPackID,
   packPrice,
   selectedPackPrice,
+  CouponPack,
 }) => {
   const theme = useTheme();
+  //get user id
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
+  //get user id
+  //debugger;
   // const selectedPackID = 1;
   // const selectedPackPrice = 0;
 
-  // const handleSelectAction = async (getbtnVal) => {
-  //   console.log("clicked", getbtnVal);
-  // };
+  const handleSelectAction = async (getbtnVal) => {
+    if (getbtnVal === "Upgrade") {
+      if (selectedPackID == 1 || CouponPack == "yes") {
+        try {
+          const stripe = await loadStripe(
+            "pk_test_51KLZITECBZEQ4z2NFQOa4erhztY7yxHZr0aw9qThfNGxWqBI9vKFR1MolJsKDYzkVmwYQwVaVA229U1hvvQVznIe00PJ2IpJDz"
+          );
+          const data = {
+            price_id: priceID,
+            user_id: user_id,
+          };
+          const response = await CheckoutPaymentSessionCreate(data);
+          const result = stripe.redirectToCheckout({
+            sessionId: response.session_id,
+          });
 
+          if (result.error) {
+            console.log(result.error);
+          }
+        } catch (error) {
+          // Handling error
+          toast.error(`${error.response?.error}`);
+          console.error("Error updating:", error);
+        }
+      } else {
+        try {
+          const data = {
+            price_id: priceID,
+            user_id: user_id,
+          };
+          const response = await UpgradeSubscription(data);
+          toast.success(`${response.message}`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } catch (error) {
+          // Handling error
+          toast.error(`${error.response?.error}`);
+          console.error("Error updating:", error);
+        }
+      }
+    } else if (getbtnVal === "Downgrade") {
+      try {
+        const data = {
+          user_id: user_id,
+        };
+        const response = await DowngradePackage(data);
+        toast.success(`${response.message}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } catch (error) {
+        // Handling error
+        toast.error(`${error.response?.error}`);
+        console.error("Error updating:", error);
+      }
+    }
+  };
   const getButtonText = () => {
     if (packID == selectedPackID) {
       return "Selected";
     } else {
+      // if (selectedPackPrice <= packPrice && packID == 1) {
+      //   return "Upgrade";
+      // }
       if (selectedPackPrice <= packPrice) {
         return "Upgrade";
       }
       if (packID == 1) {
         return "Downgrade";
       }
+      // if (selectedPackPrice >= packPrice) {
+      //   return "Upgrade";
+      // }
     }
+    // return null;
   };
 
   return (
@@ -77,7 +153,7 @@ const Price = ({
               color: "white",
             },
           }}
-          // onClick={() => handleSelectAction(btnVal)}
+          onClick={() => handleSelectAction(getButtonText())}
           disabled={getButtonText() === "Selected"}
         >
           {getButtonText()}

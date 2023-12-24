@@ -19,7 +19,7 @@ const items = [
   { value: "500+", text: "500+", selected: false },
 ];
 
-const FreeTrial = ({ passfetchPricingPackages }) => {
+const FreeTrial = () => {
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -50,8 +50,10 @@ const FreeTrial = ({ passfetchPricingPackages }) => {
       const response = await AddFreeTrialAccountAccess(data);
       if (response.message == "Enjoy free trial!") {
         toast.success(`${response.message}`);
-        passfetchPricingPackages();
         dispatch(closeModal("free-trial"));
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
         toast.error(`${response.message}`);
       }

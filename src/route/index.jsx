@@ -7,6 +7,7 @@ import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
+import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -72,6 +73,12 @@ const RouteIndex = () => {
               <DashboardLayout>
                 <Pricing />
               </DashboardLayout>
+            }
+          />
+          <Route
+            path="/payment-success"
+            element={
+                <PaymentSuccess />
             }
           />
           <Route

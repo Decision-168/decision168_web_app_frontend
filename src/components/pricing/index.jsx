@@ -43,8 +43,8 @@ export default function Pricing() {
   const styles = pricingStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const [btnIndex, setBtnIndex] = useState();
-  const subscriptionPlan = "Professional";
+  // const [btnIndex, setBtnIndex] = useState();
+  // const subscriptionPlan = "Professional";
 
   // useEffect(() => {
   //   if (subscriptionPlan === "Solo") {
@@ -61,11 +61,13 @@ export default function Pricing() {
   const [getPackages, setPackages] = useState();
   const [showFreeBut, setShowFreeBut] = useState("no");
   const [userPackagePrice, setUserPackagePrice] = useState();
+  const [userCouponPack, setuserCouponPack] = useState("no");
 
   const fetchPricingPackages = async () => {
     try {
       const response = await getAllPack(user_id);
       const response3 = await getPackageDetails(user_package_id);
+      setuserCouponPack(response3.coupon_pack);
       setUserPackagePrice(response3.pack_price);
       setPackages(response);
     } catch (error) {
@@ -97,11 +99,8 @@ export default function Pricing() {
     fetchActiveCoupons();
   }, [user_id]);
 
-  // console.log("getPackages", getPackages);
-  // console.log("user_id", user_id);
-  // console.log("user_used_co_id", user_used_co_id);
-  // console.log("user_package_coupon_id", user_package_coupon_id);
   // console.log("showFreeBut", showFreeBut);
+  // console.log("userCouponPack", user?.package_coupon_id);
 
   const handleValidity = (event, newValue) => {
     if (newValue !== null) {
@@ -156,7 +155,9 @@ export default function Pricing() {
             </Typography>
           </ToggleButton>
         </ToggleButtonGroup>
-        {showFreeBut === "yes" ? (
+        {showFreeBut === "yes" &&
+        user?.package_coupon_id === 0 &&
+        user_package_id == 1 ? (
           <Button
             startIcon={<KeyboardDoubleArrowRight />}
             size="small"
@@ -214,11 +215,14 @@ export default function Pricing() {
                   price={plan.pack_price}
                   validity={plan.validity}
                   isSpecialOffer={plan.pack_name == "Business" && true}
-                  contactUs={plan.stripe_link == "no" && true}
+                  contactUs={
+                    plan.stripe_link == "no" && plan.coupon_pack == "no" && true
+                  }
                   packID={plan.pack_id}
                   selectedPackID={user_package_id}
                   packPrice={plan.pack_price}
                   selectedPackPrice={userPackagePrice}
+                  CouponPack={userCouponPack}
                 />
               </Paper>
             </Grid>
@@ -230,7 +234,7 @@ export default function Pricing() {
         showModalButton={false}
         modalSize="xs"
       >
-        <FreeTrial passfetchPricingPackages={fetchPricingPackages} />
+        <FreeTrial />
       </ReduxDialog>
     </Box>
   );
