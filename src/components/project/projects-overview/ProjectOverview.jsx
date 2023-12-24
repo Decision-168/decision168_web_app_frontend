@@ -26,6 +26,7 @@ const ProjectOverview = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
+      console.log(response);
       setProjectDel(response.project);
     } catch (error) {
       console.error(error);
@@ -126,7 +127,9 @@ const ProjectOverview = () => {
                   startIcon={<ArrowBack />}
                   size="small"
                   sx={{ background: "#383838", color: "#fff", mx: 1 }}
-                  onClick={() => navigate("/goal-overview")}
+                  onClick={() =>
+                    navigate(`/goal-overview/${projectData?.project?.gid}`)
+                  }
                 >
                   Go To Goal
                 </Button>

@@ -203,7 +203,7 @@ const ProjectsList = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={8} sm={8} md={4} lg={4}>
+        <Grid item xs={10} sm={6} md={4} lg={4}>
           <Box
             sx={{
               display: "flex",
@@ -241,8 +241,8 @@ const ProjectsList = () => {
         </Grid>
         <Grid
           item
-          xs={4}
-          sm={align ? 8 : 5}
+          xs={2}
+          sm={align ? 6 : 2}
           md={align ? 8 : 5}
           lg={align ? 8 : 5}
           alignSelf={"center"}
@@ -263,7 +263,7 @@ const ProjectsList = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={4} md={3} lg={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}

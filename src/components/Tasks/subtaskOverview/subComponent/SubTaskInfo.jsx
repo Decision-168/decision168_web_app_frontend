@@ -51,9 +51,13 @@ export default function SubTaskInfo({ styles, info }) {
       const newStatus = event.target.value;
       alert(`${newStatus}--${subtaskId}--${assignee}`);
 
-      const data = { stid: subtaskId, stassignee: assignee, status_but: newStatus };
+      const data = {
+        stid: subtaskId,
+        stassignee: assignee,
+        status_but: newStatus,
+      };
 
-      const response = await changeSubTaskStatus(regId, data)
+      const response = await changeSubTaskStatus(regId, data);
 
       // Update local state
       setSelectedStatus(newStatus);
@@ -71,12 +75,15 @@ export default function SubTaskInfo({ styles, info }) {
   return (
     <Grid container p={1}>
       <Grid item xs={12} md={6}>
-
         {info?.projectName && (
           <Box sx={styles.notesControl}>
             <HomeRepairServiceIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Project:</Typography>
-            <Typography component={Link} to="/projects-overview" sx={styles.projectOverviewLink}>
+            <Typography
+              component={Link}
+              to={`/projects-overview/${info?.stproject_assign}`}
+              sx={styles.projectOverviewLink}
+            >
               {info.projectName}
             </Typography>
           </Box>
@@ -85,7 +92,9 @@ export default function SubTaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <AssignmentIndIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Assigned To: </Typography>
-            <Typography sx={styles.noteslabelText}>{info.subTaskAssigneeName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.subTaskAssigneeName}
+            </Typography>
           </Box>
         )}
 
@@ -102,7 +111,9 @@ export default function SubTaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <PersonIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Created By:</Typography>
-            <Typography sx={styles.noteslabelText}>{info.subTaskCreatedByName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.subTaskCreatedByName}
+            </Typography>
           </Box>
         )}
       </Grid>
@@ -111,20 +122,21 @@ export default function SubTaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <BadgeIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Portfolio:</Typography>
-            <Typography sx={styles.noteslabelText}>{info.portfolioName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.portfolioName}
+            </Typography>
           </Box>
         )}
-        {info?.stdue_date
-          && (
-            <Box sx={styles.notesControl}>
-              <CalendarTodayIcon sx={styles.noteIcon} />
-              <Typography sx={styles.noteslabel}> Due Date: </Typography>
-              <Typography sx={styles.noteslabelText}>{
-              }
-                {moment(info.stdue_date).format("Do MMMM, YYYY ")}
-              </Typography>
-            </Box>
-          )}
+        {info?.stdue_date && (
+          <Box sx={styles.notesControl}>
+            <CalendarTodayIcon sx={styles.noteIcon} />
+            <Typography sx={styles.noteslabel}> Due Date: </Typography>
+            <Typography sx={styles.noteslabelText}>
+              {}
+              {moment(info.stdue_date).format("Do MMMM, YYYY ")}
+            </Typography>
+          </Box>
+        )}
         {info?.stpriority && (
           <Box sx={styles.notesControl}>
             <LowPriorityIcon sx={styles.noteIcon} />
@@ -132,7 +144,12 @@ export default function SubTaskInfo({ styles, info }) {
             <Chip
               label={info.stpriority}
               variant="contained"
-              sx={{ ml: 1, minWidth: "80px", maxWidth: "85px", ...getPriorityStyle(info.stpriority) }}
+              sx={{
+                ml: 1,
+                minWidth: "80px",
+                maxWidth: "85px",
+                ...getPriorityStyle(info.stpriority),
+              }}
             />
           </Box>
         )}
@@ -146,10 +163,17 @@ export default function SubTaskInfo({ styles, info }) {
                   <FormControl fullWidth>
                     <Select
                       value={selectedStatus}
-                      onChange={(event) => handleStatus(event, info?.stid, info?.stassignee)}>
+                      onChange={(event) =>
+                        handleStatus(event, info?.stid, info?.stassignee)
+                      }
+                    >
                       {taskStatuses.map((status, index) => (
                         <MenuItem key={index} value={status.value}>
-                          <Typography component="p" variant="caption" display="block">
+                          <Typography
+                            component="p"
+                            variant="caption"
+                            display="block"
+                          >
                             {status.text}
                           </Typography>
                         </MenuItem>
@@ -159,13 +183,21 @@ export default function SubTaskInfo({ styles, info }) {
                 ) : (
                   <>
                     {loading ? (
-                      <CircularProgress size={15} thickness={8} sx={{ color: "gray", mx: 2 }} />
+                      <CircularProgress
+                        size={15}
+                        thickness={8}
+                        sx={{ color: "gray", mx: 2 }}
+                      />
                     ) : (
                       <Box>
                         <Chip
                           label={selectedStatus}
                           variant="contained"
-                          sx={{ minWidth: "80px", maxWidth: "85px", ...statusBg }}
+                          sx={{
+                            minWidth: "80px",
+                            maxWidth: "85px",
+                            ...statusBg,
+                          }}
                         />
                         <IconButton size="small" onClick={handleEditStatus}>
                           <ExpandMoreIcon />
@@ -176,7 +208,8 @@ export default function SubTaskInfo({ styles, info }) {
                 )}
               </Box>
             </Typography>
-          </Box>)}
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

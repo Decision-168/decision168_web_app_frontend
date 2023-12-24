@@ -30,6 +30,7 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function TaskInfo({ styles, info }) {
+  console.log("info", info);
   const [selectedStatus, setSelectedStatus] = useState(info?.tstatus);
   const [editStatus, setEditStatus] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -71,12 +72,15 @@ export default function TaskInfo({ styles, info }) {
   return (
     <Grid container p={1}>
       <Grid item xs={12} md={6}>
-
         {info?.projectName && (
           <Box sx={styles.notesControl}>
             <HomeRepairServiceIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Project:</Typography>
-            <Typography component={Link} to="/projects-overview" sx={styles.projectOverviewLink}>
+            <Typography
+              component={Link}
+              to={`/projects-overview/${info?.tproject_assign}`}
+              sx={styles.projectOverviewLink}
+            >
               {info.projectName}
             </Typography>
           </Box>
@@ -85,7 +89,9 @@ export default function TaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <AssignmentIndIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Assigned To: </Typography>
-            <Typography sx={styles.noteslabelText}>{info.taskAssigneeName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.taskAssigneeName}
+            </Typography>
           </Box>
         )}
 
@@ -102,7 +108,9 @@ export default function TaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <PersonIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Created By:</Typography>
-            <Typography sx={styles.noteslabelText}>{info.taskCreatedByName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.taskCreatedByName}
+            </Typography>
           </Box>
         )}
       </Grid>
@@ -111,20 +119,21 @@ export default function TaskInfo({ styles, info }) {
           <Box sx={styles.notesControl}>
             <BadgeIcon sx={styles.noteIcon} />
             <Typography sx={styles.noteslabel}>Portfolio:</Typography>
-            <Typography sx={styles.noteslabelText}>{info.portfolioName}</Typography>
+            <Typography sx={styles.noteslabelText}>
+              {info.portfolioName}
+            </Typography>
           </Box>
         )}
-        {info?.tdue_date
-          && (
-            <Box sx={styles.notesControl}>
-              <CalendarTodayIcon sx={styles.noteIcon} />
-              <Typography sx={styles.noteslabel}> Due Date: </Typography>
-              <Typography sx={styles.noteslabelText}>{
-              }
-                {moment(info.tdue_date).format("Do MMMM, YYYY ")}
-              </Typography>
-            </Box>
-          )}
+        {info?.tdue_date && (
+          <Box sx={styles.notesControl}>
+            <CalendarTodayIcon sx={styles.noteIcon} />
+            <Typography sx={styles.noteslabel}> Due Date: </Typography>
+            <Typography sx={styles.noteslabelText}>
+              {}
+              {moment(info.tdue_date).format("Do MMMM, YYYY ")}
+            </Typography>
+          </Box>
+        )}
         {info?.tpriority && (
           <Box sx={styles.notesControl}>
             <LowPriorityIcon sx={styles.noteIcon} />
@@ -132,7 +141,12 @@ export default function TaskInfo({ styles, info }) {
             <Chip
               label={info.tpriority}
               variant="contained"
-              sx={{ ml: 1, minWidth: "80px", maxWidth: "85px", ...getPriorityStyle(info.tpriority) }}
+              sx={{
+                ml: 1,
+                minWidth: "80px",
+                maxWidth: "85px",
+                ...getPriorityStyle(info.tpriority),
+              }}
             />
           </Box>
         )}
@@ -146,10 +160,17 @@ export default function TaskInfo({ styles, info }) {
                   <FormControl fullWidth>
                     <Select
                       value={selectedStatus}
-                      onChange={(event) => handleStatus(event, info?.tid, info?.tassignee)}>
+                      onChange={(event) =>
+                        handleStatus(event, info?.tid, info?.tassignee)
+                      }
+                    >
                       {taskStatuses.map((status, index) => (
                         <MenuItem key={index} value={status.value}>
-                          <Typography component="p" variant="caption" display="block">
+                          <Typography
+                            component="p"
+                            variant="caption"
+                            display="block"
+                          >
                             {status.text}
                           </Typography>
                         </MenuItem>
@@ -159,13 +180,21 @@ export default function TaskInfo({ styles, info }) {
                 ) : (
                   <>
                     {loading ? (
-                      <CircularProgress size={15} thickness={8} sx={{ color: "gray", mx: 2 }} />
+                      <CircularProgress
+                        size={15}
+                        thickness={8}
+                        sx={{ color: "gray", mx: 2 }}
+                      />
                     ) : (
                       <Box>
                         <Chip
                           label={selectedStatus}
                           variant="contained"
-                          sx={{ minWidth: "80px", maxWidth: "85px", ...statusBg }}
+                          sx={{
+                            minWidth: "80px",
+                            maxWidth: "85px",
+                            ...statusBg,
+                          }}
                         />
                         <IconButton size="small" onClick={handleEditStatus}>
                           <ExpandMoreIcon />
@@ -176,7 +205,8 @@ export default function TaskInfo({ styles, info }) {
                 )}
               </Box>
             </Typography>
-          </Box>)}
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

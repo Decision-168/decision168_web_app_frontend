@@ -5,6 +5,9 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   useTheme,
+  useMediaQuery,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { useState, useCallback, useEffect } from "react";
 import {
@@ -45,10 +48,11 @@ const filterOption = [
   },
 ];
 const PortfolioProjects = () => {
+  const theme = useTheme();
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
   const { portfolioId } = useParams();
-  const theme = useTheme();
   const navigate = useNavigate();
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
@@ -139,7 +143,7 @@ const PortfolioProjects = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={8} sm={8} md={4} lg={4}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
               display: "flex",
@@ -178,23 +182,34 @@ const PortfolioProjects = () => {
             >
               Back
             </Button>
-            <Button
-              variant="contained"
-              startIcon={<Add fontSize="small" />}
-              size="small"
-              sx={{ fontSize: 12 }}
-              onClick={() => dispatch(openModal("create-project"))}
-            >
-              Add Project
-            </Button>
+            {isMediumScreen ? (
+              <Tooltip arrow title="Add Project" placement="right">
+                <IconButton
+                  onClick={() => dispatch(openModal("create-project"))}
+                >
+                  <Add />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Button
+                variant="contained"
+                startIcon={<Add fontSize="small" />}
+                size="small"
+                sx={{ fontSize: 12 }}
+                onClick={() => dispatch(openModal("create-project"))}
+              >
+                Add Project
+              </Button>
+            )}
           </Box>
         </Grid>
         <Grid
           item
-          xs={4}
-          sm={align ? 8 : 5}
-          md={align ? 8 : 5}
-          lg={align ? 8 : 5}
+          xs={2}
+          sm={align ? 6 : 2}
+          md={align ? 6 : 2}
+          lg={align ? 5 : 2}
+          xl={align ? 5 : 2}
           alignSelf={"center"}
         >
           <Box
@@ -213,7 +228,7 @@ const PortfolioProjects = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={4} md={4} lg={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}

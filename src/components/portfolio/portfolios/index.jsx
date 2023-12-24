@@ -72,23 +72,23 @@ const AllPortfolios = () => {
   const navigate = useNavigate();
   // Callback function to handle view alignment changes
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   // Check if the alignment is set to "list"
   const align = alignment === "list";
   // Render the component
 
-    const [query, setQuery] = useState("");
-    const newResults = SearchWithFuse(["name", "company"], query, data);
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["name", "company"], query, data);
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       {/* Container for the header and portfolio view switch */}
       <Grid container alignItems="center" justifyContent="space-between">
         {/* Section for Breadcrumbs, View Toggle Buttons, and Create New Button */}
-        <Grid item xs={8} sm={8} md={4} lg={4}>
+        <Grid item xs={12} sm={6} md={8} lg={9}>
           <Box
             sx={{
               display: "flex",
@@ -132,7 +132,7 @@ const AllPortfolios = () => {
         </Grid>
         {/* Section for Search Field (only visible in grid view) */}
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}

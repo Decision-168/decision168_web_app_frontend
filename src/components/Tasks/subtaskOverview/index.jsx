@@ -36,7 +36,6 @@ export default function SubtaskOverview() {
     fetchSubTaskDetails();
   }, [subTaskId]);
 
-
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -44,8 +43,27 @@ export default function SubtaskOverview() {
           <BasicBreadcrumbs currentPage="Overview" showBackButton={true} />
         </Grid>
         <Grid item xs={4} md={10}>
-          <Box sx={{ height: "100%", display: "flex", justifyContent: "start", alignItems: "center" }}>
-            <Button component={Link} to="/projects-overview" startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ ml: 2, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "start",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              component={Link}
+              to={`/projects-overview/${subTask.stproject_assign}`}
+              startIcon={<ArrowBackIcon />}
+              size="small"
+              variant="contained"
+              sx={{
+                ml: 2,
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+                "&:hover": { backgroundColor: theme.palette.secondary.dark },
+              }}
+            >
               Go To Project
             </Button>
           </Box>
@@ -54,13 +72,22 @@ export default function SubtaskOverview() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
-          <SubtaskOverviewCard styles={styles} subtask={subTask}/>
-          <SubtaskLinks styles={styles} links={subTask?.stlink} LinkComments={subTask?.stlink_comment} />
+          <SubtaskOverviewCard styles={styles} subtask={subTask} />
+          <SubtaskLinks
+            styles={styles}
+            links={subTask?.stlink}
+            LinkComments={subTask?.stlink_comment}
+          />
           <SubtaskFiles styles={styles} files={subTask?.stfile} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{height:"100%"}}>
-          <CommentSection projectId={subTask?.stproject_assign} taskId={0} subtaskId={subTask?.stid} commentModule={"subtask"}/>
+          <Paper elevation={0} sx={{ height: "100%" }}>
+            <CommentSection
+              projectId={subTask?.stproject_assign}
+              taskId={0}
+              subtaskId={subTask?.stid}
+              commentModule={"subtask"}
+            />
           </Paper>
         </Grid>
       </Grid>

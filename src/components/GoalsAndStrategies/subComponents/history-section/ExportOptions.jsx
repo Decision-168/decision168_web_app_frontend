@@ -14,9 +14,8 @@ import { closeModal } from "../../../../redux/action/modalSlice";
 import { useTheme } from "@emotion/react";
 import { useDispatch } from "react-redux";
 import CustomDatePicker from "../../../common/CustomDatePicker";
-import * as ExcelJS from "exceljs";
+import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
-
 const ExportOptions = ({ name, data }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -27,7 +26,6 @@ const ExportOptions = ({ name, data }) => {
     endDate: null,
     allHistory: false,
   });
-
   const handleDob = (date) => {
     setFormValues({
       ...formValues,
@@ -47,6 +45,12 @@ const ExportOptions = ({ name, data }) => {
       ...formValues,
       endDate: date,
     });
+  };
+  const exportExcelData = (data, filename) => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+    XLSX.writeFile(wb, filename);
   };
 
   const formatDate = (dateString) => {
@@ -69,36 +73,6 @@ const ExportOptions = ({ name, data }) => {
       hour12: true,
     };
     return date.toLocaleTimeString("en-US", options);
-  };
-
-  const exportExcelData = (data, filename) => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Sheet 1");
-
-    // Add header row
-    worksheet.addRow(["Date", "Time", "Resource", "Activity"]);
-
-    // Add data rows
-    data.forEach((item) => {
-      worksheet.addRow([
-        formatDate(item.h_date),
-        formatTime(item.h_date),
-        item.h_resource,
-        item.h_description,
-      ]);
-    });
-
-    // Save the workbook
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-    });
   };
 
   const ExportData = (data) => {
