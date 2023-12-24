@@ -15,7 +15,7 @@ const PortfolioCardView = ({ newResults }) => {
         {newResults.map((item, index) => {
           return (
             // Each PortfolioCard is placed in a Grid item
-            <Grid item xs={12} lg={3} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
               {/* Render the PortfolioCard component with the corresponding data */}
               <PortfolioCard item={item} />
             </Grid>

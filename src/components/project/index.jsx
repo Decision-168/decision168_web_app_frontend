@@ -61,7 +61,6 @@ const ProjectIndex = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
   const { portfolioId } = useParams();
-
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
   const [projectTitle, setProjectTitle] = useState("");
@@ -267,7 +266,7 @@ const ProjectIndex = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={12} sm={4} md={4} lg={3} xl={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={3} md={3} lg={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
@@ -296,7 +295,7 @@ const ProjectIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" gid={"0"} sid={"0"} passPID={"0"} />
+        <CreateProject flag="add" gid={0} sid={0} passPID={0} />
       </ReduxDialog>
       <CustomDialog
         handleClose={handleProjectPreviewClose}

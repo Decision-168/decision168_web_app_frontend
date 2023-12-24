@@ -7,88 +7,59 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import { useNavigate } from "react-router-dom";
 import CustomSearchField from "../../common/CustomSearchField";
 import PortfolioListView from "./subComponents/views/PortfolioListView";
 import PortfolioCardView from "./subComponents/views/PortfolioCardView";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
-const data = [
-  {
-    name: "Owais",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Jameel",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Alim",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Zaheer",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Owais",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Jameel",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Alim",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-  {
-    name: "Arshad",
-    company: "Decision168 Inc",
-    image:
-      "https://dev.decision168.com/assets/portfolio_photos/1635209286_Decision_168_icon.png",
-  },
-];
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
+import { allPortfolios } from "../../../api/modules/porfolioModule";
 // Define the AllPortfolios component
 const AllPortfolios = () => {
+  const user = useSelector(selectUserDetails);
+  const [portfolioData, setPortfolioData] = useState([]);
+  const userID = user?.reg_id;
+  const userEmail = user?.email_address;
+
+  const fetchPortfolioData = async () => {
+    try {
+      const response = await allPortfolios(userEmail, userID);
+      setPortfolioData(response.portfolioGrid);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPortfolioData();
+  }, [userEmail]);
+
   // State to manage the view alignment (list or grid)
   const [alignment, setAlignment] = useState("list");
   // React Router hook for navigation
   const navigate = useNavigate();
   // Callback function to handle view alignment changes
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   // Check if the alignment is set to "list"
   const align = alignment === "list";
   // Render the component
 
-    const [query, setQuery] = useState("");
-    const newResults = SearchWithFuse(["name", "company"], query, data);
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["name", "company"], query, portfolioData);
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       {/* Container for the header and portfolio view switch */}
       <Grid container alignItems="center" justifyContent="space-between">
         {/* Section for Breadcrumbs, View Toggle Buttons, and Create New Button */}
-        <Grid item xs={8} sm={8} md={4} lg={4}>
+        <Grid item xs={12} sm={6} md={8} lg={9}>
           <Box
             sx={{
               display: "flex",
@@ -132,7 +103,7 @@ const AllPortfolios = () => {
         </Grid>
         {/* Section for Search Field (only visible in grid view) */}
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}

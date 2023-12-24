@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Button,} from "@mui/material";
+import { Box, Grid, Button } from "@mui/material";
 import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -52,31 +52,30 @@ const DashboardTasks = () => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const handleChange = (event, newAlignment) => {
-         if (newAlignment !== null) {
-    setAlignment(newAlignment);
-     }
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   };
 
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
   }, []);
 
-    const [query, setQuery] = useState("");
-    const newResults = SearchWithFuse(
-      ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
-      query,
-      rows
-    );
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(
+    ["tname", "tcode", "tdue_date", "tpriority", "tstatus"],
+    query,
+    rows
+  );
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={10} lg={3}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
-              height: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
@@ -87,6 +86,7 @@ const DashboardTasks = () => {
               exclusive
               onChange={handleChange}
               aria-label="Platform"
+              sx={{ mx: 1 }}
             >
               <ToggleButton value="list">
                 <FormatListBulleted sx={{ fontSize: 14 }} />
@@ -116,21 +116,15 @@ const DashboardTasks = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={2} lg={6}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf={"center"}>
           <Box
             sx={{
-              height: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "end",
               flexDirection: "row",
-              padding: "5px",
             }}
           >
-            {/* <IconButton>
-              <FilterAltIcon />
-            </IconButton> */}
-
             <CustomFilter
               value={value}
               handleChange={handleChangeRadio}
@@ -139,18 +133,8 @@ const DashboardTasks = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} lg={3}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-              flexDirection: "row",
-            }}
-          >
-            <CustomSearchField query={query} setQuery={setQuery} />
-          </Box>
+        <Grid item xs={12} sm={4} md={4} lg={3} xl={3} alignSelf={"center"}>
+          <CustomSearchField query={query} setQuery={setQuery} />
         </Grid>
 
         <Grid item xs={12} lg={12}>

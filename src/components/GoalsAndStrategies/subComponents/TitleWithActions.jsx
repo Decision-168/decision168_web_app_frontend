@@ -70,7 +70,7 @@ const TitleWithActions = ({
       </Grid>
       {(displayBtns === "all" || displayBtns === "some") && (
         <>
-          <Grid item xs={12} sm={7} md={7} lg={7}>
+          <Grid item xs={12} sm={8} md={8} lg={8}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={6} md={4} lg={4}>
                 <Button
@@ -109,7 +109,7 @@ const TitleWithActions = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={5} md={5} lg={5}>
+          <Grid item xs={12} sm={4} md={4} lg={4}>
             <Box
               sx={{
                 display: "flex",

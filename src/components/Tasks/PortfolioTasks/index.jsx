@@ -65,13 +65,12 @@ const PortfolioTasks = () => {
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={10} lg={5}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
-              height: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
               flexDirection: "row",
             }}
           >
@@ -79,15 +78,13 @@ const PortfolioTasks = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={2} lg={4}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} alignSelf={"center"}>
           <Box
             sx={{
-              height: "100%",
               display: "flex",
               alignItems: "center",
               justifyContent: "end",
               flexDirection: "row",
-              padding: "5px",
             }}
           >
             <CustomFilter
@@ -98,18 +95,8 @@ const PortfolioTasks = () => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} lg={3}>
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-              flexDirection: "row",
-            }}
-          >
-            <CustomSearchField query={query} setQuery={setQuery} />
-          </Box>
+        <Grid item xs={12} sm={4} md={4} lg={3} xl={3} alignSelf={"center"}>
+          <CustomSearchField query={query} setQuery={setQuery} />
         </Grid>
 
         <Grid item xs={12} lg={12}>

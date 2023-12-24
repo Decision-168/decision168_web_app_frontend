@@ -14,6 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 // Define the PortfolioCard component
 const PortfolioCard = ({ item }) => {
+  const handleView = (pfId) => {
+    localStorage.removeItem("portfolioId");
+    localStorage.setItem("portfolioId", pfId);
+    navigate(`/portfolio-view`)
+  }
   // Access the current theme
   const theme = useTheme();
   // React Router hook for navigation
@@ -82,7 +87,7 @@ const PortfolioCard = ({ item }) => {
               {/* Company Name */}
               <Grid item xs={12}>
                 {/* Clickable area to navigate to the portfolio view */}
-                <CardActionArea onClick={() => navigate("/portfolio-view")}>
+                <CardActionArea onClick={() => handleView(item?.portfolioId)}>
                   <Typography
                     variant="subtitle2"
                     sx={{
@@ -124,7 +129,7 @@ const PortfolioCard = ({ item }) => {
               PROJECTS
             </Typography>
             <Typography sx={{ color: "#555a5f", fontWeight: "400" }}>
-              0
+              {item?.projectTotal}
             </Typography>
           </Grid>
           <Grid
@@ -141,7 +146,7 @@ const PortfolioCard = ({ item }) => {
               TASKS
             </Typography>
             <Typography sx={{ color: "#555a5f", fontWeight: "400" }}>
-              0
+              {item?.taskTotal}
             </Typography>
           </Grid>
         </Grid>

@@ -126,7 +126,7 @@ const KPIAccordion = ({kpi}) => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" gid={kpi?.gid} sid={kpi?.sid} passPID={0}  />
+        <CreateProject flag="add" gid={kpi?.gid} sid={kpi?.sid} passPID={0}/>
       </ReduxDialog>
     </>
   );

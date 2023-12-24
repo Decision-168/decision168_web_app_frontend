@@ -12,7 +12,6 @@ import {
   getViewHistoryDateWiseStrategy,
 } from "../../../../api/modules/goalkpiModule";
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
-import * as XLSX from "xlsx";
 const HistoryList = ({ allhdata, type, id, setData }) => {
   const allinputDate = allhdata.DateOnly;
 

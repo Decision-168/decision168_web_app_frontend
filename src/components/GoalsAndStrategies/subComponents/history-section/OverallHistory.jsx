@@ -57,7 +57,7 @@ const OverallHistory = ({ allHist, name, type, id }) => {
         open={open}
         modalTitle="Select Any One Option"
         showModalButton={false}
-        modalSize="sm"
+        modalSize="xs"
       >
         <ExportOptions name={name} data={data} />
       </CustomDialog>

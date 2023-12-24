@@ -1,7 +1,15 @@
-import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { Delete, KeyboardDoubleArrowRight } from "@mui/icons-material";
-import ArchiveIcon from '@mui/icons-material/Archive';
+import ArchiveIcon from "@mui/icons-material/Archive";
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
@@ -12,14 +20,29 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
-import { getPortfolioData, getProjectData, getSubtaskData, getTaskData, getUserData } from "../../../api/modules/FileCabinetModule";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  getPortfolioData,
+  getProjectData,
+  getSubtaskData,
+  getTaskData,
+  getUserData,
+} from "../../../api/modules/FileCabinetModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveSubtask } from "../../../api/modules/ArchiveModule";
 import { patchDeleteSubtask } from "../../../api/modules/TrashModule";
-const SubtaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+const SubtaskPopup = ({
+  nodes,
+  regId,
+  portfolioId,
+  handleClose,
+  fetchTreeData,
+}) => {
   const [userData, setUserData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
   const [projectData, setProjectData] = useState([]);
@@ -45,9 +68,15 @@ const SubtaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
   }, [nodes]);
 
   const subtaskStartDate = new Date(subtaskData.stcreated_date);
-  const formattedSubtaskStartDate = `${subtaskStartDate.getDate()} ${subtaskStartDate.toLocaleString('default', { month: 'short' })}, ${subtaskStartDate.getFullYear()}`;
+  const formattedSubtaskStartDate = `${subtaskStartDate.getDate()} ${subtaskStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${subtaskStartDate.getFullYear()}`;
   const subtaskDueDate = new Date(subtaskData.stdue_date);
-  const formattedSubtaskDueDate = `${subtaskDueDate.getDate()} ${subtaskDueDate.toLocaleString('default', { month: 'short' })}, ${subtaskDueDate.getFullYear()}`;
+  const formattedSubtaskDueDate = `${subtaskDueDate.getDate()} ${subtaskDueDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${subtaskDueDate.getFullYear()}`;
   const links = subtaskData?.stlink;
   const link_comments = subtaskData?.stlink_comment;
   const subtaskCode = subtaskData?.stcode;
@@ -71,18 +100,19 @@ const SubtaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
   }, [subtaskData]);
 
   // Project Data ----------------------------------------------
-const fetchProjectData = async () => {
-  try {
-    const response = await getProjectData(subtaskData?.stproject_assign);
-    setProjectData(response);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const fetchProjectData = async () => {
+    try {
+      const response = await getProjectData(subtaskData?.stproject_assign);
+      setProjectData(response);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-useEffect(() => {
-  fetchProjectData();
-}, [subtaskData]);
+  useEffect(() => {
+    fetchProjectData();
+  }, [subtaskData]);
 
   // Creater (User) Data ----------------------------------------------
   const fetchUserData = async () => {
@@ -131,7 +161,7 @@ useEffect(() => {
   }, [subtaskData]);
 
   const handleArchive = () => {
-    setModule('archive');
+    setModule("archive");
     dispatch(
       openCnfModal({
         modalName: "archiveSubtask",
@@ -141,7 +171,7 @@ useEffect(() => {
     );
   };
   const handleDelete = () => {
-    setModule('delete');
+    setModule("delete");
     dispatch(
       openCnfModal({
         modalName: "deleteSubtask",
@@ -152,31 +182,31 @@ useEffect(() => {
   };
 
   const handleYes = async () => {
-    if(module == 'archive') {
+    if (module == "archive") {
       try {
         const response = await patchArchiveSubtask(subtaskData?.stid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'archiveSubtask' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "archiveSubtask" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'archiveSubtask' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "archiveSubtask" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
-    }else if(module == 'delete') {
+      }
+    } else if (module == "delete") {
       try {
         const response = await patchDeleteSubtask(subtaskData?.stid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "deleteSubtask" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'deleteSubtask' }));
-        console.log(error)
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "deleteSubtask" }));
+        console.log(error);
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
+      }
     }
   };
 
@@ -258,8 +288,7 @@ useEffect(() => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-        </Grid>
+        <Grid item xs={12} md={12} lg={8}></Grid>
         <Grid item xs={12} md={12} lg={4}>
           <Box
             sx={{
@@ -333,18 +362,24 @@ useEffect(() => {
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <Typography sx={{ fontSize: 13, textAlign: "left" }}>
-          Subtask Links :
+            Subtask Links :
           </Typography>
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-          {links && links.split(',').map((link, index) => (
-              <CommonLinks
-              key={index}
-              link={link}
-              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
-            /> 
-            ))}
+            {links &&
+              links
+                .split(",")
+                .map((link, index) => (
+                  <CommonLinks
+                    key={index}
+                    link={link}
+                    linkName={
+                      link_comments.split(",")[index] &&
+                      link_comments.split(",")[index]
+                    }
+                  />
+                ))}
           </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -363,24 +398,25 @@ useEffect(() => {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-              {subtaskFiles && subtaskFiles.split(',').map((file, index) => (
-                <Box
-                key={index}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "start",
-                }}
-              >
-                <KeyboardDoubleArrowRight
-                  sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                />
-                <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                  {file}
-                </Typography>
-              </Box>
-            ))}
+                {subtaskFiles &&
+                  subtaskFiles.split(",").map((file, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        justifyContent: "start",
+                      }}
+                    >
+                      <KeyboardDoubleArrowRight
+                        sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
+                      />
+                      <Typography sx={{ fontSize: 13, color: "#212934" }}>
+                        {file}
+                      </Typography>
+                    </Box>
+                  ))}
               </Grid>
             </Grid>
           </Typography>

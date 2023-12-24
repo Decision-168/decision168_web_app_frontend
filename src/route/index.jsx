@@ -7,6 +7,7 @@ import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
+import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -64,7 +65,6 @@ const PortfolioProjects = lazy(() =>
 const ProjectsList = lazy(() => import("../components/project/projects-list"));
 
 const RouteIndex = () => {
-  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   return (
     <Router>
       <Routes>
@@ -84,6 +84,12 @@ const RouteIndex = () => {
               <DashboardLayout>
                 <Pricing />
               </DashboardLayout>
+            }
+          />
+          <Route
+            path="/payment-success"
+            element={
+                <PaymentSuccess />
             }
           />
           <Route
@@ -272,7 +278,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path={`/portfolio-projects-list/${portfolioId}`}
+            path="/portfolio-projects-list/:portfolioId"
             element={
               <DashboardLayout>
                 <Project />

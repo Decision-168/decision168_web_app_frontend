@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { DashboardLayoutStyle } from "../../styles";
-import { menuItems } from "./menuItems";
+import generateMenuItems from "./menuItems";
 import {
   Collapse,
   Link,
@@ -25,6 +25,9 @@ export default function ListItems({ drawerOpen }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const menuItems = generateMenuItems(portfolioId);
+
   React.useEffect(() => {
     if (!drawerOpen) {
       setOpen(false);
@@ -32,7 +35,7 @@ export default function ListItems({ drawerOpen }) {
   }, [drawerOpen]);
 
   const handleClick = (path) => {
-    navigate(path);
+    navigate(path, { replace: true });
     //  if (drawerOpen) {
     //    setOpen(!open);
     //  }
