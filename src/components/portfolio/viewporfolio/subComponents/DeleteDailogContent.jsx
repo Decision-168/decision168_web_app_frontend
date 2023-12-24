@@ -1,14 +1,12 @@
 import { Box, Button, Checkbox, FormControlLabel, Grid, List, ListItem, Typography } from "@mui/material";
 import React from "react";
 import { useTheme } from "@mui/material/styles";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
+import { useDispatch } from "react-redux";
 
-export default function DeleteDailogContent({ handleClose }) {
+export default function DeleteDailogContent({ handleClose, portfolio_id, handleDelete }) {
   const theme = useTheme();
-
-  const handleDelete = () => {
-    handleClose();
-  };
-
   return (
     <Box sx={{ p: 1, textAlign: "left" }}>
       <Typography component="p" color="primary" variant="h6">
@@ -50,7 +48,7 @@ export default function DeleteDailogContent({ handleClose }) {
         <Button onClick={handleClose} size="small" variant="contained" sx={{ mr: 1, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
           Close
         </Button>
-        <Button onClick={handleDelete} size="small" type="submit" variant="contained">
+        <Button onClick={() => handleDelete(portfolio_id)} size="small" type="submit" variant="contained">
           Delete Portfolio
         </Button>
       </Grid>

@@ -85,7 +85,7 @@ const ProjectSection = ({ kpi_id }) => {
           showModalButton={false}
           modalSize="md"
         >
-          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={"0"} />
+          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={0} />
         </ReduxDialog>
       </Box>
     </PerfectScrollbar>

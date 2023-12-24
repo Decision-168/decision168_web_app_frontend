@@ -64,12 +64,12 @@ const PortfolioProjects = lazy(() =>
 const ProjectsList = lazy(() => import("../components/project/projects-list"));
 
 const RouteIndex = () => {
-  const [portfolioId, setPortfolioId] = useState(null);
+  // const [portfolioId, setPortfolioId] = useState(null);
 
-  useEffect(() => {
-    const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
-    setPortfolioId(storedPortfolioId);
-  }, []);
+  // useEffect(() => {
+  //   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  //   setPortfolioId(storedPortfolioId);
+  // }, []);
   return (
     <Router>
       <Routes>
@@ -277,7 +277,7 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path={`/portfolio-projects-list/${portfolioId}`}
+            path={`/portfolio-projects-list/:portfolioId`}
             element={
               <DashboardLayout>
                 <Project />

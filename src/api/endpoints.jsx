@@ -185,6 +185,9 @@ const api = {
 
   //-----------------------------Porfolio Modlue Start----------------
 
+  //All portfolio by email_address
+  getAllPorfolios: "portfolio/all-portfolios/",
+
   //get all portfolio by email_address
   porfolios: "portfolio/get-all-portfolios/",
 

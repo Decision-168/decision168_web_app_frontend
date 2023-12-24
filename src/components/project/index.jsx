@@ -60,8 +60,7 @@ const filterOption = [
 const ProjectIndex = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
-  const { portfolioId } = useParams();
-
+  const {portfolioId} = useParams();
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
   const [projectTitle, setProjectTitle] = useState("");
@@ -296,7 +295,7 @@ const ProjectIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" gid={"0"} sid={"0"} passPID={"0"} />
+        <CreateProject flag="add" gid={0} sid={0} passPID={0} />
       </ReduxDialog>
       <CustomDialog
         handleClose={handleProjectPreviewClose}

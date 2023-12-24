@@ -26,13 +26,12 @@ import {
   getSubtaskComments,
   getTaskComments,
 } from "../../../../api/modules/taskModule";
-const CommentSection = ({ projectId, taskId, subtaskId }) => {
+const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   console.log("projectId", projectId);
   console.log("taskId", taskId);
   console.log("subtaskId", subtaskId);
   const user = useSelector(selectUserDetails);
-  // const userID = user?.reg_id;
-  const userID = 1; //for testing
+  const userID = user?.reg_id;
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -44,37 +43,46 @@ const CommentSection = ({ projectId, taskId, subtaskId }) => {
   const isSmallScreen = useMediaQuery("(max-width: 600px)");
 
   const fetchCommentData = async () => {
-    setLoading(true);
-
-    try {
-      let comments = [];
-
-      if (projectId && userID) {
-        const projectResponse = await getProjectComments(projectId, userID);
-        comments = projectResponse.projectCommentDetail;
+    setLoading(true)
+    if(commentModule == 'project'){
+      if(projectId && userID){
+        try {
+          const response = await getProjectComments(projectId, userID);
+          setMessages(response.projectCommentDetail);  
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false)
+        }
+      } 
+    }else if(commentModule == 'task'){
+      if(taskId && userID){
+        try {
+          const response = await getTaskComments(taskId, userID);
+          setMessages(response.taskCommentDetail);   
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false)
+        }
+      } 
+    }else if(commentModule == 'subtask'){
+      if(subtaskId && userID){
+        try {
+          const response = await getSubtaskComments(subtaskId, userID);
+          setMessages(response.subtaskCommentDetail);   
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false)
+        }
       }
-
-      if (taskId && userID) {
-        const taskResponse = await getTaskComments(taskId, userID);
-        comments = taskResponse.taskCommentDetail;
-      }
-
-      if (subtaskId && userID) {
-        const subtaskResponse = await getSubtaskComments(subtaskId, userID);
-        comments = subtaskResponse.subtaskCommentDetail;
-      }
-
-      setMessages(comments);
-    } catch (error) {
-      console.error("Error fetching comment data:", error);
-    } finally {
-      setLoading(false);
-    }
+    }  
   };
 
   useEffect(() => {
     fetchCommentData();
-  }, [projectId, taskId, userID]);
+  }, [subtaskId, taskId, projectId, userID]);
 
   const saveMessagesToLocalStorage = (messages) => {};
 
