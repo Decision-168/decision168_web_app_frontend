@@ -3,7 +3,7 @@ name: Vite-CI
 on:
   push:
     branches:
-      - development
+      - dev
 
 jobs:
   build:
