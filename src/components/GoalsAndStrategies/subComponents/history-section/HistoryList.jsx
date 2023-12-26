@@ -43,9 +43,7 @@ const HistoryList = ({ allhdata, type, id, setData }) => {
         }
         setData((prevData) => [...prevData, ...response]);
         setallHisDetails(response);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryDetails();

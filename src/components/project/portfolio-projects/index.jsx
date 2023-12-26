@@ -63,9 +63,7 @@ const PortfolioProjects = () => {
     try {
       const response = await getPortfolioProjectList(userID, portfolioId);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 

@@ -21,9 +21,7 @@ const ProjectSection = ({ kpi_id }) => {
         const response = await getStrategyDetail(kpi_id);
         setkpiProDetails(response.projectRes);
         setGoalId(response.goalId);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllData();

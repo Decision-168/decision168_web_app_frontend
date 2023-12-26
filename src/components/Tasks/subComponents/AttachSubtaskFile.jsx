@@ -20,20 +20,14 @@ const AttachSubtaskFile = ({ subtask }) => {
   const [loading, setLoading] = useState(false);
   //to send DB convert files data structure
 
-  
-
   const handleSubtaskFilesChange = async (newValue, info) => {
-    // if (!newValue || newValue.length === 0) {
-    //   // Show an error message if it is empty
-    //   alert("Subask files cannot be empty");
-    //   return;
-    // }
     setSubtaskFiles(newValue);
     const time = Math.floor(Date.now() / 1000);
-    const taskFilesArray = newValue?.map((file, index) => (`${time}_${file.name.toLowerCase()}`));
-    const stringFormat = taskFilesArray.join(',')
-    
-    alert(`${JSON.stringify(stringFormat)}`);
+    const taskFilesArray = newValue?.map(
+      (file, index) => `${time}_${file.name.toLowerCase()}`
+    );
+    const stringFormat = taskFilesArray.join(",");
+
     try {
       const data = {
         stid: subtask?.stid,
@@ -45,7 +39,6 @@ const AttachSubtaskFile = ({ subtask }) => {
       dispatch(closeModal("subtask-attach-file"));
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -68,9 +61,9 @@ const AttachSubtaskFile = ({ subtask }) => {
           handleFilesChange={handleSubtaskFilesChange}
         />
 
-         {
-          subtask?.stfile &&   <SubtaskFiles styles={styles} files={subtask?.stfile} />
-         }
+        {subtask?.stfile && (
+          <SubtaskFiles styles={styles} files={subtask?.stfile} />
+        )}
       </Box>
     </DialogContent>
   );

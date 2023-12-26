@@ -6,9 +6,14 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import CustomTable from "../../../common/CustomTable";
-import { getkpiArchiveData, patchUnArchiveKpi } from "../../../../api/modules/ArchiveModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import {
+  getkpiArchiveData,
+  patchUnArchiveKpi,
+} from "../../../../api/modules/ArchiveModule";
 import { toast } from "react-toastify";
 
 const ArchiveKPIs = ({ value, regId, portfolioId }) => {
@@ -16,20 +21,18 @@ const ArchiveKPIs = ({ value, regId, portfolioId }) => {
 
   const [archiveData, setArchiveData] = useState([]);
   const [archiveId, setArchiveId] = useState(null);
-  
+
   const fetchArchiveData = async () => {
     try {
-      const response = await getkpiArchiveData(regId,portfolioId);
+      const response = await getkpiArchiveData(regId, portfolioId);
       setArchiveData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchArchiveData();
   }, [regId]);
-  
+
   const handleReopen = (type, id) => {
     setArchiveId(id);
     dispatch(
@@ -44,12 +47,12 @@ const ArchiveKPIs = ({ value, regId, portfolioId }) => {
   const handleYes = async () => {
     try {
       const response = await patchUnArchiveKpi(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -87,7 +90,9 @@ const ArchiveKPIs = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.kpi_type,row.original.table_id)}
+              onClick={() =>
+                handleReopen(row.original.kpi_type, row.original.table_id)
+              }
             >
               Reopen
             </Button>

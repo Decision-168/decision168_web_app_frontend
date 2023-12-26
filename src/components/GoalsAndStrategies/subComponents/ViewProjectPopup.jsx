@@ -66,9 +66,7 @@ const ViewProjectPopup = ({
       const response = await getProjectDetail(pid);
       setProjectData(response);
       setProjectDel(response.project);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -92,9 +90,7 @@ const ViewProjectPopup = ({
     try {
       const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -108,9 +104,7 @@ const ViewProjectPopup = ({
     try {
       const response = await getViewHistoryDateProject(pid);
       setHistory(response.history_dates);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -150,7 +144,7 @@ const ViewProjectPopup = ({
       }
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "fileItProject" }));
-      console.log(error);
+
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -169,7 +163,7 @@ const ViewProjectPopup = ({
       }
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "deleteProject" }));
-      console.log(error);
+
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -208,7 +202,6 @@ const ViewProjectPopup = ({
           setAccdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setAccdisplayBtns("no");
       }
     };

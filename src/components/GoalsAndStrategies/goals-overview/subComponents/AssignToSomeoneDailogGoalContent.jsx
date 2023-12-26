@@ -47,7 +47,6 @@ export default function AssignToSomeoneDailogGoalContent({
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error?.response?.data?.error}`);
-        console.error("Error in assign open work to other team member:", error);
       } finally {
         setLoading(false);
       }
@@ -109,7 +108,7 @@ export default function AssignToSomeoneDailogGoalContent({
           </Typography>
         )}
       </Box>
-    
+
       <SelectOption
         label=""
         required={false}

@@ -34,7 +34,7 @@ const EditKPIPopup = ({ kpiData, fetchAllKPIDataFun }) => {
       sname: kpiData?.sname,
       sdes: kpiData?.sdes,
       sid: kpiData?.sid,
-      user_id: user_id, 
+      user_id: user_id,
     });
   }, [kpiData]);
 
@@ -59,7 +59,6 @@ const EditKPIPopup = ({ kpiData, fetchAllKPIDataFun }) => {
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     } finally {
       setLoading(false);
     }

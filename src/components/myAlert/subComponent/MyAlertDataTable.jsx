@@ -95,15 +95,14 @@ const MyAlertDataTable = () => {
     ],
     []
   );
-    const [filteredTask, setFilterTask] = useState([]);
-  const [open, setOpen] = useState(false)
-  const handleOpen = (type)=>{
-    console.log(type);
-    setOpen(true)
-  }
-    const handleClose = () => {
-      setOpen(false);
-    };
+  const [filteredTask, setFilterTask] = useState([]);
+  const [open, setOpen] = useState(false);
+  const handleOpen = (type) => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const theme = useTheme();
   const columns = useMemo(
     () => [
@@ -202,7 +201,6 @@ const MyAlertDataTable = () => {
         modalSize="lg"
       >
         <TaskPreview filteredRow={filteredTask} />
-
       </CustomDialog>
     </>
   );

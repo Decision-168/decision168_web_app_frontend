@@ -36,9 +36,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -64,9 +62,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getTaskLinks(pid);
       setTaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -96,9 +92,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getSubtaskLinks(pid);
       setSubtaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -212,7 +206,12 @@ const LinkContainer = ({ pid }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <AddLinksPopup projectId={pid} refreshData={fetchProjectData} oldLinks={links} oldLinkComments={link_comments} />
+        <AddLinksPopup
+          projectId={pid}
+          refreshData={fetchProjectData}
+          oldLinks={links}
+          oldLinkComments={link_comments}
+        />
       </ReduxDialog>
     </Box>
   );

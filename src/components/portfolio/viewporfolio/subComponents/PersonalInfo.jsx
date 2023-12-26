@@ -25,27 +25,41 @@ const PortfolioDetails = {
   country: "United States",
   socialMedia: [
     {
-      icon: <YouTubeIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <YouTubeIcon sx={{ color: (theme) => theme.palette.primary.main }} />
+      ),
       name: "YouTube",
     },
     {
-      icon: <PinterestIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <PinterestIcon sx={{ color: (theme) => theme.palette.primary.main }} />
+      ),
       name: "Pinterest",
     },
     {
-      icon: <InstagramIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <InstagramIcon sx={{ color: (theme) => theme.palette.primary.main }} />
+      ),
       name: "Instagram",
     },
     {
-      icon: <LinkedInIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <LinkedInIcon sx={{ color: (theme) => theme.palette.primary.main }} />
+      ),
       name: "linkedIn",
     },
     {
-      icon: <TwitterIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <TwitterIcon sx={{ color: (theme) => theme.palette.primary.main }} />
+      ),
       name: "Twitter",
     },
     {
-      icon: <FacebookRoundedIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
+      icon: (
+        <FacebookRoundedIcon
+          sx={{ color: (theme) => theme.palette.primary.main }}
+        />
+      ),
       name: "Facebook",
     },
   ],
@@ -62,9 +76,7 @@ export default function PersonalInfo() {
   const fetchPortfolioDetails = async () => {
     try {
       dispatch(getPortfolioDetailsAsync(storedPorfolioId));
-    } catch (fetchError) {
-      console.error("Error fetching portfolio details:", fetchError);
-    }
+    } catch (fetchError) {}
   };
 
   useEffect(() => {
@@ -77,7 +89,8 @@ export default function PersonalInfo() {
         <Typography
           variant="subtitle1"
           sx={{ color: theme.palette.secondary.dark, fontWeight: "700" }}
-          textAlign="left">
+          textAlign="left"
+        >
           Information
         </Typography>
 
@@ -101,14 +114,20 @@ export default function PersonalInfo() {
                     p={1}
                     borderBottom={1}
                     borderColor={theme.palette.secondary.light}
-                    color={theme.palette.secondary.main}>
+                    color={theme.palette.secondary.main}
+                  >
                     <Grid item xs={12} sm={4}>
                       <Typography variant="subtitle2" textAlign="left">
                         Contact Person Name :
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        gutterBottom
+                        textAlign="left"
+                      >
                         {details?.contact_fname}&nbsp;{details?.contact_lname}
                       </Typography>
                     </Grid>
@@ -121,14 +140,20 @@ export default function PersonalInfo() {
                     p={1}
                     borderBottom={1}
                     borderColor={theme.palette.secondary.light}
-                    color={theme.palette.secondary.main}>
+                    color={theme.palette.secondary.main}
+                  >
                     <Grid item xs={12} sm={4}>
                       <Typography variant="subtitle2" textAlign="left">
                         Designation :
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        gutterBottom
+                        textAlign="left"
+                      >
                         {details?.designation}
                       </Typography>
                     </Grid>
@@ -143,14 +168,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Created By :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.portfolio_createdby}
                   </Typography>
                 </Grid>
@@ -163,14 +194,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Type :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.portfolio_user}
                   </Typography>
                 </Grid>
@@ -183,14 +220,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Email Address :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.email_address}
                   </Typography>
                 </Grid>
@@ -203,14 +246,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Company Website :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.company_website}
                   </Typography>
                 </Grid>
@@ -223,14 +272,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Country :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {countryName}
                   </Typography>
                 </Grid>
@@ -243,14 +298,20 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Social Media Link(s) :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
+                  <Stack
+                    direction="row"
+                    justifyContent="start"
+                    alignItems="center"
+                    spacing={1}
+                  >
                     {/* <SocialMedia links={details?.social_media} icons={details?.social_media_icon} /> */}
                   </Stack>
                 </Grid>
@@ -263,7 +324,8 @@ export default function PersonalInfo() {
                 p={1}
                 borderBottom={1}
                 borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}>
+                color={theme.palette.secondary.main}
+              >
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left" pb={1}>
                     Department(s) :
@@ -282,7 +344,8 @@ export default function PersonalInfo() {
                           borderRadius: "5px",
                           mb: 1,
                           mr: 1,
-                        }}>
+                        }}
+                      >
                         {department}
                       </Box>
                     ))}

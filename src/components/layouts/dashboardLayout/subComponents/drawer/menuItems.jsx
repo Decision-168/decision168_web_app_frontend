@@ -20,7 +20,7 @@
 //   SupportAgent,
 // } from "@mui/icons-material";
 // const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
-// console.log("portfolio id:", portfolioId)
+//
 // export const menuItems = [
 //   { icon: <Dashboard />, text: "Dashboard", link: "/dashboard" },
 //   // {
@@ -86,7 +86,7 @@
 
 // MenuItems.js
 
-import React from 'react';
+import React from "react";
 import {
   Dashboard,
   Badge,

@@ -45,7 +45,7 @@ const GoalOverviewRequest = () => {
         if (error.response?.status === 400) {
           navigate("/portfolio-goals");
         }
-        console.error(error);
+
         toast.error(`Portfolio Owner Inactive You!`);
         setdisplayData(false);
       }

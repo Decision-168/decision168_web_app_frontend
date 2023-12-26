@@ -13,9 +13,7 @@ export default function ChangePasswordForm({ handleClose }) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
+  const onSubmit = (data) => {};
 
   return (
     <Box

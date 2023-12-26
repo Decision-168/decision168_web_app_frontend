@@ -6,9 +6,16 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
-import { getgoalDeleteData, patchDeleteForeverGoal, patchRetrieveGoal } from "../../../../api/modules/TrashModule";
+import {
+  getgoalDeleteData,
+  patchDeleteForeverGoal,
+  patchRetrieveGoal,
+} from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 
 const TrashGoals = ({ value, regId, portfolioId }) => {
@@ -19,11 +26,9 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
 
   const fetchDeleteData = async () => {
     try {
-      const response = await getgoalDeleteData(regId,portfolioId);
+      const response = await getgoalDeleteData(regId, portfolioId);
       setDeleteData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -55,12 +60,12 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
   const handleRestoreYes = async () => {
     try {
       const response = await patchRetrieveGoal(deleteId, portfolioId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -68,12 +73,12 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
   const handleDeleteYes = async () => {
     try {
       const response = await patchDeleteForeverGoal(deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -114,7 +119,9 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleRestore(row.original.goal_type, row.original.table_id)}
+              onClick={() =>
+                handleRestore(row.original.goal_type, row.original.table_id)
+              }
             >
               Restore
             </Button>
@@ -137,7 +144,9 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
               size="small"
               variant="contained"
               sx={{ backgroundColor: "#383838", color: "#ffffff" }}
-              onClick={() => handleDelete(row.original.goal_type, row.original.table_id)}
+              onClick={() =>
+                handleDelete(row.original.goal_type, row.original.table_id)
+              }
             >
               Delete
             </Button>
@@ -202,8 +211,11 @@ const TrashGoals = ({ value, regId, portfolioId }) => {
       >
         <MaterialReactTable table={table} />
       </Container>
-      <ConfirmationDialog value={"restoreModule"} handleYes={handleRestoreYes} />
-      <ConfirmationDialog value={"deleteModule"}  handleYes={handleDeleteYes}/>
+      <ConfirmationDialog
+        value={"restoreModule"}
+        handleYes={handleRestoreYes}
+      />
+      <ConfirmationDialog value={"deleteModule"} handleYes={handleDeleteYes} />
     </>
   );
 };

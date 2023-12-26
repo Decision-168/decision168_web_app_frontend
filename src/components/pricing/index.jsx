@@ -70,9 +70,7 @@ export default function Pricing() {
       setuserCouponPack(response3.coupon_pack);
       setUserPackagePrice(response3.pack_price);
       setPackages(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchActiveCoupons = async () => {
@@ -89,18 +87,13 @@ export default function Pricing() {
           }
         });
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchPricingPackages();
     fetchActiveCoupons();
   }, [user_id]);
-
-  // console.log("showFreeBut", showFreeBut);
-  // console.log("userCouponPack", user?.package_coupon_id);
 
   const handleValidity = (event, newValue) => {
     if (newValue !== null) {

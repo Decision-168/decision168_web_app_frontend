@@ -22,21 +22,38 @@ import {
 } from "../subComponents/TasksData";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SubdirectoryArrowRightRoundedIcon from "@mui/icons-material/SubdirectoryArrowRightRounded";
-import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import Chip from "@mui/material/Chip";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import { openCnfModal, closeCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 import CustomDialog from "../../common/CustomDialog";
 import { taskOverviewStyles } from "../taskOverview/styles";
 import SubtaskPreview from "../subtaskOverview/subComponent/SubtaskPreview";
 import { useSelector } from "react-redux";
-import { changeSubTaskStatusCheckox, editTaskAndSubtask } from "../../../api/modules/taskModule";
+import {
+  changeSubTaskStatusCheckox,
+  editTaskAndSubtask,
+} from "../../../api/modules/taskModule";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { toast } from "react-toastify";
-import { formatAssigneeText, formatPriority, formatStatus } from "../../../helpers/tasks";
+import {
+  formatAssigneeText,
+  formatPriority,
+  formatStatus,
+} from "../../../helpers/tasks";
 import CommentIcon from "@mui/icons-material/Comment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -60,7 +77,8 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   const [rowStates, setRowStates] = useState({});
   const [subTaskName, setSubTaskName] = useState("");
   const [subTaskAssignee, setSubTaskAssignee] = useState(null);
-  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
+  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] =
+    React.useState(false);
   const [parentTaskName, setParentTaskName] = useState("");
   const [subTaskToEdit, setSubTaskToEdit] = useState({});
   const [openSubtaskMenu, setOpenSubtaskMenu] = useState(null);
@@ -103,7 +121,12 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   }, [task]);
 
   // Subtask Code checkbox
-  const handleSubTaskCodeCheckBoxDialog = (event, subrowId, stAssignee, stStatus) => {
+  const handleSubTaskCodeCheckBoxDialog = (
+    event,
+    subrowId,
+    stAssignee,
+    stStatus
+  ) => {
     setSubRowId(subrowId);
     setSubTaskAssignee(stAssignee);
     // for already checked and done
@@ -139,7 +162,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in changing the subtask status:", error);
     }
   };
 
@@ -187,7 +209,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       toast.success(`${response?.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
-      console.error("Error updating SubTask name:", error);
     }
   };
 
@@ -203,9 +224,7 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
           editMode: false,
         },
       }));
-    } catch (error) {
-      console.error("Error handling save SubTask click:", error);
-    }
+    } catch (error) {}
   };
 
   //SubTask Priority
@@ -227,8 +246,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       toast.success(`${response?.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
-      // Handle any errors that occur during the API call
-      console.error("Error updating priority:", error);
     }
   };
 
@@ -247,7 +264,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       setEditSubTaskPriority(null);
     } catch (error) {
       // Handle errors specific to the save operation if needed
-      console.error("Error handling the priority:", error);
     }
   };
 
@@ -275,7 +291,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
       // Handle any errors that occur during the API call
-      console.error("Error updating status:", error);
     }
   };
 
@@ -294,7 +309,6 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
       setEditSubTaskStatus(null);
     } catch (error) {
       // Handle errors specific to the save operation if needed
-      console.error("Error handling the status:", error);
     }
   };
 
@@ -335,7 +349,7 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
   //Subtask comment
   const handleSubTaskCommentsDialog = (subrowId, subrow) => {
     setSubRowId(subrowId);
-    setSubTaskToEdit(subrow)
+    setSubTaskToEdit(subrow);
     dispatch(openModal("send-comments"));
   };
 
@@ -387,7 +401,12 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
 
             {/* SubTask Name */}
             <TableCell sx={{ width: "30%" }} align="left">
-              <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={1}
+              >
                 {rowStates[subrow.stid]?.editMode ? (
                   <TextField
                     name="stname"
@@ -423,7 +442,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                       gutterBottom
                       ml={1}
                       textAlign="left"
-                      onClick={() => handleOpenSubTaskPreviewDialog(subrow?.stid)}
+                      onClick={() =>
+                        handleOpenSubTaskPreviewDialog(subrow?.stid)
+                      }
                     >
                       {rowStates[subrow.stid]?.subtaskName || subrow?.stname}
                     </Typography>
@@ -454,7 +475,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                         size="small"
                         type="button"
                         sx={{ fontSize: "1rem" }}
-                        onClick={() => handleCancelSubTaskNameEdit(subrow?.stid)}
+                        onClick={() =>
+                          handleCancelSubTaskNameEdit(subrow?.stid)
+                        }
                       >
                         <CancelIcon fontSize="inherit" />
                       </IconButton>
@@ -472,7 +495,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                       size="small"
                       type="button"
                       sx={{ fontSize: "1rem" }}
-                      onClick={(event) => handleEditSubTaskName(subrow?.stid, subrow?.stname)}
+                      onClick={(event) =>
+                        handleEditSubTaskName(subrow?.stid, subrow?.stname)
+                      }
                     >
                       <EditIcon fontSize="inherit" />
                     </IconButton>
@@ -498,11 +523,17 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                   <FormControl fullWidth>
                     <Select
                       value={selectedPriorities[subrow?.stid] || ""}
-                      onChange={(event) => handleSubTaskPriority(event, subrow?.stid)}
+                      onChange={(event) =>
+                        handleSubTaskPriority(event, subrow?.stid)
+                      }
                     >
                       {taskPriorities.map((priority, index) => (
                         <MenuItem key={index} value={priority.value}>
-                          <Typography component="p" variant="caption" display="block">
+                          <Typography
+                            component="p"
+                            variant="caption"
+                            display="block"
+                          >
                             {formatPriority(priority.text)}
                           </Typography>
                         </MenuItem>
@@ -513,7 +544,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                   <Box>
                     <Chip
                       label={formatPriority(
-                        selectedPriorities[subrow?.stid] || subrow?.stpriority || ""
+                        selectedPriorities[subrow?.stid] ||
+                          subrow?.stpriority ||
+                          ""
                       )}
                       variant="contained"
                       sx={{
@@ -540,11 +573,17 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                   <FormControl fullWidth>
                     <Select
                       value={selectedStatuses[subrow?.stid] || ""}
-                      onChange={(event) => handleSubTaskStatus(event, subrow?.stid)}
+                      onChange={(event) =>
+                        handleSubTaskStatus(event, subrow?.stid)
+                      }
                     >
                       {taskStatuses.map((status, index) => (
                         <MenuItem key={index} value={status.value}>
-                          <Typography component="p" variant="caption" display="block">
+                          <Typography
+                            component="p"
+                            variant="caption"
+                            display="block"
+                          >
                             {formatStatus(status.text)}
                           </Typography>
                         </MenuItem>
@@ -554,7 +593,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                 ) : (
                   <Box>
                     <Chip
-                      label={formatStatus(selectedStatuses[subrow?.stid] || subrow?.ststatus || "")}
+                      label={formatStatus(
+                        selectedStatuses[subrow?.stid] || subrow?.ststatus || ""
+                      )}
                       variant="contained"
                       sx={{
                         minWidth: "80px",
@@ -562,7 +603,10 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                         ...statusColors[selectedStatuses[subrow?.stid]],
                       }}
                     />
-                    <IconButton size="small" onClick={() => handleEditSubTaskStatus(subrow?.stid)}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleEditSubTaskStatus(subrow?.stid)}
+                    >
                       <ExpandMoreIcon />
                     </IconButton>
                   </Box>
@@ -586,14 +630,21 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
 
             {/* Actions */}
             <TableCell sx={{ width: "20%" }} align="center">
-              <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
                 {/* Comment */}
                 <Tooltip arrow title="Comment" size="small" placement="top-end">
                   <IconButton
                     size="small"
                     type="button"
                     sx={{ fontSize: "1.2rem" }}
-                    onClick={() => handleSubTaskCommentsDialog(subrow?.stid, subrow)}
+                    onClick={() =>
+                      handleSubTaskCommentsDialog(subrow?.stid, subrow)
+                    }
                   >
                     <CommentIcon fontSize="inherit" />
                   </IconButton>
@@ -607,18 +658,29 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     modalSize="sm"
                   >
                     <DialogContent dividers>
-                    <CommentSection projectId={subTaskToEdit?.stproject_assign} taskId={"0"} subtaskId={subTaskToEdit?.stid}/>
+                      <CommentSection
+                        projectId={subTaskToEdit?.stproject_assign}
+                        taskId={"0"}
+                        subtaskId={subTaskToEdit?.stid}
+                      />
                     </DialogContent>
                   </ReduxDialog>
                 )}
 
                 {/* Attach */}
-                <Tooltip arrow title="Attach file" size="small" placement="top-end">
+                <Tooltip
+                  arrow
+                  title="Attach file"
+                  size="small"
+                  placement="top-end"
+                >
                   <IconButton
                     size="small"
                     type="button"
                     sx={{ fontSize: "1.2rem" }}
-                    onClick={() => handleSubTaskAttachFileDialog(subrow?.stid, subrow)}
+                    onClick={() =>
+                      handleSubTaskAttachFileDialog(subrow?.stid, subrow)
+                    }
                   >
                     <AttachmentIcon fontSize="inherit" />
                   </IconButton>
@@ -645,7 +707,9 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
                     aria-controls={open ? "fade-menu" : undefined}
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
-                    onClick={(event) => handleSubTaskMoreClick(event, subrow?.stid, subrow)}
+                    onClick={(event) =>
+                      handleSubTaskMoreClick(event, subrow?.stid, subrow)
+                    }
                   >
                     <MoreVertIcon fontSize="inherit" />
                   </IconButton>
@@ -670,7 +734,10 @@ export default function SubtaskRow({ task, fetchTaskDetails }) {
         <Typography sx={styles.labelText}>No SubTasks!</Typography>
       )}
       <ConfirmationDialog value={"statusToComplete"} />
-      <ConfirmationDialog value={"changeSubTaskCheckboxStatus"} handleYes={handleSubTaskYes} />
+      <ConfirmationDialog
+        value={"changeSubTaskCheckboxStatus"}
+        handleYes={handleSubTaskYes}
+      />
     </Box>
   );
 }

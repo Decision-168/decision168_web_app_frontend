@@ -18,7 +18,11 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import { AddProjectMember, getAccepted_GoalTM_ProjectList, getAccepted_PortTM_ProjectList } from "../../../api/modules/ProjectModule";
+import {
+  AddProjectMember,
+  getAccepted_GoalTM_ProjectList,
+  getAccepted_PortTM_ProjectList,
+} from "../../../api/modules/ProjectModule";
 
 const AddMemberDialog = ({ id, gid, type, refreshData }) => {
   //get user id
@@ -39,7 +43,7 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     pid: id,
-    pcreated_by: userID, 
+    pcreated_by: userID,
     team_member: [],
     imemail: [],
   });
@@ -47,24 +51,29 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
   if (type === "project") {
     useEffect(() => {
       const fetchAllHistoryData = async () => {
-        if(gid != 0){
+        if (gid != 0) {
           try {
-            const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id, gid, userID);
+            const response = await getAccepted_GoalTM_ProjectList(
+              storedPorfolioId,
+              id,
+              gid,
+              userID
+            );
             if (response) {
               setmemberData(response);
             }
-          } catch (error) {
-            console.error(error);
-          }
-        }else{
+          } catch (error) {}
+        } else {
           try {
-            const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id, userID);
+            const response = await getAccepted_PortTM_ProjectList(
+              storedPorfolioId,
+              id,
+              userID
+            );
             if (response) {
               setmemberData(response);
             }
-          } catch (error) {
-            console.error(error);
-          }
+          } catch (error) {}
         }
       };
 
@@ -110,7 +119,6 @@ const AddMemberDialog = ({ id, gid, type, refreshData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }

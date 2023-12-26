@@ -1,4 +1,12 @@
-import { Box, Button, DialogActions, DialogContent, Grid, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ProjectTabSection from "./ProjectTabSection";
 import CustomLabelTextField from "../../subComponents/CustomLabelTextField";
@@ -41,8 +49,7 @@ const DuplicateProject = ({ projectData }) => {
 
   const handleCopyProject = async (event) => {
     event.preventDefault();
-    if (
-      formValues.pname.trim() !== "") {
+    if (formValues.pname.trim() !== "") {
       setLoading(true);
       try {
         const response = await copyProject(formValues);
@@ -55,7 +62,6 @@ const DuplicateProject = ({ projectData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }
@@ -68,13 +74,30 @@ const DuplicateProject = ({ projectData }) => {
   return (
     <>
       <DialogContent dividers>
-        <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
+        <Box
+          sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }}
+          mb={2}
+        >
           <Grid container spacing={2}>
-            <CustomLabelTextField label="Project Name" name="pname" required={true} placeholder="Enter Project Name..." value={formValues.pname} onChange={handleChange("pname")} />
+            <CustomLabelTextField
+              label="Project Name"
+              name="pname"
+              required={true}
+              placeholder="Enter Project Name..."
+              value={formValues.pname}
+              onChange={handleChange("pname")}
+            />
             <Grid item xs={12}>
               <Box p={2} sx={{ background: "#f5f5f5" }}>
-                <Typography sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}>Import Options</Typography>
-                <ProjectTabSection formValues={formValues} setFormValues={setFormValues} />
+                <Typography
+                  sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}
+                >
+                  Import Options
+                </Typography>
+                <ProjectTabSection
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                />
               </Box>
             </Grid>
           </Grid>

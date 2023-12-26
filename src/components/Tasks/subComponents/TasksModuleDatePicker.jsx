@@ -28,7 +28,6 @@ function TasksModuleDatePicker({
     setUserInteracted(true);
     if (onChange) {
       onChange(date);
-      console.log("New selected value:", date);
     }
   };
 
@@ -65,9 +64,7 @@ function TasksModuleDatePicker({
           // Example:
           dynamicMinDate = new Date(gstart_date);
           dynamicMaxDate = new Date(gend_date);
-        } catch (error) {
-          console.error("Error fetching goal details:", error);
-        }
+        } catch (error) {}
       };
 
       fetchData();
@@ -81,7 +78,9 @@ function TasksModuleDatePicker({
     <Box sx={{ textAlign: "left" }}>
       <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
         {label}
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        {required && (
+          <span style={{ color: theme.palette.error.main }}> *</span>
+        )}
       </InputLabel>
       <TextField
         variant="outlined"
