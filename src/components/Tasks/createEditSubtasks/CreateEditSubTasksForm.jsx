@@ -45,10 +45,11 @@ const priorities = [
   { name: "Low", value: "low" },
 ];
 
-export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData }) {
-  console.log("editMode", editMode);
-  console.log("taskData", taskData);
-  console.log("subtaskData", subtaskData);
+export default function CreateEditSubTasksForm({
+  editMode,
+  taskData,
+  subtaskData,
+}) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -110,9 +111,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
           user_id: userId,
         });
         setProjects(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
     fetchProjects();
   }, [storedPortfolioId, userId]);
@@ -121,13 +120,16 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
+        const response = await getProjectTeamMembers({
+          pid: taskData?.tproject_assign,
+        });
         // Add the user to assignee to assignee list
-        const updatedResponse = [...response, { reg_id: userId, name: "To Me" }];
+        const updatedResponse = [
+          ...response,
+          { reg_id: userId, name: "To Me" },
+        ];
         setAssignees(updatedResponse);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchTeamMembers();
@@ -148,17 +150,14 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   useEffect(() => {
     // stfile = "file1,file2"
     const filenames = subtaskData?.stfile;
-    console.log(subtaskData?.stfile);
+
     (async () => {
       try {
         const fileArray = await createFileArray(filenames);
         setFiles(fileArray);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      } catch (error) {}
     })();
   }, [editMode, subtaskData?.stfile]);
-
 
   useEffect(() => {
     if (editMode) {
@@ -169,7 +168,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
           stnote: subtaskData?.stnote,
           stfile: files ? files : [],
           stpriority: subtaskData?.stpriority,
-          stdue_date: subtaskData?.stdue_date ? new Date(subtaskData?.stdue_date) : "",
+          stdue_date: subtaskData?.stdue_date
+            ? new Date(subtaskData?.stdue_date)
+            : "",
           team_member2: subtaskData?.stassignee,
           slinks: [],
           slink_comments: [],
@@ -190,10 +191,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   //     });
   //     fileArray.push(file);
   //   }
-  //   // console.log(fileArray);
+  //
   //   return fileArray;
   // }
-
 
   const handleFilesChange = (index) => (newValue) => {
     setFiles(newValue);
@@ -307,22 +307,35 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     // Display a toast message for empty fields in the main form
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      toast.error(
+        `Please fill in all required fields: ${errorFields.join(", ")}`
+      );
       return;
     }
 
     // Validate each task within taskArray
     for (const task of formData.taskArray) {
       // Define the required fields for each task
-      const taskRequiredFields = ["stname", "stdue_date", "stpriority", "team_member2"];
+      const taskRequiredFields = [
+        "stname",
+        "stdue_date",
+        "stpriority",
+        "team_member2",
+      ];
 
       // Check for empty required fields in each task
-      const emptyTaskFields = taskRequiredFields.filter((field) => !task[field]);
+      const emptyTaskFields = taskRequiredFields.filter(
+        (field) => !task[field]
+      );
 
       // Display a toast message for empty fields in each task
       if (emptyTaskFields.length > 0) {
-        const errorTaskFields = emptyTaskFields.map((field) => fieldLabels[field]);
-        toast.error(`Please fill in all required fields: ${errorTaskFields.join(", ")}`);
+        const errorTaskFields = emptyTaskFields.map(
+          (field) => fieldLabels[field]
+        );
+        toast.error(
+          `Please fill in all required fields: ${errorTaskFields.join(", ")}`
+        );
         return;
       }
     }
@@ -338,27 +351,39 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       stdes: formData?.taskArray[0]?.stdes,
       stnote: formData?.taskArray[0]?.stnote,
       stfile:
-        files?.map((file, index) => ({ [index]: file.name })) || formData?.taskArray[0]?.stfile,
+        files?.map((file, index) => ({ [index]: file.name })) ||
+        formData?.taskArray[0]?.stfile,
       tpriority: formData?.taskArray[0]?.stpriority,
       tdue_date: formData?.taskArray[0]?.stdue_date,
     };
 
-    const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
-
-    alert(`${JSON.stringify(finalData)}`);
+    const finalData = {
+      user_id: userId,
+      portfolio_id: storedPortfolioId,
+      data: editeData,
+    };
 
     try {
       setLoading(true);
 
       const response = editMode
-        ? await updateSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: editeData })
-        : await insertSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: formData });
+        ? await updateSubtask({
+            user_id: userId,
+            portfolio_id: storedPortfolioId,
+            data: editeData,
+          })
+        : await insertSubtask({
+            user_id: userId,
+            portfolio_id: storedPortfolioId,
+            data: formData,
+          });
       dispatch(closeModal(`${editMode ? "edit-subtask" : "add-sub-tasks"}`));
       navigate(`/tasks-overview/${taskData?.tid}`); // it is creating issue if adding multiple subtasks
       toast.success(response.message);
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error(error.response?.data?.error || "An error occurred. Please try again.");
+      toast.error(
+        error.response?.data?.error || "An error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -408,10 +433,18 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                 }
               />
             </Divider>
-            <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
+            <Paper
+              elevation={0}
+              sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}
+            >
               <Stack direction="row" justifyContent="end" alignItems="center">
                 {field.length > 1 && (
-                  <Tooltip arrow title="Remove Subtask" size="small" placement="top-end">
+                  <Tooltip
+                    arrow
+                    title="Remove Subtask"
+                    size="small"
+                    placement="top-end"
+                  >
                     <IconButton onClick={handleRemoveClick}>
                       <RemoveCircleRoundedIcon />
                     </IconButton>
@@ -427,7 +460,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Name"
                     name="stname"
                     value={fields[index].stname || ""}
-                    onChange={(event) => handleFieldChange("stname")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stname")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -449,7 +484,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Description..."
                     name="stdes"
                     value={fields[index].stdes || ""}
-                    onChange={(event) => handleFieldChange("stdes")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stdes")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -460,7 +497,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Note"
                     name="stnote"
                     value={fields[index].stnote || ""}
-                    onChange={(event) => handleFieldChange("stnote")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stnote")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -544,7 +583,10 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                   ml: 1,
                   backgroundColor: theme.palette.secondary.light,
                   color: theme.palette.secondary.dark,
-                  "&:hover": { color: theme.palette.secondary.dark, backgroundColor: "#EBEBEB" },
+                  "&:hover": {
+                    color: theme.palette.secondary.dark,
+                    backgroundColor: "#EBEBEB",
+                  },
                 }}
               >
                 Add Another Subtask
@@ -558,7 +600,13 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
               variant="contained"
               sx={{ ml: 1 }}
             >
-              {loading ? <CircularLoader /> : (editMode ? "Save Changes" : "Create")}
+              {loading ? (
+                <CircularLoader />
+              ) : editMode ? (
+                "Save Changes"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Grid>
         </Grid>

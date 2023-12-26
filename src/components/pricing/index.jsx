@@ -71,9 +71,7 @@ export default function Pricing() {
       setuserCouponPack(response3.coupon_pack);
       setUserPackagePrice(response3.pack_price);
       setPackages(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   const fetchActiveCoupons = async () => {
@@ -90,9 +88,7 @@ export default function Pricing() {
           }
         });
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -100,6 +96,8 @@ export default function Pricing() {
     fetchActiveCoupons();
   }, [user_id]);
 
+<<<<<<< HEAD
+=======
   const filterByValidity = (packages, validity) =>
     packages ? packages.filter((i) => i.validity === validity) : [];
   const free = filterByValidity(getPackages, "free forever");
@@ -116,6 +114,7 @@ export default function Pricing() {
     ...enterprise,
   ];
 
+>>>>>>> 9115fb285f831adb1952880a27d0f92f9eaa7bae
   const handleValidity = (event, newValue) => {
     if (newValue !== null) {
       setValidity(newValue);

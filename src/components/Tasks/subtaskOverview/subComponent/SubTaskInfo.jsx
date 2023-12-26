@@ -49,7 +49,6 @@ export default function SubTaskInfo({ styles, info }) {
       setLoading(true);
 
       const newStatus = event.target.value;
-      alert(`${newStatus}--${subtaskId}--${assignee}`);
 
       const data = {
         stid: subtaskId,
@@ -66,7 +65,6 @@ export default function SubTaskInfo({ styles, info }) {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in changing the task status:", error);
     } finally {
       setLoading(false);
     }

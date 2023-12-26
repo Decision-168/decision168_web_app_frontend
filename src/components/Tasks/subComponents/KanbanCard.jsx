@@ -36,7 +36,7 @@ const KanbanCard = ({ cardData, fetchData }) => {
     formState: { errors },
   } = useForm();
   const theme = useTheme();
-  const [ type, setType] = React.useState("");
+  const [type, setType] = React.useState("");
   const [rowId, setRowId] = React.useState(0);
   const [subRowId, setSubRowId] = React.useState(0);
   const [editMode, setEditMode] = React.useState(false);
@@ -46,8 +46,10 @@ const KanbanCard = ({ cardData, fetchData }) => {
   const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   //Task PreviewDialog code
-  const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
-  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
+  const [openTaskPreviewDialog, setOpenTaskPreviewDialog] =
+    React.useState(false);
+  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] =
+    React.useState(false);
   const styles = taskOverviewStyles();
 
   // id may be for task and subtask
@@ -86,11 +88,11 @@ const KanbanCard = ({ cardData, fetchData }) => {
 
   //Edit Task Name
   const handleEditTaskName = (taskId, taskName, type) => {
-      setType(type);
-      setRowId(taskId);
-      setTaskName(taskName);
-      setEditMode(true);
-      setValue("tname", cardData?.tname);
+    setType(type);
+    setRowId(taskId);
+    setTaskName(taskName);
+    setEditMode(true);
+    setValue("tname", cardData?.tname);
   };
 
   const updateTaskName = async (taskId, taskName) => {
@@ -110,7 +112,6 @@ const KanbanCard = ({ cardData, fetchData }) => {
       setValue("tname", taskName); // Assuming 'tname' is the name of your input field
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
-      console.error("Error updating task name in grid view dashboard:", error);
     }
   };
 
@@ -131,24 +132,21 @@ const KanbanCard = ({ cardData, fetchData }) => {
       setValue("tname", subtaskName); // Assuming 'tname' is the name of your input field
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
-      console.error("Error updating task name in grid view dashboard:", error);
     }
   };
 
   //Task  and Subtask Name Save
   const onSubmit = async (data) => {
     try {
-      if(type === "task"){
+      if (type === "task") {
         const taskName = data?.tname;
         await updateTaskName(rowId, taskName);
-      }else{
+      } else {
         const subtaskName = data?.tname;
         await updateSubTaskName(rowId, subtaskName);
       }
       setEditMode(false);
-    } catch (error) {
-      console.error("Error handling save task click:", error);
-    }
+    } catch (error) {}
   };
 
   return (
@@ -172,7 +170,13 @@ const KanbanCard = ({ cardData, fetchData }) => {
         <CardHeader
           sx={{ padding: "10px" }}
           avatar={
-            <Avatar sx={{ bgcolor: theme.palette.secondary.main, border: "2px solid gray" }} aria-label="goal">
+            <Avatar
+              sx={{
+                bgcolor: theme.palette.secondary.main,
+                border: "2px solid gray",
+              }}
+              aria-label="goal"
+            >
               {...stringAvatar("John Doe")}
             </Avatar>
           }
@@ -202,10 +206,26 @@ const KanbanCard = ({ cardData, fetchData }) => {
           }
         />
         <CardContent sx={{ padding: "10px" }}>
-          <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ height: "100%" }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ height: "100%" }}
+          >
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={1}
+            >
               {editMode ? (
-                <CustomTextField name="tname" placeholder="Enter Task Name..." register={register} errors={errors} validation={globalValidations.tname} />
+                <CustomTextField
+                  name="tname"
+                  placeholder="Enter Task Name..."
+                  register={register}
+                  errors={errors}
+                  validation={globalValidations.tname}
+                />
               ) : (
                 <Typography
                   component="p"
@@ -224,7 +244,8 @@ const KanbanCard = ({ cardData, fetchData }) => {
                   textAlign="left"
                   onClick={() => handlePreview(cardData?.tid, cardData?.type)}
                 >
-                  {getValues("tname") || cardData?.tname} {/* Use getValues to get the current form state */}
+                  {getValues("tname") || cardData?.tname}{" "}
+                  {/* Use getValues to get the current form state */}
                 </Typography>
               )}
 
@@ -237,15 +258,35 @@ const KanbanCard = ({ cardData, fetchData }) => {
               >
                 {editMode ? (
                   <>
-                    <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={() => handleCancelTaskNameEdit(cardData?.tid)}>
+                    <IconButton
+                      size="small"
+                      type="button"
+                      sx={{ fontSize: "1rem" }}
+                      onClick={() => handleCancelTaskNameEdit(cardData?.tid)}
+                    >
                       <CancelIcon fontSize="inherit" />
                     </IconButton>
-                    <IconButton size="small" type="submit" sx={{ fontSize: "1rem" }}>
+                    <IconButton
+                      size="small"
+                      type="submit"
+                      sx={{ fontSize: "1rem" }}
+                    >
                       <SaveIcon fontSize="inherit" />
                     </IconButton>
                   </>
                 ) : (
-                  <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={(event) => handleEditTaskName(cardData?.tid, cardData?.tname, cardData?.type)}>
+                  <IconButton
+                    size="small"
+                    type="button"
+                    sx={{ fontSize: "1rem" }}
+                    onClick={(event) =>
+                      handleEditTaskName(
+                        cardData?.tid,
+                        cardData?.tname,
+                        cardData?.type
+                      )
+                    }
+                  >
                     <EditIcon fontSize="inherit" />
                   </IconButton>
                 )}
@@ -257,24 +298,49 @@ const KanbanCard = ({ cardData, fetchData }) => {
         <CardActions>
           <Grid container spacing={1}>
             <Grid item xs={4}>
-              <SmallList label="Due" value={moment(cardData?.tdue_date).format("YYYY-MM-DD")} />
+              <SmallList
+                label="Due"
+                value={moment(cardData?.tdue_date).format("YYYY-MM-DD")}
+              />
             </Grid>
             <Grid item xs={4}>
               <SmallList label="Code" value={cardData?.tcode} />
             </Grid>
             <Grid item xs={4}>
-              {cardData?.type === "task" ? <SmallList label="Sub Tasks" value={cardData?.subTasksCount} /> : null}
+              {cardData?.type === "task" ? (
+                <SmallList label="Sub Tasks" value={cardData?.subTasksCount} />
+              ) : null}
             </Grid>
           </Grid>
         </CardActions>
       </Card>
 
-      <CustomDialog handleClose={handleCloseTaskPreviewDialog} open={openTaskPreviewDialog} modalTitle="Task" redirectPath={`/tasks-overview/${rowId}`} showModalButton={true} modalSize="lg">
+      <CustomDialog
+        handleClose={handleCloseTaskPreviewDialog}
+        open={openTaskPreviewDialog}
+        modalTitle="Task"
+        redirectPath={`/tasks-overview/${rowId}`}
+        showModalButton={true}
+        modalSize="lg"
+      >
         <TaskPreview styles={styles} taskId={rowId} />
       </CustomDialog>
 
-      <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg">
-        <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} parentTaskName={cardData?.parentTaskName}/>
+      <CustomDialog
+        handleClose={handleCloseSubTaskPreviewDialog}
+        open={openSubTaskPreviewDialog}
+        modalTitle="Subtask"
+        redirectPath={`/subtasks-overview/${subRowId}`}
+        showModalButton={true}
+        modalSize="lg"
+      >
+        <SubtaskPreview
+          styles={styles}
+          subtaskId={subRowId}
+          closePreview={handleCloseSubTaskPreviewDialog}
+          fetchData={fetchData}
+          parentTaskName={cardData?.parentTaskName}
+        />
       </CustomDialog>
     </>
   );

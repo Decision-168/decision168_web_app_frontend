@@ -1,4 +1,11 @@
-import { Box, Button, FormControlLabel, Checkbox, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomLink from "../../common/CustomLink";
@@ -36,7 +43,6 @@ export default function Form() {
       const response = await registerUser(formData);
       toast.success(`${response?.message}`);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     } finally {
       setLoading(false);
@@ -44,7 +50,12 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
       <Box sx={{ height: "65px" }}>
         <CustomTextField
           name="full_name"
@@ -94,7 +105,10 @@ export default function Form() {
         label={
           <Typography component="p" variant="caption" textAlign="left">
             By signing up you agree to Decision 168's
-            <CustomLink path={"https://www.decision168.com/terms-conditions/"}>Terms </CustomLink>&
+            <CustomLink path={"https://www.decision168.com/terms-conditions/"}>
+              Terms{" "}
+            </CustomLink>
+            &
             <CustomLink path={"https://www.decision168.com/privacy-policy/"}>
               Privacy Policy.
             </CustomLink>
@@ -102,7 +116,11 @@ export default function Form() {
         }
       />
 
-      <AuthButton loading={loading} buttonText="Register" disabled={!isCaptchaVerified} />
+      <AuthButton
+        loading={loading}
+        buttonText="Register"
+        disabled={!isCaptchaVerified}
+      />
     </Box>
   );
 }

@@ -27,9 +27,6 @@ import {
   getTaskComments,
 } from "../../../../api/modules/taskModule";
 const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
-  console.log("projectId", projectId);
-  console.log("taskId", taskId);
-  console.log("subtaskId", subtaskId);
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
 
@@ -50,7 +47,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getProjectComments(projectId, userID);
           setMessages(response.projectCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }
@@ -61,7 +57,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getTaskComments(taskId, userID);
           setMessages(response.taskCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }
@@ -72,7 +67,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getSubtaskComments(subtaskId, userID);
           setMessages(response.subtaskCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }
@@ -118,7 +112,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   };
 
   const insertMessage = async (mssg) => {
-    console.log(mssg);
     try {
       const response = await insertComments(userID, mssg);
       fetchCommentData();

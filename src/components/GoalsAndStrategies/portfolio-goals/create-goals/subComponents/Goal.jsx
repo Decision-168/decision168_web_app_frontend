@@ -74,9 +74,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
           setassignee(response.AssignManagerListRes);
           setmemberData(response.AssignMemberListRes);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -122,9 +120,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
             .filter((member) => member.reg_id != response.goalRes?.gcreated_by)
             .map((member) => member.reg_id);
           setGMembers(gmembers);
-        } catch (error) {
-          console.error(error);
-        }
+        } catch (error) {}
       };
       fetchAllEditGoalData();
     }, [passGID]);
@@ -181,9 +177,8 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
       dispatch(closeModal("edit-goals"));
     } catch (error) {
       // Handling error
-      console.log(error);
+
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 

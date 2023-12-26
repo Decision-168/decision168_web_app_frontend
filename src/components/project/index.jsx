@@ -70,9 +70,7 @@ const ProjectIndex = () => {
     try {
       const response = await getProjectList(userID, portfolioId);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

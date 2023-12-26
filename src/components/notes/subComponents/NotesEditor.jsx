@@ -17,9 +17,7 @@ const NotesEditor = (props) => {
     editor.current = sunEditor;
   };
 
-  const handleChange = (content) => {
-    console.log(content); //Get Content Inside Editor
-  };
+  const handleChange = (content) => {};
 
   return (
     <Paper elevation={0} sx={{ borderRadius: "10px" }}>
@@ -32,7 +30,7 @@ const NotesEditor = (props) => {
             fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
             borderRadius: "10px",
             fontSize: "14px",
-            border: 0
+            border: 0,
           },
           "& .se-toolbar": { borderRadius: "10px", border: 0 },
         }}

@@ -18,7 +18,11 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import { AddProjectSuggestTMember, getAccepted_GoalTM_ProjectList, getAccepted_PortTM_ProjectList } from "../../../api/modules/ProjectModule";
+import {
+  AddProjectSuggestTMember,
+  getAccepted_GoalTM_ProjectList,
+  getAccepted_PortTM_ProjectList,
+} from "../../../api/modules/ProjectModule";
 
 const SuggestMemberDialog = ({ id, gid, type, refreshData }) => {
   //get user id
@@ -39,34 +43,36 @@ const SuggestMemberDialog = ({ id, gid, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     pid: id,
-    user_id: user_id, 
+    user_id: user_id,
     team_member: [],
     imemail: [],
   });
 
   if (type === "project") {
     useEffect(() => {
-        const fetchAllHistoryData = async () => {
-            if(gid != 0){
-              try {
-                const response = await getAccepted_GoalTM_ProjectList(storedPorfolioId, id);
-                if (response) {
-                  setmemberData(response);
-                }
-              } catch (error) {
-                console.error(error);
-              }
-            }else{
-              try {
-                const response = await getAccepted_PortTM_ProjectList(storedPorfolioId, id);
-                if (response) {
-                  setmemberData(response);
-                }
-              } catch (error) {
-                console.error(error);
-              }
+      const fetchAllHistoryData = async () => {
+        if (gid != 0) {
+          try {
+            const response = await getAccepted_GoalTM_ProjectList(
+              storedPorfolioId,
+              id
+            );
+            if (response) {
+              setmemberData(response);
             }
-        };
+          } catch (error) {}
+        } else {
+          try {
+            const response = await getAccepted_PortTM_ProjectList(
+              storedPorfolioId,
+              id
+            );
+            if (response) {
+              setmemberData(response);
+            }
+          } catch (error) {}
+        }
+      };
 
       fetchAllHistoryData();
     }, [storedPorfolioId, id]);
@@ -110,7 +116,6 @@ const SuggestMemberDialog = ({ id, gid, type, refreshData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }

@@ -6,9 +6,18 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
-import { gettaskDeleteData, patchDeleteForeverSubtask, patchDeleteForeverTask, patchRetrieveSubtask, patchRetrieveTask } from "../../../../api/modules/TrashModule";
+import {
+  gettaskDeleteData,
+  patchDeleteForeverSubtask,
+  patchDeleteForeverTask,
+  patchRetrieveSubtask,
+  patchRetrieveTask,
+} from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 
 const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
@@ -20,17 +29,15 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
 
   const fetchDeleteData = async () => {
     try {
-      const response = await gettaskDeleteData(regId,portfolioId);
+      const response = await gettaskDeleteData(regId, portfolioId);
       setDeleteData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchDeleteData();
   }, [regId]);
-  
+
   const handleRestore = (type, id) => {
     setDeleteType(type);
     setDeleteId(id);
@@ -58,12 +65,12 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const fetchRetrieveTask = async () => {
     try {
       const response = await patchRetrieveTask(deleteId, portfolioId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -71,12 +78,12 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const fetchRetrieveSubtask = async () => {
     try {
       const response = await patchRetrieveSubtask(deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -84,42 +91,42 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const fetchDeleteForeverTask = async () => {
     try {
       const response = await patchDeleteForeverTask(deleteId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
-  
+
   const fetchDeleteForeverSubtask = async () => {
     try {
       const response = await patchDeleteForeverSubtask(deleteId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const handleRestoreYes = () => {
-    if(deleteType == 'Task') {
-      fetchRetrieveTask()
-    }else if(deleteType == 'Subtask') {
-      fetchRetrieveSubtask()
+    if (deleteType == "Task") {
+      fetchRetrieveTask();
+    } else if (deleteType == "Subtask") {
+      fetchRetrieveSubtask();
     }
-  };  
+  };
 
   const handleDeleteYes = () => {
-    if(deleteType == 'Task') {
-      fetchDeleteForeverTask()
-    }else if(deleteType == 'Subtask') {
-      fetchDeleteForeverSubtask()
+    if (deleteType == "Task") {
+      fetchDeleteForeverTask();
+    } else if (deleteType == "Subtask") {
+      fetchDeleteForeverSubtask();
     }
   };
 
@@ -183,7 +190,9 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleRestore(row.original.task_type, row.original.table_id)}
+              onClick={() =>
+                handleRestore(row.original.task_type, row.original.table_id)
+              }
             >
               Restore
             </Button>
@@ -206,7 +215,9 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
               size="small"
               variant="contained"
               sx={{ backgroundColor: "#383838", color: "#ffffff" }}
-              onClick={() => handleDelete(row.original.task_type, row.original.table_id)}
+              onClick={() =>
+                handleDelete(row.original.task_type, row.original.table_id)
+              }
             >
               Delete
             </Button>
@@ -271,8 +282,11 @@ const TrashTaskAndSubtask = ({ value, regId, portfolioId }) => {
       >
         <MaterialReactTable table={table} />
       </Container>
-      <ConfirmationDialog value={"restoreModule"} handleYes={handleRestoreYes}/>
-      <ConfirmationDialog value={"deleteModule"}  handleYes={handleDeleteYes}/>
+      <ConfirmationDialog
+        value={"restoreModule"}
+        handleYes={handleRestoreYes}
+      />
+      <ConfirmationDialog value={"deleteModule"} handleYes={handleDeleteYes} />
     </>
   );
 };

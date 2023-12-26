@@ -6,9 +6,19 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import CustomTable from "../../../common/CustomTable";
-import { getAllArchiveData, patchUnArchiveGoal, patchUnArchiveKpi, patchUnArchiveProject, patchUnArchiveSubtask, patchUnArchiveTask } from "../../../../api/modules/ArchiveModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+
+import {
+  getAllArchiveData,
+  patchUnArchiveGoal,
+  patchUnArchiveKpi,
+  patchUnArchiveProject,
+  patchUnArchiveSubtask,
+  patchUnArchiveTask,
+} from "../../../../api/modules/ArchiveModule";
 import { toast } from "react-toastify";
 
 const ArchiveAll = ({ regId, portfolioId }) => {
@@ -18,17 +28,15 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   const [archiveId, setArchiveId] = useState(null);
   const fetchArchiveData = async () => {
     try {
-      const response = await getAllArchiveData(regId,portfolioId);
+      const response = await getAllArchiveData(regId, portfolioId);
       setArchiveData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchArchiveData();
   }, [regId]);
-  
+
   const handleReopen = (type, id) => {
     setArchiveType(type);
     setArchiveId(id);
@@ -44,12 +52,12 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   const fetchUnarchiveGoal = async () => {
     try {
       const response = await patchUnArchiveGoal(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -57,25 +65,29 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   const fetchUnarchiveKpi = async () => {
     try {
       const response = await patchUnArchiveKpi(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const fetchUnarchiveProject = async () => {
     try {
-      const response = await patchUnArchiveProject(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      const response = await patchUnArchiveProject(
+        archiveId,
+        portfolioId,
+        regId
+      );
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -83,12 +95,12 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   const fetchUnarchiveTask = async () => {
     try {
       const response = await patchUnArchiveTask(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -96,28 +108,27 @@ const ArchiveAll = ({ regId, portfolioId }) => {
   const fetchUnarchiveSubtask = async () => {
     try {
       const response = await patchUnArchiveSubtask(archiveId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
-  
 
   const handleYes = () => {
-    if(archiveType == 'Goal'){
-      fetchUnarchiveGoal()
-    }else if(archiveType == 'KPI') {
-      fetchUnarchiveKpi()
-    }else if(archiveType == 'Project') {
-      fetchUnarchiveProject()
-    }else if(archiveType == 'Task') {
-      fetchUnarchiveTask()
-    }else if(archiveType == 'Subtask') {
-      fetchUnarchiveSubtask()
+    if (archiveType == "Goal") {
+      fetchUnarchiveGoal();
+    } else if (archiveType == "KPI") {
+      fetchUnarchiveKpi();
+    } else if (archiveType == "Project") {
+      fetchUnarchiveProject();
+    } else if (archiveType == "Task") {
+      fetchUnarchiveTask();
+    } else if (archiveType == "Subtask") {
+      fetchUnarchiveSubtask();
     }
   };
 
@@ -164,7 +175,9 @@ const ArchiveAll = ({ regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.all_type,row.original.table_id)}
+              onClick={() =>
+                handleReopen(row.original.all_type, row.original.table_id)
+              }
             >
               Reopen
             </Button>
@@ -177,7 +190,7 @@ const ArchiveAll = ({ regId, portfolioId }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data:archiveData,
+    data: archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,

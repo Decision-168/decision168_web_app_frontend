@@ -228,7 +228,7 @@ const GoalsAndStrategiesTable = ({
       </Typography>
     ),
   });
-  // console.log(table.getRowModel().rows);
+
   return <MaterialReactTable table={table} />;
 };
 

@@ -57,9 +57,7 @@ const AddLinksPopup = ({
       refreshData();
       dispatch(closeModal("add-links"));
     } catch (error) {
-      console.log(error);
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 

@@ -6,30 +6,34 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import CustomTable from "../../../common/CustomTable";
-import { getprojectArchiveData, patchUnArchiveProject } from "../../../../api/modules/ArchiveModule";
+import {
+  getprojectArchiveData,
+  patchUnArchiveProject,
+} from "../../../../api/modules/ArchiveModule";
 import { toast } from "react-toastify";
 
 const ArchiveProjects = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  
+
   const [archiveData, setArchiveData] = useState([]);
   const [archiveId, setArchiveId] = useState(null);
 
   const fetchArchiveData = async () => {
     try {
-      const response = await getprojectArchiveData(regId,portfolioId);
+      const response = await getprojectArchiveData(regId, portfolioId);
       setArchiveData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchArchiveData();
   }, [regId]);
-  
+
   const handleReopen = (type, id) => {
     setArchiveId(id);
     dispatch(
@@ -43,13 +47,17 @@ const ArchiveProjects = ({ value, regId, portfolioId }) => {
 
   const handleYes = async () => {
     try {
-      const response = await patchUnArchiveProject(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      const response = await patchUnArchiveProject(
+        archiveId,
+        portfolioId,
+        regId
+      );
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -86,7 +94,9 @@ const ArchiveProjects = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.project_type,row.original.table_id)}
+              onClick={() =>
+                handleReopen(row.original.project_type, row.original.table_id)
+              }
             >
               Reopen
             </Button>

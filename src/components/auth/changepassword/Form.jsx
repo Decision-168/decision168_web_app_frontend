@@ -36,7 +36,6 @@ export default function Form() {
       navigate("/");
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     } finally {
       setLoading(false);
@@ -44,7 +43,12 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
       <Box sx={{ height: "65px" }}>
         <CustomPasswordField
           showTooltip={true}
@@ -67,10 +71,17 @@ export default function Form() {
       </Box>
 
       <Box mb={1}>
-        <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={handleCaptchaChange} />
+        <ReCAPTCHA
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={handleCaptchaChange}
+        />
       </Box>
 
-      <AuthButton loading={loading} buttonText="Change Password" disabled={!isCaptchaVerified} />
+      <AuthButton
+        loading={loading}
+        buttonText="Change Password"
+        disabled={!isCaptchaVerified}
+      />
 
       <Navigation question="Remember It?" linkLabel="Sign In Here" path="/" />
     </Box>

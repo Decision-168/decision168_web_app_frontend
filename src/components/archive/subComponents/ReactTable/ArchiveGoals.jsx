@@ -6,9 +6,15 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import CustomTable from "../../../common/CustomTable";
-import { getgoalArchiveData, patchUnArchiveGoal } from "../../../../api/modules/ArchiveModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+
+import {
+  getgoalArchiveData,
+  patchUnArchiveGoal,
+} from "../../../../api/modules/ArchiveModule";
 import { toast } from "react-toastify";
 
 const ArchiveGoals = ({ value, regId, portfolioId }) => {
@@ -19,17 +25,15 @@ const ArchiveGoals = ({ value, regId, portfolioId }) => {
 
   const fetchArchiveData = async () => {
     try {
-      const response = await getgoalArchiveData(regId,portfolioId);
+      const response = await getgoalArchiveData(regId, portfolioId);
       setArchiveData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchArchiveData();
   }, [regId]);
-  
+
   const handleReopen = (type, id) => {
     setArchiveId(id);
     dispatch(
@@ -44,12 +48,12 @@ const ArchiveGoals = ({ value, regId, portfolioId }) => {
   const handleYes = async () => {
     try {
       const response = await patchUnArchiveGoal(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -87,7 +91,9 @@ const ArchiveGoals = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.goal_type,row.original.table_id)}
+              onClick={() =>
+                handleReopen(row.original.goal_type, row.original.table_id)
+              }
             >
               Reopen
             </Button>
@@ -100,7 +106,7 @@ const ArchiveGoals = ({ value, regId, portfolioId }) => {
 
   const table = useMaterialReactTable({
     columns,
-    data:archiveData,
+    data: archiveData,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableFullScreenToggle: false,

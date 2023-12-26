@@ -1,20 +1,22 @@
 import { useMemo, memo, useState } from "react";
-import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
+import {
+  useMaterialReactTable,
+  MaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Typography, IconButton, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  updatePortfolioDepartment,
-} from "../../../../api/modules/porfolioModule";
+import { updatePortfolioDepartment } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
-import {
-  getPortfolioDeparmentsAsync,
-} from "../../../../redux/action/portfolioSlice";
+import { getPortfolioDeparmentsAsync } from "../../../../redux/action/portfolioSlice";
 
 const ViewDepartmentTable = ({ data }) => {
   const dispatch = useDispatch();
@@ -29,7 +31,7 @@ const ViewDepartmentTable = ({ data }) => {
   const handleReopen = (departmentId, department, status) => {
     setDeptId(departmentId);
     setdDeptStatus(status);
-    console.log("departmentId", departmentId);
+
     dispatch(
       openCnfModal({
         modalName: "changeStatus",
@@ -45,13 +47,14 @@ const ViewDepartmentTable = ({ data }) => {
     const status = deptStatus === "active" ? "inactive" : "active";
     const departmentId = depId;
     try {
-      const response = await updatePortfolioDepartment(departmentId, { dstatus: status });
+      const response = await updatePortfolioDepartment(departmentId, {
+        dstatus: status,
+      });
       dispatch(getPortfolioDeparmentsAsync(storedPorfolioId));
       toast.success(`${response.message}`);
       dispatch(closeCnfModal({ modalName: "changeStatus" }));
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating portfolio member status:", error);
     }
   };
 
@@ -73,7 +76,6 @@ const ViewDepartmentTable = ({ data }) => {
       setIsEditing(false);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating department name:", error);
     }
   };
 
@@ -97,14 +99,17 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <TextField
                   size="small"
                   variant="outlined"
                   value={editDeptName}
                   onChange={(e) => setEditDeptName(e.target.value)}
                 />
-                <IconButton onClick={() => handleSave(row.original.portfolio_dept_id)}>
+                <IconButton
+                  onClick={() => handleSave(row.original.portfolio_dept_id)}
+                >
                   <SaveIcon />
                 </IconButton>
                 <IconButton onClick={handleCancel}>
@@ -119,12 +124,17 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <Typography>{row.original.department}</Typography>
                 <IconButton
                   onClick={() =>
-                    handleEditStart(row.original.department, row.original.portfolio_dept_id)
-                  }>
+                    handleEditStart(
+                      row.original.department,
+                      row.original.portfolio_dept_id
+                    )
+                  }
+                >
                   <EditIcon />
                 </IconButton>
               </Box>
@@ -143,7 +153,8 @@ const ViewDepartmentTable = ({ data }) => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{
                 mr: 1,
@@ -167,7 +178,8 @@ const ViewDepartmentTable = ({ data }) => {
                   row.original.department,
                   row.original.dstatus
                 )
-              }>
+              }
+            >
               {row.original.dstatus}
             </Button>
           </Box>

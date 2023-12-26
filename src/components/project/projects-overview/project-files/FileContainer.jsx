@@ -14,25 +14,27 @@ import {
   a11yProps,
 } from "../../../GoalsAndStrategies/subComponents/style-functions";
 import FilesList from "./FilesList";
-import { getProjectDetail, getProjectFiles, insertFiles } from "../../../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  getProjectFiles,
+  insertFiles,
+} from "../../../../api/modules/ProjectModule";
 import { toast } from "react-toastify";
 
-const FileContainer = ({pid}) => {
+const FileContainer = ({ pid }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [projectData, setProjectData] = useState([]);
   const fetchProjectData = async () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
-  
+
   const handleFileChange = async (event) => {
     let fileArray = [];
     const file = event.target.files;
@@ -40,19 +42,18 @@ const FileContainer = ({pid}) => {
 
     for (const f of file) {
       const fileName = `${time}_${f.name.toLowerCase()}`;
-      fileArray.push(fileName)
+      fileArray.push(fileName);
     }
     const fileData = {
       pid: pid,
       pcreated_by: projectData?.project?.pcreated_by,
-      pfile: fileArray
-    }
+      pfile: fileArray,
+    };
     try {
       const response = await insertFiles(fileData);
-      fetchProjectFileData()
+      fetchProjectFileData();
       toast.success(`${response.message}`);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response.error}`);
     }
     setSelectedFile(file);
@@ -72,9 +73,7 @@ const FileContainer = ({pid}) => {
       setProjectFileData(response.projectFileDetail);
       setTaskFileData(response.taskFileDetail);
       setSubtaskFileData(response.subtaskFileDetail);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -119,10 +118,18 @@ const FileContainer = ({pid}) => {
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              {projectFileData?.filter((i) => i.type === "project-file").length > 0 ? (
-                projectFileData?.filter((i) => i.type === "project-file")?.map((item, index) => (
+              {projectFileData?.filter((i) => i.type === "project-file")
+                .length > 0 ? (
+                projectFileData
+                  ?.filter((i) => i.type === "project-file")
+                  ?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
+                      <FilesList
+                        index={index}
+                        item={item}
+                        selectedFile={selectedFile}
+                        refreshData={fetchProjectFileData}
+                      />
                     </Fragment>
                   ))
               ) : (
@@ -132,10 +139,18 @@ const FileContainer = ({pid}) => {
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-              {taskFileData?.filter((i) => i.type === "task-file").length > 0 ? (
-                taskFileData?.filter((i) => i.type === "task-file")?.map((item, index) => (
+              {taskFileData?.filter((i) => i.type === "task-file").length >
+              0 ? (
+                taskFileData
+                  ?.filter((i) => i.type === "task-file")
+                  ?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
+                      <FilesList
+                        index={index}
+                        item={item}
+                        selectedFile={selectedFile}
+                        refreshData={fetchProjectFileData}
+                      />
                     </Fragment>
                   ))
               ) : (
@@ -145,10 +160,18 @@ const FileContainer = ({pid}) => {
               )}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
-              {subtaskFileData?.filter((i) => i.type === "subtask-file").length > 0 ? (
-                subtaskFileData?.filter((i) => i.type === "subtask-file")?.map((item, index) => (
+              {subtaskFileData?.filter((i) => i.type === "subtask-file")
+                .length > 0 ? (
+                subtaskFileData
+                  ?.filter((i) => i.type === "subtask-file")
+                  ?.map((item, index) => (
                     <Fragment key={index}>
-                      <FilesList index={index} item={item} selectedFile={selectedFile} refreshData={fetchProjectFileData} />
+                      <FilesList
+                        index={index}
+                        item={item}
+                        selectedFile={selectedFile}
+                        refreshData={fetchProjectFileData}
+                      />
                     </Fragment>
                   ))
               ) : (

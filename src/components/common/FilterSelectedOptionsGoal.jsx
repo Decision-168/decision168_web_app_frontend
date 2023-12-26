@@ -12,7 +12,7 @@ export default function FilterSelectedOptionsGoal({
   required,
   placeholder,
   items,
-  onChange
+  onChange,
 }) {
   const theme = useTheme();
 
@@ -27,35 +27,32 @@ export default function FilterSelectedOptionsGoal({
   const [availableMembers, setAvailableMembers] = useState(memberData);
   const members = selectedMembers?.map((member) => member.id);
 
-  console.log(members);
-
-
   return (
     <Grid item xs={12}>
-      <Stack spacing={4.5} direction="row" alignItems="center" >
-         <InputLabel sx={{ fontSize: "14px" }}>
-            Select Members
-         </InputLabel>
-         <Autocomplete
-              multiple
-              value={selectedMembers}
-              fullWidth
-              options={availableMembers}
-              getOptionLabel={(option) => option.name}
-              getOptionSelected={(option, value) => option.id === value.id}
-              onChange={(event, newMembers) => {
-                setSelectedMembers(newMembers);
-                setAvailableMembers(memberData.filter((member) => !newMembers.includes(member)));
-              }}
-              inputValue={memberInputValue}
-              onInputChange={(event, newMemberInputValue) => {
-                setMemberInputValue(newMemberInputValue);
-              }}
-              renderInput={(params) => {
-                return <TextField  {...params} />;
-              }}
-          />
+      <Stack spacing={4.5} direction="row" alignItems="center">
+        <InputLabel sx={{ fontSize: "14px" }}>Select Members</InputLabel>
+        <Autocomplete
+          multiple
+          value={selectedMembers}
+          fullWidth
+          options={availableMembers}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => option.id === value.id}
+          onChange={(event, newMembers) => {
+            setSelectedMembers(newMembers);
+            setAvailableMembers(
+              memberData.filter((member) => !newMembers.includes(member))
+            );
+          }}
+          inputValue={memberInputValue}
+          onInputChange={(event, newMemberInputValue) => {
+            setMemberInputValue(newMemberInputValue);
+          }}
+          renderInput={(params) => {
+            return <TextField {...params} />;
+          }}
+        />
       </Stack>
-   </Grid>
+    </Grid>
   );
 }

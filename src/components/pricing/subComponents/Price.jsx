@@ -48,12 +48,10 @@ const Price = ({
           });
 
           if (result.error) {
-            console.log(result.error);
           }
         } catch (error) {
           // Handling error
           toast.error(`${error.response?.error}`);
-          console.error("Error updating:", error);
         }
       } else {
         try {
@@ -69,7 +67,6 @@ const Price = ({
         } catch (error) {
           // Handling error
           toast.error(`${error.response?.error}`);
-          console.error("Error updating:", error);
         }
       }
     } else if (getbtnVal === "Downgrade") {
@@ -85,7 +82,6 @@ const Price = ({
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       }
     }
   };

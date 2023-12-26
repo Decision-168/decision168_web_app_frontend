@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Tooltip, Stack, IconButton } from "@mui/material";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Tooltip,
+  Stack,
+  IconButton,
+} from "@mui/material";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { priorityColors, statusColors } from "./TasksData";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -104,18 +114,16 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
   };
 
   //Task Due Date
-  const handleTaskDueDate = (date) => {
-    console.log(date);
-  };
+  const handleTaskDueDate = (date) => {};
 
   //SubTask Due Date
-  const handleSubtaskDueDate = (date) => {
-    console.log(date);
-  };
+  const handleSubtaskDueDate = (date) => {};
 
   //Task PreviewDialog code
-  const [openTaskPreviewDialog, setOpenTaskPreviewDialog] = React.useState(false);
-  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
+  const [openTaskPreviewDialog, setOpenTaskPreviewDialog] =
+    React.useState(false);
+  const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] =
+    React.useState(false);
   const [parentTaskName, setParentTaskName] = useState("");
 
   // Task prview Dailog Code
@@ -173,7 +181,11 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
               {(provider) => (
                 <TableBody ref={provider.innerRef} {...provider.droppableProps}>
                   {rows?.map((row, index) => (
-                    <Draggable key={row?.tcode} draggableId={row?.tcode} index={index}>
+                    <Draggable
+                      key={row?.tcode}
+                      draggableId={row?.tcode}
+                      index={index}
+                    >
                       {(provider) => (
                         <React.Fragment key={row?.tcode}>
                           <TableRow
@@ -193,22 +205,54 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                           >
                             {/* Icons */}
                             <TableCell sx={{ width: "10%" }} align="center">
-                              <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                                <Tooltip title="Reorder Task" arrow size="small" placement="top-start">
-                                  <IconButton size="small" type="button" sx={{ fontSize: "1.2rem" }} component="span" {...provider.dragHandleProps}>
+                              <Stack
+                                direction="row"
+                                justifyContent="start"
+                                alignItems="center"
+                                spacing={1}
+                              >
+                                <Tooltip
+                                  title="Reorder Task"
+                                  arrow
+                                  size="small"
+                                  placement="top-start"
+                                >
+                                  <IconButton
+                                    size="small"
+                                    type="button"
+                                    sx={{ fontSize: "1.2rem" }}
+                                    component="span"
+                                    {...provider.dragHandleProps}
+                                  >
                                     <ReorderIcon fontSize="inherit" />
                                   </IconButton>
                                 </Tooltip>
 
                                 {row?.subTasks && row?.subTasks?.length > 0 && (
                                   <>
-                                    {openSubrows && expandedTaskId === row?.tid ? (
-                                      <IconButton size="small" onClick={() => handleCloseSubrows(row?.tid)} style={{ backgroundColor: "#F2F2F2" }}>
+                                    {openSubrows &&
+                                    expandedTaskId === row?.tid ? (
+                                      <IconButton
+                                        size="small"
+                                        onClick={() =>
+                                          handleCloseSubrows(row?.tid)
+                                        }
+                                        style={{ backgroundColor: "#F2F2F2" }}
+                                      >
                                         <ExpandLessIcon />
                                       </IconButton>
                                     ) : (
-                                      <IconButton size="small" onClick={() => handleOpenSubrows(row?.tid)} style={{ backgroundColor: "#F2F2F2" }}>
-                                        <Badge badgeContent={row?.subTasks?.length} color="secondary">
+                                      <IconButton
+                                        size="small"
+                                        onClick={() =>
+                                          handleOpenSubrows(row?.tid)
+                                        }
+                                        style={{ backgroundColor: "#F2F2F2" }}
+                                      >
+                                        <Badge
+                                          badgeContent={row?.subTasks?.length}
+                                          color="secondary"
+                                        >
                                           <ExpandMoreIcon />
                                         </Badge>
                                       </IconButton>
@@ -238,8 +282,17 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
 
                             {/* Task Name */}
                             <TableCell sx={{ width: "30%" }} align="left">
-                              <Box component="form" noValidate sx={{ height: "100%" }}>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                              <Box
+                                component="form"
+                                noValidate
+                                sx={{ height: "100%" }}
+                              >
+                                <Stack
+                                  direction="row"
+                                  justifyContent="space-between"
+                                  alignItems="center"
+                                  spacing={1}
+                                >
                                   <>
                                     <Typography
                                       component="p"
@@ -256,14 +309,33 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                       gutterBottom
                                       ml={1}
                                       textAlign="left"
-                                      onClick={() => handleOpenTaskPreviewDialog(row?.tid)}
+                                      onClick={() =>
+                                        handleOpenTaskPreviewDialog(row?.tid)
+                                      }
                                     >
-                                      {rowStates[row?.tid]?.taskName || row?.tname}
+                                      {rowStates[row?.tid]?.taskName ||
+                                        row?.tname}
                                     </Typography>
 
                                     {rowId === row?.tid && (
-                                      <CustomDialog handleClose={handleCloseTaskPreviewDialog} open={openTaskPreviewDialog} modalTitle="Task" redirectPath={`/tasks-overview/${rowId}`} showModalButton={true} modalSize="lg">
-                                        <TaskPreview styles={styles} taskId={rowId} closePreview={handleCloseTaskPreviewDialog} fetchData={fetchData} />
+                                      <CustomDialog
+                                        handleClose={
+                                          handleCloseTaskPreviewDialog
+                                        }
+                                        open={openTaskPreviewDialog}
+                                        modalTitle="Task"
+                                        redirectPath={`/tasks-overview/${rowId}`}
+                                        showModalButton={true}
+                                        modalSize="lg"
+                                      >
+                                        <TaskPreview
+                                          styles={styles}
+                                          taskId={rowId}
+                                          closePreview={
+                                            handleCloseTaskPreviewDialog
+                                          }
+                                          fetchData={fetchData}
+                                        />
                                       </CustomDialog>
                                     )}
                                   </>
@@ -276,7 +348,11 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                               <Box sx={{ minWidth: 120 }}>
                                 <Box>
                                   <Chip
-                                    label={row?.tassignee === regId ? "Assign to me" : row?.taskAssigneeName}
+                                    label={
+                                      row?.tassignee === regId
+                                        ? "Assign to me"
+                                        : row?.taskAssigneeName
+                                    }
                                     variant="contained"
                                     sx={{
                                       minWidth: "80px",
@@ -292,12 +368,18 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                               <Box sx={{ minWidth: 120 }}>
                                 <Box>
                                   <Chip
-                                    label={formatPriority(selectedPriorities[row.tid] || row.tpriority || "")}
+                                    label={formatPriority(
+                                      selectedPriorities[row.tid] ||
+                                        row.tpriority ||
+                                        ""
+                                    )}
                                     variant="contained"
                                     sx={{
                                       minWidth: "80px",
                                       maxWidth: "85px",
-                                      ...priorityColors[selectedPriorities[row.tid]],
+                                      ...priorityColors[
+                                        selectedPriorities[row.tid]
+                                      ],
                                     }}
                                   />
                                 </Box>
@@ -309,12 +391,18 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                               <Box sx={{ minWidth: 120 }}>
                                 <Box>
                                   <Chip
-                                    label={formatStatus(selectedStatuses[row.tid] || row.tstatus || "")}
+                                    label={formatStatus(
+                                      selectedStatuses[row.tid] ||
+                                        row.tstatus ||
+                                        ""
+                                    )}
                                     variant="contained"
                                     sx={{
                                       minWidth: "80px",
                                       maxWidth: "85px",
-                                      ...statusColors[selectedStatuses[row.tid]],
+                                      ...statusColors[
+                                        selectedStatuses[row.tid]
+                                      ],
                                     }}
                                   />
                                 </Box>
@@ -323,7 +411,21 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
 
                             {/* Due Date */}
                             <TableCell sx={{ width: "10%" }} align="center">
-                              <TasksModuleDatePicker label="" required={false} sizeWidth="132px" showBorder={false} value={row?.tdue_date ? new Date(row?.tdue_date) : null} onChange={handleTaskDueDate} isDisabled={true} type="task" gid={row?.gid} />
+                              <TasksModuleDatePicker
+                                label=""
+                                required={false}
+                                sizeWidth="132px"
+                                showBorder={false}
+                                value={
+                                  row?.tdue_date
+                                    ? new Date(row?.tdue_date)
+                                    : null
+                                }
+                                onChange={handleTaskDueDate}
+                                isDisabled={true}
+                                type="task"
+                                gid={row?.gid}
+                              />
                             </TableCell>
                           </TableRow>
 
@@ -346,7 +448,11 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                               >
                                 {/* SubTaskIcons */}
                                 <TableCell sx={{ width: "10%" }} align="center">
-                                  <IconButton size="small" type="button" sx={{ fontSize: "1.2rem", ml: 3 }}>
+                                  <IconButton
+                                    size="small"
+                                    type="button"
+                                    sx={{ fontSize: "1.2rem", ml: 3 }}
+                                  >
                                     <SubdirectoryArrowRightRoundedIcon fontSize="inherit" />
                                   </IconButton>
                                 </TableCell>
@@ -371,7 +477,12 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
 
                                 {/* SubTask Name */}
                                 <TableCell sx={{ width: "30%" }} align="left">
-                                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+                                  <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    spacing={1}
+                                  >
                                     <>
                                       <Typography
                                         component="p"
@@ -388,14 +499,35 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                         gutterBottom
                                         ml={1}
                                         textAlign="left"
-                                        onClick={() => handleOpenSubTaskPreviewDialog(subrow?.stid)}
+                                        onClick={() =>
+                                          handleOpenSubTaskPreviewDialog(
+                                            subrow?.stid
+                                          )
+                                        }
                                       >
-                                        {rowStates[subrow.stid]?.subtaskName || subrow?.stname}
+                                        {rowStates[subrow.stid]?.subtaskName ||
+                                          subrow?.stname}
                                       </Typography>
 
                                       {subRowId === subrow?.stid && (
-                                        <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg">
-                                          <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} />
+                                        <CustomDialog
+                                          handleClose={
+                                            handleCloseSubTaskPreviewDialog
+                                          }
+                                          open={openSubTaskPreviewDialog}
+                                          modalTitle="Subtask"
+                                          redirectPath={`/subtasks-overview/${subRowId}`}
+                                          showModalButton={true}
+                                          modalSize="lg"
+                                        >
+                                          <SubtaskPreview
+                                            styles={styles}
+                                            subtaskId={subRowId}
+                                            closePreview={
+                                              handleCloseSubTaskPreviewDialog
+                                            }
+                                            fetchData={fetchData}
+                                          />
                                         </CustomDialog>
                                       )}
                                     </>
@@ -408,7 +540,11 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                     <Box>
                                       <Chip
                                         // label={formatAssigneeText(selectedAssignees[subrow?.stid] || subrow?.stassignee, regId, assignees)}
-                                        label={subrow?.stassignee === regId ? "To Me" : subrow?.subTaskAssigneeName}
+                                        label={
+                                          subrow?.stassignee === regId
+                                            ? "To Me"
+                                            : subrow?.subTaskAssigneeName
+                                        }
                                         variant="contained"
                                         sx={{
                                           minWidth: "80px",
@@ -424,12 +560,18 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                   <Box sx={{ minWidth: 120 }}>
                                     <Box>
                                       <Chip
-                                        label={formatPriority(selectedPriorities[subrow?.stid] || subrow?.stpriority || "")}
+                                        label={formatPriority(
+                                          selectedPriorities[subrow?.stid] ||
+                                            subrow?.stpriority ||
+                                            ""
+                                        )}
                                         variant="contained"
                                         sx={{
                                           minWidth: "80px",
                                           maxWidth: "85px",
-                                          ...priorityColors[selectedPriorities[subrow?.stid]],
+                                          ...priorityColors[
+                                            selectedPriorities[subrow?.stid]
+                                          ],
                                         }}
                                       />
                                     </Box>
@@ -441,12 +583,18 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                   <Box sx={{ minWidth: 120 }}>
                                     <Box>
                                       <Chip
-                                        label={formatStatus(selectedStatuses[subrow?.stid] || subrow?.ststatus || "")}
+                                        label={formatStatus(
+                                          selectedStatuses[subrow?.stid] ||
+                                            subrow?.ststatus ||
+                                            ""
+                                        )}
                                         variant="contained"
                                         sx={{
                                           minWidth: "80px",
                                           maxWidth: "85px",
-                                          ...statusColors[selectedStatuses[subrow?.stid]],
+                                          ...statusColors[
+                                            selectedStatuses[subrow?.stid]
+                                          ],
                                         }}
                                       />
                                     </Box>
@@ -455,7 +603,21 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
 
                                 {/*Subtask Due Date */}
                                 <TableCell sx={{ width: "10%" }} align="center">
-                                  <TasksModuleDatePicker label="" required={false} sizeWidth="132px" showBorder={false} value={subrow?.stdue_date ? new Date(subrow?.stdue_date) : null} onChange={handleSubtaskDueDate} isDisabled={true} type="subtask" parentTaskDueDate={row?.tdue_date} />
+                                  <TasksModuleDatePicker
+                                    label=""
+                                    required={false}
+                                    sizeWidth="132px"
+                                    showBorder={false}
+                                    value={
+                                      subrow?.stdue_date
+                                        ? new Date(subrow?.stdue_date)
+                                        : null
+                                    }
+                                    onChange={handleSubtaskDueDate}
+                                    isDisabled={true}
+                                    type="subtask"
+                                    parentTaskDueDate={row?.tdue_date}
+                                  />
                                 </TableCell>
                               </TableRow>
                             ))}

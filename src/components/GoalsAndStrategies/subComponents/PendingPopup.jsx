@@ -46,9 +46,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
             set_gmid(response2.gmid);
           }
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     checkMemberToDisplay();
@@ -74,9 +72,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
         const response = await getGoalOverviewRequest(user_id, gid);
 
         setgdetail(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchOverviewReqData();
@@ -103,7 +99,6 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
         fetchAllData();
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     };
 

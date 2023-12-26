@@ -1,4 +1,12 @@
-import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import {
   CalendarMonth,
@@ -7,19 +15,31 @@ import {
   KeyboardDoubleArrowRight,
   Person,
 } from "@mui/icons-material";
-import ArchiveIcon from '@mui/icons-material/Archive';
+import ArchiveIcon from "@mui/icons-material/Archive";
 import { Link } from "react-router-dom";
 import GridList from "../../GoalsAndStrategies/subComponents/GridList";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import ProgressBar from "../subComponents/ProgressBar";
-import { getProjectData, getUserData } from "../../../api/modules/FileCabinetModule";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  getProjectData,
+  getUserData,
+} from "../../../api/modules/FileCabinetModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveProject } from "../../../api/modules/ArchiveModule";
 import { patchDeleteProject } from "../../../api/modules/TrashModule";
-const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+const ProjectPopup = ({
+  nodes,
+  regId,
+  portfolioId,
+  handleClose,
+  fetchTreeData,
+}) => {
   const [projectData, setProjectData] = useState([]);
   const [userData, setUserData] = useState([]);
 
@@ -31,9 +51,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
     try {
       const response = await getProjectData(nodes?.table_id);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -41,7 +59,10 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
   }, [nodes]);
 
   const projectStartDate = new Date(projectData.pcreated_date);
-  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
+  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${projectStartDate.getFullYear()}`;
   const projectType = projectData.ptype;
   const links = projectData.plink;
   const link_comments = projectData.plink_comment;
@@ -51,9 +72,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
     try {
       const response = await getUserData(projectData?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -63,7 +82,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
   const userName = `${userData?.first_name} ${userData?.last_name}`;
 
   const handleArchive = () => {
-    setModule('archive');
+    setModule("archive");
     dispatch(
       openCnfModal({
         modalName: "archiveProject",
@@ -73,7 +92,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
     );
   };
   const handleDelete = () => {
-    setModule('delete');
+    setModule("delete");
     dispatch(
       openCnfModal({
         modalName: "deleteProject",
@@ -84,35 +103,35 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
   };
 
   const handleYes = async () => {
-    if(module == 'archive') {
+    if (module == "archive") {
       try {
         const response = await patchArchiveProject(projectData?.pid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'archiveProject' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "archiveProject" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'archiveProject' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "archiveProject" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
-    }else if(module == 'delete') {
+      }
+    } else if (module == "delete") {
       try {
         const response = await patchDeleteProject(projectData?.pid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'deleteProject' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "deleteProject" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'deleteProject' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "deleteProject" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
+      }
     }
   };
 
   // --------End ---------------------------------
-  
+
   const theme = useTheme();
   const CommonLinks = ({ link, linkName }) => {
     return (
@@ -189,8 +208,7 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-        </Grid>
+        <Grid item xs={12} md={12} lg={8}></Grid>
         <Grid item xs={12} md={12} lg={4}>
           <Box
             sx={{
@@ -245,13 +263,19 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            {links && links.split(',').map((link, index) => (
-              <CommonLinks
-              key={index}
-              link={link}
-              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
-            /> 
-            ))}
+            {links &&
+              links
+                .split(",")
+                .map((link, index) => (
+                  <CommonLinks
+                    key={index}
+                    link={link}
+                    linkName={
+                      link_comments.split(",")[index] &&
+                      link_comments.split(",")[index]
+                    }
+                  />
+                ))}
           </Grid>
         </Grid>
 
@@ -276,9 +300,11 @@ const ProjectPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData })
             }
             title={"Type"}
             info={
-              projectType === 'content' ? 'Content' :
-              projectType === 'goal_strategy' ? 'Goals & Strategies' :
-              'Project'
+              projectType === "content"
+                ? "Content"
+                : projectType === "goal_strategy"
+                ? "Goals & Strategies"
+                : "Project"
             }
           />
         </Grid>

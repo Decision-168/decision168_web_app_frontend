@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Avatar, Box, Button, Grid, InputLabel, TextField, Stack, IconButton } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  InputLabel,
+  TextField,
+  Stack,
+  IconButton,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
 import { globalValidations } from "../../../../utils/GlobalValidation";
@@ -119,7 +128,6 @@ export default function IndividualForm({ isEditPath, depts }) {
 
   const [departments, setDepartments] = React.useState([]);
   const handleDepartmentChange = (selectedOptions) => {
-    console.log("Selected departments:", selectedOptions);
     const departmentsArray = selectedOptions?.map((item) => item.department);
     setDepartments(departmentsArray);
   };
@@ -144,7 +152,6 @@ export default function IndividualForm({ isEditPath, depts }) {
   };
 
   const handleSubmit = async (event) => {
-    alert(`${JSON.stringify(formValues)}`)
     event.preventDefault();
     setLoading(true);
 
@@ -164,7 +171,9 @@ export default function IndividualForm({ isEditPath, depts }) {
       return;
     }
 
-    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
+    const customDepartmentArray = updatedFields.map(
+      (item) => item.cus_department
+    );
     const departmentData = {
       portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
       departments: departments,
@@ -175,7 +184,11 @@ export default function IndividualForm({ isEditPath, depts }) {
     try {
       const icons = fields.map((item) => item.social_media_icon).join(",");
       const links = fields.map((item) => item.social_media).join(",");
-      const data = { ...formValues, social_media_icon: icons, social_media: links };
+      const data = {
+        ...formValues,
+        social_media_icon: icons,
+        social_media: links,
+      };
       if (isEditPath) {
         const portfolioId = storedPortfolioId;
         const response = await updatePortfolio(portfolioId, data);
@@ -187,7 +200,6 @@ export default function IndividualForm({ isEditPath, depts }) {
       }
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error("Error in inserting new portfolio:", error);
     } finally {
       setLoading(false);
     }
@@ -274,7 +286,10 @@ export default function IndividualForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
-          <GenderRadioGroup formValues={formValues} setFormValues={setFormValues} />
+          <GenderRadioGroup
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -341,7 +356,9 @@ export default function IndividualForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
-          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Company Logo</InputLabel>
+          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
+            Add Company Logo
+          </InputLabel>
           <Button
             fullWidth
             variant="outlined"
@@ -370,7 +387,9 @@ export default function IndividualForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
-          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Cover Picture</InputLabel>
+          <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
+            Add Cover Picture
+          </InputLabel>
           <Button
             fullWidth
             variant="outlined"
@@ -386,7 +405,13 @@ export default function IndividualForm({ isEditPath, depts }) {
           {/* For the preview during edit */}
 
           {isEditPath ? (
-            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <img src={CoverImage} alt="" width="100%" height="250px" />
             </Box>
           ) : null}
@@ -427,7 +452,14 @@ export default function IndividualForm({ isEditPath, depts }) {
             </Grid>
             <Grid item xs={12} md={8} pl={1} textAlign="start">
               {inputFields.map((inputField, index) => (
-                <Grid container key={index} my={1} px={1} spacing={2} bgcolor="#F7F7F7">
+                <Grid
+                  container
+                  key={index}
+                  my={1}
+                  px={1}
+                  spacing={2}
+                  bgcolor="#F7F7F7"
+                >
                   <Grid item xs={10} py={2} mt={2.5} textAlign="start">
                     <TextField
                       fullWidth
@@ -440,7 +472,11 @@ export default function IndividualForm({ isEditPath, depts }) {
                     />
                   </Grid>
                   <Grid item xs={2} py={2} mt={2.5}>
-                    <Stack direction="row" justifyContent="end" alignItems="center">
+                    <Stack
+                      direction="row"
+                      justifyContent="end"
+                      alignItems="center"
+                    >
                       {inputFields.length > 0 && (
                         <IconButton onClick={() => handleRemoveClick(index)}>
                           <RemoveCircleRoundedIcon />
@@ -460,7 +496,13 @@ export default function IndividualForm({ isEditPath, depts }) {
 
         <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
           <Button size="small" type="submit" variant="contained" sx={{ mr: 1 }}>
-            {loading ? <CircularLoader /> : isEditPath ? "Save Changes" : "Create"}
+            {loading ? (
+              <CircularLoader />
+            ) : isEditPath ? (
+              "Save Changes"
+            ) : (
+              "Create"
+            )}
           </Button>
         </Grid>
       </Grid>

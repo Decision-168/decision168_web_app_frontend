@@ -58,9 +58,7 @@ const SubtaskPopup = ({
     try {
       const response = await getSubtaskData(nodes?.table_id);
       setSubtaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -90,9 +88,7 @@ const SubtaskPopup = ({
     try {
       const response = await getTaskData(subtaskData?.tid);
       setTaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -104,10 +100,7 @@ const SubtaskPopup = ({
     try {
       const response = await getProjectData(subtaskData?.stproject_assign);
       setProjectData(response);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -119,9 +112,7 @@ const SubtaskPopup = ({
     try {
       const response = await getUserData(subtaskData?.stcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -135,9 +126,7 @@ const SubtaskPopup = ({
     try {
       const response = await getUserData(subtaskData?.stassignee);
       setAssigneeData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -151,9 +140,7 @@ const SubtaskPopup = ({
     try {
       const response = await getPortfolioData(portfolioId);
       setPortfolioData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -203,7 +190,7 @@ const SubtaskPopup = ({
         toast.success(`${response.message}`);
       } catch (error) {
         dispatch(closeCnfModal({ modalName: "deleteSubtask" }));
-        console.log(error);
+
         handleClose();
         toast.error(`${error.response?.error}`);
       }

@@ -1,7 +1,15 @@
-import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { Delete, KeyboardDoubleArrowRight } from "@mui/icons-material";
-import ArchiveIcon from '@mui/icons-material/Archive';
+import ArchiveIcon from "@mui/icons-material/Archive";
 import { Link } from "react-router-dom";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import HomeRepairServiceIcon from "@mui/icons-material/HomeRepairService";
@@ -13,14 +21,29 @@ import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import PersonIcon from "@mui/icons-material/Person";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
-import { getPortfolioData, getProjectData, getTaskData, getTaskSubtaskData, getUserData } from "../../../api/modules/FileCabinetModule";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  getPortfolioData,
+  getProjectData,
+  getTaskData,
+  getTaskSubtaskData,
+  getUserData,
+} from "../../../api/modules/FileCabinetModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveTask } from "../../../api/modules/ArchiveModule";
 import { patchDeleteTask } from "../../../api/modules/TrashModule";
-const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+const TaskPopup = ({
+  nodes,
+  regId,
+  portfolioId,
+  handleClose,
+  fetchTreeData,
+}) => {
   const [taskData, setTaskData] = useState([]);
   const [userData, setUserData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
@@ -31,100 +54,99 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   const [module, setModule] = useState(null);
   const dispatch = useDispatch();
 
-    // Task Data ----------------------------------------------
-    const fetchTaskData = async () => {
-      try {
-        const response = await getTaskData(nodes?.table_id);
-        setTaskData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchTaskData();
-    }, [nodes]);
-  
-    const taskStartDate = new Date(taskData.tcreated_date);
-    const formattedTaskStartDate = `${taskStartDate.getDate()} ${taskStartDate.toLocaleString('default', { month: 'short' })}, ${taskStartDate.getFullYear()}`;
-    const taskDueDate = new Date(taskData.tdue_date);
-    const formattedTaskDueDate = `${taskDueDate.getDate()} ${taskDueDate.toLocaleString('default', { month: 'short' })}, ${taskDueDate.getFullYear()}`;
-    const links = taskData?.tlink;
-    const link_comments = taskData?.tlink_comment;
-    const taskCode = taskData?.tcode;
-    const taskNote = taskData?.tnote;
-    const taskFiles = taskData?.tfile;
-    const taskStatus = taskData?.tstatus;
-    const taskPriority = taskData?.tpriority;
+  // Task Data ----------------------------------------------
+  const fetchTaskData = async () => {
+    try {
+      const response = await getTaskData(nodes?.table_id);
+      setTaskData(response);
+    } catch (error) {}
+  };
 
-    // Subtask Data ----------------------------------------------
-    const fetchTaskSubtaskData = async () => {
-      try {
-        const response = await getTaskSubtaskData(regId,taskData?.tid,taskData?.dept_id,portfolioId);
-        setSubtaskData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchTaskSubtaskData();
-    }, [taskData]);
+  useEffect(() => {
+    fetchTaskData();
+  }, [nodes]);
 
-    // Project Data ----------------------------------------------
+  const taskStartDate = new Date(taskData.tcreated_date);
+  const formattedTaskStartDate = `${taskStartDate.getDate()} ${taskStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${taskStartDate.getFullYear()}`;
+  const taskDueDate = new Date(taskData.tdue_date);
+  const formattedTaskDueDate = `${taskDueDate.getDate()} ${taskDueDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${taskDueDate.getFullYear()}`;
+  const links = taskData?.tlink;
+  const link_comments = taskData?.tlink_comment;
+  const taskCode = taskData?.tcode;
+  const taskNote = taskData?.tnote;
+  const taskFiles = taskData?.tfile;
+  const taskStatus = taskData?.tstatus;
+  const taskPriority = taskData?.tpriority;
+
+  // Subtask Data ----------------------------------------------
+  const fetchTaskSubtaskData = async () => {
+    try {
+      const response = await getTaskSubtaskData(
+        regId,
+        taskData?.tid,
+        taskData?.dept_id,
+        portfolioId
+      );
+      setSubtaskData(response);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchTaskSubtaskData();
+  }, [taskData]);
+
+  // Project Data ----------------------------------------------
   const fetchProjectData = async () => {
     try {
       const response = await getProjectData(taskData?.tproject_assign);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchProjectData();
   }, [taskData]);
-  
-    // Creater (User) Data ----------------------------------------------
-    const fetchUserData = async () => {
-      try {
-        const response = await getUserData(taskData?.tcreated_by);
-        setUserData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchUserData();
-    }, [taskData]);
-  
-    const userName = `${userData?.first_name} ${userData?.last_name}`;
 
-    // Assignee (User) Data ----------------------------------------------
-    const fetchAssigneeData = async () => {
-      try {
-        const response = await getUserData(taskData?.tassignee);
-        setAssigneeData(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    useEffect(() => {
-      fetchAssigneeData();
-    }, [taskData]);
-  
-    const assigneeName = `${assigneeData?.first_name} ${assigneeData?.last_name}`;
+  // Creater (User) Data ----------------------------------------------
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserData(taskData?.tcreated_by);
+      setUserData(response);
+    } catch (error) {}
+  };
 
-    // Portfolio Data ----------------------------------------------
+  useEffect(() => {
+    fetchUserData();
+  }, [taskData]);
+
+  const userName = `${userData?.first_name} ${userData?.last_name}`;
+
+  // Assignee (User) Data ----------------------------------------------
+  const fetchAssigneeData = async () => {
+    try {
+      const response = await getUserData(taskData?.tassignee);
+      setAssigneeData(response);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchAssigneeData();
+  }, [taskData]);
+
+  const assigneeName = `${assigneeData?.first_name} ${assigneeData?.last_name}`;
+
+  // Portfolio Data ----------------------------------------------
   const fetchPortfolioData = async () => {
     try {
       const response = await getPortfolioData(portfolioId);
       setPortfolioData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -132,7 +154,7 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   }, [taskData]);
 
   const handleArchive = () => {
-    setModule('archive');
+    setModule("archive");
     dispatch(
       openCnfModal({
         modalName: "archiveTask",
@@ -142,7 +164,7 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
     );
   };
   const handleDelete = () => {
-    setModule('delete');
+    setModule("delete");
     dispatch(
       openCnfModal({
         modalName: "deleteTask",
@@ -153,31 +175,30 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   };
 
   const handleYes = async () => {
-    if(module == 'archive') {
+    if (module == "archive") {
       try {
         const response = await patchArchiveTask(taskData?.tid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "archiveTask" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'archiveTask' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "archiveTask" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-        console.log(error)
-      };
-    }else if(module == 'delete') {
+      }
+    } else if (module == "delete") {
       try {
         const response = await patchDeleteTask(taskData?.tid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "deleteTask" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'deleteTask' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "deleteTask" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
+      }
     }
   };
 
@@ -260,8 +281,7 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-        </Grid>
+        <Grid item xs={12} md={12} lg={8}></Grid>
         <Grid item xs={12} md={12} lg={4}>
           <Box
             sx={{
@@ -333,13 +353,19 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-          {links && links.split(',').map((link, index) => (
-              <CommonLinks
-              key={index}
-              link={link}
-              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
-            /> 
-            ))}
+            {links &&
+              links
+                .split(",")
+                .map((link, index) => (
+                  <CommonLinks
+                    key={index}
+                    link={link}
+                    linkName={
+                      link_comments.split(",")[index] &&
+                      link_comments.split(",")[index]
+                    }
+                  />
+                ))}
           </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
@@ -358,24 +384,25 @@ const TaskPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-              {taskFiles && taskFiles.split(',').map((file, index) => (
-                <Box
-                key={index}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "row",
-                  justifyContent: "start",
-                }}
-              >
-                <KeyboardDoubleArrowRight
-                  sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
-                />
-                <Typography sx={{ fontSize: 13, color: "#212934" }}>
-                  {file}
-                </Typography>
-              </Box>
-            ))}
+                {taskFiles &&
+                  taskFiles.split(",").map((file, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "row",
+                        justifyContent: "start",
+                      }}
+                    >
+                      <KeyboardDoubleArrowRight
+                        sx={{ color: "#c7df19", fontSize: 15, mr: 1 }}
+                      />
+                      <Typography sx={{ fontSize: 13, color: "#212934" }}>
+                        {file}
+                      </Typography>
+                    </Box>
+                  ))}
               </Grid>
             </Grid>
           </Typography>

@@ -1,4 +1,11 @@
-import { Box, Button, DialogActions, DialogContent, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  Typography,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import CircularLoader from "../../common/CircularLoader";
@@ -39,17 +46,13 @@ const DuplicateTaskDialog = ({ taskData, closeModalName }) => {
         user_id: userId,
       };
 
-      alert(`${JSON.stringify(data)}`);
-
       const response = await duplicateTask(data);
 
       navigate(`/tasks-overview/${response?.insertedTaskId}`);
       dispatch(closeModal(closeModalName));
       toast.success(`${response?.message}`);
     } catch (error) {
-      console.log(error);
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in task Duplication:", error);
     } finally {
       setLoading(false);
     }
@@ -58,7 +61,10 @@ const DuplicateTaskDialog = ({ taskData, closeModalName }) => {
   return (
     <>
       <DialogContent dividers>
-        <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
+        <Box
+          sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }}
+          mb={2}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <CustomLabelTextField
@@ -74,7 +80,9 @@ const DuplicateTaskDialog = ({ taskData, closeModalName }) => {
 
             <Grid item xs={12}>
               <Box p={2} sx={{ background: "#f5f5f5" }}>
-                <Typography sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}>
+                <Typography
+                  sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}
+                >
                   Import Options
                 </Typography>
                 <DuplicateTaskTabSection
@@ -91,7 +99,12 @@ const DuplicateTaskDialog = ({ taskData, closeModalName }) => {
       <DialogActions>
         <Grid container>
           <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">
-            <Button onClick={handleTaskDuplicate} variant="contained" size="small" sx={{}}>
+            <Button
+              onClick={handleTaskDuplicate}
+              variant="contained"
+              size="small"
+              sx={{}}
+            >
               {loading ? <CircularLoader /> : "Duplicate"}
             </Button>
           </Grid>

@@ -9,26 +9,24 @@ import { getViewHistoryDateProject } from "../../../../api/modules/ProjectModule
 
 const RecentHistory = ({ id, type }) => {
   const [recentHis, setrecentHis] = useState([]);
-  
-    useEffect(() => {
-      const fetchRecentHistoryData = async () => {
-        try {
-          let response;
-          if (type === "goal") {
-            response = await getViewHistoryDateGoal(id);
-          } else if (type === "kpi") {
-            response = await getViewHistoryDateStrategy(id);
-          } else if (type === "project") {
-            response = await getViewHistoryDateProject(id);
-          }
-          setrecentHis(response.history_dates);
-        } catch (error) {
-          console.error(error);
-        }
-      };
 
-      fetchRecentHistoryData();
-    }, [id, type]);  
+  useEffect(() => {
+    const fetchRecentHistoryData = async () => {
+      try {
+        let response;
+        if (type === "goal") {
+          response = await getViewHistoryDateGoal(id);
+        } else if (type === "kpi") {
+          response = await getViewHistoryDateStrategy(id);
+        } else if (type === "project") {
+          response = await getViewHistoryDateProject(id);
+        }
+        setrecentHis(response.history_dates);
+      } catch (error) {}
+    };
+
+    fetchRecentHistoryData();
+  }, [id, type]);
 
   const recentData = recentHis.slice(0, 5);
 

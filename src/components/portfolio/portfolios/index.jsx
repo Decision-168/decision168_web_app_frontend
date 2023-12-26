@@ -28,9 +28,7 @@ const AllPortfolios = () => {
     try {
       const response = await allPortfolios(userEmail, userID);
       setPortfolioData(response.portfolioGrid);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

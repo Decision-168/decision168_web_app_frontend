@@ -25,7 +25,6 @@ const PaymentSuccess = () => {
         } catch (error) {
           // Handling error
           toast.error(`${error.response?.error}`);
-          console.error("Error updating:", error);
         }
       }
     };
@@ -40,7 +39,7 @@ const PaymentSuccess = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "100vh", 
+          height: "100vh",
         }}
       >
         <Typography variant="h4" textAlign="center">

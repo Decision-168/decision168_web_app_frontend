@@ -56,7 +56,7 @@ const KPIs = ({
       gid: passGID,
     });
     const okdata = oktemp();
-    //console.log(okdata);
+
     const isSnameEmpty = okdata.kpiArray.some((kpi) => kpi.sname.trim() === "");
     if (isSnameEmpty) {
       toast.error("Please fill in all required fields");
@@ -72,7 +72,6 @@ const KPIs = ({
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
   //Only KPIs Create Part
