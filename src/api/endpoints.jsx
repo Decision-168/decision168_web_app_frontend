@@ -649,6 +649,12 @@ const api = {
   //Insert Project Links
   updateProjectLink: "project/update-project-links",
 
+  //Clear Project Notifications
+  projectNotificationsClear: "project/project-notifications/",
+
+  //Project Invite Request
+  projectInviteRequest: "project-invite-reject-request/",
+
   //-----------------------------Upgrade Plan Modlue Start----------------
 
   //getAllPack

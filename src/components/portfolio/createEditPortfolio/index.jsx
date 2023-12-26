@@ -58,9 +58,9 @@ export default function CreateEditPortfolio() {
 
           <Grid item xs={12}>
             {value === "company" ? (
-              <CompanyForm isEditPath={isEditPath} depts={departments ? departments : []} />
+              <CompanyForm paramId={id} isEditPath={isEditPath} depts={departments ? departments : []} />
             ) : (
-              <IndividualForm isEditPath={isEditPath} depts={departments ? departments : []} />
+              <IndividualForm paramId={id} isEditPath={isEditPath} depts={departments ? departments : []} />
             )}
           </Grid>
         </Grid>

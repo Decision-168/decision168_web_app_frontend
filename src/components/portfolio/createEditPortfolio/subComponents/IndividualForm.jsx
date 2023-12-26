@@ -17,10 +17,12 @@ import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 import CircularLoader from "../../../common/CircularLoader";
 import { updatePortfolio } from "../../../../api/modules/porfolioModule";
 import { useSelector } from "react-redux";
-import { selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
+import { getPortfolioDetailsAsync, selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import SelectOption from "../../../common/SelectOption";
 import { getCountries } from "../../../../api/modules/dashboardModule";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const countries = [
   { label: "India" },
@@ -31,10 +33,11 @@ const countries = [
   { label: "Bangladesh" },
 ];
 
-export default function IndividualForm({ isEditPath, depts }) {
+export default function IndividualForm({ paramId, isEditPath, depts }) {
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const details = useSelector(selectPorfolioDetails);
   const user = useSelector(selectUserDetails);
+  const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
     portfolio_createdby: user?.reg_id,
     portfolio_user: "individual",
@@ -72,30 +75,41 @@ export default function IndividualForm({ isEditPath, depts }) {
   ]);
 
   useEffect(() => {
-    setFormValues({
-      ...formValues,
-      portfolio_createdby: user?.reg_id,
-      portfolio_user: details?.portfolio_user,
-      portfolio_name: details?.portfolio_name,
-      portfolio_mname: details?.portfolio_mname,
-      portfolio_lname: details?.portfolio_lname,
-      about_portfolio: details?.about_portfolio,
-      phone_number: details?.phone_number,
-      email_address: details?.email_address,
-      designation: details?.designation,
-      gender: details?.gender,
-      gender_other: details?.gender_other,
-      company_individual: details?.company_individual,
-      street: details?.street,
-      city: details?.city,
-      state: details?.state,
-      country: details?.country,
-      social_media_icon: details?.social_media_icon,
-      social_media: details?.social_media,
-      photo: "",
-      cover_photo: "",
-    });
-  }, [details]);
+    // dispatch(getPortfolioDetailsAsync(storedPortfolioId));
+    if(isEditPath){
+      dispatch(getPortfolioDetailsAsync(paramId));
+    }
+  }, [isEditPath]);
+
+  useEffect(() => {
+    if(isEditPath){
+      setFormValues({
+        ...formValues,
+        portfolio_createdby: user?.reg_id,
+        portfolio_user: details?.portfolio_user,
+        portfolio_name: details?.portfolio_name,
+        portfolio_mname: details?.portfolio_mname,
+        portfolio_lname: details?.portfolio_lname,
+        about_portfolio: details?.about_portfolio,
+        phone_number: details?.phone_number,
+        email_address: details?.email_address,
+        designation: details?.designation,
+        gender: details?.gender,
+        gender_other: details?.gender_other,
+        company_individual: details?.company_individual,
+        street: details?.street,
+        city: details?.city,
+        state: details?.state,
+        country: details?.country,
+        social_media_icon: details?.social_media_icon,
+        social_media: details?.social_media,
+        photo: "",
+        cover_photo: "",
+      });
+    }else{
+      setFormValues({});
+    }
+  }, [isEditPath]);
 
   useEffect(() => {
     // Split the comma-separated strings into arrays
