@@ -17,7 +17,6 @@ export default function ChangePasswordForm({ handleClose }) {
     register,
     formState: { errors },
   } = useForm();
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
   const userId = user?.reg_id;
@@ -35,10 +34,6 @@ export default function ChangePasswordForm({ handleClose }) {
       setLoading(false);
     }
   };
-=======
-
-  const onSubmit = (data) => {};
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>

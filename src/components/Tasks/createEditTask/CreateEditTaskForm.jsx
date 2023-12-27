@@ -196,7 +196,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-<<<<<<< HEAD
         // Fetch project team members
         const response = await getProjectTeamMembers({ pid: selectedProjectIdObject?.project_id });
 
@@ -221,19 +220,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       } catch (error) {
         console.error(error);
       }
-=======
-        const response = await getProjectTeamMembers({
-          pid: selectedProjectIdObject?.project_id,
-        });
-
-        // Add the user to assignee to assignee list
-        const updatedResponse = [
-          ...response,
-          { reg_id: userId, name: "To Me" },
-        ];
-        setTeamMembers(updatedResponse);
-      } catch (error) {}
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
     };
 
     // Fetch team members when the component mounts or when dependencies change
@@ -375,17 +361,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
                   idKey="portfolio_dept_id"
                   getOptionLabel={(option) => option.department}
                   dynamicOptions={false}
-<<<<<<< HEAD
                   staticOptions={selectedProjectDeptId !== undefined && selectedProjectDeptId !== null && selectedProjectDeptId !== 0 ? filteredDepartments : departments}
-=======
-                  staticOptions={
-                    selectedProjectDeptId !== undefined &&
-                    selectedProjectDeptId !== null &&
-                    selectedProjectDeptId !== 0
-                      ? filteredDepartments
-                      : departments
-                  }
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
                   formValues={formValues}
                   setFormValues={setFormValues}
                 />

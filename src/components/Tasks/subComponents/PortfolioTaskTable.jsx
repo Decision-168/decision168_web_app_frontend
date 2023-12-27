@@ -510,29 +510,8 @@ export default function PortfolioTaskTable({ rows, setRows, fetchData }) {
                                       </Typography>
 
                                       {subRowId === subrow?.stid && (
-<<<<<<< HEAD
                                         <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg" data={{ tname: row?.tname, tproject_assign: row?.tproject_assign }}>
                                           <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} />
-=======
-                                        <CustomDialog
-                                          handleClose={
-                                            handleCloseSubTaskPreviewDialog
-                                          }
-                                          open={openSubTaskPreviewDialog}
-                                          modalTitle="Subtask"
-                                          redirectPath={`/subtasks-overview/${subRowId}`}
-                                          showModalButton={true}
-                                          modalSize="lg"
-                                        >
-                                          <SubtaskPreview
-                                            styles={styles}
-                                            subtaskId={subRowId}
-                                            closePreview={
-                                              handleCloseSubTaskPreviewDialog
-                                            }
-                                            fetchData={fetchData}
-                                          />
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
                                         </CustomDialog>
                                       )}
                                     </>
