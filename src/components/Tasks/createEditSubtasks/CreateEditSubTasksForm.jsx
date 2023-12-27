@@ -114,7 +114,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-<<<<<<< HEAD
         const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
 
         // Find the user in the team members
@@ -138,18 +137,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       } catch (error) {
         console.error(error);
       }
-=======
-        const response = await getProjectTeamMembers({
-          pid: taskData?.tproject_assign,
-        });
-        // Add the user to assignee to assignee list
-        const updatedResponse = [
-          ...response,
-          { reg_id: userId, name: "To Me" },
-        ];
-        setAssignees(updatedResponse);
-      } catch (error) {}
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
     };
 
     fetchTeamMembers();
@@ -170,10 +157,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   useEffect(() => {
     // stfile = "file1,file2"
     const filenames = subtaskData?.stfile;
-<<<<<<< HEAD
-=======
-
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
     (async () => {
       try {
         const fileArray = await createFileArray(filenames);
@@ -202,24 +185,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     }
   }, [editMode, subtaskData, files]);
 
-<<<<<<< HEAD
-=======
-  // const fileObjects = [{"0": "file1"}, {"1": "file2"}]
-  // Output will be like [file1,file2 ]
-  // function createFileArrayToValueInField(fileObjects) {
-  //   const filenameArray = fileObjects.map((fileObj) => Object.values(fileObj)[0]);
-  //   const fileArray = [];
-  //   for (const filename of filenameArray) {
-  //     const content = "Placeholder content for" + filename;
-  //     const file = new File([content], filename, {
-  //       type: "text/plain", // adjust the type based on the actual file type
-  //     });
-  //     fileArray.push(file);
-  //   }
-  //
-  //   return fileArray;
-  // }
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
 
   const handleFilesChange = (index) => (newValue) => {
     setFiles(newValue);
@@ -383,15 +348,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       tdue_date: formData?.taskArray[0]?.stdue_date,
     };
 
-<<<<<<< HEAD
     const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
-=======
-    const finalData = {
-      user_id: userId,
-      portfolio_id: storedPortfolioId,
-      data: editeData,
-    };
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
 
     try {
       setLoading(true);
