@@ -3,7 +3,10 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = () => {
   const token = localStorage.getItem("token");
-  return token ? <Outlet /> : <Navigate to="/" />;
+  if (!token) {
+    return <Navigate to="/" />;
+  }
+  return <Outlet />;
 };
 
 export default PrivateRoute;

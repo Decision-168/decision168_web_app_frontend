@@ -89,24 +89,16 @@ const Price = ({
     if (packID == selectedPackID) {
       return "Selected";
     } else {
-      // if (selectedPackPrice <= packPrice && packID == 1) {
-      //   return "Upgrade";
-      // }
       if (packID == 1) {
         return "Downgrade";
       }
-      if (16.8 >= 7.28) {
-        console.log(16.8 >= 7.28);
-        return "Upgrade";
-      }
-      if (16.8 <= 7.28) {
-        console.log(16.8 <= 7.28);
-        return "Upgrade";
-      } else {
+      if (selectedPackPrice >= packPrice) {
+        if (selectedPackPrice < packPrice) {
+          return "Upgrade";
+        }
         return null;
       }
     }
-    // return null;
   };
 
   return (

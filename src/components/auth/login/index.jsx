@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,12 +11,25 @@ import BackImage from "../subComponents/BackImage";
 import { useTheme } from "@mui/material/styles";
 import { Hidden, Stack } from "@mui/material";
 import Navigation from "../subComponents/Navigation";
+import { Navigate } from "react-router-dom";
 
 export default function Login() {
   const theme = useTheme();
-
+  const token = localStorage.getItem("token");
+  if (token) {
+    return <Navigate to="/dashboard" />;
+  }
   return (
-    <Grid container component="main" sx={{ maxHeight: "100vh", minHeight:"100vh", maxWidth:"100vw", boxSizing:"border-box" }}>
+    <Grid
+      container
+      component="main"
+      sx={{
+        maxHeight: "100vh",
+        minHeight: "100vh",
+        maxWidth: "100vw",
+        boxSizing: "border-box",
+      }}
+    >
       <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
         <BackImage />
       </Grid>
@@ -31,7 +44,7 @@ export default function Login() {
         elevation={6}
         square
         bgcolor={theme.palette.secondary.main}
-        sx={{ position: "relative"}}
+        sx={{ position: "relative" }}
       >
         <Hidden mdDown>
           <Ribbon />
