@@ -82,9 +82,7 @@ const CreateProject = ({ flag, gid, sid, passPID, refreshData }) => {
           setassignee(response.AssignManagerListRes);
           setmemberData(response.AssignMemberListRes);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -130,9 +128,7 @@ const CreateProject = ({ flag, gid, sid, passPID, refreshData }) => {
             .filter((member) => member.reg_id != response.project?.pcreated_by)
             .map((member) => member.reg_id);
           setPMembers(pmembers);
-        } catch (error) {
-          console.error(error);
-        }
+        } catch (error) {}
       };
       fetchAllEditProjectData();
     }, [passPID]);
@@ -228,9 +224,8 @@ const CreateProject = ({ flag, gid, sid, passPID, refreshData }) => {
       dispatch(closeModal("edit-project"));
     } catch (error) {
       // Handling error
-      console.log(error);
+
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 
@@ -275,9 +270,7 @@ const CreateProject = ({ flag, gid, sid, passPID, refreshData }) => {
       toast.success(`${response.message}`);
       navigate(`/projects-overview/${response.pid}`);
     } catch (error) {
-      console.log(error);
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 

@@ -6,11 +6,17 @@ import { useNavigate } from "react-router-dom";
 import AddSocialMediaLinks from "../../../components/common/AddSocialMediaLinks";
 import CustomNumberField from "../../common/CustomNumberField";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
-import { getUserDetailsAsync, selectUserDetails } from "../../../redux/action/userSlice";
+import {
+  getUserDetailsAsync,
+  selectUserDetails,
+} from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import GenderRadioGroup from "../../common/GenderRadioGroup";
 import CustomDatePicker from "../../common/CustomDatePicker";
-import { getCountries, updateUserProfile } from "../../../api/modules/dashboardModule";
+import {
+  getCountries,
+  updateUserProfile,
+} from "../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
 import { useDispatch } from "react-redux";
@@ -157,7 +163,10 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
-          <GenderRadioGroup formValues={formValues} setFormValues={setFormValues} />
+          <GenderRadioGroup
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -187,7 +196,12 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomDatePicker label="DOB" required value={formValues.dob} onChange={handleDob} />
+          <CustomDatePicker
+            label="DOB"
+            required
+            value={formValues.dob}
+            onChange={handleDob}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} py={1}>
@@ -207,7 +221,12 @@ export default function UpdateProfileForm() {
           >
             Cancel
           </Button>
-          <Button size="small" type="submit" variant="contained" sx={{ ml: 1, width: "130px" }}>
+          <Button
+            size="small"
+            type="submit"
+            variant="contained"
+            sx={{ ml: 1, width: "130px" }}
+          >
             {loading ? <CircularLoader /> : "Save changes"}
           </Button>
         </Grid>

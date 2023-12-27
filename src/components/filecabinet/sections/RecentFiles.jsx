@@ -47,9 +47,7 @@ const RecentFiles = ({ handleFileOpen, regId, portfolioId }) => {
     try {
       const response = await getRecentFilesData(regId, portfolioId);
       setRecentFilesData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

@@ -57,7 +57,6 @@ export default function AddDepartmentForm({ handleClose, data }) {
   };
 
   const handleDepartmentChange = (selectedOptions) => {
-    console.log("Selected departments:", selectedOptions);
     const departmentsArray = selectedOptions?.map((item) => item.department);
     setDepartments(departmentsArray);
   };
@@ -88,7 +87,9 @@ export default function AddDepartmentForm({ handleClose, data }) {
       return;
     }
 
-    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
+    const customDepartmentArray = updatedFields.map(
+      (item) => item.cus_department
+    );
     const data = {
       portfolio_id: storedPorfolioId,
       departments: departments?.department || [],
@@ -104,7 +105,6 @@ export default function AddDepartmentForm({ handleClose, data }) {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in inserting portfolio department:", error);
     } finally {
       setLoading(false);
     }

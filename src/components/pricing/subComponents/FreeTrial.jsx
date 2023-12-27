@@ -59,7 +59,6 @@ const FreeTrial = () => {
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     } finally {
       setLoading(false);
     }

@@ -22,15 +22,20 @@ const AttachTaskFile = ({ task }) => {
   const handleTaskFilesChange = async (newValue, info) => {
     setTaskFiles(newValue);
     const time = Math.floor(Date.now() / 1000);
-    const taskFilesArray = newValue?.map((file, index) => `${time}_${file.name.toLowerCase()}`);
+    const taskFilesArray = newValue?.map(
+      (file, index) => `${time}_${file.name.toLowerCase()}`
+    );
     const stringFormat = taskFilesArray.join(",");
     try {
-      const data = { tid: task?.tid, task_file: stringFormat, tcode: task?.tcode };
+      const data = {
+        tid: task?.tid,
+        task_file: stringFormat,
+        tcode: task?.tcode,
+      };
       const response = await insertTaskFile(user_id, data);
       dispatch(closeModal("task-attach-file"));
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -43,7 +48,15 @@ const AttachTaskFile = ({ task }) => {
           pb: 4,
         }}
       >
-        <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={taskFiles} handleFilesChange={handleTaskFilesChange} />
+        <CustomFileInput
+          label="Attached File(s)"
+          placeholder="Choose files..."
+          multiple
+          required={false}
+          name="file"
+          value={taskFiles}
+          handleFilesChange={handleTaskFilesChange}
+        />
 
         {task?.tfile && <TaskFiles styles={styles} files={task?.tfile} />}
       </Box>

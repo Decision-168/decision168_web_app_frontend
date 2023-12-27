@@ -27,9 +27,7 @@ const ProjectOverview = () => {
       const response = await getProjectDetail(pid);
       setProjectData(response);
       setProjectDel(response.project);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -42,9 +40,7 @@ const ProjectOverview = () => {
     try {
       const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -69,7 +65,6 @@ const ProjectOverview = () => {
           setAccdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setAccdisplayBtns("no");
       }
     };
@@ -174,7 +169,12 @@ const ProjectOverview = () => {
               <MembersAccordion pid={pid} displayBtns={AccdisplayBtns} />
             </Grid>
             <Grid item xs={12} lg={12}>
-            <CommentSection projectId={pid} taskId={0} subtaskId={0} commentModule={"project"} />
+              <CommentSection
+                projectId={pid}
+                taskId={0}
+                subtaskId={0}
+                commentModule={"project"}
+              />
             </Grid>
             <Grid item xs={12} lg={12}>
               <RecentHistory id={pid} type={"project"} />

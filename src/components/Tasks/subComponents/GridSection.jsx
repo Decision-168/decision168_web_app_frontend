@@ -10,7 +10,11 @@ import { filterDataByStatus } from "../../../helpers/filterDataByStatus";
 import NoGridTaskFound from "./NoGridTaskFound";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import { changeSubtaskStatusDND, changeTaskStatusDND, getDashboardAlltaskGridView } from "../../../api/modules/taskModule";
+import {
+  changeSubtaskStatusDND,
+  changeTaskStatusDND,
+  getDashboardAlltaskGridView,
+} from "../../../api/modules/taskModule";
 import { toast } from "react-toastify";
 
 const GridSection = ({ rows, setRows }) => {
@@ -27,7 +31,6 @@ const GridSection = ({ rows, setRows }) => {
       const response = await getDashboardAlltaskGridView(regId);
       setRows(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -90,8 +93,6 @@ const GridSection = ({ rows, setRows }) => {
 
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating task status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -110,11 +111,8 @@ const GridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating subtask status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -124,7 +122,11 @@ const GridSection = ({ rows, setRows }) => {
 
     if (removed?.content?.type === "task") {
       try {
-        const response = await updateTaskStatus(tid, tassignee, destColumn?.value);
+        const response = await updateTaskStatus(
+          tid,
+          tassignee,
+          destColumn?.value
+        );
 
         if (response.status === 200) {
           fetchData();
@@ -135,12 +137,14 @@ const GridSection = ({ rows, setRows }) => {
       } catch (error) {
         fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the task status:", error);
       }
     } else {
-
       try {
-        const response = await updateSubtaskStatus(tid, tassignee, destColumn?.value);
+        const response = await updateSubtaskStatus(
+          tid,
+          tassignee,
+          destColumn?.value
+        );
         if (response.status === 200) {
           fetchData();
           toast.success(`${response.data?.message}`);
@@ -150,7 +154,6 @@ const GridSection = ({ rows, setRows }) => {
       } catch (error) {
         fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the subtask status:", error);
       }
     }
   };
@@ -166,7 +169,6 @@ const GridSection = ({ rows, setRows }) => {
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
-
 
       handleStatusChange(removed, destColumn);
 
@@ -210,7 +212,9 @@ const GridSection = ({ rows, setRows }) => {
             overflowX: "auto",
           }}
         >
-          <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+          <DragDropContext
+            onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
+          >
             {Object.entries(columns).map(([columnId, column], index) => {
               return (
                 <Droppable droppableId={columnId} key={columnId}>
@@ -220,7 +224,9 @@ const GridSection = ({ rows, setRows }) => {
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                          background: snapshot.isDraggingOver ? "#DEE1E6" : "#FFFFFF",
+                          background: snapshot.isDraggingOver
+                            ? "#DEE1E6"
+                            : "#FFFFFF",
                           padding: 14,
                           width: "100%",
                           minHeight: 500,
@@ -229,7 +235,13 @@ const GridSection = ({ rows, setRows }) => {
                         }}
                       >
                         {/* Column Header */}
-                        <KanbanColumnHeader status={column.name} color={column.color} count={column.items.length > 0 ? column.items.length : 0} />
+                        <KanbanColumnHeader
+                          status={column.name}
+                          color={column.color}
+                          count={
+                            column.items.length > 0 ? column.items.length : 0
+                          }
+                        />
 
                         {/* Column Body */}
                         <Box sx={{ mt: 2, height: "400px", overflow: "auto" }}>
@@ -238,7 +250,11 @@ const GridSection = ({ rows, setRows }) => {
                               {column?.items?.length > 0 ? (
                                 column?.items?.map((item, index) => {
                                   return (
-                                    <Draggable key={item.id} draggableId={item.id} index={index}>
+                                    <Draggable
+                                      key={item.id}
+                                      draggableId={item.id}
+                                      index={index}
+                                    >
                                       {(provided) => {
                                         return (
                                           <div
@@ -254,7 +270,10 @@ const GridSection = ({ rows, setRows }) => {
                                               ...provided.draggableProps.style,
                                             }}
                                           >
-                                            <KanbanCard cardData={item.content} fetchData={fetchData} />
+                                            <KanbanCard
+                                              cardData={item.content}
+                                              fetchData={fetchData}
+                                            />
                                           </div>
                                         );
                                       }}

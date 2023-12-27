@@ -34,7 +34,6 @@ const TitleWithActions = ({
   progressPercentage,
   displayBtns,
 }) => {
-
   const matches = useMediaQuery("(min-width:500px)");
   const theme = useTheme();
   const splitString = title.split(" ");

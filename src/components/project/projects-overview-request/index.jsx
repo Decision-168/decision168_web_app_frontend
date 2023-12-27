@@ -16,11 +16,9 @@ const ProjectsOverviewRequest = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
@@ -31,9 +29,7 @@ const ProjectsOverviewRequest = () => {
     try {
       const response = await getUserData(pDetail?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

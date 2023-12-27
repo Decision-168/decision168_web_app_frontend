@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Grid, InputLabel, Avatar, TextField, Stack, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  InputLabel,
+  Avatar,
+  TextField,
+  Stack,
+  IconButton,
+} from "@mui/material";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
 import CustomNumberField from "../../../common/CustomNumberField";
 import CustomMultilineTextField from "../../../common/CustomMultilineTextField";
@@ -451,7 +460,14 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
 
             <Grid item xs={12} md={8} pl={1} textAlign="start">
               {inputFields.map((inputField, index) => (
-                <Grid container key={index} my={1} px={1} spacing={2} bgcolor="#F7F7F7">
+                <Grid
+                  container
+                  key={index}
+                  my={1}
+                  px={1}
+                  spacing={2}
+                  bgcolor="#F7F7F7"
+                >
                   <Grid item xs={10} py={2} mt={2.5} textAlign="start">
                     <TextField
                       fullWidth
@@ -464,7 +480,11 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
                     />
                   </Grid>
                   <Grid item xs={2} py={2} mt={2.5}>
-                    <Stack direction="row" justifyContent="end" alignItems="center">
+                    <Stack
+                      direction="row"
+                      justifyContent="end"
+                      alignItems="center"
+                    >
                       {inputFields.length > 0 && (
                         <IconButton onClick={() => handleRemoveClick(index)}>
                           <RemoveCircleRoundedIcon />
@@ -484,7 +504,13 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
 
         <Grid item xs={12} sm={12} py={2} textAlign="end">
           <Button size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
-            {loading ? <CircularLoader /> : isEditPath ? "Save Changes" : "Create"}
+            {loading ? (
+              <CircularLoader />
+            ) : isEditPath ? (
+              "Save Changes"
+            ) : (
+              "Create"
+            )}
           </Button>
         </Grid>
       </Grid>

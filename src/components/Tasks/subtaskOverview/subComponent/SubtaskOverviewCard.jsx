@@ -2,7 +2,10 @@ import { Grid, Paper } from "@mui/material";
 import React, { memo } from "react";
 import { Edit } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
@@ -49,7 +52,6 @@ const SubtaskOverviewCard = ({ styles, subtask , tname, tproject_assign}) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in filing the Subtask in preview:", error);
     }
   };
 
@@ -74,7 +76,6 @@ const SubtaskOverviewCard = ({ styles, subtask , tname, tproject_assign}) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in Deleteing the Subtask:", error);
     }
   };
 
@@ -89,13 +90,27 @@ const SubtaskOverviewCard = ({ styles, subtask , tname, tproject_assign}) => {
       <CreateEditSubTasksForm editMode={true} taskData={{tname,tproject_assign }} subtaskData={subtask}/>
       </ReduxDialog>
 
-      <ReduxDialog value="duplicate-overview-subtask" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateSubtaskDialog subtaskData={subtask} closeModalName={"duplicate-overview-subtask"} />
+      <ReduxDialog
+        value="duplicate-overview-subtask"
+        modalTitle="Copy Task"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateSubtaskDialog
+          subtaskData={subtask}
+          closeModalName={"duplicate-overview-subtask"}
+        />
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileItSubTaskInOverview"} handleYes={handleFileItSubTaskYes} />
+      <ConfirmationDialog
+        value={"fileItSubTaskInOverview"}
+        handleYes={handleFileItSubTaskYes}
+      />
 
-      <ConfirmationDialog value={"deleteSubTaskInOverview"} handleYes={handleDeleteSubTaskYes} />
+      <ConfirmationDialog
+        value={"deleteSubTaskInOverview"}
+        handleYes={handleDeleteSubTaskYes}
+      />
     </Paper>
   );
 };

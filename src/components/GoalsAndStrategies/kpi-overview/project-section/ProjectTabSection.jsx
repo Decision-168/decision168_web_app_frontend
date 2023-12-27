@@ -11,7 +11,6 @@ import {
 import { KeyboardDoubleArrowRight } from "@mui/icons-material";
 import { CustomTabPanel, a11yProps } from "../../subComponents/style-functions";
 
-
 const ProjectTabSection = ({ formValues, setFormValues }) => {
   const [value, setValue] = useState(0);
   const theme = useTheme();
@@ -19,8 +18,7 @@ const ProjectTabSection = ({ formValues, setFormValues }) => {
     setValue(newValue);
     let copy_detail_val = "everything";
     let cust_project_val = "";
-    if(newValue === 1)
-    {
+    if (newValue === 1) {
       copy_detail_val = "custom";
     }
     setFormValues({
@@ -32,7 +30,7 @@ const ProjectTabSection = ({ formValues, setFormValues }) => {
   const [checked, setChecked] = useState(true);
 
   const handleCheckboxChange = (event) => {
-    setChecked(event.target.checked)
+    setChecked(event.target.checked);
     if (event.target.checked === true) {
       const newRadioValue = event.target.value;
       setFormValues({

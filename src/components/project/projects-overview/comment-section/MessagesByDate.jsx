@@ -7,7 +7,12 @@ import { deleteComment } from "../../../../api/modules/ProjectModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
-const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLocalStorage }) => {
+const MessagesByDate = ({
+  date,
+  groupedMessages,
+  setMessages,
+  saveMessagesToLocalStorage,
+}) => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
   const [deletePopoverAnchor, setDeletePopoverAnchor] = useState(null);
@@ -26,7 +31,11 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
   const handleDeleteMessage = async () => {
     try {
       const response = await deleteComment(userID, selectedItemId);
-      setMessages((prevMessages) => prevMessages.map((msg) => (msg.id === selectedItemId ? { ...msg, isDeleted: true } : msg)));
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === selectedItemId ? { ...msg, isDeleted: true } : msg
+        )
+      );
 
       setMessages((prevMessages) => {
         saveMessagesToLocalStorage([...prevMessages]);
@@ -37,7 +46,6 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
 
       toast.success(`${response.message}`);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.error}`);
     }
   };
@@ -50,7 +58,10 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
         </Typography>
       </Divider>
       {groupedMessages[date].map((message) => (
-        <Box key={message.id} sx={{ textAlign: message.isMe ? "right" : "left" }}>
+        <Box
+          key={message.id}
+          sx={{ textAlign: message.isMe ? "right" : "left" }}
+        >
           <Box
             sx={{
               background: "#eff2f7",
@@ -101,7 +112,11 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
                     </Typography>
                     {!message.isDeleted && (
                       <>
-                        <IconButton aria-label="more" onClick={(e) => handleDeleteClick(e, message.id)} size="small">
+                        <IconButton
+                          aria-label="more"
+                          onClick={(e) => handleDeleteClick(e, message.id)}
+                          size="small"
+                        >
                           <MoreVert fontSize="inherit" />
                         </IconButton>
                         <Popover
@@ -118,7 +133,9 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
                             horizontal: "left",
                           }}
                         >
-                          <MenuItem onClick={handleDeleteMessage}>Delete</MenuItem>
+                          <MenuItem onClick={handleDeleteMessage}>
+                            Delete
+                          </MenuItem>
                         </Popover>
                       </>
                     )}
@@ -201,7 +218,9 @@ const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLoca
                 }}
               >
                 <Schedule sx={{ fontSize: 12, color: "#74788d" }} />
-                <Typography sx={{ fontSize: 12, color: "#74788d" }}>{moment(message.timestamp, "h:mm:ss A").format("hh:mm A")}</Typography>
+                <Typography sx={{ fontSize: 12, color: "#74788d" }}>
+                  {moment(message.timestamp, "h:mm:ss A").format("hh:mm A")}
+                </Typography>
               </Box>
             )}
           </Box>

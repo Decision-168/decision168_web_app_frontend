@@ -28,7 +28,6 @@ export default function PlanTable() {
         const response = await getPackageDetails(user?.package_id);
         setPack(response);
       } catch (error) {
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -56,7 +55,9 @@ export default function PlanTable() {
             </TableCell>
             <TableCell>${pack?.pack_price}</TableCell>
             <TableCell>---</TableCell>
-            <TableCell>{moment(pack?.pack_created_date).format("Do MMMM YYYY, h:mm a")}</TableCell>
+            <TableCell>
+              {moment(pack?.pack_created_date).format("Do MMMM YYYY, h:mm a")}
+            </TableCell>
             <TableCell>---</TableCell>
           </TableRow>
         </TableBody>

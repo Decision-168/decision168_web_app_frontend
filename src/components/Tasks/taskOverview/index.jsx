@@ -26,7 +26,6 @@ export default function TaskOverview() {
       const response = await getTaskDetails(taskId);
       setTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }

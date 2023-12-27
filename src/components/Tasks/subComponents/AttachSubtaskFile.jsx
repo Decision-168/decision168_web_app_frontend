@@ -36,7 +36,6 @@ const AttachSubtaskFile = ({ subtask }) => {
       dispatch(closeModal("subtask-attach-file"));
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -59,9 +58,9 @@ const AttachSubtaskFile = ({ subtask }) => {
           handleFilesChange={handleSubtaskFilesChange}
         />
 
-         {
-          subtask?.stfile &&   <SubtaskFiles styles={styles} files={subtask?.stfile} />
-         }
+        {subtask?.stfile && (
+          <SubtaskFiles styles={styles} files={subtask?.stfile} />
+        )}
       </Box>
     </DialogContent>
   );

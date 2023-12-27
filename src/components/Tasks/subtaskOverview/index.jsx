@@ -35,7 +35,6 @@ export default function SubtaskOverview() {
       const response = await getSubTaskDetails(subTaskId);
       setSubTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }

@@ -65,10 +65,11 @@ const ContactSaleForm = () => {
     setLoading(true);
 
     try {
-      const data = { ...formContactSalesValues};
+      const data = { ...formContactSalesValues };
       const { pass_total_users, user_id } = data;
       const NewData = {
-        pass_total_users, user_id
+        pass_total_users,
+        user_id,
       };
       if (NewData.pass_total_users != "") {
         const response = await AddContactSales(data);
@@ -80,7 +81,6 @@ const ContactSaleForm = () => {
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     } finally {
       setLoading(false);
     }

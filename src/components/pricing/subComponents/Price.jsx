@@ -23,6 +23,7 @@ const Price = ({
   const theme = useTheme();
   //get user id
   const user = useSelector(selectUserDetails);
+  const [disabled, setDisabled] = useState(false);
   const user_id = user?.reg_id;
   //get user id
   //debugger;
@@ -30,6 +31,7 @@ const Price = ({
   // const selectedPackPrice = 0;
 
   const handleSelectAction = async (getbtnVal) => {
+    setDisabled(true);
     if (getbtnVal === "Upgrade") {
       if (selectedPackID == 1 || CouponPack == "yes") {
         try {
@@ -46,12 +48,10 @@ const Price = ({
           });
 
           if (result.error) {
-            console.log(result.error);
           }
         } catch (error) {
           // Handling error
           toast.error(`${error.response?.error}`);
-          console.error("Error updating:", error);
         }
       } else {
         try {
@@ -67,7 +67,6 @@ const Price = ({
         } catch (error) {
           // Handling error
           toast.error(`${error.response?.error}`);
-          console.error("Error updating:", error);
         }
       }
     } else if (getbtnVal === "Downgrade") {
@@ -83,7 +82,6 @@ const Price = ({
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       }
     }
   };
@@ -94,15 +92,19 @@ const Price = ({
       // if (selectedPackPrice <= packPrice && packID == 1) {
       //   return "Upgrade";
       // }
-      if (selectedPackPrice <= packPrice) {
-        return "Upgrade";
-      }
       if (packID == 1) {
         return "Downgrade";
       }
-      // if (selectedPackPrice >= packPrice) {
-      //   return "Upgrade";
-      // }
+      if (16.8 >= 7.28) {
+        console.log(16.8 >= 7.28);
+        return "Upgrade";
+      }
+      if (16.8 <= 7.28) {
+        console.log(16.8 <= 7.28);
+        return "Upgrade";
+      } else {
+        return null;
+      }
     }
     // return null;
   };
@@ -154,7 +156,7 @@ const Price = ({
             },
           }}
           onClick={() => handleSelectAction(getButtonText())}
-          disabled={getButtonText() === "Selected"}
+          disabled={getButtonText() === "Selected" || disabled}
         >
           {getButtonText()}
         </Button>

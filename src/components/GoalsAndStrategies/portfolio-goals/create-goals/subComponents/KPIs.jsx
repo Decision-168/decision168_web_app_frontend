@@ -71,7 +71,6 @@ const KPIs = ({
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
   //Only KPIs Create Part

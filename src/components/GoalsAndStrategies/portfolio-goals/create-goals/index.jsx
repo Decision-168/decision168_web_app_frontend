@@ -39,8 +39,8 @@ const CreateGoal = ({ fetchAllData }) => {
     kpiArray: [],
     gdept_id: "",
     gid: "",
-    screated_by: user_id, 
-    portfolio_id: storedPorfolioId, 
+    screated_by: user_id,
+    portfolio_id: storedPorfolioId,
   });
 
   const handleNext = () => {
@@ -78,9 +78,8 @@ const CreateGoal = ({ fetchAllData }) => {
       handleNext(); // Proceed to the next step (KPIs)
     } catch (error) {
       // Handling error
-      console.log(error);
+
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 
@@ -105,11 +104,10 @@ const CreateGoal = ({ fetchAllData }) => {
       const response = await InsertStrategiesData(kdata);
       fetchAllData();
       dispatch(closeModal("create-goals-kpis"));
-      toast.success(`${response.message}`);      
+      toast.success(`${response.message}`);
     } catch (error) {
       // Handling error
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 
@@ -204,7 +202,7 @@ const CreateGoal = ({ fetchAllData }) => {
           </Button>
         ) : (
           <>
-            <>              
+            <>
               <Button variant="contained" size="small" onClick={handleAddClick}>
                 Add More KPI's
               </Button>

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axios";
 import api from "../endpoints";
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -13,7 +13,9 @@ export const getUserDetails = async (id) => {
 
 export const getAllCounts = async (email, id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.userAllCounts}${email}/${id}`);
+    const response = await axios.get(
+      `${apiUrl}${api.userAllCounts}${email}/${id}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -31,7 +33,9 @@ export const getMotivator = async () => {
 
 export const getRecentNotifications = async (id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.userRecentNotifications}${id}`);
+    const response = await axios.get(
+      `${apiUrl}${api.userRecentNotifications}${id}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -41,7 +45,10 @@ export const getRecentNotifications = async (id) => {
 //update profile by user id
 export const updateUserProfile = async (userId, data) => {
   try {
-    const response = await axios.patch(`${apiUrl}${api.updateProfile}${userId}`, data);
+    const response = await axios.patch(
+      `${apiUrl}${api.updateProfile}${userId}`,
+      data
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -50,7 +57,9 @@ export const updateUserProfile = async (userId, data) => {
 
 export const getAlertsAndNotifications = async (userId) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.userAlertsAndNotifications}${userId}`);
+    const response = await axios.get(
+      `${apiUrl}${api.userAlertsAndNotifications}${userId}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -79,7 +88,9 @@ export const clearAllNotificaions = async (user_id) => {
 
 export const getPackageDetails = async (package_id) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.userPackage}${package_id}`);
+    const response = await axios.get(
+      `${apiUrl}${api.userPackage}${package_id}`
+    );
     return response.data;
   } catch (error) {
     throw error;

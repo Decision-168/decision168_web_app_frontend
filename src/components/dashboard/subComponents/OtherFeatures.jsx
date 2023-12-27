@@ -21,7 +21,6 @@ export default function ResponsiveGrid() {
         const response = await getRecentNotifications(id);
         setData(response);
       } catch (error) {
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -35,40 +34,42 @@ export default function ResponsiveGrid() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         <Grid item xs={12} md={6}>
-          <MyDayCard TodayTasksResult={data.TodayTasksResult} TodaySubtasksResult={data?.TodaySubtasksResult} />
+          <MyDayCard
+            TodayTasksResult={data.TodayTasksResult}
+            TodaySubtasksResult={data?.TodaySubtasksResult}
+          />
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <MyNext168Card WeekTasksResult={data.WeekTasksResult} WeekSubtasksResult={data?.WeekSubtasksResult} />
+          <MyNext168Card
+            WeekTasksResult={data.WeekTasksResult}
+            WeekSubtasksResult={data?.WeekSubtasksResult}
+          />
         </Grid>
-
-        {/* <Grid item xs={12} md={6}>
-          <Paper elevation={0}>
-            <Stack direction="row" justifyContent="space-between" alignItems="start" spacing={2} p={2}>
-              <Box component="span">
-                <Typography component="div" variant="subtitle2">
-                  My Notes
-                </Typography>
-              </Box>
-              <Box component="span" flexGrow={1}>
-                <Notes />
-              </Box>
-              <Box py={1}>
-                <Avatar sx={{ bgcolor: theme.palette.secondary.dark }}>
-                  <ListAltIcon />
-                </Avatar>
-              </Box>
-            </Stack>
-          </Paper>
-        </Grid> */}
 
         <Grid item xs={12} md={6}>
           <MyAlertsCard />
         </Grid>
       </Grid>
+<<<<<<< HEAD
       
     </Box>
   );
 }
 
 
+=======
+      <CustomDialog
+        handleClose={handleCloseSubTaskPreviewDialog}
+        open={openSubTaskPreviewDialog}
+        modalTitle="Subtask"
+        redirectPath={"/subtasks-overview"}
+        showModalButton={true}
+        modalSize="lg"
+      >
+        <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
+      </CustomDialog>
+    </Box>
+  );
+}
+>>>>>>> c8e20cae2265221430370582776db8fcea1d39fd

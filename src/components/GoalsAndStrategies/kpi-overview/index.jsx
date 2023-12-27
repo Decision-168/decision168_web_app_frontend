@@ -32,7 +32,7 @@ const KPIOverview = () => {
         const response = await checkPortfolioMemberActive(
           user_email,
           storedPorfolioId
-        ); 
+        );
         if (response) {
           setdisplayData(true);
         } else {
@@ -43,7 +43,6 @@ const KPIOverview = () => {
           navigate("/portfolio-goals");
         }
 
-        console.error(error);
         toast.error(`Portfolio Owner Inactive You!`);
         setdisplayData(false);
         // Handle error, maybe show an error message
@@ -60,9 +59,7 @@ const KPIOverview = () => {
       try {
         const hresponse = await getViewHistoryDateStrategy(sid);
         setKPIName(hresponse.KpiDetail);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchKPIAllHistoryData();
@@ -119,10 +116,10 @@ const KPIOverview = () => {
           <Grid item xs={12} lg={8}>
             <Grid container>
               <Grid item xs={12} lg={12}>
-                <ViewKpiPopup kpi_id={sid}/>
+                <ViewKpiPopup kpi_id={sid} />
               </Grid>
               <Grid item xs={12} lg={12}>
-                <ProjectSection kpi_id={sid}/>
+                <ProjectSection kpi_id={sid} />
               </Grid>
             </Grid>
           </Grid>
@@ -132,7 +129,7 @@ const KPIOverview = () => {
                 <Quote />
               </Grid>
               <Grid item xs={12} lg={12}>
-                <RecentHistory id={sid} type={"kpi"}/>
+                <RecentHistory id={sid} type={"kpi"} />
               </Grid>
             </Grid>
           </Grid>

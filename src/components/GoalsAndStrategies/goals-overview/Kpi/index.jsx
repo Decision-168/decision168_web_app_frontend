@@ -20,9 +20,7 @@ const KPISection = ({ goalID }) => {
         const response = await getGoalsAllStrategiesList(goalID);
         setGoalInfo(response.goalRes);
         setGoalkpidetails(response.listResults);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllData();

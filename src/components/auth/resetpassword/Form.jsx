@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Box, Alert } from "@mui/material";
+import { Box } from "@mui/material";
 import CustomTextField from "../../common/CustomTextField";
 import { authValidations } from "../authValidations";
 import Navigation from "../subComponents/Navigation";
@@ -31,7 +31,6 @@ export default function Form() {
       const response = await forgotPassword(formData);
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     } finally {
       setLoading(false);
@@ -39,13 +38,12 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
-      {/* <Box mb={2}>
-        <Alert icon={false} severity="error" color="error">
-          Enter your Email, and instructions will be sent to you!
-        </Alert>
-      </Box> */}
-
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
       <Box sx={{ height: "65px" }}>
         <CustomTextField
           name="email_address"
@@ -57,12 +55,18 @@ export default function Form() {
       </Box>
 
       <Box mb={1}>
-        <ReCAPTCHA sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" onChange={handleCaptchaChange} />
+        <ReCAPTCHA
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          onChange={handleCaptchaChange}
+        />
       </Box>
 
-      <AuthButton loading={loading} buttonText="Reset" disabled={!isCaptchaVerified} />
+      <AuthButton
+        loading={loading}
+        buttonText="Reset"
+        disabled={!isCaptchaVerified}
+      />
 
-      {/* Navigation */}
       <Navigation question="Remember It?" linkLabel="Sign In here" path="/" />
     </Box>
   );

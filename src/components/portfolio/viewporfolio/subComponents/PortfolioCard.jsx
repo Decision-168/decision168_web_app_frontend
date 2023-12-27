@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Box, Button, Grid, Paper, Typography, Menu, MenuItem, useMediaQuery, Stack } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  Stack,
+} from "@mui/material";
 import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -14,20 +25,34 @@ import AddDepartmentForm from "./AddDepartmentForm";
 import ViewDepartmentTable from "./ViewDepartmentTable";
 import AllMembersTable from "./AllMembersTable";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import DeleteDailogContent from "./DeleteDailogContent";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateProject from "../../../project/Dialogs/CreateProject";
 import { useNavigate } from "react-router-dom";
-import { getPortfolioDeparmentsAsync, getPortfolioTeamMembersAsync, getProjectAndTaskCountAsync, selectPorfolioDepartments, selectPorfolioDetails, selectPorfolioTeamMembers, selectProjectAndTaskCount } from "../../../../redux/action/portfolioSlice";
+import {
+  getPortfolioDeparmentsAsync,
+  getPortfolioTeamMembersAsync,
+  getProjectAndTaskCountAsync,
+  selectPorfolioDepartments,
+  selectPorfolioDetails,
+  selectPorfolioTeamMembers,
+  selectProjectAndTaskCount,
+} from "../../../../redux/action/portfolioSlice";
 import { useSelector } from "react-redux";
 import CardAvatar from "../../../common/CardAvatar";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 import { patchArchivePortfolio } from "../../../../api/modules/ArchiveModule";
-import { patchDeleteGoal, patchDeletePortfolio } from "../../../../api/modules/TrashModule";
+import {
+  patchDeleteGoal,
+  patchDeletePortfolio,
+} from "../../../../api/modules/TrashModule";
 
 export default function PortfolioCard({ regId }) {
   const theme = useTheme();
@@ -106,7 +131,8 @@ export default function PortfolioCard({ regId }) {
   };
 
   //View Department Dailog code
-  const [openViewDepartmentDialog, setOpenViewDepartmentDialog] = React.useState(false);
+  const [openViewDepartmentDialog, setOpenViewDepartmentDialog] =
+    React.useState(false);
 
   const handleOpenViewDepartmentDailog = () => {
     setOpenViewDepartmentDialog(true);
@@ -143,9 +169,9 @@ export default function PortfolioCard({ regId }) {
     try {
       const response = await patchArchivePortfolio(portfId, userID);
       dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-      if(storedPortfolioId == portfId){
+      if (storedPortfolioId == portfId) {
         localStorage.removeItem("portfolioId");
-        navigate(`/portfolio`)
+        navigate(`/portfolio`);
       }
       toast.success(`${response.message}`);
     } catch (error) {
@@ -158,9 +184,9 @@ export default function PortfolioCard({ regId }) {
     try {
       const response = await patchDeletePortfolio(portfolioid, userID);
       dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
-      if(storedPortfolioId == portfolioid){
+      if (storedPortfolioId == portfolioid) {
         localStorage.removeItem("portfolioId");
-        navigate(`/portfolio`)
+        navigate(`/portfolio`);
       }
       toast.success(`${response.message}`);
       handleCloseDeleteDialog();
@@ -180,7 +206,11 @@ export default function PortfolioCard({ regId }) {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <CardAvatar fullName={details?.portfolio_name} photo={details?.photo} designation={details?.designation} />
+          <CardAvatar
+            fullName={details?.portfolio_name}
+            photo={details?.photo}
+            designation={details?.designation}
+          />
         </Grid>
 
         <Grid item xs={12} md={7}>
@@ -188,7 +218,12 @@ export default function PortfolioCard({ regId }) {
             {items.map((item, index) => (
               <Grid item xs={12} sm={4} p={2} key={index}>
                 <Stack alignItems="flex-start" flexDirection={"column"}>
-                  <Typography variant="caption" textAlign={"left"} display="block" gutterBottom>
+                  <Typography
+                    variant="caption"
+                    textAlign={"left"}
+                    display="block"
+                    gutterBottom
+                  >
                     {item.count}
                   </Typography>
                   <Typography
@@ -224,25 +259,59 @@ export default function PortfolioCard({ regId }) {
           </Link>
         </Grid> */}
 
-        <Grid item xs={12} md={8} textAlign={isSmallScreen ? "left" : "end"} p={1}>
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }} onClick={() => dispatch(openModal("create-project"))}>
+        <Grid
+          item
+          xs={12}
+          md={8}
+          textAlign={isSmallScreen ? "left" : "end"}
+          p={1}
+        >
+          <Button
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            size="small"
+            sx={{ m: 1 }}
+            onClick={() => dispatch(openModal("create-project"))}
+          >
             Add project
           </Button>
 
           <Box display="inline-block" sx={{ m: 1 }}>
-            <Button onClick={handleOpenMemberDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+            <Button
+              onClick={handleOpenMemberDailog}
+              variant="contained"
+              endIcon={<ArrowForwardIcon />}
+              size="small"
+            >
               Add member
             </Button>
-            <CustomDialog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
+            <CustomDialog
+              handleClose={handleCloseMemberDailog}
+              open={openMemberDialog}
+              modalTitle="Add to Portfolio Team Members"
+              showModalButton={false}
+              modalSize="sm"
+            >
               <AddMemberForm handleClose={handleCloseMemberDailog} />
             </CustomDialog>
           </Box>
 
           <Box display="inline-block" sx={{ m: 1 }}>
-            <Button onClick={handleOpenMembersDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
+            <Button
+              onClick={handleOpenMembersDailog}
+              variant="contained"
+              endIcon={<ArrowForwardIcon />}
+              size="small"
+            >
               Members
             </Button>
-            <CustomDialog handleClose={handleCloseMembersDailog} open={openMembersDialog} modalTitle="All Portfolio Members" showModalButton={false} modalSize="md">
+            <CustomDialog
+              handleClose={handleCloseMembersDailog}
+              open={openMembersDialog}
+              modalTitle="All Portfolio Members"
+              showModalButton={false}
+              modalSize="md"
+            >
               <AllMembersTable data={members} />
             </CustomDialog>
           </Box>
@@ -274,29 +343,71 @@ export default function PortfolioCard({ regId }) {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleOpenDepartmentDailog}>Add Department</MenuItem>
-              <MenuItem onClick={handleOpenViewDepartmentDailog}>View Department</MenuItem>
+              <MenuItem onClick={handleOpenDepartmentDailog}>
+                Add Department
+              </MenuItem>
+              <MenuItem onClick={handleOpenViewDepartmentDailog}>
+                View Department
+              </MenuItem>
 
-              <MenuItem component={Link} to={`/portfolio-edit/${storedPortfolioId}`} onClick={handleClose}>
+              <MenuItem
+                component={Link}
+                to={`/portfolio-edit/${storedPortfolioId}`}
+                onClick={handleClose}
+              >
                 Edit
               </MenuItem>
-              <MenuItem onClick={() => handleArchive(storedPortfolioId)}>Archive</MenuItem>
-              <MenuItem onClick={() => handleDelete(storedPortfolioId)}>Delete</MenuItem>
+              <MenuItem onClick={() => handleArchive(storedPortfolioId)}>
+                Archive
+              </MenuItem>
+              <MenuItem onClick={() => handleDelete(storedPortfolioId)}>
+                Delete
+              </MenuItem>
             </Menu>
 
-            <CustomDialog handleClose={handleCloseDepartmentDailog} open={openDepartmentDialog} modalTitle="Add Department" showModalButton={false} modalSize="md">
-              <AddDepartmentForm handleClose={handleCloseDepartmentDailog} data={departments} />
+            <CustomDialog
+              handleClose={handleCloseDepartmentDailog}
+              open={openDepartmentDialog}
+              modalTitle="Add Department"
+              showModalButton={false}
+              modalSize="md"
+            >
+              <AddDepartmentForm
+                handleClose={handleCloseDepartmentDailog}
+                data={departments}
+              />
             </CustomDialog>
 
-            <CustomDialog handleClose={handleCloseViewDepartmentDailog} open={openViewDepartmentDialog} modalTitle="All Portfolio Departments" showModalButton={false} modalSize="md">
+            <CustomDialog
+              handleClose={handleCloseViewDepartmentDailog}
+              open={openViewDepartmentDialog}
+              modalTitle="All Portfolio Departments"
+              showModalButton={false}
+              modalSize="md"
+            >
               <ViewDepartmentTable data={departments} />
             </CustomDialog>
 
-            <CustomDialog handleClose={handleCloseDeleteDialog} open={openDeleteDialog} modalTitle="Delete Portfolio" showModalButton={false} modalSize="sm">
-              <DeleteDailogContent handleClose={handleCloseDeleteDialog} portfolio_id={portfId} handleDelete={handleDeleteYes} />
+            <CustomDialog
+              handleClose={handleCloseDeleteDialog}
+              open={openDeleteDialog}
+              modalTitle="Delete Portfolio"
+              showModalButton={false}
+              modalSize="sm"
+            >
+              <DeleteDailogContent
+                handleClose={handleCloseDeleteDialog}
+                portfolio_id={portfId}
+                handleDelete={handleDeleteYes}
+              />
             </CustomDialog>
-            <ReduxDialog value="create-project" modalTitle="Create New Project" showModalButton={false} modalSize="md">
-            <CreateProject flag="add" gid={0} sid={0} passPID={0}/>
+            <ReduxDialog
+              value="create-project"
+              modalTitle="Create New Project"
+              showModalButton={false}
+              modalSize="md"
+            >
+              <CreateProject flag="add" gid={0} sid={0} passPID={0} />
             </ReduxDialog>
           </Box>
         </Grid>
@@ -305,8 +416,14 @@ export default function PortfolioCard({ regId }) {
           <CustomAvatarGroup data={members} />
         </Grid>
       </Grid>
-      <ConfirmationDialog value={"archivePortfolio"} handleYes={handleArchiveYes} />
-      <ConfirmationDialog value={"deletePortfolio"} handleYes={handleDeleteYes} />
+      <ConfirmationDialog
+        value={"archivePortfolio"}
+        handleYes={handleArchiveYes}
+      />
+      <ConfirmationDialog
+        value={"deletePortfolio"}
+        handleYes={handleDeleteYes}
+      />
     </Paper>
   );
 }

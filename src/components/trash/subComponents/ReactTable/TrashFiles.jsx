@@ -6,8 +6,19 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import { getFilesDeleteData, patchDeleteForeverProjectFile, patchDeleteForeverSubtaskFile, patchDeleteForeverTaskFile, patchRetrieveProjectFile, patchRetrieveSubtaskFile, patchRetrieveTaskFile } from "../../../../api/modules/TrashModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import {
+  getFilesDeleteData,
+  patchDeleteForeverProjectFile,
+  patchDeleteForeverSubtaskFile,
+  patchDeleteForeverTaskFile,
+  patchRetrieveProjectFile,
+  patchRetrieveSubtaskFile,
+  patchRetrieveTaskFile,
+} from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 
 const TrashFiles = ({ value, regId, portfolioId }) => {
@@ -22,15 +33,13 @@ const TrashFiles = ({ value, regId, portfolioId }) => {
     try {
       const response = await getFilesDeleteData(regId, portfolioId);
       setDeleteData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchDeleteData();
   }, [regId]);
-  
+
   const handleRestore = (type, id, module_id, file_name) => {
     setDeleteType(type);
     setDeleteId(id);
@@ -61,100 +70,124 @@ const TrashFiles = ({ value, regId, portfolioId }) => {
 
   const fetchRetrieveProjectFile = async () => {
     try {
-      const response = await patchRetrieveProjectFile(moduleId, deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      const response = await patchRetrieveProjectFile(
+        moduleId,
+        deleteId,
+        regId
+      );
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const fetchRetrieveTaskFile = async () => {
     try {
-      const response = await patchRetrieveTaskFile(moduleId, fileName, deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      const response = await patchRetrieveTaskFile(
+        moduleId,
+        fileName,
+        deleteId,
+        regId
+      );
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const fetchRetrieveSubtaskFile = async () => {
     try {
-      const response = await patchRetrieveSubtaskFile(moduleId, fileName, deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
+      const response = await patchRetrieveSubtaskFile(
+        moduleId,
+        fileName,
+        deleteId,
+        regId
+      );
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'restoreModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "restoreModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
-   // ------- Delete Forever Modules -------------------------
+  // ------- Delete Forever Modules -------------------------
   const fetchDeleteForeverProjectFile = async () => {
     try {
       const response = await patchDeleteForeverProjectFile(deleteId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const fetchDeleteForeverTaskFile = async () => {
     try {
-      const response = await patchDeleteForeverTaskFile(moduleId, deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      const response = await patchDeleteForeverTaskFile(
+        moduleId,
+        deleteId,
+        regId
+      );
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
-  
+
   const fetchDeleteForeverSubtaskFile = async () => {
     try {
-      const response = await patchDeleteForeverSubtaskFile(moduleId, deleteId, regId);
-      fetchDeleteData()
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
+      const response = await patchDeleteForeverSubtaskFile(
+        moduleId,
+        deleteId,
+        regId
+      );
+      fetchDeleteData();
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "deleteModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const handleRestoreYes = () => {
-    if(deleteType == 'Project File') {
-      fetchRetrieveProjectFile()
-    }if(deleteType == 'Task File') {
-      fetchRetrieveTaskFile()
-    }else if(deleteType == 'Subtask File') {
-      fetchRetrieveSubtaskFile()
+    if (deleteType == "Project File") {
+      fetchRetrieveProjectFile();
     }
-  };  
+    if (deleteType == "Task File") {
+      fetchRetrieveTaskFile();
+    } else if (deleteType == "Subtask File") {
+      fetchRetrieveSubtaskFile();
+    }
+  };
 
   const handleDeleteYes = () => {
-    if(deleteType == 'Project File') {
-      fetchDeleteForeverProjectFile()
-    }if(deleteType == 'Task File') {
-      fetchDeleteForeverTaskFile()
-    }else if(deleteType == 'Subtask File') {
-      fetchDeleteForeverSubtaskFile()
+    if (deleteType == "Project File") {
+      fetchDeleteForeverProjectFile();
+    }
+    if (deleteType == "Task File") {
+      fetchDeleteForeverTaskFile();
+    } else if (deleteType == "Subtask File") {
+      fetchDeleteForeverSubtaskFile();
     }
   };
 
@@ -206,7 +239,14 @@ const TrashFiles = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleRestore(row.original.file_type, row.original.table_id, row.original.module_id, row.original.file_name)}
+              onClick={() =>
+                handleRestore(
+                  row.original.file_type,
+                  row.original.table_id,
+                  row.original.module_id,
+                  row.original.file_name
+                )
+              }
             >
               Restore
             </Button>
@@ -229,7 +269,14 @@ const TrashFiles = ({ value, regId, portfolioId }) => {
               size="small"
               variant="contained"
               sx={{ backgroundColor: "#383838", color: "#ffffff" }}
-              onClick={() => handleDelete(row.original.file_type, row.original.table_id, row.original.module_id, row.original.file_name)}
+              onClick={() =>
+                handleDelete(
+                  row.original.file_type,
+                  row.original.table_id,
+                  row.original.module_id,
+                  row.original.file_name
+                )
+              }
             >
               Delete
             </Button>
@@ -294,7 +341,10 @@ const TrashFiles = ({ value, regId, portfolioId }) => {
       >
         <MaterialReactTable table={table} />
       </Container>
-      <ConfirmationDialog value={"restoreModule"} handleYes={handleRestoreYes} />
+      <ConfirmationDialog
+        value={"restoreModule"}
+        handleYes={handleRestoreYes}
+      />
       <ConfirmationDialog value={"deleteModule"} handleYes={handleDeleteYes} />
     </>
   );

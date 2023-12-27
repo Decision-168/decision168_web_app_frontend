@@ -1,6 +1,18 @@
 import React, { useEffect, useState, memo } from "react";
-import { FormControl, Select, MenuItem, Typography, Box, IconButton, Chip } from "@mui/material";
-import { activePotfolioTeamMembers, editTaskAndSubtask, getGoalTeamMembers } from "../../../api/modules/taskModule";
+import {
+  FormControl,
+  Select,
+  MenuItem,
+  Typography,
+  Box,
+  IconButton,
+  Chip,
+} from "@mui/material";
+import {
+  activePotfolioTeamMembers,
+  editTaskAndSubtask,
+  getGoalTeamMembers,
+} from "../../../api/modules/taskModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -24,7 +36,9 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
     if (assigneeId === regId) {
       return "Assign to me";
     } else {
-      const foundAssignee = assignees?.find((assignee) => assignee?.reg_id === assigneeId);
+      const foundAssignee = assignees?.find(
+        (assignee) => assignee?.reg_id === assigneeId
+      );
 
       // Check if an assignee with the given reg_id was found
       if (foundAssignee) {
@@ -61,7 +75,9 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
         const storedRegId = regId;
 
         // Find the index of the team member with reg_id equal to storedRegId
-        const indexOfStoredRegId = teamMembers.findIndex((member) => member.reg_id === storedRegId);
+        const indexOfStoredRegId = teamMembers.findIndex(
+          (member) => member.reg_id === storedRegId
+        );
 
         // If the member with storedRegId is found, replace its name with "Assign to me"
         if (indexOfStoredRegId !== -1) {
@@ -69,12 +85,12 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
         }
 
         // Sort the array so that "Assign to me" is always the first option
-        teamMembers.sort((a, b) => (a.name === "Assign to me" ? -1 : b.name === "Assign to me" ? 1 : 0));
+        teamMembers.sort((a, b) =>
+          a.name === "Assign to me" ? -1 : b.name === "Assign to me" ? 1 : 0
+        );
 
         setAssignees(teamMembers);
-      } catch (error) {
-        console.error("Error fetching team members:", error);
-      }
+      } catch (error) {}
     };
 
     fetchTeamMembers();
@@ -104,12 +120,13 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
       };
 
       // Assuming editTaskAndSubtask returns a Promise
-      const response = type === "task" ? await editTaskAndSubtask(portfolioId, taskData) : await editTaskAndSubtask(portfolioId, subtaskData);
+      const response =
+        type === "task"
+          ? await editTaskAndSubtask(portfolioId, taskData)
+          : await editTaskAndSubtask(portfolioId, subtaskData);
       toast.success(`${response?.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.message}`);
-      // Handle any errors that occur during the API call
-      console.error("Error updating assignee:", error);
     }
   };
 
@@ -123,16 +140,17 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
       setSelectedAssignee(event.target.value);
       // Close the assignee editing
       setEditAssignee(null);
-    } catch (error) {
-      console.error("Error handling the task assignee:", error);
-    }
+    } catch (error) {}
   };
 
   return (
     <Box sx={{ minWidth: 120 }}>
       {editAssignee === rowID ? (
         <FormControl fullWidth>
-          <Select value={selectedAssignee} onChange={(event) => handleAssignee(event, rowID)}>
+          <Select
+            value={selectedAssignee}
+            onChange={(event) => handleAssignee(event, rowID)}
+          >
             {assignees.map((assignee, index) => (
               <MenuItem key={index} value={assignee.reg_id}>
                 <Typography component="p" variant="caption" display="block">
@@ -152,7 +170,12 @@ const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
               maxWidth: "85px",
             }}
           />
-          <IconButton size="small" type="button" sx={{ fontSize: "1rem" }} onClick={() => handleEditAssignee(rowID)}>
+          <IconButton
+            size="small"
+            type="button"
+            sx={{ fontSize: "1rem" }}
+            onClick={() => handleEditAssignee(rowID)}
+          >
             <ExpandMoreIcon fontSize="inherit" />
           </IconButton>
         </Box>

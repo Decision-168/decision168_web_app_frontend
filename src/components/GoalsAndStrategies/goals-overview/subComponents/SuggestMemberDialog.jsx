@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from "react";
-import CustomAutocomplete from "../../../common/CustomAutocomplete";
 import { useForm } from "react-hook-form";
 import {
   Autocomplete,
@@ -45,7 +44,7 @@ const SuggestMemberDialog = ({ id, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     gid: id,
-    user_id: user_id, 
+    user_id: user_id,
     team_member: [],
     imemail: [],
   });
@@ -54,13 +53,14 @@ const SuggestMemberDialog = ({ id, type, refreshData }) => {
     useEffect(() => {
       const fetchAllHistoryData = async () => {
         try {
-          const response = await getAccepted_PortTM_GoalList(storedPorfolioId, id);
+          const response = await getAccepted_PortTM_GoalList(
+            storedPorfolioId,
+            id
+          );
           if (response) {
             setmemberData(response);
           }
-        } catch (error) {
-          console.error(error);
-        }
+        } catch (error) {}
       };
 
       fetchAllHistoryData();
@@ -105,7 +105,6 @@ const SuggestMemberDialog = ({ id, type, refreshData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }

@@ -18,7 +18,7 @@ const PricingCardBody = ({
   selectedPackID,
   packPrice,
   selectedPackPrice,
-  CouponPack
+  CouponPack,
 }) => {
   const theme = useTheme();
   return (

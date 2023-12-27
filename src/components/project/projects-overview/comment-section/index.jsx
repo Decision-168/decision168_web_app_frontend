@@ -47,7 +47,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getProjectComments(projectId, userID);
           setMessages(response.projectCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }
@@ -58,7 +57,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getTaskComments(taskId, userID);
           setMessages(response.taskCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }
@@ -69,7 +67,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
           const response = await getSubtaskComments(subtaskId, userID);
           setMessages(response.subtaskCommentDetail);
         } catch (error) {
-          console.error(error);
         } finally {
           setLoading(false);
         }

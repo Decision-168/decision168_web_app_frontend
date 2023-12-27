@@ -201,7 +201,6 @@ const MyAlertDataTable = () => {
         modalSize="lg"
       >
         <TaskPreview filteredRow={filteredTask} />
-
       </CustomDialog>
     </>
   );

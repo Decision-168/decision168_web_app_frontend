@@ -61,7 +61,6 @@ export default function TaskInfo({ styles, info }) {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in changing the task status:", error);
     } finally {
       setLoading(false);
     }

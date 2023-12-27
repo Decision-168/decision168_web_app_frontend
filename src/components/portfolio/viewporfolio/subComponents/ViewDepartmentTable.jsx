@@ -1,15 +1,19 @@
 import { useMemo, memo, useState } from "react";
-import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
+import {
+  useMaterialReactTable,
+  MaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Typography, IconButton, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  updatePortfolioDepartment,
-} from "../../../../api/modules/porfolioModule";
+import { updatePortfolioDepartment } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -44,13 +48,14 @@ const ViewDepartmentTable = ({ data }) => {
     const status = deptStatus === "active" ? "inactive" : "active";
     const departmentId = depId;
     try {
-      const response = await updatePortfolioDepartment(departmentId, { dstatus: status });
+      const response = await updatePortfolioDepartment(departmentId, {
+        dstatus: status,
+      });
       dispatch(getPortfolioDeparmentsAsync(storedPorfolioId));
       toast.success(`${response.message}`);
       dispatch(closeCnfModal({ modalName: "changeStatus" }));
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating portfolio member status:", error);
     }
   };
 
@@ -73,7 +78,6 @@ const ViewDepartmentTable = ({ data }) => {
       setIsEditing(false);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating department name:", error);
     }
   };
 
@@ -97,7 +101,8 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <TextField
                 fullWidth
                   size="small"
@@ -120,7 +125,8 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <Typography>{row.original.department}</Typography>
                 <IconButton size="small" sx={{fontSize:"1rem"}}
                   onClick={() =>
@@ -144,7 +150,8 @@ const ViewDepartmentTable = ({ data }) => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{
                 mr: 1,
@@ -168,7 +175,8 @@ const ViewDepartmentTable = ({ data }) => {
                   row.original.department,
                   row.original.dstatus
                 )
-              }>
+              }
+            >
               {row.original.dstatus}
             </Button>
           </Box>

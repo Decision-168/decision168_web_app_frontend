@@ -3,7 +3,6 @@ import BasicBreadcrumbs from "../common/BasicBreadcrumbs";
 import { Box, Grid, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { FormatListBulleted, GridView } from "@mui/icons-material";
 import GridSection from "./sections/GridSection";
-import RadioSection from "./sections/RadioSection";
 import TreeSection from "./sections/TreeSection";
 import RecentFiles from "./sections/RecentFiles";
 import GoalPopup from "./popup/GoalPopup";
@@ -31,9 +30,7 @@ const FileCabinet = () => {
     try {
       const response = await getTreeData(storedPortfolioId, userID);
       setTreeData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

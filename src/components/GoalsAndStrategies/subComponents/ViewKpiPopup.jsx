@@ -59,9 +59,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
       const response = await getStrategyDetail(kpi_id);
       setkpiDetail(response.kpiRes);
       setkpiProDetails(response.projectRes);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -86,7 +84,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
           setdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setdisplayBtns("no");
       }
     };
@@ -102,9 +99,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
       try {
         const hresponse = await getViewHistoryDateStrategy(kpi_id);
         setallKPIHist(hresponse.history_dates);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchKPIAllHistoryData();
@@ -168,7 +163,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
       navigate(`/goal-overview/${kpiDetail.gid}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
@@ -180,7 +174,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
       navigate(`/goal-overview/${kpiDetail.gid}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 

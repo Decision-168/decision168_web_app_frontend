@@ -82,7 +82,6 @@ export default function AddMemberForm({ handleClose }) {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in inserting portfolio member:", error);
     } finally {
       setLoading(false);
     }
@@ -130,7 +129,8 @@ export default function AddMemberForm({ handleClose }) {
               backgroundColor: theme.palette.secondary.main,
               color: theme.palette.secondary.light,
               "&:hover": { backgroundColor: theme.palette.secondary.dark },
-            }}>
+            }}
+          >
             Close
           </Button>
           <Button size="small" type="submit" variant="contained">

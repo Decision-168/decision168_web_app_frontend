@@ -9,7 +9,10 @@ import AddIcon from "@mui/icons-material/Add";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getPorfolioCount, getPortfolios } from "../../../../../api/modules/porfolioModule";
+import {
+  getPorfolioCount,
+  getPortfolios,
+} from "../../../../../api/modules/porfolioModule";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import portfolioImage from "../../../../../assets/images/person.png";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -75,9 +78,7 @@ export default function PortfolioMenu() {
     try {
       const response = await getPortfolios({ email });
       setPortfolios(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -86,12 +87,13 @@ export default function PortfolioMenu() {
 
   useEffect(() => {
     if (storedPortfolioId && portfolios) {
-      const portfolioIndex = portfolios?.findIndex((p) => p?.portfolio_id === storedPortfolioId);
+      const portfolioIndex = portfolios?.findIndex(
+        (p) => p?.portfolio_id === storedPortfolioId
+      );
 
       if (portfolioIndex !== -1) {
         setSelectedIndex(portfolioIndex);
       } else {
-        console.log("Portfolio not found");
       }
     }
   }, [storedPortfolioId, portfolios]);
@@ -104,7 +106,11 @@ export default function PortfolioMenu() {
   };
 
   const isValidPortfolioCount = (count, packCount) => {
-    return typeof count === "number" && typeof packCount === "number" && count === packCount;
+    return (
+      typeof count === "number" &&
+      typeof packCount === "number" &&
+      count === packCount
+    );
   };
 
   const handleCreatePortfolioClick = async (event) => {

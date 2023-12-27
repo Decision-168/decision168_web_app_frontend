@@ -45,9 +45,7 @@ const PortfolioListView = () => {
     try {
       const response = await allPortfolios(userEmail, userID);
       setPortfolioData(response.portfolioList);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -105,14 +103,14 @@ const PortfolioListView = () => {
     try {
       const response = await patchArchivePortfolio(portfId, userID);
       dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-      if(storedPortfolioId == portfId){
+      if (storedPortfolioId == portfId) {
         localStorage.removeItem("portfolioId");
-        navigate(`/portfolio`)
+        navigate(`/portfolio`);
       }
       toast.success(`${response.message}`);
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-      console.log(error.response.data);
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -133,9 +131,9 @@ const PortfolioListView = () => {
     try {
       const response = await patchDeletePortfolio(portfolioid, userID);
       dispatch(closeCnfModal({ modalName: "deletePortfolio" }));
-      if(storedPortfolioId == portfolioid){
+      if (storedPortfolioId == portfolioid) {
         localStorage.removeItem("portfolioId");
-        navigate(`/portfolio`)
+        navigate(`/portfolio`);
       }
       toast.success(`${response.message}`);
       handleCloseDeleteDialog();
@@ -161,8 +159,8 @@ const PortfolioListView = () => {
   const handleView = (pfId) => {
     localStorage.removeItem("portfolioId");
     localStorage.setItem("portfolioId", pfId);
-    navigate(`/portfolio-view`)
-  }
+    navigate(`/portfolio-view`);
+  };
 
   // Table columns configuration
   const columns = useMemo(
@@ -221,7 +219,9 @@ const PortfolioListView = () => {
                   size="small"
                   variant="contained"
                   sx={{ height: "24px", padding: "4px" }}
-                  onClick={() => navigate(`/portfolio-edit/${row.original.portfolioId}`)}
+                  onClick={() =>
+                    navigate(`/portfolio-edit/${row.original.portfolioId}`)
+                  }
                 >
                   Edit
                 </Button>

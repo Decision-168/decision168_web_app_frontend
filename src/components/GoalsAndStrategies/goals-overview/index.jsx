@@ -51,7 +51,7 @@ const GoalsOverview = () => {
         if (error.response?.status === 400) {
           navigate("/portfolio-goals");
         }
-        console.error(error);
+
         toast.error(`Portfolio Owner Inactive You!`);
         setdisplayData(false);
       }
@@ -69,9 +69,7 @@ const GoalsOverview = () => {
         const hresponse = await getViewHistoryDateGoal(gid);
         setName(hresponse.goal_detail);
         setallHist(hresponse.history_dates);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -94,7 +92,6 @@ const GoalsOverview = () => {
           setAccdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setAccdisplayBtns("no");
       }
     };

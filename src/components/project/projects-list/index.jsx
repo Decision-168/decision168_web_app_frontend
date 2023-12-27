@@ -68,9 +68,7 @@ const ProjectsList = () => {
     try {
       const response = await getDashboardProjectList(userID, portfolioId);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

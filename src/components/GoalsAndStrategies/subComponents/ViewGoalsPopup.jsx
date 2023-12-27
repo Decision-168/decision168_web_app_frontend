@@ -66,9 +66,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       const response = await getGoalDetail(gid);
       setgdetail(response.goalRes);
       setkpidetails(response.GoalsAllStrategiesListRes);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -93,7 +91,6 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           setdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setdisplayBtns("no");
       }
     };
@@ -109,9 +106,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       try {
         const hresponse = await getViewHistoryDateGoal(gid);
         setallHist(hresponse.history_dates);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -178,7 +173,6 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       navigate("/portfolio-goals");
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
@@ -190,7 +184,6 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       navigate("/portfolio-goals");
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 

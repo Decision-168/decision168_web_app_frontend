@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Button, DialogActions, DialogContent, Grid, InputLabel } from "@mui/material";
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  Grid,
+  InputLabel,
+} from "@mui/material";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { useTheme } from "@mui/material/styles";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
@@ -10,8 +16,16 @@ import { useDispatch } from "react-redux";
 import SelectOption from "../../common/SelectOption";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
-import { getPorfolioDepartments, getPortfolios } from "../../../api/modules/porfolioModule";
-import { getProjectTeamMembers, getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
+import {
+  getPorfolioDepartments,
+  getPortfolios,
+} from "../../../api/modules/porfolioModule";
+import {
+  getProjectTeamMembers,
+  getProjectsForSelectMenu,
+  insertTask,
+  updateTask,
+} from "../../../api/modules/taskModule";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +48,9 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
 
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [projects, setProjects] = useState([]);
-  const [selectedProjectIdObject, setSelectedProjectIdObject] = useState({ project_id: null });
+  const [selectedProjectIdObject, setSelectedProjectIdObject] = useState({
+    project_id: null,
+  });
   const [selectedProjectDeptId, setSelectedProjectDeptId] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [portfolios, setPortfolios] = useState([]);
@@ -77,7 +93,9 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
         tpriority: taskEditData?.tpriority,
         team_member2: taskEditData?.tassignee, //Assignee
         portfolio_id: storedPortfolioId,
-        tdue_date: taskEditData?.tdue_date ? new Date(taskEditData?.tdue_date) : "",
+        tdue_date: taskEditData?.tdue_date
+          ? new Date(taskEditData?.tdue_date)
+          : "",
       });
       setSelectedProjectIdObject({ project_id: taskEditData?.tproject_assign });
     }
@@ -112,9 +130,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       try {
         const fileArray = await createFileArray(filenames);
         setFiles(fileArray);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      } catch (error) {}
     })();
   }, [editMode, taskEditData?.tfile]);
 
@@ -127,13 +143,10 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
           user_id: userId,
         });
         setProjects(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
     fetchProjects();
   }, [storedPortfolioId, userId]);
-
 
   //fetch departments
   useEffect(() => {
@@ -141,9 +154,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       try {
         const response = await getPorfolioDepartments(storedPortfolioId);
         setDepartments(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchDepartments();
@@ -158,7 +169,12 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     // Update filtered departments based on selected project
     if (selectedProjectDeptId !== undefined && selectedProjectDeptId !== null) {
-      const filteredDepts = selectedProjectDeptId !== 0 ? departments.filter((d) => d.portfolio_dept_id === selectedProjectDeptId) : [];
+      const filteredDepts =
+        selectedProjectDeptId !== 0
+          ? departments.filter(
+              (d) => d.portfolio_dept_id === selectedProjectDeptId
+            )
+          : [];
       setFilteredDepartments(filteredDepts);
     }
   }, [selectedProjectDeptId, departments]);
@@ -169,9 +185,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       try {
         const portfoliosData = await getPortfolios({ email: email });
         setPortfolios(portfoliosData);
-      } catch (error) {
-        console.error("Error fetching portfolios:", error);
-      }
+      } catch (error) {}
     };
 
     // Fetch portfolios when the component mounts
@@ -182,6 +196,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
+<<<<<<< HEAD
         // Fetch project team members
         const response = await getProjectTeamMembers({ pid: selectedProjectIdObject?.project_id });
 
@@ -206,6 +221,19 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       } catch (error) {
         console.error(error);
       }
+=======
+        const response = await getProjectTeamMembers({
+          pid: selectedProjectIdObject?.project_id,
+        });
+
+        // Add the user to assignee to assignee list
+        const updatedResponse = [
+          ...response,
+          { reg_id: userId, name: "To Me" },
+        ];
+        setTeamMembers(updatedResponse);
+      } catch (error) {}
+>>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
     };
 
     // Fetch team members when the component mounts or when dependencies change
@@ -266,21 +294,33 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     // Display a toast message with custom field names
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      toast.error(
+        `Please fill in all required fields: ${errorFields.join(", ")}`
+      );
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = editMode ? await updateTask({ user_id: userId, data: { ...formData, tid: taskEditData?.tid } }) : await insertTask({ regId: userId, data: formData });
+      const response = editMode
+        ? await updateTask({
+            user_id: userId,
+            data: { ...formData, tid: taskEditData?.tid },
+          })
+        : await insertTask({ regId: userId, data: formData });
 
       dispatch(closeModal(`${editMode ? "edit-task" : "create-new-task"}`));
-      navigate(`/tasks-overview/${editMode ? (taskEditData || {}).tid : response?.taskInsertedId}`);
+      navigate(
+        `/tasks-overview/${
+          editMode ? (taskEditData || {}).tid : response?.taskInsertedId
+        }`
+      );
       toast.success(response.message);
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error(error.response?.data?.error || "An error occurred. Please try again.");
+      toast.error(
+        error.response?.data?.error || "An error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -291,7 +331,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       <DialogContent dividers>
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField label="Task" required={true} placeholder="Enter Task Name" name="tname" value={formValues.tname} onChange={handleChange("tname")} />
+            <CustomLabelTextField
+              label="Task"
+              required={true}
+              placeholder="Enter Task Name"
+              name="tname"
+              value={formValues.tname}
+              onChange={handleChange("tname")}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <SelectOption
@@ -309,7 +356,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField label="Description" required={false} placeholder="Enter Task Description..." name="tdes" value={formValues.tdes} onChange={handleChange("tdes")} />
+            <CustomMultilineTextField
+              label="Description"
+              required={false}
+              placeholder="Enter Task Description..."
+              name="tdes"
+              value={formValues.tdes}
+              onChange={handleChange("tdes")}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2}>
             <Grid container>
@@ -321,7 +375,17 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
                   idKey="portfolio_dept_id"
                   getOptionLabel={(option) => option.department}
                   dynamicOptions={false}
+<<<<<<< HEAD
                   staticOptions={selectedProjectDeptId !== undefined && selectedProjectDeptId !== null && selectedProjectDeptId !== 0 ? filteredDepartments : departments}
+=======
+                  staticOptions={
+                    selectedProjectDeptId !== undefined &&
+                    selectedProjectDeptId !== null &&
+                    selectedProjectDeptId !== 0
+                      ? filteredDepartments
+                      : departments
+                  }
+>>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
                   formValues={formValues}
                   setFormValues={setFormValues}
                 />
@@ -346,7 +410,14 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomMultilineTextField label="Note" required={false} placeholder="Enter Task Note..." name="tnote" value={formValues.tnote} onChange={handleChange("tnote")} />
+            <CustomMultilineTextField
+              label="Note"
+              required={false}
+              placeholder="Enter Task Note..."
+              name="tnote"
+              value={formValues.tnote}
+              onChange={handleChange("tnote")}
+            />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2}>
@@ -380,7 +451,15 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="file" value={files} handleFilesChange={handleFilesChange} />
+            <CustomFileInput
+              label="Attached File(s)"
+              placeholder="Choose files..."
+              multiple
+              required={false}
+              name="file"
+              value={files}
+              handleFilesChange={handleFilesChange}
+            />
           </Grid>
           <Grid item xs={12} sm={6} px={2} py={1}>
             <CustomDatePicker
@@ -425,8 +504,20 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
             >
               Close
             </Button>
-            <Button onClick={handleSubmit} size="small" type="button" variant="contained" sx={{ ml: 1 }}>
-              {loading ? <CircularLoader /> : editMode ? "Save Changes" : "Create"}
+            <Button
+              onClick={handleSubmit}
+              size="small"
+              type="button"
+              variant="contained"
+              sx={{ ml: 1 }}
+            >
+              {loading ? (
+                <CircularLoader />
+              ) : editMode ? (
+                "Save Changes"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Grid>
         </Grid>

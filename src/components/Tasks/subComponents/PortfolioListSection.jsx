@@ -36,7 +36,6 @@ const PortfolioListSection = ({ rows, setRows }) => {
       setRows(response.data);
       setTotalPages(response.totalPages);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }

@@ -64,9 +64,7 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
       setprojectRes(response.project);
       setprojectdetail(response);
       setGoalId(response.project.gid);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -118,7 +116,6 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "acceptedBy" || gettype === "sentTo") {
@@ -139,7 +136,6 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
         }
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "invited") {
@@ -159,12 +155,15 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "suggested") {
       try {
-        const response = await InsertSuggestedProjectMember(userID, pid, get_id);
+        const response = await InsertSuggestedProjectMember(
+          userID,
+          pid,
+          get_id
+        );
         settype("");
         set_id("");
         setpassname("");
@@ -173,12 +172,15 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "suggested-invite") {
       try {
-        const response = await InsertSuggestedInvitedProjectMember(userID, pid, get_id);
+        const response = await InsertSuggestedInvitedProjectMember(
+          userID,
+          pid,
+          get_id
+        );
         settype("");
         set_id("");
         setpassname("");
@@ -187,7 +189,6 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
   };
@@ -203,7 +204,6 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
@@ -354,7 +354,8 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
             displayBtns={displayBtns}
             data={gAllDetails.ProjectTeamMemberRes?.filter(
               (i) =>
-                i.status === "accepted" && i.pmember != getprojectRes.pcreated_by
+                i.status === "accepted" &&
+                i.pmember != getprojectRes.pcreated_by
             )}
           />
           <MembersChildAccordion

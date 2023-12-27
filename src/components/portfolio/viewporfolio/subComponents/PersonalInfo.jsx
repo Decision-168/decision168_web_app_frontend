@@ -7,42 +7,6 @@ import { useDispatch } from "react-redux";
 import SocialMedia from "../../../common/SocialMedia";
 import useCountryName from "../../../../hooks/useCountryName";
 
-// const PortfolioDetails = {
-//   contactPersonName: "John Doe",
-//   createdBy: "John Doe",
-//   type: "company",
-//   email: "johnDoe@decision168.com",
-//   website: "www.decision168.com",
-//   country: "United States",
-//   socialMedia: [
-//     {
-//       icon: <YouTubeIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "YouTube",
-//     },
-//     {
-//       icon: <PinterestIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "Pinterest",
-//     },
-//     {
-//       icon: <InstagramIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "Instagram",
-//     },
-//     {
-//       icon: <LinkedInIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "linkedIn",
-//     },
-//     {
-//       icon: <TwitterIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "Twitter",
-//     },
-//     {
-//       icon: <FacebookRoundedIcon sx={{ color: (theme) => theme.palette.primary.main }} />,
-//       name: "Facebook",
-//     },
-//   ],
-//   departments: ["Marketing", "Implementation", "Marketing & Sales"],
-// };
-
 export default function PersonalInfo() {
   const theme = useTheme();
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
@@ -53,9 +17,7 @@ export default function PersonalInfo() {
   const fetchPortfolioDetails = async () => {
     try {
       dispatch(getPortfolioDetailsAsync(storedPorfolioId));
-    } catch (fetchError) {
-      console.error("Error fetching portfolio details:", fetchError);
-    }
+    } catch (fetchError) {}
   };
 
   useEffect(() => {
@@ -91,7 +53,12 @@ export default function PersonalInfo() {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        gutterBottom
+                        textAlign="left"
+                      >
                         {details?.contact_fname}&nbsp;{details?.contact_lname}
                       </Typography>
                     </Grid>
@@ -106,7 +73,12 @@ export default function PersonalInfo() {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        gutterBottom
+                        textAlign="left"
+                      >
                         {details?.designation}
                       </Typography>
                     </Grid>
@@ -138,7 +110,12 @@ export default function PersonalInfo() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.portfolio_user}
                   </Typography>
                 </Grid>
@@ -153,7 +130,12 @@ export default function PersonalInfo() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.email_address}
                   </Typography>
                 </Grid>
@@ -168,7 +150,12 @@ export default function PersonalInfo() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {details?.company_website}
                   </Typography>
                 </Grid>
@@ -183,7 +170,12 @@ export default function PersonalInfo() {
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    textAlign="left"
+                  >
                     {countryName}
                   </Typography>
                 </Grid>

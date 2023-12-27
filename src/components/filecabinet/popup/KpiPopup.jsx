@@ -1,18 +1,45 @@
-import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
-import { BusinessCenter, CalendarMonth, Delete, Person } from "@mui/icons-material";
-import ArchiveIcon from '@mui/icons-material/Archive';
+import {
+  BusinessCenter,
+  CalendarMonth,
+  Delete,
+  Person,
+} from "@mui/icons-material";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import GridList from "../../GoalsAndStrategies/subComponents/GridList";
 import ProgressBar from "../subComponents/ProgressBar";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-import { getDepartmentData, getKPIData, getKpiProjectData, getUserData } from "../../../api/modules/FileCabinetModule";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  getDepartmentData,
+  getKPIData,
+  getKpiProjectData,
+  getUserData,
+} from "../../../api/modules/FileCabinetModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveKpi } from "../../../api/modules/ArchiveModule";
 import { patchDeleteKpi } from "../../../api/modules/TrashModule";
-const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+const KpiPopup = ({
+  nodes,
+  regId,
+  portfolioId,
+  handleClose,
+  fetchTreeData,
+}) => {
   const [kpiData, setKpiData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -26,9 +53,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
     try {
       const response = await getKPIData(nodes?.table_id);
       setKpiData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -36,16 +61,17 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
   }, [nodes]);
 
   const kpiStartDate = new Date(kpiData.screated_date);
-  const formattedKpiStartDate = `${kpiStartDate.getDate()} ${kpiStartDate.toLocaleString('default', { month: 'short' })}, ${kpiStartDate.getFullYear()}`;
+  const formattedKpiStartDate = `${kpiStartDate.getDate()} ${kpiStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${kpiStartDate.getFullYear()}`;
 
   // Department Data ----------------------------------------------
   const fetchDepartmentData = async () => {
     try {
       const response = await getDepartmentData(kpiData?.gdept_id);
       setDepartmentData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -59,9 +85,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
     try {
       const response = await getUserData(kpiData?.screated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -73,11 +97,14 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
   // KPI Project Data ----------------------------------------------
   const fetchKpiProjectData = async () => {
     try {
-      const response = await getKpiProjectData(regId,kpiData?.sid,kpiData?.gdept_id,portfolioId);
+      const response = await getKpiProjectData(
+        regId,
+        kpiData?.sid,
+        kpiData?.gdept_id,
+        portfolioId
+      );
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -86,7 +113,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
 
   // Archive
   const handleArchive = () => {
-    setModule('archive');
+    setModule("archive");
     dispatch(
       openCnfModal({
         modalName: "archiveKpi",
@@ -98,7 +125,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
 
   // Trash
   const handleDelete = () => {
-    setModule('delete');
+    setModule("delete");
     dispatch(
       openCnfModal({
         modalName: "deleteKpi",
@@ -109,30 +136,30 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
   };
 
   const handleYes = async () => {
-    if(module == 'archive') {
+    if (module == "archive") {
       try {
         const response = await patchArchiveKpi(kpiData?.sid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'archiveKpi' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "archiveKpi" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'archiveKpi' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "archiveKpi" }));
+        handleClose();
         toast.error(`${error.response.data?.error}`);
-      };
-    }else if(module == 'delete') {
+      }
+    } else if (module == "delete") {
       try {
         const response = await patchDeleteKpi(kpiData?.sid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'deleteKpi' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "deleteKpi" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'deleteKpi' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "deleteKpi" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
+      }
     }
   };
   // -----------End -----------------------------------------
@@ -177,8 +204,7 @@ const KpiPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => 
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-        </Grid>
+        <Grid item xs={12} md={12} lg={8}></Grid>
         <Grid item xs={12} md={12} lg={4}>
           <Box
             sx={{

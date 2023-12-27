@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import TaskProgressList from "./TaskProgressList";
 import { getTaskAssignees } from "../../../../api/modules/ProjectModule";
 
-const TaskContainer = ({pid}) => {
+const TaskContainer = ({ pid }) => {
   const [taskData, setTaskData] = useState([]);
   const [subtaskData, setSubtaskData] = useState([]);
   const fetchTaskData = async () => {
@@ -11,11 +11,9 @@ const TaskContainer = ({pid}) => {
       const response = await getTaskAssignees(pid);
       setTaskData(response.projectTaskAssigneeDetail);
       setSubtaskData(response.projectSubtaskAssigneeDetail);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchTaskData();
   }, [pid]);
