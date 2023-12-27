@@ -8,7 +8,10 @@ import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
 import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
-import VerifyProjectInviteMember from "../components/project/subComponents/VerifyProjectInviteMember";
+import VerifyGoalRequestMember from "../components/GoalsAndStrategies/subComponents/VerifyGoalRequestMember";
+import VerifyGoalInviteRequestMember from "../components/GoalsAndStrategies/subComponents/VerifyGoalInviteRequestMember";
+import VerifyProjectInviteRequestMember from "../components/project/subComponents/VerifyProjectInviteRequestMember";
+import VerifyProjectRequestMember from "../components/project/subComponents/VerifyProjectRequestMember";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -338,14 +341,26 @@ const RouteIndex = () => {
 
           <Route
             exact
+            path="/goal-request/:goalId/:primaryId/:flag"
+            element={<VerifyGoalRequestMember />}
+          />
+
+          <Route
+            exact
+            path="/goal-invite-reject-request/:goalId/:primaryId/:flag"
+            element={<VerifyGoalInviteRequestMember />}
+          />
+
+          <Route
+            exact
             path="/project-request/:projectId/:primaryId/:flag"
-            element={<VerifyProjectInviteMember />}
+            element={<VerifyProjectRequestMember />}
           />
 
           <Route
             exact
             path="/project-invite-reject-request/:projectId/:primaryId/:flag"
-            element={<VerifyProjectInviteMember />}
+            element={<VerifyProjectInviteRequestMember />}
           />
         </Route>
 

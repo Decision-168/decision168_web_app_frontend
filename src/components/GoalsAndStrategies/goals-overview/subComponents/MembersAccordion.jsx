@@ -370,7 +370,9 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
             bgColor={"#fde1e1"}
             pending={pending}
             displayBtns={displayBtns}
-            data={gAllDetails.InvitedGoalMemberRes}
+            data={gAllDetails.InvitedGoalMemberRes?.filter(
+              (i) => i.status === "pending"
+            )}
           />
           {!pending && (
             <MembersChildAccordion
