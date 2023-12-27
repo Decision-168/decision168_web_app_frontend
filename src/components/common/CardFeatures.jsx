@@ -19,7 +19,6 @@ export default function CardFeatures() {
         const response = await getAllCounts(email, id);
         setCounts(response);
       } catch (error) {
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -51,7 +50,12 @@ export default function CardFeatures() {
       {items.map((item, index) => (
         <Grid item xs={6} sm={3} p={2} key={index}>
           <Stack alignItems="flex-start" flexDirection={"column"}>
-            <Typography variant="caption" textAlign={"left"} display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              textAlign={"left"}
+              display="block"
+              gutterBottom
+            >
               {item.count}
             </Typography>
             <Typography
@@ -65,7 +69,8 @@ export default function CardFeatures() {
                   color: "#c7df19",
                 },
               }}
-              onClick={() => navigate(item.link)}>
+              onClick={() => navigate(item.link)}
+            >
               {item.label}
             </Typography>
           </Stack>

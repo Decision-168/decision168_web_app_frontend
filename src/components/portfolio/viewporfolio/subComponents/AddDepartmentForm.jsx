@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomTextField from "../../../common/CustomTextField";
 import { Box, Button, Grid, IconButton, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
@@ -12,34 +12,25 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import CircularLoader from "../../../common/CircularLoader";
 import { insertProjectPortfolioDepartment } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
-
-const departments = [
-  { title: "Admnistration" },
-  { title: "Accounting & Finanace" },
-  { title: "Customer Service" },
-  { title: "Human Resources" },
-  { title: "Marketing" },
-  { title: "Sales" },
-  { title: "Research & Development" },
-];
+import MultiSelectOption from "../../../common/MultiSelectOption";
+import { useDispatch } from "react-redux";
+import {  getPortfolioDetailsAsync } from "../../../../redux/action/portfolioSlice";
 
 export default function AddDepartmentForm({ handleClose, data }) {
-  console.log(data);
   const [show, setShow] = React.useState(true);
   const [inputFields, setInputFields] = React.useState([]);
-  const [departments, setDepartments] = React.useState([]);
+  const [departments, setDepartments] = useState({});
   const [loading, setLoading] = React.useState(false);
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const theme = useTheme();
   const user = useSelector(selectUserDetails);
+  const dispatch = useDispatch();
 
   const handleInputChange = (event, index) => {
     const values = [...inputFields];
     values[index][event.target.name] = event.target.value;
     setInputFields(values);
   };
-
-  console.log(inputFields);
 
   const handleAddClick = () => {
     setInputFields([...inputFields, { cus_department: "", error: false }]);
@@ -66,7 +57,6 @@ export default function AddDepartmentForm({ handleClose, data }) {
   };
 
   const handleDepartmentChange = (selectedOptions) => {
-    console.log("Selected departments:", selectedOptions);
     const departmentsArray = selectedOptions?.map((item) => item.department);
     setDepartments(departmentsArray);
   };
@@ -97,24 +87,24 @@ export default function AddDepartmentForm({ handleClose, data }) {
       return;
     }
 
-    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
+    const customDepartmentArray = updatedFields.map(
+      (item) => item.cus_department
+    );
     const data = {
       portfolio_id: storedPorfolioId,
-      departments: departments,
-      cus_departments: customDepartmentArray,
+      departments: departments?.department || [],
+      cus_departments: customDepartmentArray || [],
       createdby: user?.reg_id,
     };
-
-    alert(JSON.stringify(data));
 
     try {
       setLoading(true);
       const response = await insertProjectPortfolioDepartment(data);
+      dispatch(getPortfolioDetailsAsync(storedPorfolioId));
       handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in inserting portfolio department:", error);
     } finally {
       setLoading(false);
     }
@@ -125,14 +115,25 @@ export default function AddDepartmentForm({ handleClose, data }) {
       <Grid container>
         <Grid item xs={12} py={2} textAlign="start">
           {show && (
-            <FilterSelectedOptions
-              label=""
-              labelColor=""
+            // <FilterSelectedOptions
+            //   label=""
+            //   labelColor=""
+            //   required={false}
+            //   placeholder="Departments"
+            //   items={data}
+            //   onSelectionChange={handleDepartmentChange}
+            //   getOptionLabelFn={(option) => option.department}
+            // />
+
+            <MultiSelectOption
+              label="Department(s)"
               required={false}
-              placeholder="Departments"
-              items={data}
-              onSelectionChange={handleDepartmentChange}
-              getOptionLabelFn={(option) => option.department}
+              field="department"
+              idKey="department"
+              getOptionLabel={(option) => option.department}
+              staticOptions={data}
+              formValues={departments}
+              setFormValues={setDepartments}
             />
           )}
         </Grid>
@@ -180,7 +181,8 @@ export default function AddDepartmentForm({ handleClose, data }) {
               backgroundColor: theme.palette.secondary.main,
               color: theme.palette.secondary.light,
               "&:hover": { backgroundColor: theme.palette.secondary.dark },
-            }}>
+            }}
+          >
             Close
           </Button>
           <Button size="small" type="submit" variant="contained">

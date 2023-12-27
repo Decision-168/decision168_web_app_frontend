@@ -21,43 +21,46 @@ import ViewProjectPopup from "../GoalsAndStrategies/subComponents/ViewProjectPop
 import PendingProjectPopup from "./portfolio-projects-list/PendingProjectPopup";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../redux/action/userSlice";
-import { getProjectDetail, getProjectList } from "../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  getProjectList,
+} from "../../api/modules/ProjectModule";
 import { SearchWithFuse } from "../../helpers/SearchWithFuse";
- const filterOption = [
-   {
-     value: "all",
-     label: "All",
-   },
-   {
-     value: "created",
-     label: "Created",
-   },
-   {
-     value: "accepted",
-     label: "Accepted",
-   },
-   {
-     value: "pending",
-     label: "Pending",
-   },
-   {
-     value: "more-info-requests",
-     label: "More Info Requests",
-   },
-   {
-     value: "regular-projects",
-     label: "Regular Projects",
-   },
-   {
-     value: "goal-projects",
-     label: "Goal Projects",
-   },
- ];
+import { useParams } from "react-router";
+const filterOption = [
+  {
+    value: "all",
+    label: "All",
+  },
+  {
+    value: "created",
+    label: "Created",
+  },
+  {
+    value: "accepted",
+    label: "Accepted",
+  },
+  {
+    value: "pending",
+    label: "Pending",
+  },
+  {
+    value: "more-info-requests",
+    label: "More Info Requests",
+  },
+  {
+    value: "regular-projects",
+    label: "Regular Projects",
+  },
+  {
+    value: "goal-projects",
+    label: "Goal Projects",
+  },
+];
 const ProjectIndex = () => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
-  const storedPortfolioId = JSON.parse(localStorage.getItem('portfolioId'));
-
+  const { portfolioId } = useParams();
   const [projectData, setProjectData] = useState([]);
   const [projectId, setProjectId] = useState(0);
   const [projectTitle, setProjectTitle] = useState("");
@@ -65,11 +68,9 @@ const ProjectIndex = () => {
 
   const fetchProjectData = async () => {
     try {
-      const response = await getProjectList(userID, storedPortfolioId);
+      const response = await getProjectList(userID, portfolioId);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -79,7 +80,9 @@ const ProjectIndex = () => {
   const [alignment, setAlignment] = useState("list");
   const [value, setValue] = useState("all");
   const handleChangeSwitch = useCallback((event, newAlignment) => {
-    setAlignment(newAlignment);
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
   }, []);
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -96,24 +99,23 @@ const ProjectIndex = () => {
     setProjectTitle(pname);
     setPreviewProject(true);
   };
- const handlePendingProjectClose = () => {
-   setOpenPreviewPendingProj(false);
- };
- const handlePendingProjectOpen = (type, pid, pname) => {
+  const handlePendingProjectClose = () => {
+    setOpenPreviewPendingProj(false);
+  };
+  const handlePendingProjectOpen = (type, pid, pname) => {
     setProjectTitleType(type);
     setProjectId(pid);
     setProjectTitle(pname);
     setOpenPreviewPendingProj(true);
- };
+  };
   const dispatch = useDispatch();
   const align = alignment === "list";
 
-
   const [query, setQuery] = useState("");
-   const createData = projectData.projectRegularList;
-   const acceptedData = projectData.projectAcceptedList;
-   const pendingRequest = projectData.projectPendingList;
-   const moreInfoRequest = projectData.projectReadMoreList;
+  const createData = projectData.projectRegularList;
+  const acceptedData = projectData.projectAcceptedList;
+  const pendingRequest = projectData.projectPendingList;
+  const moreInfoRequest = projectData.projectReadMoreList;
   const cardData = {
     all: [
       ...(createData || []),
@@ -145,10 +147,63 @@ const ProjectIndex = () => {
     cardsToRender || []
   );
 
+  const tableData = {
+    all: [
+      { title: "Created Projects", data: createData },
+      { title: "Accepted Projects", data: acceptedData },
+      { title: "Pending Requests", data: pendingRequest },
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    created: [{ title: "Created Projects", data: createData }],
+    accepted: [{ title: "Accepted Projects", data: acceptedData }],
+    pending: [{ title: "Pending Requests", data: pendingRequest }],
+    "more-info-requests": [
+      { title: "More Info Requests", data: moreInfoRequest },
+    ],
+    "regular-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 0),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 0),
+      },
+    ],
+    "goal-projects": [
+      {
+        title: "Created Projects",
+        data: createData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Accepted Projects",
+        data: acceptedData?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "Pending Requests",
+        data: pendingRequest?.filter((i) => i.projectType === 1),
+      },
+      {
+        title: "More Info Requests",
+        data: moreInfoRequest?.filter((i) => i.projectType === 1),
+      },
+    ],
+  };
+
+  const tablesToRender = tableData[value] || [];
+
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
-        <Grid item xs={8} sm={8} md={4} lg={4}>
+        <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
             sx={{
               display: "flex",
@@ -186,10 +241,11 @@ const ProjectIndex = () => {
         </Grid>
         <Grid
           item
-          xs={4}
-          sm={align ? 8 : 5}
-          md={align ? 8 : 5}
-          lg={align ? 8 : 5}
+          xs={2}
+          sm={align ? 6 : 2}
+          md={align ? 6 : 2}
+          lg={align ? 5 : 2}
+          xl={align ? 5 : 2}
           alignSelf={"center"}
         >
           <Box
@@ -208,7 +264,7 @@ const ProjectIndex = () => {
           </Box>
         </Grid>
         {!align && (
-          <Grid item xs={8} sm={3} md={3} lg={3} alignSelf={"center"}>
+          <Grid item xs={12} sm={3} md={3} lg={3} alignSelf={"center"}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
         )}
@@ -219,7 +275,7 @@ const ProjectIndex = () => {
               handleOpen={handleProjectPreviewOpen}
               handlePendingOpen={handlePendingProjectOpen}
               value={value}
-              projectData={projectData}
+              projectData={tablesToRender}
             />
           ) : (
             <ProjectGridView
@@ -237,7 +293,7 @@ const ProjectIndex = () => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" />
+        <CreateProject flag="add" gid={0} sid={0} passPID={0} />
       </ReduxDialog>
       <CustomDialog
         handleClose={handleProjectPreviewClose}

@@ -10,7 +10,10 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,28 +25,40 @@ import TitleWithActions from "./TitleWithActions";
 import { description2 } from "./style-functions";
 import CreateProject from "../../project/Dialogs/CreateProject";
 import CreateEditTaskForm from "../../Tasks/createEditTask/CreateEditTaskForm";
-import { fileItProject, getProjectDetail, getViewHistoryDateProject } from "../../../api/modules/ProjectModule";
+import {
+  fileItProject,
+  getProjectDetail,
+  getViewHistoryDateProject,
+} from "../../../api/modules/ProjectModule";
 import { getUserData } from "../../../api/modules/FileCabinetModule";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { patchDeleteProject } from "../../../api/modules/TrashModule";
-const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) => {
+const ViewProjectPopup = ({
+  pid,
+  refreshData,
+  handleClose,
+  projectTitleType,
+}) => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [projectData, setProjectData] = useState([]);
+  const [projectDel, setProjectDel] = useState([]);
   const [userData, setUserData] = useState([]);
   const [currentPage, setCurrentPage] = useState(null);
 
   useEffect(() => {
     const pathName = window.location.pathname;
-    const pathSegments = pathName.split('/');
+    const pathSegments = pathName.split("/");
     const indexSecondLast = pathSegments.length - 2;
-    const secondLastParameter = indexSecondLast >= 0 ? pathSegments[indexSecondLast] : '';
+    const secondLastParameter =
+      indexSecondLast >= 0 ? pathSegments[indexSecondLast] : "";
     setCurrentPage(secondLastParameter);
   }, []);
 
@@ -51,33 +66,32 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+      setProjectDel(response.project);
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
-  const projectDetail = projectData?.project;
-  const projectName = projectDetail?.pname;
-  const projectDescription = projectDetail?.pdes;
+  const projectName = projectDel?.pname;
+  const projectDescription = projectDel?.pdes;
   const AllTaskCount = projectData?.allTaskCount;
   const DoneTaskCount = projectData?.doneTaskCount;
-  const links = projectDetail?.plink;
-  const link_comments = projectDetail?.plink_comment;
-  const projectStartDate = new Date(projectDetail?.pcreated_date);
-  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
-  const projectType = projectDetail?.ptype;
+  const links = projectDel?.plink;
+  const link_comments = projectDel?.plink_comment;
+  const projectStartDate = new Date(projectDel?.pcreated_date);
+  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${projectStartDate.getFullYear()}`;
+  const projectType = projectDel?.ptype;
 
   // Creater (User) Data ----------------------------------------------
   const fetchUserData = async () => {
     try {
-      const response = await getUserData(projectDetail?.pcreated_by);
+      const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -91,9 +105,7 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
     try {
       const response = await getViewHistoryDateProject(pid);
       setHistory(response.history_dates);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -121,20 +133,19 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
 
   const handleFileItYes = async () => {
     try {
-      const response = await fileItProject(pid, userID);  
-      dispatch(closeCnfModal({ modalName: 'fileItProject' }));
-      refreshData()
+      const response = await fileItProject(pid, userID);
+      dispatch(closeCnfModal({ modalName: "fileItProject" }));
+      refreshData();
       toast.success(`${response.message}`);
 
-      if(currentPage == 'projects-overview'){
+      if (currentPage == "projects-overview") {
         navigate(-1);
-      }else{
-        handleClose()
+      } else {
+        handleClose();
       }
-
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'fileItProject' }));
-      console.log(error)
+      dispatch(closeCnfModal({ modalName: "fileItProject" }));
+
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -142,19 +153,18 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   const handleDeleteYes = async () => {
     try {
       const response = await patchDeleteProject(pid, userID);
-      dispatch(closeCnfModal({ modalName: 'deleteProject' }));
-      refreshData()
+      dispatch(closeCnfModal({ modalName: "deleteProject" }));
+      refreshData();
       toast.success(`${response.message}`);
 
-      if(currentPage == 'projects-overview'){
+      if (currentPage == "projects-overview") {
         navigate(-1);
-      }else{
-        handleClose()
+      } else {
+        handleClose();
       }
-
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'deleteProject' }));
-      console.log(error)
+      dispatch(closeCnfModal({ modalName: "deleteProject" }));
+
       toast.error(`${error.response?.data?.error}`);
     }
   };
@@ -182,24 +192,23 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
   useEffect(() => {
     const DisplayAccordionActions = async () => {
       try {
-        if (projectDetail.pcreated_by == userID) {
+        if (projectDel.pcreated_by == userID) {
           setAccdisplayBtns("all");
         } else if (
-          projectDetail.get_portfolio_createdby_id == userID ||
-          projectDetail.pmanager == userID
+          projectDel.get_portfolio_createdby_id == userID ||
+          projectDel.pmanager == userID
         ) {
           setAccdisplayBtns("some");
         } else {
           setAccdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setAccdisplayBtns("no");
       }
     };
 
     DisplayAccordionActions();
-  }, [projectDetail, userID]);
+  }, [projectDel, userID]);
 
   const CommonLinks = ({ link, linkName }) => {
     return (
@@ -249,6 +258,13 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
       mb={2}
     >
       <Grid container spacing={2}>
+        {
+          projectDel?.portfolio_id != storedPorfolioId && (
+            <Typography sx={{
+              color: "red", fontSize: 14, textAlign: "left", ml:1, fontWeight: 500
+            }}>Different Portfolio is Selected!</Typography>
+          )
+        }  
         <TitleWithActions
           title={`Project: ${projectName}`}
           handleClick1={handleEditProject}
@@ -277,53 +293,61 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
         </Grid>
         <Grid item xs={12} md={12} lg={12} mb={2}>
           <Grid container spacing={2}>
-            {links && links.split(',').map((link, index) => (
-              <CommonLinks
-              key={index}
-              link={link}
-              linkName={link_comments.split(',')[index] && ( link_comments.split(',')[index] )}
-            /> 
-            ))}
+            {links &&
+              links
+                .split(",")
+                .map((link, index) => (
+                  <CommonLinks
+                    key={index}
+                    link={link}
+                    linkName={
+                      link_comments.split(",")[index] &&
+                      link_comments.split(",")[index]
+                    }
+                  />
+                ))}
           </Grid>
         </Grid>
 
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created Date"}
             info={formattedProjectStartDate}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
             info={userName}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <FolderOpenOutlined sx={{ color: "#c7df19", fontSize: "14px" }} />
             }
             title={"Type"}
             info={
-              projectType === 'content' ? 'Content' :
-              projectType === 'goal_strategy' ? 'Goals & Strategies' :
-              'Project'
+              projectType === "content"
+                ? "Content"
+                : projectType === "goal_strategy"
+                ? "Goals & Strategies"
+                : "Project"
             }
           />
         </Grid>
       </Grid>
       <ConfirmationDialog value={"fileItProject"} handleYes={handleFileItYes} />
-      <ConfirmationDialog value={"deleteProject"} handleYes={handleDeleteYes}/>
+      <ConfirmationDialog value={"deleteProject"} handleYes={handleDeleteYes} />
       <ReduxDialog
         value="duplicate-project"
         modalTitle="Copy Project"
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateProject projectData={projectData}/>
+        <DuplicateProject projectData={projectData} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -332,11 +356,11 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
         showModalButton={false}
         modalSize="md"
       >
-        <OverallHistory 
-        allHist={history}
-        name={projectName}
-        type={"project"}
-        id={pid}
+        <OverallHistory
+          allHist={history}
+          name={projectName}
+          type={"project"}
+          id={pid}
         />
       </ReduxDialog>
       <ReduxDialog
@@ -345,7 +369,13 @@ const ViewProjectPopup = ({ pid, refreshData, handleClose, projectTitleType }) =
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="edit" />
+        <CreateProject
+          flag="edit"
+          gid={projectDel?.gid}
+          sid={projectDel?.sid}
+          passPID={pid}
+          refreshData={fetchProjectData}
+        />
       </ReduxDialog>
       <ReduxDialog
         value="create-new-task"

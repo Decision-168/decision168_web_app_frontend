@@ -12,7 +12,7 @@ import { getStrategyDetail } from "../../../../api/modules/goalkpiModule";
 import { SearchWithFuse } from "../../../../helpers/SearchWithFuse";
 const ProjectSection = ({ kpi_id }) => {
   const dispatch = useDispatch();
-
+  const [goalId, setGoalId] = useState(null);
   const [kpiProDetails, setkpiProDetails] = useState([]);
 
   useEffect(() => {
@@ -20,9 +20,8 @@ const ProjectSection = ({ kpi_id }) => {
       try {
         const response = await getStrategyDetail(kpi_id);
         setkpiProDetails(response.projectRes);
-      } catch (error) {
-        console.error(error);
-      }
+        setGoalId(response.goalId);
+      } catch (error) {}
     };
 
     fetchAllData();
@@ -43,7 +42,7 @@ const ProjectSection = ({ kpi_id }) => {
         mb={2}
       >
         <Grid container>
-          <Grid item xs={8} alignSelf={"center"}>
+          <Grid item xs={12} sm={6} md={8} lg={8} alignSelf={"center"}>
             <Typography
               sx={{
                 color: "#495057",
@@ -55,7 +54,7 @@ const ProjectSection = ({ kpi_id }) => {
               Projects
             </Typography>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12} sm={6} md={4} lg={4}>
             <CustomSearchField query={query} setQuery={setQuery} />
           </Grid>
           <Grid item xs={12} mt={2}>
@@ -84,7 +83,7 @@ const ProjectSection = ({ kpi_id }) => {
           showModalButton={false}
           modalSize="md"
         >
-          <CreateProject flag="add" />
+          <CreateProject flag="add" gid={goalId} sid={kpi_id} passPID={0} />
         </ReduxDialog>
       </Box>
     </PerfectScrollbar>

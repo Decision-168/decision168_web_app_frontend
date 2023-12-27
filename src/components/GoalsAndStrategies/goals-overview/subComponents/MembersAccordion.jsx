@@ -41,8 +41,6 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import AssignToSomeoneDailogGoalContent from "./AssignToSomeoneDailogGoalContent";
 
 const BasicAccordion = ({ goalID, pending, displayBtns }) => {
-  //console.log("displayBtns", displayBtns);
-
   //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
@@ -65,9 +63,7 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
       const response = await getGoalDetail(gid);
       setgoalRes(response.goalRes);
       setgoaldetail(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -119,7 +115,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "acceptedBy" || gettype === "sentTo") {
@@ -140,7 +135,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         }
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "invited") {
@@ -160,7 +154,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "suggested") {
@@ -174,7 +167,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
     if (gettype === "suggested-invite") {
@@ -188,7 +180,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
         toast.success(`${response.message}`);
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
-        console.error(error);
       }
     }
   };
@@ -204,7 +195,6 @@ const BasicAccordion = ({ goalID, pending, displayBtns }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 

@@ -1,56 +1,38 @@
-import { useMemo, memo, useEffect, useState } from "react";
-import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
+import { useMemo, memo, useState } from "react";
+import {
+  useMaterialReactTable,
+  MaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Typography, IconButton, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  getPortfolioTeamMemberName,
-  updatePortfolioDepartment,
-  updatePortfolioMemberStatus,
-} from "../../../../api/modules/porfolioModule";
+import { updatePortfolioDepartment } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
-import CustomDialog from "../../../common/CustomDialog";
-import AssignToSomeoneDailogContent from "./AssignToSomeoneDailogContent";
 import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import {
-  getPortfolioDeparmentsAsync,
-  getPortfolioTeamMembersAsync,
-  selectPorfolioDepartments,
-  selectPorfolioTeamMembers,
+  getPortfolioDeparmentsAsync, getPortfolioDetailsAsync,
 } from "../../../../redux/action/portfolioSlice";
 
 const ViewDepartmentTable = ({ data }) => {
   const dispatch = useDispatch();
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [depId, setDeptId] = useState(null);
-  const [memberName, setMemberName] = useState("");
-  const [memberRegId, setMemberRegId] = useState(null);
-  const [pimId, setPimId] = useState(null);
   const [deptStatus, setdDeptStatus] = useState("");
-  const [open, setOpen] = useState(false);
-  const [result, setResult] = useState({});
   // New state variables for editing
   const [isEditing, setIsEditing] = useState(false);
   const [editDeptName, setEditDeptName] = useState("");
   const theme = useTheme();
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleReopen = (departmentId, department, status) => {
     setDeptId(departmentId);
     setdDeptStatus(status);
-    console.log("departmentId", departmentId);
     dispatch(
       openCnfModal({
         modalName: "changeStatus",
@@ -66,13 +48,14 @@ const ViewDepartmentTable = ({ data }) => {
     const status = deptStatus === "active" ? "inactive" : "active";
     const departmentId = depId;
     try {
-      const response = await updatePortfolioDepartment(departmentId, { dstatus: status });
+      const response = await updatePortfolioDepartment(departmentId, {
+        dstatus: status,
+      });
       dispatch(getPortfolioDeparmentsAsync(storedPorfolioId));
       toast.success(`${response.message}`);
       dispatch(closeCnfModal({ modalName: "changeStatus" }));
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating portfolio member status:", error);
     }
   };
 
@@ -90,11 +73,11 @@ const ViewDepartmentTable = ({ data }) => {
         department: editDeptName,
       });
       dispatch(getPortfolioDeparmentsAsync(storedPorfolioId));
+      dispatch(getPortfolioDetailsAsync(storedPorfolioId));
       toast.success(`${response.message}`);
       setIsEditing(false);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating department name:", error);
     }
   };
 
@@ -108,7 +91,7 @@ const ViewDepartmentTable = ({ data }) => {
       {
         accessorKey: "department",
         header: "Departments",
-        size: 400,
+        size: 500,
         enableEditing: true, // Enable editing for this cell
         Cell: ({ row }) => {
           if (isEditing && row.original.portfolio_dept_id === depId) {
@@ -118,18 +101,20 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <TextField
+                fullWidth
                   size="small"
                   variant="outlined"
                   value={editDeptName}
                   onChange={(e) => setEditDeptName(e.target.value)}
                 />
-                <IconButton onClick={() => handleSave(row.original.portfolio_dept_id)}>
-                  <SaveIcon />
+                <IconButton size="small" sx={{fontSize:"1rem"}} onClick={() => handleSave(row.original.portfolio_dept_id)}>
+                  <SaveIcon fontSize="inherite"/>
                 </IconButton>
-                <IconButton onClick={handleCancel}>
-                  <CancelIcon />
+                <IconButton size="small" sx={{fontSize:"1rem"}}  onClick={handleCancel}>
+                  <CancelIcon fontSize="inherite" />
                 </IconButton>
               </Box>
             );
@@ -140,13 +125,14 @@ const ViewDepartmentTable = ({ data }) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                }}>
+                }}
+              >
                 <Typography>{row.original.department}</Typography>
-                <IconButton
+                <IconButton size="small" sx={{fontSize:"1rem"}}
                   onClick={() =>
                     handleEditStart(row.original.department, row.original.portfolio_dept_id)
                   }>
-                  <EditIcon />
+                  <EditIcon  fontSize="inherite"/>
                 </IconButton>
               </Box>
             );
@@ -164,7 +150,8 @@ const ViewDepartmentTable = ({ data }) => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{
                 mr: 1,
@@ -188,7 +175,8 @@ const ViewDepartmentTable = ({ data }) => {
                   row.original.department,
                   row.original.dstatus
                 )
-              }>
+              }
+            >
               {row.original.dstatus}
             </Button>
           </Box>

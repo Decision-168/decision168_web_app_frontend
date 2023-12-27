@@ -15,6 +15,7 @@ import {
 import { VisibilityOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { stringAvatar } from "../../../helpers/stringAvatar";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 
 const ProjectListViewTable = ({
   title,
@@ -30,13 +31,15 @@ const ProjectListViewTable = ({
     }
   };
 
-  const openPage = (type, pid, pname) => {
+  const openPage = (type, pid, pname, portfId) => {
+    localStorage.removeItem("portfolioId");
+    localStorage.setItem("portfolioId", portfId);
     if (["Created Projects", "Accepted Projects"].includes(type)) {
-      navigate(`/projects-overview/${pid}`)
-    }else{
-      navigate(`/projects-overview-request/${pid}`)
+      navigate(`/projects-overview/${pid}`);
+    } else {
+      navigate(`/projects-overview-request/${pid}`);
     }
-  }
+  };
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -69,7 +72,7 @@ const ProjectListViewTable = ({
                 sx={{ bgcolor: theme.palette.secondary.main, mx: 1 }}
                 aria-label="project"
               >
-                {...stringAvatar(row.original.project.name)}
+                {...stringAvatar(row.original?.project?.name)}
               </Avatar>
               <Box>
                 <Typography
@@ -80,9 +83,21 @@ const ProjectListViewTable = ({
                     cursor: "pointer",
                   }}
                   textAlign={"start"}
-                  onClick={() => openPage(title,row?.original?.project?.id,row.original.project.name)}
+                  onClick={() =>
+                    openPage(
+                      title,
+                      row?.original?.project?.id,
+                      row.original.project.name,
+                      row.original.portfolio_id
+                    )
+                  }
                 >
                   {row?.original?.project?.name}
+                  {row.original.bellIcon == "yes" && (
+                    <>
+                      <NotificationsOutlinedIcon />
+                    </>
+                  )}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -101,7 +116,13 @@ const ProjectListViewTable = ({
 
             <IconButton
               aria-label="settings"
-              onClick={() => handleOpenCondition(title,row?.original?.project?.id,row.original.project.name)}
+              onClick={() =>
+                handleOpenCondition(
+                  title,
+                  row?.original?.project?.id,
+                  row.original.project.name
+                )
+              }
             >
               <VisibilityOutlined fontSize="small" />
             </IconButton>
@@ -125,7 +146,7 @@ const ProjectListViewTable = ({
             }}
           >
             <AvatarGroup max={5}>
-              {row?.original?.acceptedTeam.map((item, index) => {
+              {row?.original?.acceptedTeam?.map((item, index) => {
                 return (
                   <Avatar
                     key={index}
@@ -162,7 +183,7 @@ const ProjectListViewTable = ({
             }}
           >
             <AvatarGroup max={5}>
-              {row?.original?.invitedTeam.map((item, index) => {
+              {row?.original?.invitedTeam?.map((item, index) => {
                 return (
                   <Avatar
                     key={index}
@@ -187,7 +208,7 @@ const ProjectListViewTable = ({
 
   const table = useMaterialReactTable({
     columns,
-    data:data?data:[],
+    data: data ? data : [],
     enableColumnActions: false,
     enableRowActions: false,
     enableColumnFilters: false,
@@ -246,17 +267,17 @@ const ProjectListViewTable = ({
   return (
     <>
       <Container
-      maxWidth="xl"
-      fixed
-      sx={{
-        "&.MuiContainer-root": {
-          paddingLeft: "0px",
-          paddingRight: "0px",
-        },
-      }}
-    >
-      <MaterialReactTable table={table} />
-    </Container>
+        maxWidth="xl"
+        fixed
+        sx={{
+          "&.MuiContainer-root": {
+            paddingLeft: "0px",
+            paddingRight: "0px",
+          },
+        }}
+      >
+        <MaterialReactTable table={table} />
+      </Container>
     </>
   );
 };

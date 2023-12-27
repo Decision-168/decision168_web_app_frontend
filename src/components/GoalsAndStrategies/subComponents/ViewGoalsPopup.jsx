@@ -66,11 +66,9 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       const response = await getGoalDetail(gid);
       setgdetail(response.goalRes);
       setkpidetails(response.GoalsAllStrategiesListRes);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchAllGoalData();
   }, [gid]);
@@ -93,13 +91,12 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           setdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setdisplayBtns("no");
       }
     };
 
     DisplayTitleWithActions();
-  }, [gdetail,user_id]);
+  }, [gdetail, user_id]);
   //Check Button Visibility
 
   const [allHist, setallHist] = useState([]);
@@ -109,9 +106,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
       try {
         const hresponse = await getViewHistoryDateGoal(gid);
         setallHist(hresponse.history_dates);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -167,30 +162,28 @@ const ViewGoalsPopup = ({ goalID, id }) => {
     dispatch(openModal("edit-goals"));
   };
   const handleCreateKPI = () => {
-    dispatch(openModal("create-kpis"));
+    dispatch(openModal("create-kpis-popup"));
   };
 
   const handleGoalFileItYes = async () => {
     try {
-      const response = await CallFileItGoal(gdetail.gid, user_id); 
+      const response = await CallFileItGoal(gdetail.gid, user_id);
       dispatch(closeCnfModal({ modalName: "fileItGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
   const handleGoalDeleteYes = async () => {
     try {
-      const response = await CallTrashGoal(gdetail.gid, user_id); 
+      const response = await CallTrashGoal(gdetail.gid, user_id);
       dispatch(closeCnfModal({ modalName: "deleteGoal" }));
       toast.success(`${response.message}`);
       navigate("/portfolio-goals");
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
@@ -223,21 +216,21 @@ const ViewGoalsPopup = ({ goalID, id }) => {
           progressPercentage={gdetail.progress}
           displayBtns={displayBtns}
         />
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Start Date"}
             info={formatDate(gdetail.gstart_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"End Date"}
             info={formatDate(gdetail.gend_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
@@ -246,7 +239,7 @@ const ViewGoalsPopup = ({ goalID, id }) => {
             info={gdetail.get_dept_name}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
@@ -308,10 +301,14 @@ const ViewGoalsPopup = ({ goalID, id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <Goal passGID={gdetail.gid} refreshGoalOverview={fetchAllGoalData} individual={true} />
+        <Goal
+          passGID={gdetail.gid}
+          refreshGoalOverview={fetchAllGoalData}
+          individual={true}
+        />
       </ReduxDialog>
       <ReduxDialog
-        value="create-kpis"
+        value="create-kpis-popup"
         modalTitle="Add KPIs"
         showModalButton={false}
         modalSize="sm"

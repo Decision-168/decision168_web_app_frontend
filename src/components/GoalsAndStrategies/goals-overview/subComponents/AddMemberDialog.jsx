@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from "react";
-import CustomAutocomplete from "../../../common/CustomAutocomplete";
 import { useForm } from "react-hook-form";
 import {
   Autocomplete,
@@ -32,11 +31,6 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
 
   const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
-  const {
-    register,
-    formState: { errors },
-  } = useForm();
-
   const [loading, setLoading] = useState(false);
   const [memberData, setmemberData] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
@@ -45,7 +39,7 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
 
   const [formValues, setFormValues] = useState({
     gid: id,
-    gcreated_by: user_id, 
+    gcreated_by: user_id,
     team_member: [],
     imemail: [],
   });
@@ -54,13 +48,14 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
     useEffect(() => {
       const fetchAllHistoryData = async () => {
         try {
-          const response = await getAccepted_PortTM_GoalList(storedPorfolioId, id);
+          const response = await getAccepted_PortTM_GoalList(
+            storedPorfolioId,
+            id
+          );
           if (response) {
             setmemberData(response);
           }
-        } catch (error) {
-          console.error(error);
-        }
+        } catch (error) {}
       };
 
       fetchAllHistoryData();
@@ -105,7 +100,6 @@ const AddMemberDialog = ({ id, type, refreshData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }

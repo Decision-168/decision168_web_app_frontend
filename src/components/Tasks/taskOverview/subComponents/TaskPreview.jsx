@@ -6,9 +6,12 @@ import TaskInfo from "./TaskInfo";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
-import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 import { useDispatch } from "react-redux";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
@@ -26,7 +29,8 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   //Dailog code
-  const [openSubTaskPreviewDailog, setOpenSubTaskPreviewDailog] = React.useState(false);
+  const [openSubTaskPreviewDailog, setOpenSubTaskPreviewDailog] =
+    React.useState(false);
   const [task, setTask] = React.useState({});
   const [subTaskId, setSubTaskId] = React.useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,7 +41,6 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
       const response = await getTaskDetails(taskId);
       setTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -89,8 +92,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
 
   const handleFileItTaskYes = async () => {
     const task_id = taskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItTaskInPreview" }));
@@ -99,7 +101,6 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in filing the task:", error);
     }
   };
 
@@ -115,8 +116,8 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
 
   const handleDeleteTaskYes = async () => {
     const task_id = taskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await patchDeleteTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteTaskInPreview" }));
@@ -125,15 +126,14 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in Deleteing the task:", error);
     }
   };
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs={12} lg={8}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width:"100%"}}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <OverviewCardHeader
@@ -156,15 +156,21 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                     {task?.tcode && (
                       <>
                         <Typography sx={styles.label}>Task Code:</Typography>
-                        <Typography sx={styles.labelText}>{task?.tcode}</Typography>
+                        <Typography sx={styles.labelText}>
+                          {task?.tcode}
+                        </Typography>
                       </>
                     )}
                   </Grid>
                   <Grid item xs={12}>
                     {task?.tdes && (
                       <>
-                        <Typography sx={styles.label}>Task Description :</Typography>
-                        <Typography sx={styles.labelText}>{task?.tdes}</Typography>
+                        <Typography sx={styles.label}>
+                          Task Description :
+                        </Typography>
+                        <Typography sx={styles.labelText}>
+                          {task?.tdes}
+                        </Typography>
                       </>
                     )}
                   </Grid>
@@ -172,7 +178,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                     {task?.tnote && (
                       <>
                         <Typography sx={styles.label}>Task Notes:</Typography>
-                        <Typography sx={styles.labelText}>{task?.tnote}</Typography>
+                        <Typography sx={styles.labelText}>
+                          {task?.tnote}
+                        </Typography>
                       </>
                     )}
                   </Grid>
@@ -185,7 +193,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                         </Typography>
                       ))
                     ) : (
-                      <Typography sx={styles.labelText}>No Task Links!</Typography>
+                      <Typography sx={styles.labelText}>
+                        No Task Links!
+                      </Typography>
                     )}
                   </Grid>
 
@@ -198,7 +208,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                         </Typography>
                       ))
                     ) : (
-                      <Typography sx={styles.labelText}>No Task Files!</Typography>
+                      <Typography sx={styles.labelText}>
+                        No Task Files!
+                      </Typography>
                     )}
                   </Grid>
 
@@ -210,7 +222,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                           <Box key={index} sx={styles.subtaskLinkWrapper}>
                             <ArrowCircleRightIcon sx={styles.subtaskIcon} />
                             <Typography
-                              onClick={() => handleSubTaskPreviewDialog(subTask?.stid)}
+                              onClick={() =>
+                                handleSubTaskPreviewDialog(subTask?.stid)
+                              }
                               sx={styles.subtaskLinkText}
                             >
                               {subTask?.stcode} : {subTask?.stname}
@@ -218,7 +232,9 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
                           </Box>
                         ))
                       ) : (
-                        <Typography sx={styles.labelText}>No SubTasks!</Typography>
+                        <Typography sx={styles.labelText}>
+                          No SubTasks!
+                        </Typography>
                       )}
                     </Box>
                   </Grid>
@@ -229,18 +245,28 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
-            <CommentSection />
+          <Paper elevation={0} sx={{ height: "100%", width:"100%"}}>
+            <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={0} commentModule={"task"} />
           </Paper>
         </Grid>
       </Grid>
 
-      <ReduxDialog value="add-task" modalTitle="Add Task" showModalButton={false} modalSize="md">
+      <ReduxDialog
+        value="add-task"
+        modalTitle="Add Task"
+        showModalButton={false}
+        modalSize="md"
+      >
         <CreateEditTaskForm editMode={false} />
       </ReduxDialog>
 
-      <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} />
+      <ReduxDialog
+        value="edit-task"
+        modalTitle="Edit Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateEditTaskForm editMode={true} taskEditData={task} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -249,7 +275,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
         showModalButton={false}
         modalSize="md"
       >
-          <CreateSubTasksForm taskData={task} />
+        <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -258,12 +284,21 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-preview-task"}/>
+        <DuplicateTaskDialog
+          taskData={task}
+          closeModalName={"duplicate-preview-task"}
+        />
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileItTaskInPreview"} handleYes={handleFileItTaskYes} />
+      <ConfirmationDialog
+        value={"fileItTaskInPreview"}
+        handleYes={handleFileItTaskYes}
+      />
 
-      <ConfirmationDialog value={"deleteTaskInPreview"} handleYes={handleDeleteTaskYes} />
+      <ConfirmationDialog
+        value={"deleteTaskInPreview"}
+        handleYes={handleDeleteTaskYes}
+      />
 
       <CustomDialog
         handleClose={handleCloseTaskPreviewDailog}
@@ -273,7 +308,11 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
         showModalButton={true}
         modalSize="lg"
       >
-        <SubtaskPreview styles={styles} subtaskId={subTaskId} parentTaskName={task?.tname} />
+        <SubtaskPreview
+          styles={styles}
+          subtaskId={subTaskId}
+          parentTaskName={task?.tname}
+        />
       </CustomDialog>
     </>
   );

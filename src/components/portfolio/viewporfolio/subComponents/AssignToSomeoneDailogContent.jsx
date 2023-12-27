@@ -8,7 +8,10 @@ import { toast } from "react-toastify";
 import { closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import CircularLoader from "../../../common/CircularLoader";
-import { getPortfolioTeamMembersAsync, selectPorfolioTeamMembers } from "../../../../redux/action/portfolioSlice";
+import {
+  getPortfolioTeamMembersAsync,
+  selectPorfolioTeamMembers,
+} from "../../../../redux/action/portfolioSlice";
 
 export default function AssignToSomeoneDailogContent({
   result,
@@ -33,7 +36,8 @@ export default function AssignToSomeoneDailogContent({
 
   useEffect(() => {
     const filteredData = data?.filter(
-      (item) => item.member_name !== memberName && item.working_status === "active"
+      (item) =>
+        item.member_name !== memberName && item.working_status === "active"
     );
     setOtherTeamMembers(filteredData);
   }, [data, memberName]);
@@ -55,7 +59,6 @@ export default function AssignToSomeoneDailogContent({
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in assign open work to other team member:", error);
     } finally {
       setLoading(false);
     }
@@ -63,41 +66,64 @@ export default function AssignToSomeoneDailogContent({
 
   return (
     <div>
-      <Typography component="p" sx={{ color: "red", fontSize: "12px", textAlign: "left", mb: 2 }}>
-        {memberName} have some open projects or tasks. To Inactive, Please Assign to Someone!
+      <Typography
+        component="p"
+        sx={{ color: "red", fontSize: "12px", textAlign: "left", mb: 2 }}
+      >
+        {memberName} have some open projects or tasks. To Inactive, Please
+        Assign to Someone!
       </Typography>
 
-      <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", mb: 1 }}>
+      <Typography
+        component="p"
+        sx={{ fontSize: "12px", textAlign: "left", mb: 1 }}
+      >
         Open works:
       </Typography>
 
       <Box sx={{ mb: 2 }}>
         {result?.goal_countResult + result?.goal_tm_countResult !== 0 && (
-          <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}>
+          <Typography
+            component="p"
+            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
+          >
             {result?.goal_countResult + result?.goal_tm_countResult} goal(s)
           </Typography>
         )}
 
         {result?.strategies_countResult !== 0 && (
-          <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}>
+          <Typography
+            component="p"
+            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
+          >
             {result?.strategies_countResult} strategies
           </Typography>
         )}
 
         {result?.only_pro_countResult + result?.pro_tm_countResult !== 0 && (
-          <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}>
-            {result?.only_pro_countResult + result?.pro_tm_countResult} planned content
+          <Typography
+            component="p"
+            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
+          >
+            {result?.only_pro_countResult + result?.pro_tm_countResult} planned
+            content
           </Typography>
         )}
 
         {result?.task_countResult !== 0 && (
-          <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}>
+          <Typography
+            component="p"
+            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
+          >
             {result?.task_countResult} task(s)
           </Typography>
         )}
 
         {result?.subtask_countResult !== 0 && (
-          <Typography component="p" sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}>
+          <Typography
+            component="p"
+            sx={{ fontSize: "12px", textAlign: "left", ml: 2 }}
+          >
             {result?.subtask_countResult} subtask(s)
           </Typography>
         )}
@@ -110,13 +136,21 @@ export default function AssignToSomeoneDailogContent({
         otherTeamMembers={otherTeamMembers}
       />
 
-      <Box sx={{ display: "flex", justifyContent: "end", alignItems: "center", mt: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          mt: 2,
+        }}
+      >
         <Button
           size="small"
           type="button"
           onClick={handleAssign}
           variant="contained"
-          sx={{ ml: 1, width: "130px" }}>
+          sx={{ ml: 1, width: "130px" }}
+        >
           {loading ? <CircularLoader /> : "Assign"}
         </Button>
       </Box>

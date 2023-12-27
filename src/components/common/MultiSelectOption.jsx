@@ -22,11 +22,13 @@ export default function MultiSelectOption({
   const [options, setOptions] = useState([]);
 
   const handleChange = (fieldName) => (event, values) => {
+
     setFormValues({
       ...formValues,
       [fieldName]: values.map((value) => value[idKey]),
     });
   };
+
 
   useEffect(() => {
     const fetchOptions = async () => {

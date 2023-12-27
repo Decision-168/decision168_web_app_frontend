@@ -45,17 +45,12 @@ const priorities = [
   { name: "Low", value: "low" },
 ];
 
-export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) {
-  console.log("editMode", editMode);
-  console.log("taskData", taskData);
-  console.log("subtaskData", subtaskData);
+export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData }) {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUserDetails);
-  // const userId = user?.reg_id;
-  // const email = user?.email_address;
-  const userId = 1; // for testing
+  const userId = user?.reg_id;
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [formValues, setFormValues] = useState({
     tid: taskData?.tid,
@@ -110,9 +105,7 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
           user_id: userId,
         });
         setProjects(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
     fetchProjects();
   }, [storedPortfolioId, userId]);
@@ -122,9 +115,25 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
     const fetchTeamMembers = async () => {
       try {
         const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
-        // Add the user to assignee to assignee list
-        const updatedResponse = [...response, { reg_id: userId, name: "To Me" }];
-        setAssignees(updatedResponse);
+
+        // Find the user in the team members
+        const foundAssignee = response.find((assignee) => assignee.reg_id === userId);
+
+          // Check if an assignee with the given reg_id was found
+          if (foundAssignee) {
+            // Check for duplicates before adding the new entry
+            const isDuplicate = response.some((member) => member.reg_id === userId);
+  
+            // Update state with a new entry only if not a duplicate
+            if (!isDuplicate) {
+              setAssignees([...response, { ...foundAssignee, name: 'Assign to me' }]);
+            } else {
+              setAssignees(response);
+            }
+          } else {
+            // No assignee found, update state with the original team members
+            setAssignees(response);
+          }
       } catch (error) {
         console.error(error);
       }
@@ -148,17 +157,13 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
   useEffect(() => {
     // stfile = "file1,file2"
     const filenames = subtaskData?.stfile;
-    console.log(subtaskData?.stfile);
     (async () => {
       try {
         const fileArray = await createFileArray(filenames);
         setFiles(fileArray);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      } catch (error) {}
     })();
   }, [editMode, subtaskData?.stfile]);
-
 
   useEffect(() => {
     if (editMode) {
@@ -169,7 +174,9 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
           stnote: subtaskData?.stnote,
           stfile: files ? files : [],
           stpriority: subtaskData?.stpriority,
-          stdue_date: subtaskData?.stdue_date ? new Date(subtaskData?.stdue_date) : "",
+          stdue_date: subtaskData?.stdue_date
+            ? new Date(subtaskData?.stdue_date)
+            : "",
           team_member2: subtaskData?.stassignee,
           slinks: [],
           slink_comments: [],
@@ -177,22 +184,6 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
       ]);
     }
   }, [editMode, subtaskData, files]);
-
-  // const fileObjects = [{"0": "file1"}, {"1": "file2"}]
-  // Output will be like [file1,file2 ]
-  // function createFileArrayToValueInField(fileObjects) {
-  //   const filenameArray = fileObjects.map((fileObj) => Object.values(fileObj)[0]);
-  //   const fileArray = [];
-  //   for (const filename of filenameArray) {
-  //     const content = "Placeholder content for" + filename;
-  //     const file = new File([content], filename, {
-  //       type: "text/plain", // adjust the type based on the actual file type
-  //     });
-  //     fileArray.push(file);
-  //   }
-  //   // console.log(fileArray);
-  //   return fileArray;
-  // }
 
 
   const handleFilesChange = (index) => (newValue) => {
@@ -307,22 +298,35 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
     // Display a toast message for empty fields in the main form
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      toast.error(
+        `Please fill in all required fields: ${errorFields.join(", ")}`
+      );
       return;
     }
 
     // Validate each task within taskArray
     for (const task of formData.taskArray) {
       // Define the required fields for each task
-      const taskRequiredFields = ["stname", "stdue_date", "stpriority", "team_member2"];
+      const taskRequiredFields = [
+        "stname",
+        "stdue_date",
+        "stpriority",
+        "team_member2",
+      ];
 
       // Check for empty required fields in each task
-      const emptyTaskFields = taskRequiredFields.filter((field) => !task[field]);
+      const emptyTaskFields = taskRequiredFields.filter(
+        (field) => !task[field]
+      );
 
       // Display a toast message for empty fields in each task
       if (emptyTaskFields.length > 0) {
-        const errorTaskFields = emptyTaskFields.map((field) => fieldLabels[field]);
-        toast.error(`Please fill in all required fields: ${errorTaskFields.join(", ")}`);
+        const errorTaskFields = emptyTaskFields.map(
+          (field) => fieldLabels[field]
+        );
+        toast.error(
+          `Please fill in all required fields: ${errorTaskFields.join(", ")}`
+        );
         return;
       }
     }
@@ -338,27 +342,35 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
       stdes: formData?.taskArray[0]?.stdes,
       stnote: formData?.taskArray[0]?.stnote,
       stfile:
-        files?.map((file, index) => ({ [index]: file.name })) || formData?.taskArray[0]?.stfile,
+        files?.map((file, index) => ({ [index]: file.name })) ||
+        formData?.taskArray[0]?.stfile,
       tpriority: formData?.taskArray[0]?.stpriority,
       tdue_date: formData?.taskArray[0]?.stdue_date,
     };
 
     const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
 
-    alert(`${JSON.stringify(finalData)}`);
-
     try {
       setLoading(true);
 
       const response = editMode
-        ? await updateSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: editeData })
-        : await insertSubtask({ user_id: userId, portfolio_id: storedPortfolioId, data: formData });
+        ? await updateSubtask({
+            user_id: userId,
+            portfolio_id: storedPortfolioId,
+            data: editeData,
+          })
+        : await insertSubtask({
+            user_id: userId,
+            portfolio_id: storedPortfolioId,
+            data: formData,
+          });
       dispatch(closeModal(`${editMode ? "edit-subtask" : "add-sub-tasks"}`));
       navigate(`/tasks-overview/${taskData?.tid}`); // it is creating issue if adding multiple subtasks
       toast.success(response.message);
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error(error.response?.data?.error || "An error occurred. Please try again.");
+      toast.error(
+        error.response?.data?.error || "An error occurred. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -408,10 +420,18 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
                 }
               />
             </Divider>
-            <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
+            <Paper
+              elevation={0}
+              sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}
+            >
               <Stack direction="row" justifyContent="end" alignItems="center">
                 {field.length > 1 && (
-                  <Tooltip arrow title="Remove Subtask" size="small" placement="top-end">
+                  <Tooltip
+                    arrow
+                    title="Remove Subtask"
+                    size="small"
+                    placement="top-end"
+                  >
                     <IconButton onClick={handleRemoveClick}>
                       <RemoveCircleRoundedIcon />
                     </IconButton>
@@ -427,7 +447,9 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
                     placeholder="Enter Subtask Name"
                     name="stname"
                     value={fields[index].stname || ""}
-                    onChange={(event) => handleFieldChange("stname")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stname")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -449,7 +471,9 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
                     placeholder="Enter Subtask Description..."
                     name="stdes"
                     value={fields[index].stdes || ""}
-                    onChange={(event) => handleFieldChange("stdes")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stdes")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -460,7 +484,9 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
                     placeholder="Enter Subtask Note"
                     name="stnote"
                     value={fields[index].stnote || ""}
-                    onChange={(event) => handleFieldChange("stnote")(event, index)}
+                    onChange={(event) =>
+                      handleFieldChange("stnote")(event, index)
+                    }
                   />
                 </Grid>
 
@@ -544,7 +570,10 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
                   ml: 1,
                   backgroundColor: theme.palette.secondary.light,
                   color: theme.palette.secondary.dark,
-                  "&:hover": { color: theme.palette.secondary.dark, backgroundColor: "#EBEBEB" },
+                  "&:hover": {
+                    color: theme.palette.secondary.dark,
+                    backgroundColor: "#EBEBEB",
+                  },
                 }}
               >
                 Add Another Subtask
@@ -558,7 +587,13 @@ export default function CreateSubTasksForm({ editMode, taskData, subtaskData }) 
               variant="contained"
               sx={{ ml: 1 }}
             >
-              {loading ? <CircularLoader /> : (editMode ? "Save Changes" : "Create")}
+              {loading ? (
+                <CircularLoader />
+              ) : editMode ? (
+                "Save Changes"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Grid>
         </Grid>

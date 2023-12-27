@@ -14,15 +14,24 @@ import {
 } from "@mui/material";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 
 const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
   const handleOpenCondition = (type, pid, pname) => {
-    if (
-      ["created-project", "accepted-project"].includes(type)
-    ) {
-      handleOpen(pid, pname);
+    if (["created-project", "accepted-project"].includes(type)) {
+      handleOpen(type, pid, pname);
     } else {
-      handlePendingOpen(pid, pname);
+      handlePendingOpen(type, pid, pname);
+    }
+  };
+
+  const openPage = (type, pid, pname, portfId) => {
+    localStorage.removeItem("portfolioId");
+    localStorage.setItem("portfolioId", portfId);
+    if (["created-project", "accepted-project"].includes(type)) {
+      navigate(`/projects-overview/${pid}`);
+    } else {
+      navigate(`/projects-overview-request/${pid}`);
     }
   };
 
@@ -40,7 +49,14 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
       }}
     >
       <CardActionArea
-        onClick={() => navigate(`/projects-overview/${item?.project?.id}`)}
+        onClick={() =>
+          openPage(
+            value,
+            item?.project?.id,
+            item?.project?.name,
+            item?.portfolio_id
+          )
+        }
         sx={{
           borderRadius: 0,
           height: "120px",
@@ -75,6 +91,11 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
               textAlign={"start"}
             >
               {item?.project?.name}
+              {item.bellIcon == "yes" && (
+                <>
+                  <NotificationsOutlinedIcon />
+                </>
+              )}
             </Typography>
           }
         />
@@ -126,7 +147,9 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
         </AvatarGroup>
         <IconButton
           aria-label="settings"
-          onClick={() => handleOpenCondition(value, item?.project?.id,item?.project?.name)}
+          onClick={() =>
+            handleOpenCondition(value, item?.project?.id, item?.project?.name)
+          }
         >
           <VisibilityOutlined fontSize="small" />
         </IconButton>

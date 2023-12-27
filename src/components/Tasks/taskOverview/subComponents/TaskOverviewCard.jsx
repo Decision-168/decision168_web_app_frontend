@@ -2,14 +2,17 @@ import { Grid, Paper } from "@mui/material";
 import React, { memo } from "react";
 import { Add, Edit } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
 import OverviewCardHeader from "./TaskOverviewCardHeader";
 import OverviewCardBody from "./TaskOverviewCardBody";
 import CreateEditTaskForm from "../../createEditTask/CreateEditTaskForm";
-import CreateSubTasksForm from "../../createEditSubtasks/CreateSubTasksForm";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 import { patchDeleteTask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -49,8 +52,8 @@ const TaskOverviewCard = ({ styles, task }) => {
 
   const handleFileItTaskYes = async () => {
     const task_id = task?.tid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await fileItTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItTaskInOverview" }));
@@ -58,7 +61,6 @@ const TaskOverviewCard = ({ styles, task }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in filing the task:", error);
     }
   };
 
@@ -74,8 +76,7 @@ const TaskOverviewCard = ({ styles, task }) => {
 
   const handleDeleteTaskYes = async () => {
     const task_id = task?.tid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await patchDeleteTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteTaskInOverview" }));
@@ -83,37 +84,78 @@ const TaskOverviewCard = ({ styles, task }) => {
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in Deleteing the Overview task :", error);
     }
   };
 
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <OverviewCardHeader title={`Task: ${task?.tname}`} btn1Text={"Add Task"} btn2Text={"Add Subtask"} btn3Text={"Edit Task"} btn1Icon={<Add />} btn2Icon={<Add />} btn3Icon={<Edit />} handleClick1={handleAddTasksDialog} handleClick2={handleAddSubTasksDialog} handleClick3={handleEditTaskDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <OverviewCardHeader
+          title={`Task: ${task?.tname}`}
+          btn1Text={"Add Task"}
+          btn2Text={"Add Subtask"}
+          btn3Text={"Edit Task"}
+          btn1Icon={<Add />}
+          btn2Icon={<Add />}
+          btn3Icon={<Edit />}
+          handleClick1={handleAddTasksDialog}
+          handleClick2={handleAddSubTasksDialog}
+          handleClick3={handleEditTaskDialog}
+          handleDuplicate={handleDuplicateDialog}
+          handleFileIt={handleFileItDialog}
+          handleDelete={handleDeleteDialog}
+        />
         <OverviewCardBody styles={styles} task={task} />
       </Grid>
 
-      <ReduxDialog value="add-task" modalTitle="Add Task" showModalButton={false} modalSize="md">
+      <ReduxDialog
+        value="add-task"
+        modalTitle="Add Task"
+        showModalButton={false}
+        modalSize="md"
+      >
         <CreateEditTaskForm editMode={false} />
       </ReduxDialog>
 
-      <ReduxDialog value="edit-task" modalTitle="Edit Task" showModalButton={false} modalSize="md">
-        <CreateEditTaskForm editMode={true} />
+      <ReduxDialog
+        value="edit-task"
+        modalTitle="Edit Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateEditTaskForm editMode={true} taskEditData={task} />
       </ReduxDialog>
 
-      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
-        <CreateSubTasksForm taskData={task} />
+      <ReduxDialog
+        value="add-sub-tasks"
+        modalTitle="Add Sub Task"
+        showModalButton={false}
+        modalSize="md"
+      >
+        <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
-
-      <ReduxDialog value="duplicate-overview-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
-        <DuplicateTaskDialog  taskData={task} closeModalName={"duplicate-overview-task"}/>
+      <ReduxDialog
+        value="duplicate-overview-task"
+        modalTitle="Copy Task"
+        showModalButton={false}
+        modalSize="sm"
+      >
+        <DuplicateTaskDialog
+          taskData={task}
+          closeModalName={"duplicate-overview-task"}
+        />
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileItTaskInOverview"} handleYes={handleFileItTaskYes} />
+      <ConfirmationDialog
+        value={"fileItTaskInOverview"}
+        handleYes={handleFileItTaskYes}
+      />
 
-      <ConfirmationDialog value={"deleteTaskInOverview"} handleYes={handleDeleteTaskYes} />
+      <ConfirmationDialog
+        value={"deleteTaskInOverview"}
+        handleYes={handleDeleteTaskYes}
+      />
     </Paper>
   );
 };

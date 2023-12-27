@@ -11,7 +11,10 @@ import {
   VisibilityOutlined,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import ReduxDialog from "../../common/ReduxDialog";
@@ -56,9 +59,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
       const response = await getStrategyDetail(kpi_id);
       setkpiDetail(response.kpiRes);
       setkpiProDetails(response.projectRes);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -83,7 +84,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
           setdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setdisplayBtns("no");
       }
     };
@@ -99,9 +99,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
       try {
         const hresponse = await getViewHistoryDateStrategy(kpi_id);
         setallKPIHist(hresponse.history_dates);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchKPIAllHistoryData();
@@ -156,8 +154,8 @@ const ViewKpiPopup = ({ kpi_id }) => {
   const handleAddProject = () => {
     dispatch(openModal("create-project"));
   };
-  
-  const handleKpiFileItYes = async () => {  
+
+  const handleKpiFileItYes = async () => {
     try {
       const response = await CallFileItKPI(kpiDetail.sid, user_id);
       dispatch(closeCnfModal({ modalName: "fileItKPI" }));
@@ -165,11 +163,10 @@ const ViewKpiPopup = ({ kpi_id }) => {
       navigate(`/goal-overview/${kpiDetail.gid}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
-  const handleKpiDeleteYes = async () => {    
+  const handleKpiDeleteYes = async () => {
     try {
       const response = await CallTrashKPI(kpiDetail.sid, user_id);
       dispatch(closeCnfModal({ modalName: "deleteKPI" }));
@@ -177,7 +174,6 @@ const ViewKpiPopup = ({ kpi_id }) => {
       navigate(`/goal-overview/${kpiDetail.gid}`);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
-      console.error(error);
     }
   };
 
@@ -210,14 +206,14 @@ const ViewKpiPopup = ({ kpi_id }) => {
           progressPercentage={kpiDetail.kpi_progress}
           displayBtns={displayBtns}
         />
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<CalendarMonth sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created Date"}
             info={formatDate(kpiDetail?.screated_date)}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <FolderOpenOutlined sx={{ color: "#c7df19", fontSize: "14px" }} />
@@ -226,7 +222,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
             info={kpiDetail?.get_goal_name}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={
               <BusinessCenter sx={{ color: "#c7df19", fontSize: "14px" }} />
@@ -235,7 +231,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
             info={kpiDetail?.get_dept_name}
           />
         </Grid>
-        <Grid item xs={3} md={3} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3}>
           <GridList
             icon={<Person sx={{ color: "#c7df19", fontSize: "14px" }} />}
             title={"Created By"}
@@ -259,7 +255,10 @@ const ViewKpiPopup = ({ kpi_id }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <EditKPIPopup kpiData={kpiDetail} fetchAllKPIDataFun={fetchAllKPIData}/>
+        <EditKPIPopup
+          kpiData={kpiDetail}
+          fetchAllKPIDataFun={fetchAllKPIData}
+        />
       </ReduxDialog>
       <ReduxDialog
         value="duplicate-kpi"
@@ -267,7 +266,7 @@ const ViewKpiPopup = ({ kpi_id }) => {
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateKPI kpiData={kpiDetail}/>
+        <DuplicateKPI kpiData={kpiDetail} />
       </ReduxDialog>
       <ReduxDialog
         value="view-all-kpi-history"
@@ -298,7 +297,12 @@ const ViewKpiPopup = ({ kpi_id }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" />
+        <CreateProject
+          flag="add"
+          gid={kpiDetail?.gid}
+          sid={kpiDetail?.sid}
+          passPID={"0"}
+        />
       </ReduxDialog>
     </Box>
   );

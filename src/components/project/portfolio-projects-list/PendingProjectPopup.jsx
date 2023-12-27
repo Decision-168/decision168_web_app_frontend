@@ -8,7 +8,11 @@ import {
   Person,
 } from "@mui/icons-material";
 import GridList from "../../GoalsAndStrategies/subComponents/GridList";
-import { getProjectDetail, getProjectMemberData, patchProjectRequest } from "../../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  getProjectMemberData,
+  patchProjectRequest,
+} from "../../../api/modules/ProjectModule";
 import { getUserData } from "../../../api/modules/FileCabinetModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
@@ -27,9 +31,10 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
 
   useEffect(() => {
     const pathName = window.location.pathname;
-    const pathSegments = pathName.split('/');
+    const pathSegments = pathName.split("/");
     const indexSecondLast = pathSegments.length - 2;
-    const secondLastParameter = indexSecondLast >= 0 ? pathSegments[indexSecondLast] : '';
+    const secondLastParameter =
+      indexSecondLast >= 0 ? pathSegments[indexSecondLast] : "";
     setCurrentPage(secondLastParameter);
   }, []);
 
@@ -37,11 +42,9 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchProjectData();
   }, [pid]);
@@ -53,7 +56,10 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
   const links = projectDetail?.plink;
   const link_comments = projectDetail?.plink_comment;
   const projectStartDate = new Date(projectDetail?.pcreated_date);
-  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString('default', { month: 'short' })}, ${projectStartDate.getFullYear()}`;
+  const formattedProjectStartDate = `${projectStartDate.getDate()} ${projectStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${projectStartDate.getFullYear()}`;
   const projectType = projectDetail?.ptype;
 
   // Creater (User) Data ----------------------------------------------
@@ -61,9 +67,7 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
     try {
       const response = await getUserData(projectDetail?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -75,11 +79,9 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
     try {
       const response = await getProjectMemberData(pid, userID);
       setPmId(response.pm_id);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
-  
+
   useEffect(() => {
     fetchProjectMemberData();
   }, [pid, userID]);
@@ -87,23 +89,22 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
   const handleProjectRequest = async (flag) => {
     try {
       const response = await patchProjectRequest(pid, pmId, flag);
-      refreshData()
-      if(response.user_status == 'accepted'){
+      refreshData();
+      if (response.user_status == "accepted") {
         toast.success("Request Accepted Successfully");
-      }else if(response.user_status == 'read_more'){
+      } else if (response.user_status == "read_more") {
         toast.success("Request marked as Read More");
       }
-      
-      if(currentPage == 'projects-overview-request'){
+
+      if (currentPage == "projects-overview-request") {
         navigate(-1);
-      }else{
-        handleClose()
+      } else {
+        handleClose();
       }
     } catch (error) {
-      console.error(error.response);
-      if(error.response.data.user_status == 'accepted'){
+      if (error.response.data.user_status == "accepted") {
         toast.error("Request Accepted Successfully");
-      }else if(error.response.data.user_status == 'read_more'){
+      } else if (error.response.data.user_status == "read_more") {
         toast.error("Request marked as Read More");
       }
     }
@@ -145,13 +146,19 @@ const PendingProjectPopup = ({ pid, refreshData, handleClose }) => {
           </Box>
         </Grid>
         <Grid item xs={6} md={6} lg={6} alignSelf={"center"}>
-          <Button variant="contained" size="small" sx={{ mr: 1 }} onClick={() => handleProjectRequest(1)}>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mr: 1 }}
+            onClick={() => handleProjectRequest(1)}
+          >
             Accept Request
           </Button>
           <Button
             variant="contained"
             size="small"
-            sx={{ background: "#383838", color: "#fff" }}  onClick={() => handleProjectRequest(2)}
+            sx={{ background: "#383838", color: "#fff" }}
+            onClick={() => handleProjectRequest(2)}
           >
             Request More Info
           </Button>

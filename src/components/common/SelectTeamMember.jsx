@@ -20,7 +20,6 @@ export default function SelectTeamMember({
   };
 
   const handleChange = (fieldName) => (event, value) => {
-    console.log(value);
     setSelectedMember(value.reg_id);
   };
 
@@ -28,7 +27,9 @@ export default function SelectTeamMember({
     <Box sx={{ textAlign: "left" }}>
       <InputLabel sx={{ fontSize: "14px" }}>
         Assign open work to other team member
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        {required && (
+          <span style={{ color: theme.palette.error.main }}> *</span>
+        )}
       </InputLabel>
       <Autocomplete
         sx={{ marginTop: "8px", width: "100%" }}
@@ -36,7 +37,9 @@ export default function SelectTeamMember({
         value={SelectTeamMember}
         onChange={handleChange("memberName")}
         getOptionLabel={(option) => option.member_name}
-        renderInput={(params) => <TextField {...params} placeholder="Assign Open Work.." />}
+        renderInput={(params) => (
+          <TextField {...params} placeholder="Assign Open Work.." />
+        )}
       />
     </Box>
   );

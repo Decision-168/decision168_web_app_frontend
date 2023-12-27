@@ -9,13 +9,17 @@ import LinkContainer from "./project-links/LinkContainer";
 import FileContainer from "./project-files/FileContainer";
 import CommentSection from "./comment-section";
 import { getUserData } from "../../../api/modules/FileCabinetModule";
-import { getProjectDetail } from "../../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  notificationsClear,
+} from "../../../api/modules/ProjectModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import MembersAccordion from "../subComponents/MembersAccordion";
 const ProjectOverview = () => {
   const { pid } = useParams();
   const [projectData, setProjectData] = useState([]);
+  const [projectDel, setProjectDel] = useState([]);
   const [userData, setUserData] = useState([]);
 
   const user = useSelector(selectUserDetails);
@@ -25,25 +29,31 @@ const ProjectOverview = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
+      setProjectDel(response.project);
+    } catch (error) {}
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationsClear(pid, userID);
+      console.log(response.message);
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     fetchProjectData();
+    fetchNotifications();
   }, [pid]);
-  const pDetail = projectData?.project;
-  const link_comments = pDetail?.plink_comment;
+  const link_comments = projectDel?.plink_comment;
 
   // Creater (User) Data ----------------------------------------------
   const fetchUserData = async () => {
     try {
-      const response = await getUserData(pDetail?.pcreated_by);
+      const response = await getUserData(projectDel?.pcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -54,28 +64,26 @@ const ProjectOverview = () => {
 
   //Check Button Visibility
   const [AccdisplayBtns, setAccdisplayBtns] = useState("no");
-
   useEffect(() => {
     const DisplayAccordionActions = async () => {
       try {
-        if (pDetail.pcreated_by == userID) {
+        if (projectDel.pcreated_by == userID) {
           setAccdisplayBtns("all");
         } else if (
-          pDetail.get_portfolio_createdby_id == userID ||
-          pDetail.pmanager == userID
+          projectDel.get_portfolio_createdby_id == userID ||
+          projectDel.pmanager == userID
         ) {
           setAccdisplayBtns("some");
         } else {
           setAccdisplayBtns("no");
         }
       } catch (error) {
-        console.error(error);
         setAccdisplayBtns("no");
       }
     };
 
     DisplayAccordionActions();
-  }, [pDetail, userID]);
+  }, [projectData?.project, userID]);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -116,23 +124,27 @@ const ProjectOverview = () => {
                 startIcon={<ArrowBack />}
                 size="small"
                 sx={{ background: "#383838", color: "#fff" }}
-                onClick={() => navigate("/portfolio-projects-list")}
+                onClick={() => navigate(-1)}
               >
                 Back
               </Button>
-              { (pDetail?.gid != 0) ?
-                (<Button
+              {projectDel?.gid != 0 ? (
+                <Button
                   variant="contained"
                   startIcon={<ArrowBack />}
                   size="small"
                   sx={{ background: "#383838", color: "#fff", mx: 1 }}
-                  onClick={() => navigate("/goal-overview")}
+                  onClick={() =>
+                    navigate(`/goal-overview/${projectData?.project?.gid}`)
+                  }
                 >
                   Go To Goal
-                </Button>) : <></>
-              }
-              { (pDetail?.sid != 0) ?
-                (<Button
+                </Button>
+              ) : (
+                <></>
+              )}
+              {projectDel?.sid != 0 ? (
+                <Button
                   variant="contained"
                   startIcon={<ArrowBack />}
                   size="small"
@@ -140,8 +152,10 @@ const ProjectOverview = () => {
                   onClick={() => navigate("/kpi-overview")}
                 >
                   Go TO KPI
-                </Button>) : <></>
-              }              
+                </Button>
+              ) : (
+                <></>
+              )}
             </Box>
           </Box>
         </Grid>
@@ -149,10 +163,10 @@ const ProjectOverview = () => {
         <Grid item xs={12} lg={8}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-              <ViewProjectPopup pid={pid} refreshData={fetchProjectData}/>
+              <ViewProjectPopup pid={pid} refreshData={fetchProjectData} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <TaskContainer pid={pid}/>
+              <TaskContainer pid={pid} />
             </Grid>
             <Grid item xs={12} lg={12}>
               <LinkContainer pid={pid} />
@@ -165,13 +179,18 @@ const ProjectOverview = () => {
         <Grid item xs={12} lg={4}>
           <Grid container>
             <Grid item xs={12} lg={12}>
-              <MembersAccordion pid={pid} displayBtns={AccdisplayBtns}/>
+              <MembersAccordion pid={pid} displayBtns={AccdisplayBtns} />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <CommentSection projectId={pid} taskId={"0"} subtaskId={"0"}/>
+              <CommentSection
+                projectId={pid}
+                taskId={0}
+                subtaskId={0}
+                commentModule={"project"}
+              />
             </Grid>
             <Grid item xs={12} lg={12}>
-              <RecentHistory id={pid} type={"project"}/>
+              <RecentHistory id={pid} type={"project"} />
             </Grid>
           </Grid>
         </Grid>

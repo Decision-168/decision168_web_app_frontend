@@ -9,12 +9,22 @@ import SubtaskOverviewCard from "./subComponent/SubtaskOverviewCard";
 import SubtaskLinks from "./subComponent/SubtaskLinks";
 import SubtaskFiles from "./subComponent/SubtaskFiles";
 import { getSubTaskDetails } from "../../../api/modules/taskModule";
+import CommentSection from "../../project/projects-overview/comment-section";
 
 export default function SubtaskOverview() {
   const theme = useTheme();
   const styles = taskOverviewStyles();
 
-  const { subTaskId } = useParams();
+  const { subTaskId} = useParams();
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const tname = searchParams.get("tname");
+  const tproject_assign = searchParams.get("tproject_assign");
+
+  // Now 'tname' and 'tproject_assign' will have the values from the URL
+  console.log("tname:", tname);
+  console.log("tproject_assign:", tproject_assign);
+
 
   const [subTask, setSubTask] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -25,7 +35,6 @@ export default function SubtaskOverview() {
       const response = await getSubTaskDetails(subTaskId);
       setSubTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -35,7 +44,6 @@ export default function SubtaskOverview() {
     fetchSubTaskDetails();
   }, [subTaskId]);
 
-
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -43,8 +51,27 @@ export default function SubtaskOverview() {
           <BasicBreadcrumbs currentPage="Overview" showBackButton={true} />
         </Grid>
         <Grid item xs={4} md={10}>
-          <Box sx={{ height: "100%", display: "flex", justifyContent: "start", alignItems: "center" }}>
-            <Button component={Link} to="/projects-overview" startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ ml: 2, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "start",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              component={Link}
+              to={`/projects-overview/${subTask.stproject_assign}`}
+              startIcon={<ArrowBackIcon />}
+              size="small"
+              variant="contained"
+              sx={{
+                ml: 2,
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+                "&:hover": { backgroundColor: theme.palette.secondary.dark },
+              }}
+            >
               Go To Project
             </Button>
           </Box>
@@ -53,13 +80,22 @@ export default function SubtaskOverview() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
-          <SubtaskOverviewCard styles={styles} subtask={subTask} />
-          <SubtaskLinks styles={styles} links={subTask?.stlink} LinkComments={subTask?.stlink_comment} />
+          <SubtaskOverviewCard styles={styles} subtask={subTask} tname={tname} tproject_assign={tproject_assign}/>
+          <SubtaskLinks
+            styles={styles}
+            links={subTask?.stlink}
+            LinkComments={subTask?.stlink_comment}
+          />
           <SubtaskFiles styles={styles} files={subTask?.stfile} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0}>
-            <Typography variant="h6">Comments Section</Typography>
+          <Paper elevation={0} sx={{ height: "100%" }}>
+            <CommentSection
+              projectId={subTask?.stproject_assign}
+              taskId={0}
+              subtaskId={subTask?.stid}
+              commentModule={"subtask"}
+            />
           </Paper>
         </Grid>
       </Grid>

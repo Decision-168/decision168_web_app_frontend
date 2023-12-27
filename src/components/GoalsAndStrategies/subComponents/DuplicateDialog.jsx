@@ -81,7 +81,7 @@ const DuplicateDialog = ({ goalData }) => {
       moment(formValues.gend_date, moment.ISO_8601, true).isValid()
     ) {
       setLoading(true);
-      
+
       try {
         const response = await CopyGoal(formValues);
         toast.success(`${response.message}`);
@@ -93,7 +93,6 @@ const DuplicateDialog = ({ goalData }) => {
       } catch (error) {
         // Handling error
         toast.error(`${error.response?.error}`);
-        console.error("Error updating:", error);
       } finally {
         setLoading(false);
       }
@@ -110,7 +109,7 @@ const DuplicateDialog = ({ goalData }) => {
           sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }}
           mb={2}
         >
-          <Grid container spacing={2}>
+          <Grid container>
             <CustomLabelTextField
               label="Goal"
               name="gname"
@@ -119,22 +118,22 @@ const DuplicateDialog = ({ goalData }) => {
               value={formValues.gname}
               onChange={handleChange("gname")}
             />
-            <Grid container alignItems="center" style={{ marginLeft: "16px" }}>
-              <Grid item xs={2}>
-                <InputLabel sx={{ fontSize: "14px" }}>
+            <Grid container alignItems="center" justifyContent={"flex-start"}>
+              <Grid item xs={12} sm={2} md={2} lg={2}>
+                <InputLabel sx={{ fontSize: "14px", textAlign: "start" }}>
                   Duration
                   <span style={{ color: theme.palette.error.main }}> *</span>
                 </InputLabel>
               </Grid>
-              <Grid item xs={10} container spacing={1}>
-                <Grid item xs={5}>
+              <Grid item xs={12} sm={10} md={10} lg={10} container spacing={1}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
                   <CustomDatePicker
                     label=""
                     value={formValues.gstart_date}
                     onChange={handleStartDateChange}
                   />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
                   <CustomDatePicker
                     label=""
                     value={formValues.gend_date}
@@ -144,7 +143,7 @@ const DuplicateDialog = ({ goalData }) => {
               </Grid>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} mt={1}>
               <Box p={2} sx={{ background: "#f5f5f5" }}>
                 <Typography
                   sx={{ fontSize: 15, fontWeight: "600", textAlign: "start" }}

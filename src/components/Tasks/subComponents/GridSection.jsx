@@ -1,4 +1,4 @@
-import React, { useState, useEffect,memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Box } from "@mui/material";
 import KanbanColumnHeader from "./KanbanColumnHeader";
 import KanbanCard from "./KanbanCard";
@@ -21,16 +21,16 @@ const GridSection = ({ rows, setRows }) => {
   const [columns, setColumns] = useState({});
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
-  // const regId = user?.reg_id;
-  const regId = 1; // for testing
+  const regId = user?.reg_id;
 
   const fetchData = async () => {
     setLoading(true);
     try {
+      // Introduce a delay of 1 second (1000 milliseconds)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await getDashboardAlltaskGridView(regId);
       setRows(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -91,13 +91,8 @@ const GridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Task Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating task status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -116,13 +111,8 @@ const GridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Subtask Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating subtask status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -131,24 +121,24 @@ const GridSection = ({ rows, setRows }) => {
     const { tid, tassignee } = removed?.content || {};
 
     if (removed?.content?.type === "task") {
-      console.log("This is a task");
       try {
         const response = await updateTaskStatus(
           tid,
           tassignee,
           destColumn?.value
         );
+
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update task status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the task status:", error);
       }
     } else {
-      console.log("This is a subtask");
       try {
         const response = await updateSubtaskStatus(
           tid,
@@ -156,13 +146,14 @@ const GridSection = ({ rows, setRows }) => {
           destColumn?.value
         );
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update subtask status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the subtask status:", error);
       }
     }
   };
@@ -180,6 +171,7 @@ const GridSection = ({ rows, setRows }) => {
       destItems.splice(destination.index, 0, removed);
 
       handleStatusChange(removed, destColumn);
+
       setColumns({
         ...columns,
         [source.droppableId]: {

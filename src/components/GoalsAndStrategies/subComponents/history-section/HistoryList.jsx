@@ -7,14 +7,12 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import {
+  getViewHistoryDateWiseGoal,
+  getViewHistoryDateWiseStrategy,
+} from "../../../../api/modules/goalkpiModule";
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
-
-const HistoryList = ({ allhdata, type, id }) => {
-  console.log("allhdata", allhdata);
-  console.log("type", type);
-  console.log("id", id);
-
+const HistoryList = ({ allhdata, type, id, setData }) => {
   const allinputDate = allhdata.DateOnly;
 
   // Parse the input date using Moment.js
@@ -40,31 +38,16 @@ const HistoryList = ({ allhdata, type, id }) => {
           response = await getViewHistoryDateWiseGoal(id, alldateParam);
         } else if (type === "kpi") {
           response = await getViewHistoryDateWiseStrategy(id, alldateParam);
+        } else if (type === "project") {
+          response = await getViewHistoryDateWiseProject(id, alldateParam);
         }
+        setData((prevData) => [...prevData, ...response]);
         setallHisDetails(response);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryDetails();
-  }, [type, id, PassallformattedDate]);
-
-  if (type === "project") {
-    useEffect(() => {
-      const dateParam = encodeURIComponent(PassformattedDate);
-      const fetchAllHistoryDetails = async () => {
-        try {
-          const response = await getViewHistoryDateWiseProject(id, dateParam);
-          setallHisDetails(response);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchAllHistoryDetails();
-    }, []);
-  }
+  }, []);
 
   return (
     <Accordion>

@@ -3,7 +3,14 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Button, Grid, IconButton,Tooltip,Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { Add, VisibilityOutlined } from "@mui/icons-material";
 import KPIChildAccordion from "./KPIChildAccordion";
 import ViewKpiPopup from "../../../subComponents/ViewKpiPopup";
@@ -15,25 +22,20 @@ import CreateProject from "../../../../project/Dialogs/CreateProject";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 import { getStrategyAllProjectsList } from "../../../../../api/modules/goalkpiModule";
 
-const KPIAccordion = ({kpi}) => {
-  
-  const sid = kpi.sid;  
+const KPIAccordion = ({ kpi }) => {
+  const sid = kpi.sid;
 
   const [kpiProdetails, setkpiProdetails] = useState([]);
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const response = await getStrategyAllProjectsList(sid); 
+        const response = await getStrategyAllProjectsList(sid);
         setkpiProdetails(response);
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllData();
   }, [sid]);
-
-  const [inputFields, setInputFields] = useState([]);
 
   const [openKPI, setOpenKPI] = useState(false);
 
@@ -43,7 +45,7 @@ const KPIAccordion = ({kpi}) => {
   const handleKPIOpen = () => {
     setOpenKPI(true);
   };
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <>
       <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
@@ -73,7 +75,7 @@ const KPIAccordion = ({kpi}) => {
           <Grid container p={1} sx={{ borderBottom: "1px solid #f5f5f5" }}>
             <Grid item xs={7} md={7} lg={7} textAlign={"left"}>
               <Typography sx={{ fontSize: 12 }}>
-              {kpi?.sdes ? kpi?.sdes : "No Description!"}
+                {kpi?.sdes ? kpi?.sdes : "No Description!"}
               </Typography>
             </Grid>
             <Grid xs={4} alignSelf={"center"}>
@@ -94,7 +96,7 @@ const KPIAccordion = ({kpi}) => {
           {kpiProdetails.map((item, index) => {
             return (
               <Fragment key={index}>
-                <KPIChildAccordion project={item}/>
+                <KPIChildAccordion project={item} />
               </Fragment>
             );
           })}
@@ -118,7 +120,7 @@ const KPIAccordion = ({kpi}) => {
         showModalButton={true}
         modalSize="md"
       >
-        <ViewKpiPopup kpi_id={sid}/>
+        <ViewKpiPopup kpi_id={sid} />
       </CustomDialog>
       <ReduxDialog
         value="create-project"
@@ -126,7 +128,7 @@ const KPIAccordion = ({kpi}) => {
         showModalButton={false}
         modalSize="md"
       >
-        <CreateProject flag="add" />
+        <CreateProject flag="add" gid={kpi?.gid} sid={kpi?.sid} passPID={0} />
       </ReduxDialog>
     </>
   );

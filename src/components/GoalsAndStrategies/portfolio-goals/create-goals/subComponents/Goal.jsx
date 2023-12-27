@@ -42,15 +42,15 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
 
   const [departments, setdepartments] = useState([]);
   const [assignee, setassignee] = useState([]);
-  const [memberData, setmemberData] = useState([]); 
+  const [memberData, setmemberData] = useState([]);
   const [availableMembers, setAvailableMembers] = useState([]);
 
   const [formValues, setFormValues] = useState({
     gname: "",
     gdept: "",
     gdes: "",
-    gcreated_by: user_id, 
-    portfolio_id: storedPorfolioId, 
+    gcreated_by: user_id,
+    portfolio_id: storedPorfolioId,
     gmanager: 0,
     gstart_date: new Date(),
     gend_date: new Date(),
@@ -74,9 +74,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
           setassignee(response.AssignManagerListRes);
           setmemberData(response.AssignMemberListRes);
         }
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (error) {}
     };
 
     fetchAllHistoryData();
@@ -122,9 +120,7 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
             .filter((member) => member.reg_id != response.goalRes?.gcreated_by)
             .map((member) => member.reg_id);
           setGMembers(gmembers);
-        } catch (error) {
-          console.error(error);
-        }
+        } catch (error) {}
       };
       fetchAllEditGoalData();
     }, [passGID]);
@@ -143,8 +139,8 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
       gname: getGDetail?.gname,
       gdept: getGDetail?.gdept,
       gdes: getGDetail?.gdes,
-      gcreated_by: user_id, 
-      portfolio_id: storedPorfolioId, 
+      gcreated_by: user_id,
+      portfolio_id: storedPorfolioId,
       gmanager: getGDetail?.gmanager,
       gstart_date: gStartDate,
       gend_date: gendDate,
@@ -181,9 +177,8 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
       dispatch(closeModal("edit-goals"));
     } catch (error) {
       // Handling error
-      console.log(error);
+
       toast.error(`${error.response?.error}`);
-      console.error("Error updating:", error);
     }
   };
 
@@ -208,7 +203,27 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
               formValues={formValues}
               setFormValues={setFormValues}
             />
-
+            <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+              <InputLabel sx={{ fontSize: "14px", textAlign: "start" }}>
+                End Date
+                <span style={{ color: theme.palette.error.main }}> *</span>
+              </InputLabel>
+            </Grid>
+            <Grid item xs={12} sm={10} md={10} lg={10}>
+              <CustomDatePicker
+                label=""
+                value={formValues.gend_date}
+                onChange={handleEndDateChange}
+              />
+            </Grid>
+            <CustomMultilineTextField
+              label="Description"
+              name="gdes"
+              required={false}
+              placeholder="Enter Description..."
+              value={formValues.gdes}
+              onChange={handleChange("gdes")}
+            />
             <MultiSelectOptionGrid
               label="Members"
               required={false}
@@ -219,38 +234,9 @@ const Goal = ({ individual, onUpdate, passGID, refreshGoalOverview }) => {
               formValues={formValues}
               setFormValues={setFormValues}
             />
-
             <InviteMembers
               formValues={formValues}
               setFormValues={setFormValues}
-            />
-            <Grid
-              container
-              alignItems="center"
-              style={{ marginLeft: "28px", marginTop: "16px" }}
-            >
-              <Grid item xs={2}>
-                <InputLabel sx={{ fontSize: "14px" }}>
-                  End Date
-                  <span style={{ color: theme.palette.error.main }}> *</span>
-                </InputLabel>
-              </Grid>
-              <Grid item xs={10} container spacing={1}>
-                <CustomDatePicker
-                  label=""
-                  value={formValues.gend_date}
-                  onChange={handleEndDateChange}
-                />
-              </Grid>
-            </Grid>
-
-            <CustomMultilineTextField
-              label="Description"
-              name="gdes"
-              required={false}
-              placeholder="Enter Description..."
-              value={formValues.gdes}
-              onChange={handleChange("gdes")}
             />
           </Grid>
         </DialogContent>

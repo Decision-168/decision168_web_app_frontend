@@ -35,7 +35,7 @@ export default function TaskLinks({ styles, links, LinkComments }) {
     <Paper elevation={0} sx={{ p: 2, mt: 2 }}>
       <Grid container>
         <Grid item xs={12}>
-          <Typography sx={styles.label}>Tasks Links:</Typography>
+          <Typography sx={styles.label}>Task Link(s):</Typography>
           {arrayOfObjects && arrayOfObjects.length > 0 ? (
             arrayOfObjects.map((item, index) => (
               <React.Fragment key={index}>

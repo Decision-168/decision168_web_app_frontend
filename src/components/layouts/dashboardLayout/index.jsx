@@ -9,7 +9,10 @@ import Hidden from "@mui/material/Hidden";
 import TabletMobileAppBar from "./subComponents/appBar/TabletMobileAppBar";
 import DesktopDrawer from "./subComponents/drawer/DesktopDrawer";
 import TabletMobileDrawer from "./subComponents/drawer/TabletMobileDrawer";
-import { getUserDetailsAsync, selectUserDetails } from "../../../redux/action/userSlice";
+import {
+  getUserDetailsAsync,
+  selectUserDetails,
+} from "../../../redux/action/userSlice";
 import { getAlertNotificationsAsync } from "../../../redux/action/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -28,9 +31,7 @@ export default function DashboardLayout({ children }) {
         // Attempt to decode the token
         const decoded = jwtDecode(token);
         setDecodedToken(decoded); // Set the decoded token in state
-      } catch (error) {
-        console.error("Invalid token:", error);
-      }
+      } catch (error) {}
     }
   }, [token]);
 
@@ -49,9 +50,7 @@ export default function DashboardLayout({ children }) {
       try {
         const userId = user?.reg_id;
         dispatch(getAlertNotificationsAsync(userId));
-      } catch (error) {
-        console.error(error)
-      }
+      } catch (error) {}
     };
 
     alerts();
@@ -62,7 +61,16 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <Box sx={{ display: "flex", overflow: "hidden", maxHeight: "100vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        overflow: "hidden",
+        maxHeight: "100vh",
+        minHeight: "100vh",
+        maxWidth: "100vw",
+        overflowX: "hidden",
+      }}
+    >
       {/* Render Desktop App Bar for larger screens */}
       <Hidden mdDown>
         <DesktopAppBar open={open} toggleDrawer={toggleDrawer} />
@@ -91,21 +99,33 @@ export default function DashboardLayout({ children }) {
               ? theme.palette.secondary.light
               : theme.palette.secondary.dark,
           flexGrow: 1,
-        }}>
+        }}
+      >
         <PerfectScrollbar>
-          <Toolbar sx={{ my: 1 }} />
-          <Container maxWidth="xl">
+          {/* <Toolbar sx={{ my: 1 }} /> */}
+          {/* <Container maxWidth="xl"> */}
+          <Box
+            sx={{
+              minHeight: "90vh",
+              marginTop: "10vh",
+              padding: "0",
+              boxSizing: "border-box",
+            }}
+          >
             <Box
               sx={{
-                padding: "10px",
                 width: "100%",
-                minHeight: "85vh",
-                my: 3,
-              }}>
+                minHeight: "90vh",
+                overflowX: "auto",
+                p: 2.5,
+              }}
+            >
               {children}
             </Box>
-          </Container>
-          <Copyright />
+
+            <Copyright />
+          </Box>
+          {/* </Container> */}
         </PerfectScrollbar>
       </Box>
     </Box>

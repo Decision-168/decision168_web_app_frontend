@@ -48,3 +48,15 @@ export const changePassword = async (password, id) => {
     throw error;
   }
 };
+
+
+export const updateAuthUserPassword = async (userId, password) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.updateAuthUserPassword}${userId}`, {
+      password: password,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

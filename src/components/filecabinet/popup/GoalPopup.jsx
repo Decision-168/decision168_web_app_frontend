@@ -1,17 +1,44 @@
-import { Avatar, Box, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
 import { stringAvatar } from "../../../helpers/stringAvatar";
-import { BusinessCenter, CalendarMonth, Delete, Person } from "@mui/icons-material";
-import ArchiveIcon from '@mui/icons-material/Archive';
+import {
+  BusinessCenter,
+  CalendarMonth,
+  Delete,
+  Person,
+} from "@mui/icons-material";
+import ArchiveIcon from "@mui/icons-material/Archive";
 import ProgressBar from "../subComponents/ProgressBar";
-import { getDepartmentData, getGoalData, getGoalKPIData, getUserData } from "../../../api/modules/FileCabinetModule";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  getDepartmentData,
+  getGoalData,
+  getGoalKPIData,
+  getUserData,
+} from "../../../api/modules/FileCabinetModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
 import { toast } from "react-toastify";
 import { patchArchiveGoal } from "../../../api/modules/ArchiveModule";
 import { patchDeleteGoal } from "../../../api/modules/TrashModule";
-const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) => {
+const GoalPopup = ({
+  nodes,
+  regId,
+  portfolioId,
+  handleClose,
+  fetchTreeData,
+}) => {
   const [goalData, setGoalData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [userData, setUserData] = useState([]);
@@ -25,9 +52,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
     try {
       const response = await getGoalData(nodes?.table_id);
       setGoalData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -35,19 +60,23 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   }, [nodes]);
 
   const goalStartDate = new Date(goalData.gstart_date);
-  const formattedGoalStartDate = `${goalStartDate.getDate()} ${goalStartDate.toLocaleString('default', { month: 'short' })}, ${goalStartDate.getFullYear()}`;
+  const formattedGoalStartDate = `${goalStartDate.getDate()} ${goalStartDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${goalStartDate.getFullYear()}`;
 
   const goalEndDate = new Date(goalData.gend_date);
-  const formattedGoalEndDate = `${goalEndDate.getDate()} ${goalEndDate.toLocaleString('default', { month: 'short' })}, ${goalEndDate.getFullYear()}`;
+  const formattedGoalEndDate = `${goalEndDate.getDate()} ${goalEndDate.toLocaleString(
+    "default",
+    { month: "short" }
+  )}, ${goalEndDate.getFullYear()}`;
 
   // Department Data ----------------------------------------------
   const fetchDepartmentData = async () => {
     try {
       const response = await getDepartmentData(goalData?.gdept);
       setDepartmentData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -61,9 +90,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
     try {
       const response = await getUserData(goalData?.gcreated_by);
       setUserData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -75,11 +102,13 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   // Goal Wise KPI data ----------------------------------------------
   const fetchKPIData = async () => {
     try {
-      const response = await getGoalKPIData(goalData?.gid,goalData?.gdept,portfolioId);
+      const response = await getGoalKPIData(
+        goalData?.gid,
+        goalData?.gdept,
+        portfolioId
+      );
       setKpiData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -87,7 +116,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   }, [goalData]);
 
   const handleArchive = () => {
-    setModule('archive');
+    setModule("archive");
     dispatch(
       openCnfModal({
         modalName: "archiveGoal",
@@ -97,7 +126,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
     );
   };
   const handleDelete = () => {
-    setModule('delete');
+    setModule("delete");
     dispatch(
       openCnfModal({
         modalName: "deleteGoal",
@@ -108,30 +137,30 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
   };
 
   const handleYes = async () => {
-    if(module == 'archive') {
+    if (module == "archive") {
       try {
         const response = await patchArchiveGoal(goalData?.gid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'archiveGoal' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "archiveGoal" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'archiveGoal' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "archiveGoal" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
-    }else if(module == 'delete') {
+      }
+    } else if (module == "delete") {
       try {
         const response = await patchDeleteGoal(goalData?.gid, regId);
-        fetchTreeData()
-        dispatch(closeCnfModal({ modalName: 'deleteGoal' }));
-        handleClose()
+        fetchTreeData();
+        dispatch(closeCnfModal({ modalName: "deleteGoal" }));
+        handleClose();
         toast.success(`${response.message}`);
       } catch (error) {
-        dispatch(closeCnfModal({ modalName: 'deleteGoal' }));
-        handleClose()
+        dispatch(closeCnfModal({ modalName: "deleteGoal" }));
+        handleClose();
         toast.error(`${error.response?.error}`);
-      };
+      }
     }
   };
 
@@ -204,8 +233,7 @@ const GoalPopup = ({ nodes, regId, portfolioId, handleClose, fetchTreeData }) =>
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={12} lg={8}>
-        </Grid>
+        <Grid item xs={12} md={12} lg={8}></Grid>
         <Grid item xs={12} md={12} lg={4}>
           <Box
             sx={{

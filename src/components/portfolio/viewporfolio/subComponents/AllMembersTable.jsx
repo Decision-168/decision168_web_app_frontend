@@ -1,22 +1,21 @@
-import { useMemo, memo, useEffect, useState } from "react";
-import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
-import { Box, Button, Typography } from "@mui/material";
+import { useMemo, memo, useState } from "react";
+import {
+  useMaterialReactTable,
+  MaterialReactTable,
+} from "material-react-table";
+import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import {
-  getPortfolioTeamMemberName,
-  updatePortfolioMemberStatus,
-} from "../../../../api/modules/porfolioModule";
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import { updatePortfolioMemberStatus } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import CustomDialog from "../../../common/CustomDialog";
 import AssignToSomeoneDailogContent from "./AssignToSomeoneDailogContent";
 import { useTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
-import {
-  getPortfolioTeamMembersAsync,
-  selectPorfolioTeamMembers,
-} from "../../../../redux/action/portfolioSlice";
+import { getPortfolioTeamMembersAsync } from "../../../../redux/action/portfolioSlice";
 
 const AllMembersTable = ({ data }) => {
   const dispatch = useDispatch({ data });
@@ -37,20 +36,6 @@ const AllMembersTable = ({ data }) => {
     setOpen(false);
   };
 
-  // const fetchTeamMembers = async () => {
-  //   try {
-  //     dispatch(getPortfolioTeamMembersAsync(storedPorfolioId));
-  //   } catch (fetchError) {
-  //     console.error("Error fetching portfolio team members:", fetchError);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchTeamMembers();
-  // }, [storedPorfolioId]);
-
-  console.log(data);
-
   const handleReopen = (member, regId, primaryId, status) => {
     setMemberName(member);
     setPimId(primaryId);
@@ -61,7 +46,9 @@ const AllMembersTable = ({ data }) => {
       openCnfModal({
         modalName: "changeStatus",
         title: "Are you sure?",
-        description: `You want to ${status === "active" ? "inactive" : "active"} ${member}`,
+        description: `You want to ${
+          status === "active" ? "inactive" : "active"
+        } ${member}`,
       })
     );
   };
@@ -71,7 +58,11 @@ const AllMembersTable = ({ data }) => {
     const portfolioId = storedPorfolioId;
     const status = workingStatus === "active" ? "inactive" : "active";
     try {
-      const response = await updatePortfolioMemberStatus(primaryId, portfolioId, status);
+      const response = await updatePortfolioMemberStatus(
+        primaryId,
+        portfolioId,
+        status
+      );
       if (response.statusChanged === false) {
         if (response.result) {
           // open dialog
@@ -85,11 +76,8 @@ const AllMembersTable = ({ data }) => {
       }
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in updating portfolio member status:", error);
     }
   };
-
-  console.log("result", result);
 
   const columns = useMemo(
     () => [
@@ -110,11 +98,13 @@ const AllMembersTable = ({ data }) => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{
                 mr: 1,
-                color: row.original.working_status === "active" ? "black" : "white",
+                color:
+                  row.original.working_status === "active" ? "black" : "white",
                 backgroundColor:
                   row.original.working_status === "active"
                     ? theme.palette.primary.main // Use your active color code here
@@ -135,7 +125,8 @@ const AllMembersTable = ({ data }) => {
                   row.original.pim_id,
                   row.original.working_status
                 )
-              }>
+              }
+            >
               {row.original.working_status}
             </Button>
           </Box>
@@ -186,7 +177,8 @@ const AllMembersTable = ({ data }) => {
         open={open}
         modalTitle={`Inactive ${memberName}`}
         showModalButton={false}
-        modalSize="sm">
+        modalSize="sm"
+      >
         <AssignToSomeoneDailogContent
           result={result}
           memberName={memberName}

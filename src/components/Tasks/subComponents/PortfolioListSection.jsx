@@ -1,11 +1,12 @@
 import { Grid } from "@mui/material";
-import React, { useState, useEffect,memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import TaskTable from "./TaskTable";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPortfolioTasksSubtasksListView } from "../../../api/modules/taskModule";
 import Loader from "../../common/Loader";
 import NoListTaskFound from "./NoListTaskFound";
+import MyPagination from "../../common/MyPagination";
 
 const PortfolioListSection = ({ rows, setRows }) => {
   const [loading, setLoading] = useState(false);
@@ -15,24 +16,38 @@ const PortfolioListSection = ({ rows, setRows }) => {
   const regId = 1;
   const portfolioId = 2;
 
-  const fetchData = async () => {
+  // Pagination settings
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 6;
+
+  const fetchData = async (page) => {
     setLoading(true);
     try {
+      // Introduce a delay of 1 second (1000 milliseconds)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const response = await getPortfolioTasksSubtasksListView(
         portfolioId,
-        regId
+        regId,
+        page,
+        pageSize
       );
-      setRows(response);
+      setRows(response.data);
+      setTotalPages(response.totalPages);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
-  }, [portfolioId, regId]);
+    fetchData(currentPage);
+  }, [portfolioId, regId, currentPage]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Grid container mt={2}>
@@ -40,7 +55,16 @@ const PortfolioListSection = ({ rows, setRows }) => {
         {loading ? (
           <Loader />
         ) : (
-          <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
+          <>
+            <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
+            {rows?.length > 0 && (
+              <MyPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
         )}
       </Grid>
     </Grid>

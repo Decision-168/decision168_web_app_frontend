@@ -36,9 +36,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -64,9 +62,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getTaskLinks(pid);
       setTaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -96,9 +92,7 @@ const LinkContainer = ({ pid }) => {
     try {
       const response = await getSubtaskLinks(pid);
       setSubtaskData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -126,7 +120,7 @@ const LinkContainer = ({ pid }) => {
   return (
     <Box sx={{ flexGrow: 1, width: "100%", background: "white", p: 2 }} mb={2}>
       <Grid container>
-        {/* <Grid item xs={12} lg={12}>
+        <Grid item xs={12} lg={12}>
           <Box
             sx={{ display: "flex", alignItems: "center", flexDirection: "row" }}
           >
@@ -143,7 +137,7 @@ const LinkContainer = ({ pid }) => {
               </IconButton>
             </Tooltip>
           </Box>
-        </Grid> */}
+        </Grid>
         <Grid item xs={12} lg={12}>
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -212,7 +206,12 @@ const LinkContainer = ({ pid }) => {
         showModalButton={false}
         modalSize="md"
       >
-        <AddLinksPopup />
+        <AddLinksPopup
+          projectId={pid}
+          refreshData={fetchProjectData}
+          oldLinks={links}
+          oldLinkComments={link_comments}
+        />
       </ReduxDialog>
     </Box>
   );

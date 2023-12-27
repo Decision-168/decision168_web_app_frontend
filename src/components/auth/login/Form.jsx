@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../../api/modules/authModule";
 import AuthButton from "../subComponents/AuthButton";
 import { toast } from "react-toastify";
+import axiosInstance from "../../../api/axios";
 
 export default function Form() {
   const {
@@ -49,7 +50,7 @@ export default function Form() {
       setLoading(true);
       const response = await loginUser(formData);
       localStorage.setItem("token", response.token);
-
+      axiosInstance.defaults.headers.Authorization = `Bearer ${response.token}`;
       if (rememberMe) {
         localStorage.setItem("rememberedUser", JSON.stringify(formData));
       } else {
@@ -60,7 +61,6 @@ export default function Form() {
       navigate("/dashboard");
       toast.success(response.message);
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response?.data?.error}`);
     } finally {
       setLoading(false);
@@ -68,7 +68,12 @@ export default function Form() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{ mt: 1 }}
+    >
       <Box sx={{ height: "65px" }}>
         <CustomTextField
           name="email_address"
@@ -111,7 +116,11 @@ export default function Form() {
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <AuthButton loading={loading} buttonText="Log In" disabled={!isCaptchaVerified} />
+      <AuthButton
+        loading={loading}
+        buttonText="Log In"
+        disabled={!isCaptchaVerified}
+      />
     </Box>
   );
 }

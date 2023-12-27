@@ -23,10 +23,9 @@ export default function TaskOverview() {
   const fetchTaskDetails = async () => {
     setLoading(true);
     try {
-      const response = await getTaskDetails(taskId)
+      const response = await getTaskDetails(taskId);
       setTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -36,7 +35,6 @@ export default function TaskOverview() {
     fetchTaskDetails();
   }, [taskId]);
 
-
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
       <Grid container>
@@ -44,8 +42,27 @@ export default function TaskOverview() {
           <BasicBreadcrumbs currentPage="Overview" showBackButton={true} />
         </Grid>
         <Grid item xs={4} md={10}>
-          <Box sx={{ height: "100%", display: "flex", justifyContent: "start", alignItems: "center" }}>
-            <Button component={Link} to="/projects-overview" startIcon={<ArrowBackIcon />} size="small" variant="contained" sx={{ ml: 2, backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.light, "&:hover": { backgroundColor: theme.palette.secondary.dark } }}>
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              justifyContent: "start",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              component={Link}
+              to={`/projects-overview/${task.tproject_assign}`}
+              startIcon={<ArrowBackIcon />}
+              size="small"
+              variant="contained"
+              sx={{
+                ml: 2,
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.secondary.light,
+                "&:hover": { backgroundColor: theme.palette.secondary.dark },
+              }}
+            >
               Go To Project
             </Button>
           </Box>
@@ -55,17 +72,28 @@ export default function TaskOverview() {
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
           <TaskOverviewCard styles={styles} task={task} />
-          <TaskLinks styles={styles} links={task?.tlink} LinkComments={task?.tlink_comment} />
+          <TaskLinks
+            styles={styles}
+            links={task?.tlink}
+            LinkComments={task?.tlink_comment}
+          />
           <TaskFiles styles={styles} files={task?.tfile} />
         </Grid>
         <Grid item xs={12} lg={4}>
-          <CommentSection />
+          <Paper elevation={0} sx={{ height: "100%" }}>
+            <CommentSection
+              projectId={task?.tproject_assign}
+              taskId={task?.tid}
+              subtaskId={0}
+              commentModule={"task"}
+            />
+          </Paper>
         </Grid>
       </Grid>
       <Grid item xs={12} lg={12}>
         <Paper elevation={0} sx={{ p: 2, mt: 2 }}>
           <Typography sx={styles.label}>Subtaks:</Typography>
-          <SubtaskRow  task={task} fetchTaskDetails={fetchTaskDetails}/>
+          <SubtaskRow task={task} fetchTaskDetails={fetchTaskDetails} />
         </Paper>
       </Grid>
     </Box>

@@ -7,7 +7,14 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTheme } from "@mui/material/styles";
 import moment from "moment";
 
-function CustomDatePicker({ label, required, minDate, maxDate, value, onChange }) {
+function CustomDatePicker({
+  label,
+  required,
+  minDate,
+  maxDate,
+  value,
+  onChange,
+}) {
   const theme = useTheme();
   const [startDate, setStartDate] = useState(value);
   const textFieldStyles = {
@@ -28,16 +35,18 @@ function CustomDatePicker({ label, required, minDate, maxDate, value, onChange }
   };
 
   return (
-    <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
+    <>
+      <InputLabel sx={{ fontSize: "14px", mb: 1, textAlign: "start" }}>
         {label}
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        {required && (
+          <span style={{ color: theme.palette.error.main }}> *</span>
+        )}
       </InputLabel>
       <TextField
         variant="outlined"
         disabled
         fullWidth
-        value={moment(startDate).format("YYYY-MM-DD")}
+        value={value ? moment(startDate).format("YYYY-MM-DD") : label}
         sx={{
           width: "100%",
           "& .MuiOutlinedInput-notchedOutline": {
@@ -69,7 +78,7 @@ function CustomDatePicker({ label, required, minDate, maxDate, value, onChange }
           ),
         }}
       />
-    </Box>
+    </>
   );
 }
 

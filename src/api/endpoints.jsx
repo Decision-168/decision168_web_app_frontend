@@ -16,6 +16,9 @@ const api = {
   //user change-password api
   userChangePass: "user/change-password/",
 
+  //update Auth User Password inside the App by user id
+  updateAuthUserPassword:"user/update-password/",
+
   //-----------------------------Dashboard Module Start----------------
 
   //user details by user id
@@ -44,6 +47,10 @@ const api = {
 
   //update dashboard + bell icon clear alert notifications by different id's, user id and type
   updateAlertsAndNotifications: "user/update-alert-notifications/",
+
+
+  //update bell icon clear all alert notifications by user_id
+  clearAllNotificaions : "user/update-all-alert-notifications/",
 
   //get countries
   countries: "user/get-countries",
@@ -185,6 +192,9 @@ const api = {
 
   //-----------------------------Porfolio Modlue Start----------------
 
+  //All portfolio by email_address
+  getAllPorfolios: "portfolio/all-portfolios/",
+
   //get all portfolio by email_address
   porfolios: "portfolio/get-all-portfolios/",
 
@@ -303,6 +313,28 @@ const api = {
 
   //Change Subtask Status in Grid View (Drag and Drop) by user id
   changeSubtaskStatusDND: "subtask/change-status/",
+
+  //get all accepted active portfolio team members(Assignee dropdown) by portfolio id
+  activePotfolioTeamMembers:
+    "portfolio/get-all-accepted-active-portfolio-team-members/",
+
+  //get all Goal team members without read_more status (Assignee dropdown) by gid
+  getGoalTeamMembers: "goal/goal-team-member/",
+
+  //get goal details for (Date Picker Date) by gid
+  getGoalDetails: "goal/goal-details/",
+
+  //insert Task file by user id
+  insertTaskFile: "task/insert-task-file/",
+
+  //insert Subtask file by user id
+  insertSubtaskFile: "subtask/insert-subtask-file/",
+
+  //get Task comments by tid and userid
+  getTaskComments: "task/get-task-comments/",
+
+  //get Subask comments by stid and userid
+  geSubtaskComments: "subtask/get-subtask-comments/",
 
   //-----------------------------File Cabinet Module Start----------------
 
@@ -511,11 +543,16 @@ const api = {
   // Delete forever Subtask File
   deleteForeverSubtaskFile: "trash/delete-forever/subtask-file/",
 
-
   //-----------------------------Project Module Start----------------
 
   // Project List / Grid
   getProjectList: "project/get-project-list/",
+
+  // Portfolio Project List / Grid
+  getPortfolioProjectList: "project/get-portfolio-projects-list/",
+
+  // Dashboard Project List / Grid
+  getDashboardProjectList: "project/get-dashboard-project-list/",
 
   // Project Detail
   getProjectById: "project/get-project-by-id/",
@@ -584,16 +621,19 @@ const api = {
   AddSuggestedProjectMember: "project/add-suggested-project-member/",
 
   //Add Suggested Project Invited Member
-  AddSuggestedInvitedProjectMember: "project/add-invited-suggested-project-member/",
+  AddSuggestedInvitedProjectMember:
+    "project/add-invited-suggested-project-member/",
 
   //Direct Remove Project Manager
   DirectRemoveProjectManager: "project/direct-remove-project-manager/",
 
   //Accepted Portfolio team member project list
-  Accepted_PortTM_ProjectList: "project/get-all-accepted-portfolio-team-member-project-list/",
+  Accepted_PortTM_ProjectList:
+    "project/get-all-accepted-portfolio-team-member-project-list/",
 
   //Accepted Goal team member project list
-  Accepted_GoalTM_ProjectList: "project/get-all-accepted-goal-team-member-project-list/",
+  Accepted_GoalTM_ProjectList:
+    "project/get-all-accepted-goal-team-member-project-list/",
 
   //Insert Project Member
   InsertProjectMember: "project/insert-project-member",
@@ -604,5 +644,51 @@ const api = {
   //project_open_work_new_assignee
   ProjectOpenWorkNewAssignee: "project/project-open-work-new-assignee",
 
+  //getProjectCreateDD
+  ProjectCreateDD: "project/get-project-create-dd/",
+
+  //Update Project
+  UpdateProject: "project/update-project",
+
+  //Insert Project
+  InsertProject: "project/insert-project",
+
+  //Insert Project Links
+  updateProjectLink: "project/update-project-links",
+
+  //Clear Project Notifications
+  projectNotificationsClear: "project/project-notifications/",
+
+  //Project Invite Request
+  projectInviteRequest: "project-invite-reject-request/",
+
+  //-----------------------------Upgrade Plan Modlue Start----------------
+
+  //getAllPack
+  AllPack: "upgrade-plan/get-all-pack/",
+
+  //get_active_coupons
+  ActiveCoupons: "upgrade-plan/get-active-coupons",
+
+  //free_trial_account_access
+  FreeTrialAccountAccess: "upgrade-plan/free-trial-account-access",
+
+  //insert_ContactSales
+  InsertContactSales: "upgrade-plan/insert-contact-sales",
+
+  //checkout_payment_session_initialize
+  CheckoutPaymentSessionInitialize: "upgrade-plan/create-checkout-session",
+
+  //insert_checkout_payment_data
+  InsertCheckoutPaymentData: "upgrade-plan/insert-checkout-payment-data",
+
+  //update_subscription
+  UpdateSubscription: "upgrade-plan/update-subscription",
+
+  //downgrade_plan
+  DowngradePlan: "upgrade-plan/downgrade-plan",
+
+  //UpdateAllUsersPackageDetails
+  UpdateAllUsersPackageDetails: "updtae-all-users-package-details",
 };
 export default api;

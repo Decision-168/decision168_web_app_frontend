@@ -9,6 +9,7 @@ export const AuthStyles = () => {
         backgroundPosition: "center",
         width: "100%",
         height: "100%",
+        maxHeight:"100vh",
     };
     return { backGroundImage };
 };

@@ -3,26 +3,26 @@ import { Paper, Box, Grid, Typography } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useDispatch } from "react-redux";
-import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import {
+  openCnfModal,
+  closeCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
 import { openModal } from "../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
-import EditSubTasksForm from "../../createEditSubtasks/EditSubTasksForm";
 import SubTaskOverviewCardHeader from "./SubTaskOverviewCardHeader";
 import CommentSection from "../../../project/projects-overview/comment-section";
-import { fileItSubTask, getSubTaskDetails } from "../../../../api/modules/taskModule";
+import {
+  fileItSubTask,
+  getSubTaskDetails,
+} from "../../../../api/modules/taskModule";
 import SubTaskInfo from "./SubTaskInfo";
 import { patchDeleteSubtask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
+import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
-export default function SubtaskPreview({
-  styles,
-  subtaskId,
-  parentTaskName,
-  closePreview,
-  fetchData,
-}) {
+export default function SubtaskPreview({ styles, subtaskId, taskData, closePreview, fetchData }) {
   const dispatch = useDispatch();
 
   const [subTask, setSubTask] = React.useState({});
@@ -34,7 +34,6 @@ export default function SubtaskPreview({
       const response = await getSubTaskDetails(subtaskId);
       setSubTask(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -45,7 +44,7 @@ export default function SubtaskPreview({
   }, [subtaskId]);
 
   const handleEditSubTasksDialog = () => {
-    dispatch(openModal("edit-subtask"));
+    dispatch(openModal("edit-preview-subtask"));
   };
 
   const handleDuplicateDialog = () => {
@@ -65,8 +64,7 @@ export default function SubtaskPreview({
 
   const handleFileItSubTaskYes = async () => {
     const subtask_id = subtaskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
       fetchData();
@@ -74,7 +72,6 @@ export default function SubtaskPreview({
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in filing the Subtask in preview:", error);
     }
   };
 
@@ -90,8 +87,7 @@ export default function SubtaskPreview({
 
   const handleDeleteSubTaskYes = async () => {
     const subtask_id = subtaskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteSubTaskInPreview" }));
@@ -100,15 +96,14 @@ export default function SubtaskPreview({
       toast.success(`${response.message}`);
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
-      console.error("Error in Deleteing the Subtask in preview:", error);
     }
   };
 
   return (
     <>
-      <Grid container spacing={3}>
+      <Grid container>
         <Grid item xs={12} lg={8}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}>
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "100%px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <SubTaskOverviewCardHeader
@@ -121,31 +116,41 @@ export default function SubtaskPreview({
                   handleDelete={handleDeleteDialog}
                 />
                 <Grid container>
-                  {parentTaskName && (
+                  {taskData?.tname && (
                     <Grid item xs={12}>
                       <Typography sx={styles.label}>Task:</Typography>
-                      <Typography sx={styles.labelText}>{parentTaskName}</Typography>
+                      <Typography sx={styles.labelText}>
+                        {taskData?.tname}
+                      </Typography>
                     </Grid>
                   )}
 
                   {subTask?.stcode && (
                     <Grid item xs={12}>
                       <Typography sx={styles.label}>Subtask Code:</Typography>
-                      <Typography sx={styles.labelText}>{subTask?.stcode}</Typography>
+                      <Typography sx={styles.labelText}>
+                        {subTask?.stcode}
+                      </Typography>
                     </Grid>
                   )}
 
                   {subTask?.stdes && (
                     <Grid item xs={12}>
-                      <Typography sx={styles.label}>Subtask Description :</Typography>
-                      <Typography sx={styles.labelText}>{subTask?.stdes}</Typography>
+                      <Typography sx={styles.label}>
+                        Subtask Description :
+                      </Typography>
+                      <Typography sx={styles.labelText}>
+                        {subTask?.stdes}
+                      </Typography>
                     </Grid>
                   )}
 
                   {subTask?.stnote && (
                     <Grid item xs={12}>
                       <Typography sx={styles.label}>Subtask Notes:</Typography>
-                      <Typography sx={styles.labelText}>{subTask?.stnote}</Typography>
+                      <Typography sx={styles.labelText}>
+                        {subTask?.stnote}
+                      </Typography>
                     </Grid>
                   )}
 
@@ -158,7 +163,9 @@ export default function SubtaskPreview({
                         </Typography>
                       ))
                     ) : (
-                      <Typography sx={styles.labelText}>No Subtask Links!</Typography>
+                      <Typography sx={styles.labelText}>
+                        No Subtask Links!
+                      </Typography>
                     )}
                   </Grid>
 
@@ -171,7 +178,9 @@ export default function SubtaskPreview({
                         </Typography>
                       ))
                     ) : (
-                      <Typography sx={styles.labelText}>No Subtask Files!</Typography>
+                      <Typography sx={styles.labelText}>
+                        No Subtask Files!
+                      </Typography>
                     )}
                   </Grid>
                 </Grid>
@@ -183,19 +192,14 @@ export default function SubtaskPreview({
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ p: 1, bgcolor: "#F7F7F7", width: "300px" }}>
-            <CommentSection />
+          <Paper elevation={0} sx={{ height: "100%", width: "100%" }}>
+            <CommentSection projectId={subTask?.stproject_assign} taskId={0} subtaskId={subTask?.stid} commentModule={"subtask"} />
           </Paper>
         </Grid>
       </Grid>
 
-      <ReduxDialog
-        value="edit-subtask"
-        modalTitle="Edit Sub Task"
-        showModalButton={false}
-        modalSize="lg"
-      >
-        <EditSubTasksForm />
+      <ReduxDialog value="edit-preview-subtask" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md" >
+        <CreateEditSubTasksForm editMode={true} taskData={taskData} subtaskData={subTask} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -204,12 +208,21 @@ export default function SubtaskPreview({
         showModalButton={false}
         modalSize="sm"
       >
-        <DuplicateSubtaskDialog subtaskData={subTask} closeModalName={"duplicate-preview-subtask"}/>
+        <DuplicateSubtaskDialog
+          subtaskData={subTask}
+          closeModalName={"duplicate-preview-subtask"}
+        />
       </ReduxDialog>
 
-      <ConfirmationDialog value={"fileItSubTaskInPreview"} handleYes={handleFileItSubTaskYes} />
+      <ConfirmationDialog
+        value={"fileItSubTaskInPreview"}
+        handleYes={handleFileItSubTaskYes}
+      />
 
-      <ConfirmationDialog value={"deleteSubTaskInPreview"} handleYes={handleDeleteSubTaskYes} />
+      <ConfirmationDialog
+        value={"deleteSubTaskInPreview"}
+        handleYes={handleDeleteSubTaskYes}
+      />
     </>
   );
 }

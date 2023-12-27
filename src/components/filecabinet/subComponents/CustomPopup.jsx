@@ -9,9 +9,18 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, DialogActions } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ConfirmationDialog from "../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../redux/action/confirmationModalSlice";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../redux/action/confirmationModalSlice";
 import { useDispatch } from "react-redux";
-import { reopenGoal, reopenKpi, reopenProject, reopenSubtask, reopenTask } from "../../../api/modules/FileCabinetModule";
+import {
+  reopenGoal,
+  reopenKpi,
+  reopenProject,
+  reopenSubtask,
+  reopenTask,
+} from "../../../api/modules/FileCabinetModule";
 import { toast } from "react-toastify";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -33,7 +42,7 @@ const CustomPopup = ({
   modalSize,
   portfolioId,
   regId,
-  fetchTreeData
+  fetchTreeData,
 }) => {
   const [modId, setModId] = useState(null);
   const [modType, setModType] = useState(null);
@@ -41,7 +50,13 @@ const CustomPopup = ({
   const [userId, setUserId] = useState(null);
   const theme = useTheme();
   const dispatch = useDispatch();
-  const handleReopen = (module, moduleId, moduleType, modulePort, moduleUser) => {
+  const handleReopen = (
+    module,
+    moduleId,
+    moduleType,
+    modulePort,
+    moduleUser
+  ) => {
     setModId(moduleId);
     setModType(moduleType);
     setPortfolio(modulePort);
@@ -59,13 +74,13 @@ const CustomPopup = ({
   const fetchGoalData = async () => {
     try {
       const response = await reopenGoal(modId, portfolio, userId);
-      fetchTreeData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      fetchTreeData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.error(`${error.response?.error}`);
     }
   };
@@ -74,13 +89,13 @@ const CustomPopup = ({
   const fetchKpiData = async () => {
     try {
       const response = await reopenKpi(modId, portfolio, userId);
-      fetchTreeData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      fetchTreeData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.error(`${error.response?.error}`);
     }
   };
@@ -89,14 +104,14 @@ const CustomPopup = ({
   const fetchProjectData = async () => {
     try {
       const response = await reopenProject(modId, portfolio, userId);
-      fetchTreeData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      fetchTreeData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
-      console.log(error)
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -105,13 +120,13 @@ const CustomPopup = ({
   const fetchTaskData = async () => {
     try {
       const response = await reopenTask(modId, portfolio, userId);
-      fetchTreeData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      fetchTreeData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -120,28 +135,28 @@ const CustomPopup = ({
   const fetchSubtaskData = async () => {
     try {
       const response = await reopenSubtask(modId, userId);
-      fetchTreeData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      fetchTreeData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      handleClose()
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+      handleClose();
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const handleYes = () => {
-    if(modType == 'goal-content') {
-      fetchGoalData()
-    }else if(modType == 'kpi-content') {
-      fetchKpiData()
-    }else if(modType == 'project-content') {
-      fetchProjectData()
-    }else if(modType == 'task-content') {
-      fetchTaskData()
-    }else if(modType == 'subtask-content') {
-      fetchSubtaskData()
+    if (modType == "goal-content") {
+      fetchGoalData();
+    } else if (modType == "kpi-content") {
+      fetchKpiData();
+    } else if (modType == "project-content") {
+      fetchProjectData();
+    } else if (modType == "task-content") {
+      fetchTaskData();
+    } else if (modType == "subtask-content") {
+      fetchSubtaskData();
     }
   };
   return (
@@ -174,7 +189,15 @@ const CustomPopup = ({
                 <Button
                   size="small"
                   variant="contained"
-                  onClick={() => handleReopen(modalTitle, modalId, modalType, portfolioId, regId)}
+                  onClick={() =>
+                    handleReopen(
+                      modalTitle,
+                      modalId,
+                      modalType,
+                      portfolioId,
+                      regId
+                    )
+                  }
                 >
                   Reopen
                 </Button>
@@ -204,7 +227,16 @@ const CustomPopup = ({
               <Button
                 autoFocus
                 variant="contained"
-                href={(modalType === "project-file") && (`./src/assets/project_files/${modalTitle}`) || (modalType === "task-file") && (`./src/assets/task_files/${modalTitle}`) || (modalType === "subtask-file") && (`./src/assets/task_files/${modalTitle}`) || (modalType === "content-file") && (`./src/assets/plan_content_files/${modalTitle}`)}
+                href={
+                  (modalType === "project-file" &&
+                    `./src/assets/project_files/${modalTitle}`) ||
+                  (modalType === "task-file" &&
+                    `./src/assets/task_files/${modalTitle}`) ||
+                  (modalType === "subtask-file" &&
+                    `./src/assets/task_files/${modalTitle}`) ||
+                  (modalType === "content-file" &&
+                    `./src/assets/plan_content_files/${modalTitle}`)
+                }
                 download={modalTitle}
               >
                 Download

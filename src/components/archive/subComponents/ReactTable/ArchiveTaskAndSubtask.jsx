@@ -6,31 +6,35 @@ import {
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { closeCnfModal, openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import CustomTable from "../../../common/CustomTable";
-import { gettaskArchiveData, patchUnArchiveSubtask, patchUnArchiveTask } from "../../../../api/modules/ArchiveModule";
+import {
+  closeCnfModal,
+  openCnfModal,
+} from "../../../../redux/action/confirmationModalSlice";
+import {
+  gettaskArchiveData,
+  patchUnArchiveSubtask,
+  patchUnArchiveTask,
+} from "../../../../api/modules/ArchiveModule";
 import { toast } from "react-toastify";
 
 const ArchiveTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const dispatch = useDispatch();
-  
+
   const [archiveData, setArchiveData] = useState([]);
   const [archiveType, setArchiveType] = useState(null);
   const [archiveId, setArchiveId] = useState(null);
 
   const fetchArchiveData = async () => {
     try {
-      const response = await gettaskArchiveData(regId,portfolioId);
+      const response = await gettaskArchiveData(regId, portfolioId);
       setArchiveData(response);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchArchiveData();
   }, [regId]);
-  
+
   const handleReopen = (type, id) => {
     setArchiveType(type);
     setArchiveId(id);
@@ -46,12 +50,12 @@ const ArchiveTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const fetchUnarchiveTask = async () => {
     try {
       const response = await patchUnArchiveTask(archiveId, portfolioId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -59,21 +63,21 @@ const ArchiveTaskAndSubtask = ({ value, regId, portfolioId }) => {
   const fetchUnarchiveSubtask = async () => {
     try {
       const response = await patchUnArchiveSubtask(archiveId, regId);
-      fetchArchiveData()
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
+      fetchArchiveData();
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
       toast.success(`${response.message}`);
     } catch (error) {
-      dispatch(closeCnfModal({ modalName: 'reopenModule' }));
-      console.log(error);
+      dispatch(closeCnfModal({ modalName: "reopenModule" }));
+
       toast.error(`${error.response.data?.error}`);
     }
   };
 
   const handleYes = async () => {
-    if(archiveType == 'Task') {
-      fetchUnarchiveTask()
-    }else if(archiveType == 'Subtask') {
-      fetchUnarchiveSubtask()
+    if (archiveType == "Task") {
+      fetchUnarchiveTask();
+    } else if (archiveType == "Subtask") {
+      fetchUnarchiveSubtask();
     }
   };
 
@@ -137,7 +141,9 @@ const ArchiveTaskAndSubtask = ({ value, regId, portfolioId }) => {
               sx={{ mr: 1 }}
               size="small"
               variant="contained"
-              onClick={() => handleReopen(row.original.task_type,row.original.table_id)}
+              onClick={() =>
+                handleReopen(row.original.task_type, row.original.table_id)
+              }
             >
               Reopen
             </Button>

@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getCountry } from '../api/modules/dashboardModule';
-
+import { useState, useEffect } from "react";
+import { getCountry } from "../api/modules/dashboardModule";
 
 const useCountryName = (code) => {
   const [countryName, setCountryName] = useState(null);
@@ -10,9 +9,7 @@ const useCountryName = (code) => {
       try {
         const response = await getCountry(code);
         setCountryName(response.country_name);
-      } catch (error) {
-        console.error('Error fetching country name:', error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

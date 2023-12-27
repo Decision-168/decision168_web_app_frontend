@@ -28,12 +28,7 @@ export default function AddSocialMediaLinks({ fields, setFields }) {
 
   return (
     <Box>
-      <Box
-        display="flex"
-        justifyContent="start"
-        alignItems="center"
-        px={2}
-        color={theme.palette.secondary.main}>
+      <Box display="flex" justifyContent="start" alignItems="center" px={2} color={theme.palette.secondary.main}>
         <Typography>Add Social Media Links : </Typography>
         <IconButton onClick={handleAddClick}>
           <AddCircleIcon />
@@ -49,9 +44,7 @@ export default function AddSocialMediaLinks({ fields, setFields }) {
 
             <Grid item xs={12} sm={5.5} px={2} py={1}>
               <Box sx={{ textAlign: "left" }}>
-                <InputLabel sx={{ fontSize: "14px", color: theme.palette.secondary.main }}>
-                  Link
-                </InputLabel>
+                <InputLabel sx={{ fontSize: "14px", color: theme.palette.secondary.main }}>Link</InputLabel>
                 <TextField
                   sx={{ mt: 1 }}
                   id={`link-${index}`}
@@ -71,7 +64,8 @@ export default function AddSocialMediaLinks({ fields, setFields }) {
                   display: "flex",
                   justifyContent: "end",
                   alignItems: "end",
-                }}>
+                }}
+              >
                 <IconButton onClick={() => handleRemoveClick(index)}>
                   <RemoveCircleIcon />
                 </IconButton>

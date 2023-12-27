@@ -15,7 +15,7 @@ export default function Register() {
   const theme = useTheme();
 
   return (
-    <Grid container component="main" sx={{ height: "100vh" }}>
+    <Grid container component="main" sx={{ maxHeight: "100vh", minHeight:"100vh", maxWidth:"100vw", boxSizing:"border-box" }}>
       <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
         <BackImage />
       </Grid>

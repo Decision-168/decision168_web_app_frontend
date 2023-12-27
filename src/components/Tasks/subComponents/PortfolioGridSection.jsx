@@ -11,7 +11,10 @@ import { getPortfolioTasksSubtasksGridView } from "../../../api/modules/taskModu
 import { filterDataByStatus } from "../../../helpers/filterDataByStatus";
 import Loader from "../../common/Loader";
 import NoGridTaskFound from "./NoGridTaskFound";
-import { changeSubtaskStatusDND, changeTaskStatusDND } from "../../../api/modules/taskModule";
+import {
+  changeSubtaskStatusDND,
+  changeTaskStatusDND,
+} from "../../../api/modules/taskModule";
 import { toast } from "react-toastify";
 
 const PortfolioGridSection = ({ rows, setRows }) => {
@@ -26,13 +29,14 @@ const PortfolioGridSection = ({ rows, setRows }) => {
   const fetchData = async () => {
     setLoading(true);
     try {
+      // Introduce a delay of 1 second (1000 milliseconds)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await getPortfolioTasksSubtasksGridView(
         portfolioId,
         regId
       );
       setRows(response);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -93,13 +97,8 @@ const PortfolioGridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Task Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating task status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -118,13 +117,8 @@ const PortfolioGridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Subtask Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
-      // Log error details for debugging
-      console.error("Error updating subtask status:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   };
@@ -133,7 +127,6 @@ const PortfolioGridSection = ({ rows, setRows }) => {
     const { tid, tassignee } = removed?.content || {};
 
     if (removed?.content?.type === "task") {
-      console.log("This is a task");
       try {
         const response = await updateTaskStatus(
           tid,
@@ -141,16 +134,16 @@ const PortfolioGridSection = ({ rows, setRows }) => {
           destColumn?.value
         );
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update task status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the task status:", error);
       }
     } else {
-      console.log("This is a subtask");
       try {
         const response = await updateSubtaskStatus(
           tid,
@@ -158,13 +151,14 @@ const PortfolioGridSection = ({ rows, setRows }) => {
           destColumn?.value
         );
         if (response.status === 200) {
+          fetchData();
           toast.success(`${response.data?.message}`);
         } else {
           toast.error(`Failed to update subtask status. Please try again.`);
         }
       } catch (error) {
+        fetchData();
         toast.error(`${error?.response?.data?.message}`);
-        console.error("Error handling the subtask status:", error);
       }
     }
   };

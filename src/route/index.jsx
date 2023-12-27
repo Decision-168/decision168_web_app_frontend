@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import React, { lazy, useState , useEffect} from "react";
+import React, { lazy, useState, useEffect } from "react";
 import DashboardLayout from "../components/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
@@ -7,6 +7,8 @@ import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
+import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
+import VerifyProjectInviteMember from "../components/project/subComponents/VerifyProjectInviteMember";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -18,18 +20,26 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
 const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
 
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
 const PortfolioGoals = lazy(() =>
   import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
 );
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
 const GoalOverviewRequest = lazy(() =>
   import("../components/GoalsAndStrategies/goal-overview-request")
 );
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
 const ProjectOverview = lazy(() =>
   import("../components/project/projects-overview/ProjectOverview")
@@ -44,15 +54,18 @@ const DashboardTasks = lazy(() => import("../components/Tasks/DashboardTasks"));
 const PortfolioTasksList = lazy(() => import("../components/Tasks")); //side bar
 const PortfolioTasks = lazy(() => import("../components/Tasks/PortfolioTasks")); // from the porfolio page
 
-const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
+// const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
 const AccountVerification = lazy(() =>
   import("../components/auth/accountVerification")
 );
+const PortfolioProjects = lazy(() =>
+  import("../components/project/portfolio-projects")
+);
+const ProjectsList = lazy(() => import("../components/project/projects-list"));
 
 const RouteIndex = () => {
-
   return (
     <Router>
       <Routes>
@@ -74,6 +87,7 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route
             path="/calendar"
             element={
@@ -195,11 +209,11 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-           <Route
+          <Route
             path="/portfolio-tasks-list"
             element={
               <DashboardLayout>
-              <PortfolioTasksList />
+                <PortfolioTasksList />
               </DashboardLayout>
             }
           />
@@ -207,7 +221,7 @@ const RouteIndex = () => {
             path="/portfolio-tasks/:portfolioId"
             element={
               <DashboardLayout>
-                <PortfolioTasks/>
+                <PortfolioTasks />
               </DashboardLayout>
             }
           />
@@ -219,14 +233,14 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
+          {/* <Route
             path="/tasks-create"
             element={
               <DashboardLayout>
                 <CreateEditTask />
               </DashboardLayout>
             }
-          />
+          /> */}
           <Route
             path="/tasks-overview/:taskId"
             element={
@@ -260,10 +274,26 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/portfolio-projects-list"
+            path="/portfolio-projects-list/:portfolioId"
             element={
               <DashboardLayout>
                 <Project />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/portfolio-projects/:portfolioId"
+            element={
+              <DashboardLayout>
+                <PortfolioProjects />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/projects-list"
+            element={
+              <DashboardLayout>
+                <ProjectsList />
               </DashboardLayout>
             }
           />
@@ -304,6 +334,18 @@ const RouteIndex = () => {
             exact
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
             element={<VerifyInviteMember />}
+          />
+
+          <Route
+            exact
+            path="/project-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectInviteMember />}
+          />
+
+          <Route
+            exact
+            path="/project-invite-reject-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectInviteMember />}
           />
         </Route>
 

@@ -2,9 +2,17 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import SubTaskInfo from "./SubTaskInfo";
 
-export default function SubtakOverviewCardBody({ styles, subtask }) {
+export default function SubtakOverviewCardBody({ styles, subtask, tname, tproject_assign }) {
   return (
     <Grid container>
+      <Grid item xs={12}>
+        {tname && (
+          <>
+            <Typography sx={styles.label}>Task:</Typography>
+            <Typography sx={styles.labelText}>{tname}</Typography>
+          </>
+        )}
+      </Grid>
       <Grid item xs={12}>
         {subtask?.stcode && (
           <>

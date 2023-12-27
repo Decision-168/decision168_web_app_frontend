@@ -11,26 +11,28 @@ export default function CustomLabelTextField({
   value,
   onChange,
 }) {
-   const theme = useTheme();
+  const theme = useTheme();
 
-   // //to style placeholder
-   // const inputProps = register(name, validation);
-   // Define custom CSS styles for the placeholder
-   const placeholderStyles = {
-     fontSize: "14px",
-     color: theme.palette.secondary.dark,
-   };
+  // //to style placeholder
+  // const inputProps = register(name, validation);
+  // Define custom CSS styles for the placeholder
+  const placeholderStyles = {
+    fontSize: "14px",
+    color: theme.palette.secondary.dark,
+  };
   return (
     <>
-      <Grid item xs={2} alignSelf={"center"}>
-        <InputLabel sx={{ fontSize: "14px", color: labelColor }}>
+      <Grid item xs={12} sm={2} md={2} lg={2} alignSelf={"center"}>
+        <InputLabel
+          sx={{ fontSize: "14px", color: labelColor, textAlign: "start" }}
+        >
           {label}
           {required && (
             <span style={{ color: theme.palette.error.main }}> *</span>
           )}
         </InputLabel>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={12} sm={10} md={10} lg={10}>
         <TextField
           placeholder={placeholder}
           margin="dense"

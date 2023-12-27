@@ -7,7 +7,10 @@ import {
   AccordionSummary,
 } from "../style-functions";
 import moment from "moment";
-import { getViewHistoryDateWiseGoal, getViewHistoryDateWiseStrategy } from "../../../../api/modules/goalkpiModule";
+import {
+  getViewHistoryDateWiseGoal,
+  getViewHistoryDateWiseStrategy,
+} from "../../../../api/modules/goalkpiModule";
 import { getViewHistoryDateWiseProject } from "../../../../api/modules/ProjectModule";
 
 const RecentList = ({ data, id, type }) => {
@@ -39,9 +42,7 @@ const RecentList = ({ data, id, type }) => {
           response = await getViewHistoryDateWiseProject(id, dateParam);
         }
         setrecentHisDetails(response);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchRecentHistoryData();
