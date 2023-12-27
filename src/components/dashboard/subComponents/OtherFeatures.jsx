@@ -51,25 +51,8 @@ export default function ResponsiveGrid() {
           <MyAlertsCard />
         </Grid>
       </Grid>
-<<<<<<< HEAD
-      
     </Box>
   );
 }
 
 
-=======
-      <CustomDialog
-        handleClose={handleCloseSubTaskPreviewDialog}
-        open={openSubTaskPreviewDialog}
-        modalTitle="Subtask"
-        redirectPath={"/subtasks-overview"}
-        showModalButton={true}
-        modalSize="lg"
-      >
-        <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
-      </CustomDialog>
-    </Box>
-  );
-}
->>>>>>> c8e20cae2265221430370582776db8fcea1d39fd
