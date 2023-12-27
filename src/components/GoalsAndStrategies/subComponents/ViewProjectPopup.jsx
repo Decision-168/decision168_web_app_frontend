@@ -43,6 +43,7 @@ const ViewProjectPopup = ({
 }) => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
+  const storedPorfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -257,6 +258,13 @@ const ViewProjectPopup = ({
       mb={2}
     >
       <Grid container spacing={2}>
+        {
+          projectDel?.portfolio_id != storedPorfolioId && (
+            <Typography sx={{
+              color: "red", fontSize: 14, textAlign: "left", ml:1, fontWeight: 500
+            }}>Different Portfolio is Selected!</Typography>
+          )
+        }  
         <TitleWithActions
           title={`Project: ${projectName}`}
           handleClick1={handleEditProject}

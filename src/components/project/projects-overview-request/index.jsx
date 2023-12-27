@@ -4,13 +4,21 @@ import PendingProjectPopup from "../portfolio-projects-list/PendingProjectPopup"
 import MembersAccordion from "../../GoalsAndStrategies/goals-overview/subComponents/MembersAccordion";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import { getUserData } from "../../../api/modules/FileCabinetModule";
-import { getProjectDetail } from "../../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  notificationsClear,
+} from "../../../api/modules/ProjectModule";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../redux/action/userSlice";
 
 const ProjectsOverviewRequest = () => {
   const { pid } = useParams();
   const [projectData, setProjectData] = useState([]);
   const [userData, setUserData] = useState([]);
+
+  const user = useSelector(selectUserDetails);
+  const userID = user?.reg_id;
 
   const fetchProjectData = async () => {
     try {
@@ -19,8 +27,18 @@ const ProjectsOverviewRequest = () => {
     } catch (error) {}
   };
 
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationsClear(pid, userID);
+      console.log(response.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchProjectData();
+    fetchNotifications();
   }, [pid]);
   const pDetail = projectData?.project;
 

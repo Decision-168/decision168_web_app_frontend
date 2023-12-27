@@ -221,10 +221,10 @@ export const getProjectMemberData = async (project_id, user_id) => {
   }
 };
 
-export const patchProjectRequest = async (project_id, memberId, flag) => {
+export const patchProjectRequest = async (projectId, primaryId, flag) => {
   try {
-    const response = await axios.patch(
-      `${apiUrl}${api.projectRequest}${project_id}/${memberId}/${flag}`
+    const response = await axios.get(
+      `${apiUrl}${api.projectRequest}${projectId}/${primaryId}/${flag}`
     );
     return response.data;
   } catch (error) {
@@ -426,6 +426,28 @@ export const updateProjectLinkData = async (formdata) => {
     const response = await axios.patch(
       `${apiUrl}${api.updateProjectLink}`,
       formdata
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const notificationsClear = async (pid, user_id) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.projectNotificationsClear}${pid}/${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProjectInviteRequest = async (projectId, primaryId, flag) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.projectInviteRequest}${projectId}/${primaryId}/${flag}`
     );
     return response.data;
   } catch (error) {

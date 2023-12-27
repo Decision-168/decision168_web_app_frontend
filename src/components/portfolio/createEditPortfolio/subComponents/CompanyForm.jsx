@@ -36,7 +36,7 @@ import {
 import SelectOption from "../../../common/SelectOption";
 import { getCountries } from "../../../../api/modules/dashboardModule";
 
-export default function CompanyForm({ isEditPath, depts }) {
+export default function CompanyForm({ paramId, isEditPath, depts }) {
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const user = useSelector(selectUserDetails);
   const details = useSelector(selectPorfolioDetails);
@@ -57,7 +57,10 @@ export default function CompanyForm({ isEditPath, depts }) {
   ]);
 
   useEffect(() => {
-    dispatch(getPortfolioDetailsAsync(storedPortfolioId));
+    // dispatch(getPortfolioDetailsAsync(storedPortfolioId));
+    if(isEditPath){
+      dispatch(getPortfolioDetailsAsync(paramId));
+    }
   }, [isEditPath]);
 
   const [formValues, setFormValues] = useState({
@@ -83,29 +86,33 @@ export default function CompanyForm({ isEditPath, depts }) {
   });
 
   useEffect(() => {
-    setFormValues({
-      ...formValues,
-      portfolio_createdby: user?.reg_id,
-      portfolio_user: details?.portfolio_user,
-      portfolio_name: details?.portfolio_name,
-      company_website: details?.company_website,
-      email_address: details?.email_address,
-      about_portfolio: details?.about_portfolio,
-      phone_number: details?.phone_number,
-      contact_fname: details?.contact_fname,
-      contact_mname: details?.contact_mname,
-      contact_lname: details?.contact_lname,
-      contact_phone_number: details?.contact_phone_number,
-      street: details?.street,
-      city: details?.city,
-      state: details?.state,
-      country: details?.country,
-      social_media_icon: details?.social_media_icon,
-      social_media: details?.social_media,
-      photo: "",
-      cover_photo: "",
-    });
-  }, [details]);
+    if(isEditPath){
+      setFormValues({
+        ...formValues,
+        portfolio_createdby: user?.reg_id,
+        portfolio_user: details?.portfolio_user,
+        portfolio_name: details?.portfolio_name,
+        company_website: details?.company_website,
+        email_address: details?.email_address,
+        about_portfolio: details?.about_portfolio,
+        phone_number: details?.phone_number,
+        contact_fname: details?.contact_fname,
+        contact_mname: details?.contact_mname,
+        contact_lname: details?.contact_lname,
+        contact_phone_number: details?.contact_phone_number,
+        street: details?.street,
+        city: details?.city,
+        state: details?.state,
+        country: details?.country,
+        social_media_icon: details?.social_media_icon,
+        social_media: details?.social_media,
+        photo: "",
+        cover_photo: "",
+      });
+    }else{
+      setFormValues({});
+    }
+  }, [isEditPath]);
 
   useEffect(() => {
     // Split the comma-separated strings into arrays

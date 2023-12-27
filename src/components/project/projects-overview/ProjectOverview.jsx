@@ -9,7 +9,10 @@ import LinkContainer from "./project-links/LinkContainer";
 import FileContainer from "./project-files/FileContainer";
 import CommentSection from "./comment-section";
 import { getUserData } from "../../../api/modules/FileCabinetModule";
-import { getProjectDetail } from "../../../api/modules/ProjectModule";
+import {
+  getProjectDetail,
+  notificationsClear,
+} from "../../../api/modules/ProjectModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import MembersAccordion from "../subComponents/MembersAccordion";
@@ -26,13 +29,22 @@ const ProjectOverview = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-
       setProjectDel(response.project);
     } catch (error) {}
   };
 
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationsClear(pid, userID);
+      console.log(response.message);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchProjectData();
+    fetchNotifications();
   }, [pid]);
   const link_comments = projectDel?.plink_comment;
 

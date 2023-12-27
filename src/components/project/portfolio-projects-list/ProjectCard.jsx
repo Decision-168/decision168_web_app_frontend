@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { stringAvatar } from "../../../helpers/stringAvatar";
 import { useNavigate } from "react-router-dom";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 
 const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
   const handleOpenCondition = (type, pid, pname) => {
@@ -24,7 +25,9 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
     }
   };
 
-  const openPage = (type, pid, pname) => {
+  const openPage = (type, pid, pname, portfId) => {
+    localStorage.removeItem("portfolioId");
+    localStorage.setItem("portfolioId", portfId);
     if (["created-project", "accepted-project"].includes(type)) {
       navigate(`/projects-overview/${pid}`);
     } else {
@@ -46,7 +49,14 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
       }}
     >
       <CardActionArea
-        onClick={() => openPage(value, item?.project?.id, item?.project?.name)}
+        onClick={() =>
+          openPage(
+            value,
+            item?.project?.id,
+            item?.project?.name,
+            item?.portfolio_id
+          )
+        }
         sx={{
           borderRadius: 0,
           height: "120px",
@@ -81,6 +91,11 @@ const ProjectCard = ({ item, handleOpen, value, handlePendingOpen }) => {
               textAlign={"start"}
             >
               {item?.project?.name}
+              {item.bellIcon == "yes" && (
+                <>
+                  <NotificationsOutlinedIcon />
+                </>
+              )}
             </Typography>
           }
         />

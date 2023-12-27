@@ -8,6 +8,7 @@ import SubtaskOverview from "../components/Tasks/subtaskOverview";
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
 import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
+import VerifyProjectInviteMember from "../components/project/subComponents/VerifyProjectInviteMember";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -86,12 +87,7 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route
-            path="/payment-success"
-            element={
-                <PaymentSuccess />
-            }
-          />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route
             path="/calendar"
             element={
@@ -338,6 +334,18 @@ const RouteIndex = () => {
             exact
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
             element={<VerifyInviteMember />}
+          />
+
+          <Route
+            exact
+            path="/project-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectInviteMember />}
+          />
+
+          <Route
+            exact
+            path="/project-invite-reject-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectInviteMember />}
           />
         </Route>
 
