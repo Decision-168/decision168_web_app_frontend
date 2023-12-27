@@ -44,8 +44,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
   const dispatch = useDispatch();
   const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const user = useSelector(selectUserDetails);
-  // const regId = user?.reg_id;
-  const regId = 1; // for testing
+  const regId = user?.reg_id;
 
   const [rowId, setRowId] = useState(0);
   const [subRowId, setSubRowId] = useState(0);
@@ -563,7 +562,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
   //Task Duedate
   const handleSubTaskDueDate = (subtaskId) => async (date) => {
-    // alert(`${subtaskId}--${date} `);
     try {
       const newDate = date;
       await updateSubTaskDueDate(subtaskId, newDate);
@@ -1010,7 +1008,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                         </Typography>
 
                                         {subRowId === subrow?.stid && (
-                                          <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg">
+                                          <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg" data={{tname: row?.tname, tproject_assign: row?.tproject_assign}}>
                                             <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData}  taskData={row} />
                                           </CustomDialog>
                                         )}

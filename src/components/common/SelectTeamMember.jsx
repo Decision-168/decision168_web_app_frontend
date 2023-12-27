@@ -20,7 +20,6 @@ export default function SelectTeamMember({
   };
 
   const handleChange = (fieldName) => (event, value) => {
-    console.log(value);
     setSelectedMember(value.reg_id);
   };
 

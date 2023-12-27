@@ -125,7 +125,6 @@ const PortfolioListView = () => {
       toast.success(`${response.message}`);
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "unarchivePortfolio" }));
-      console.log(error.response.data);
       toast.error(`${error.response.data?.error}`);
     }
   };
@@ -155,7 +154,6 @@ const PortfolioListView = () => {
       toast.success(`${response.message}`);
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "retrievePortfolio" }));
-      console.log(error.response.data);
       toast.error(`${error.response.data?.error}`);
     }
   };

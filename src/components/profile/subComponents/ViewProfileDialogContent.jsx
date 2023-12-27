@@ -69,7 +69,7 @@ export default function ViewProfileDialogContent() {
           <PersonalInfo />
         </Grid>
       </Grid>
-      <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="md">
+      <CustomDialog handleClose={handleCloseChangePasswordDailog} open={openChangePasswordDialog} modalTitle="Change Password" showModalButton={false} modalSize="sm">
         <ChangePasswordForm handleClose={handleCloseChangePasswordDailog} />
       </CustomDialog>
     </Paper>

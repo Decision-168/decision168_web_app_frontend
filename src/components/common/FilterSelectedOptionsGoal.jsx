@@ -27,8 +27,6 @@ export default function FilterSelectedOptionsGoal({
   const [availableMembers, setAvailableMembers] = useState(memberData);
   const members = selectedMembers?.map((member) => member.id);
 
-  console.log(members);
-
 
   return (
     <Grid item xs={12}>

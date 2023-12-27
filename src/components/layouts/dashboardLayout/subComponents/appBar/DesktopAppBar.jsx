@@ -14,34 +14,29 @@ import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutMenu from "./LogoutMenu";
 import PortfolioMenu from "./PortfolioMenu";
-import { useTheme } from "@mui/material/styles";
-import { Avatar, Button, Grid, Hidden, MenuList } from "@mui/material";
+import { Button, Grid, Hidden, MenuList } from "@mui/material";
 import screenfull from "screenfull";
 import { Link } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-import { stringAvatar } from "../../../../../helpers/stringAvatar";
-import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
+import { openCnfModal, closeCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../../common/ConfirmationDialog";
 import CustomDialog from "../../../../common/CustomDialog";
 import ViewGoalsPopup from "../../../../GoalsAndStrategies/subComponents/ViewGoalsPopup";
-import { menu_data } from "../../../../../helpers/notificationData";
 import ViewKpiPopup from "../../../../GoalsAndStrategies/subComponents/ViewKpiPopup";
 import ViewProjectPopup from "../../../../GoalsAndStrategies/subComponents/ViewProjectPopup";
 import TaskPreview from "../../../../Tasks/taskOverview/subComponents/TaskPreview";
 import { taskOverviewStyles } from "../../../../Tasks/taskOverview/styles";
 import SubtaskPreview from "../../../../Tasks/subtaskOverview/subComponent/SubtaskPreview";
-import {
-  getAlertNotificationsAsync,
-  selectAlertNotifications,
-} from "../../../../../redux/action/dashboardSlice";
-import { updateAlertsAndNotifications } from "../../../../../api/modules/dashboardModule";
+import { getAlertNotificationsAsync, selectAlertNotifications } from "../../../../../redux/action/dashboardSlice";
+import { clearAllNotificaions, updateAlertsAndNotifications } from "../../../../../api/modules/dashboardModule";
 import { useSelector } from "react-redux";
 import Notification from "./Notification";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import NoDataFound from "../../../../common/NoDataFound";
+import { selectUserDetails } from "../../../../../redux/action/userSlice";
 
 const drawerWidth = 250;
 const AppBar = styled(MuiAppBar, {
@@ -84,8 +79,7 @@ const StyledMenu = styled((props) => (
     maxWidth: 320,
     maxHeight: 400,
     color: theme.palette.mode === "light" ? "rgb(55, 65, 81)" : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+    boxShadow: "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
@@ -98,8 +92,9 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function DesktopAppBar({ open, toggleDrawer }) {
-  const theme = useTheme();
   const dispatch = useDispatch();
+  const user = useSelector(selectUserDetails);
+  const user_id = user?.reg_id;
   const data = useSelector(selectAlertNotifications);
   const arrays = [
     data?.NewTasksResult,
@@ -143,7 +138,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
     }
   };
 
-  React.useEffect(() => {
+ useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(screenfull.isFullscreen);
     };
@@ -180,6 +175,19 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
     );
   };
 
+  const handleClearAllNotifications = async () => {
+    try {
+      const response = await clearAllNotificaions(user_id);
+      dispatch(getAlertNotificationsAsync(user_id));
+      dispatch(closeCnfModal({ modalName: "clearAll" }));
+      toast.success(`${response.message}`);
+    } catch (error) {
+      dispatch(closeCnfModal({ modalName: "clearAll" }));
+      console.log(error);
+      toast.error(`${error.response.data?.error}`);
+    }
+  };
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open_menu = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -205,7 +213,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           alignItems: "center",
           justifyContent: "space-between",
           height: "10vh",
-        }}>
+        }}
+      >
         <IconButton
           edge="start"
           color="black"
@@ -216,7 +225,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             width: "40px",
             height: "40px",
             ...(open && { display: "block" }),
-          }}>
+          }}
+        >
           <MenuOpenIcon />
         </IconButton>
 
@@ -230,7 +240,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             width: "40px",
             height: "40px",
             ...(open && { display: "none" }),
-          }}>
+          }}
+        >
           <MenuIcon />
         </IconButton>
 
@@ -240,7 +251,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
-          }}>
+          }}
+        >
           <PortfolioMenu />
 
           <Hidden lgDown>
@@ -254,25 +266,26 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
               Upgrade
             </Button>
             <Stack direction="row" spacing={1}>
-              <IconButton
-                onClick={toggleFullScreen}
-                color="black"
-                sx={{ width: "50px", height: "50px" }}>
+              <IconButton onClick={toggleFullScreen} color="black" sx={{ width: "50px", height: "50px" }}>
                 {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
               </IconButton>
 
-              <IconButton
-                id="demo-customized-button"
-                aria-controls={open_menu ? "demo-customized-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open_menu ? "true" : undefined}
-                onClick={handleClick}
-                color="black"
-                sx={{ width: "50px", height: "50px", cursor: "pointer" }}>
-                <Badge badgeContent={totalLength ? totalLength : 0} color="primary">
-                  <NotificationsNoneIcon />
-                </Badge>
-              </IconButton>
+              {totalLength > 0 && (
+                <IconButton
+                  id="demo-customized-button"
+                  aria-controls={open_menu ? "demo-customized-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open_menu ? "true" : undefined}
+                  onClick={handleClick}
+                  color="black"
+                  sx={{ width: "50px", height: "50px", cursor: "pointer" }}
+                >
+                  <Badge badgeContent={totalLength ? totalLength : 0} color="primary">
+                    <NotificationsNoneIcon />
+                  </Badge>
+                </IconButton>
+              )}
+
               <StyledMenu
                 id="demo-customized-menu"
                 MenuListProps={{
@@ -283,7 +296,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                 onClose={handleClose}
                 sx={{
                   "& .MuiMenuItem-root:last-child": { borderBottom: 0 },
-                }}>
+                }}
+              >
                 <MenuList sx={{ p: 2 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={6} lg={6}>
@@ -292,7 +306,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                           fontSize: "14px",
                           fontWeight: 700,
                           textAlign: "justify",
-                        }}>
+                        }}
+                      >
                         Notifications
                       </Typography>
                     </Grid>
@@ -305,7 +320,8 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                           color: "#c7df19",
                           cursor: "pointer",
                         }}
-                        onClick={() => handleClearAll()}>
+                        onClick={() => handleClearAll()}
+                      >
                         Clear All
                       </Typography>
                     </Grid>
@@ -321,9 +337,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.NewTasksResult?.length > 0 &&
                         data?.NewTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="New Task"
                               taskCode={task?.tcode}
@@ -339,9 +353,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.NewSubtaskResult?.length > 0 &&
                         data?.NewSubtaskResult?.map((subTask) => (
-                          <MenuItem
-                            key={subTask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="New Subtask"
                               taskCode={subTask?.stcode}
@@ -357,9 +369,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.OverdueTasksResult?.length > 0 &&
                         data?.OverdueTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Overdue Task"
                               taskCode={task?.tcode}
@@ -375,9 +385,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.OverdueSubtaskResult?.length > 0 &&
                         data?.OverdueSubtaskResult?.map((subtask) => (
-                          <MenuItem
-                            key={subtask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Overdue Subtask"
                               taskCode={subtask?.stcode}
@@ -393,9 +401,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SentToReviewTasksResult?.length > 0 &&
                         data?.SentToReviewTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Task"
                               taskCode={task?.tcode}
@@ -411,9 +417,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SentToReviewSubtasksResult?.length > 0 &&
                         data?.SentToReviewSubtasksResult?.map((subtask) => (
-                          <MenuItem
-                            key={subtask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Subtask"
                               taskCode={subtask?.stcode}
@@ -429,9 +433,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewArriveTasksResult?.length > 0 &&
                         data?.ReviewArriveTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Arrived"
                               taskCode={task?.tcode}
@@ -447,18 +449,14 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewArriveSubtasksResult?.length > 0 &&
                         data?.ReviewArriveSubtasksResult?.map((subtask) => (
-                          <MenuItem
-                            key={subtask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Arrived"
                               taskCode={subtask?.stcode}
                               TaskName={subtask?.stname}
                               ProjectName={subtask?.pname}
                               taskDueDate={subtask?.stdue_date}
-                              handleRemove={() =>
-                                handleRemove(subtask?.stid, 1, "reviewarrivesubtasks")
-                              }
+                              handleRemove={() => handleRemove(subtask?.stid, 1, "reviewarrivesubtasks")}
                             />
                           </MenuItem>
                         ))}
@@ -467,18 +465,14 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PendingProjectRequestResult?.length > 0 &&
                         data?.PendingProjectRequestResult?.map((p) => (
-                          <MenuItem
-                            key={p?.pm_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Pending Project"
                               taskCode={p?.tcode}
                               TaskName={p?.tname}
                               ProjectName={p?.pname}
                               taskDueDate={p?.tdue_date}
-                              handleRemove={() =>
-                                handleRemove(p?.pm_id, 1, "pendingprojectrequest")
-                              }
+                              handleRemove={() => handleRemove(p?.pm_id, 1, "pendingprojectrequest")}
                             />
                           </MenuItem>
                         ))}
@@ -487,9 +481,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PortfolioAcceptedResult?.length > 0 &&
                         data?.PortfolioAcceptedResult?.map((p) => (
-                          <MenuItem
-                            key={p?.pim_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.pim_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Accepted Portfolio"
                               taskCode={p?.tcode}
@@ -505,9 +497,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PortfolioAcceptedResult?.length > 0 &&
                         data?.PortfolioAcceptedResult?.map((p) => (
-                          <MenuItem
-                            key={p?.pm_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.pm_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Accepted Project"
                               taskCode={p?.tcode}
@@ -523,18 +513,14 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ProjectAcceptedInviteResult?.length > 0 &&
                         data?.ProjectAcceptedInviteResult?.map((p) => (
-                          <MenuItem
-                            key={p?.im_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.im_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Accepted Invite"
                               taskCode={p?.tcode}
                               TaskName={p?.tname}
                               ProjectName={p?.pname}
                               taskDueDate={p?.tdue_date}
-                              handleRemove={() =>
-                                handleRemove(p?.im_id, 1, "projectacceptedinvite")
-                              }
+                              handleRemove={() => handleRemove(p?.im_id, 1, "projectacceptedinvite")}
                             />
                           </MenuItem>
                         ))}
@@ -543,9 +529,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.MembershipRequestedResult?.length > 0 &&
                         data?.MembershipRequestedResult?.map((p) => (
-                          <MenuItem
-                            key={p?.req_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.req_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Membership Requeste"
                               taskCode={p?.tcode}
@@ -561,9 +545,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.PendingGoalRequestResult?.length > 0 &&
                         data?.PendingGoalRequestResult?.map((p) => (
-                          <MenuItem
-                            key={p?.gmid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.gmid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Pending Goal"
                               taskCode={p?.tcode}
@@ -579,9 +561,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ProjectFilesResult?.length > 0 &&
                         data?.ProjectFilesResult?.map((p) => (
-                          <MenuItem
-                            key={p?.pfile_id}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={p?.pfile_id} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Project File"
                               taskCode={p?.tcode}
@@ -597,9 +577,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.TasksFilesResult?.length > 0 &&
                         data?.TasksFilesResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Task File"
                               taskCode={task?.tcode}
@@ -615,9 +593,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.SubtasksFilesResult?.length > 0 &&
                         data?.SubtasksFilesResult?.map((subTask) => (
-                          <MenuItem
-                            key={subTask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subTask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Subtask File"
                               taskCode={subTask?.stcode}
@@ -649,9 +625,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewDeniedTasksResult?.length > 0 &&
                         data?.ReviewDeniedTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Denied"
                               taskCode={task?.tcode}
@@ -667,9 +641,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewDeniedSubtasksResult?.length > 0 &&
                         data?.ReviewDeniedSubtasksResult?.map((subtask) => (
-                          <MenuItem
-                            key={subtask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Denied"
                               taskCode={subtask?.stcode}
@@ -686,9 +658,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewApprovedTasksResult?.length > 0 &&
                         data?.ReviewApprovedTasksResult?.map((task) => (
-                          <MenuItem
-                            key={task?.tid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={task?.tid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Approved"
                               taskCode={task?.tcode}
@@ -705,9 +675,7 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                     <>
                       {data?.ReviewApprovedSubtasksResult?.length > 0 &&
                         data?.ReviewApprovedSubtasksResult?.map((subtask) => (
-                          <MenuItem
-                            key={subtask?.stid}
-                            sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
+                          <MenuItem key={subtask?.stid} sx={{ borderBottom: "1px solid #0000001f", p: 2 }}>
                             <Notification
                               type="Review Approved"
                               taskCode={subtask?.stcode}
@@ -727,23 +695,13 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
           </Box>
         </Box>
       </Toolbar>
-      <ConfirmationDialog value={"clearAll"} />
-      <CustomDialog
-        handleClose={handleModuleClose}
-        open={openModule}
-        modalTitle={notificationData.title}
-        redirectPath={notificationData.link}
-        showModalButton={true}
-        modalSize="md">
+      <ConfirmationDialog value={"clearAll"} handleYes={handleClearAllNotifications} />
+      <CustomDialog handleClose={handleModuleClose} open={openModule} modalTitle={notificationData.title} redirectPath={notificationData.link} showModalButton={true} modalSize="md">
         {notificationData.type === "goal" && <ViewGoalsPopup />}
         {notificationData.type === "kpi" && <ViewKpiPopup />}
         {notificationData.type === "project" && <ViewProjectPopup />}
-        {notificationData.type === "task" && (
-          <TaskPreview styles={styles} filteredRow={filteredTask} />
-        )}
-        {notificationData.type === "subtask" && (
-          <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />
-        )}
+        {notificationData.type === "task" && <TaskPreview styles={styles} filteredRow={filteredTask} />}
+        {notificationData.type === "subtask" && <SubtaskPreview styles={styles} filteredRow={filteredSubTask} />}
       </CustomDialog>
     </AppBar>
   );

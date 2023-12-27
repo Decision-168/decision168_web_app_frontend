@@ -26,7 +26,6 @@ const ProjectOverview = () => {
     try {
       const response = await getProjectDetail(pid);
       setProjectData(response);
-      console.log(response);
       setProjectDel(response.project);
     } catch (error) {
       console.error(error);

@@ -41,8 +41,6 @@ import CustomDialog from "../../common/CustomDialog";
 import SuggestMemberDialog from "./SuggestMemberDialog";
 
 const BasicAccordion = ({ pid, pending, displayBtns }) => {
-  //console.log("displayBtns", displayBtns);
-
   //get user id
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;

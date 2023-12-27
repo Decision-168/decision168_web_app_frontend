@@ -36,8 +36,8 @@ export default function Notification({ type, taskCode, TaskName, ProjectName, ta
         ) : null}
       </Grid>
       <Grid item xs={12} md={2} lg={2}>
-        <IconButton sx={{ bgcolor: "#eff2f7" }} onClick={handleRemove}>
-          <CloseIcon sx={{ mr: 0, color: "#000", fontSize: "18px" }} />
+        <IconButton size="small" sx={{ bgcolor: "#eff2f7", fontSize:"1rem" }} onClick={handleRemove}>
+          <CloseIcon fontSize= "inherite"  />
         </IconButton>
       </Grid>
     </Grid>

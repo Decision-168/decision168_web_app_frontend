@@ -30,7 +30,6 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function TaskInfo({ styles, info }) {
-  console.log("info", info);
   const [selectedStatus, setSelectedStatus] = useState(info?.tstatus);
   const [editStatus, setEditStatus] = React.useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,7 +49,6 @@ export default function TaskInfo({ styles, info }) {
       setLoading(true);
 
       const newStatus = event.target.value;
-      alert(`${newStatus}--${taskId}--${assignee}`);
 
       const data = { tid: taskId, tassignee: assignee, status_but: newStatus };
 

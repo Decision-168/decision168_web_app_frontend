@@ -41,7 +41,6 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import AssignToSomeoneDailogGoalContent from "./AssignToSomeoneDailogGoalContent";
 
 const BasicAccordion = ({ goalID, pending, displayBtns }) => {
-  //console.log("displayBtns", displayBtns);
 
   //get user id
   const user = useSelector(selectUserDetails);

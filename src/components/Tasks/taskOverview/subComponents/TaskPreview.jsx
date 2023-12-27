@@ -89,8 +89,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
 
   const handleFileItTaskYes = async () => {
     const task_id = taskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItTaskInPreview" }));
@@ -115,8 +114,8 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
 
   const handleDeleteTaskYes = async () => {
     const task_id = taskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await patchDeleteTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteTaskInPreview" }));
@@ -133,7 +132,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
     <>
       <Grid container >
         <Grid item xs={12} lg={8}>
-          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width:"700px"}}>
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width:"100%"}}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <OverviewCardHeader
@@ -226,7 +225,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
           </Paper>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ height: "100%", width:"350px"}}>
+          <Paper elevation={0} sx={{ height: "100%", width:"100%"}}>
             <CommentSection projectId={task?.tproject_assign} taskId={task?.tid} subtaskId={0} commentModule={"task"} />
           </Paper>
         </Grid>

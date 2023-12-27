@@ -76,7 +76,6 @@ const CreateGoal = ({ fetchAllData }) => {
       toast.success(`${response.message}`);
       setChildFormValues({});
       handleNext(); // Proceed to the next step (KPIs)
-      //console.log(data);
     } catch (error) {
       // Handling error
       console.log(error);

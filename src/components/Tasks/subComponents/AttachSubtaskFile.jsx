@@ -14,26 +14,17 @@ const AttachSubtaskFile = ({ subtask }) => {
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  // const user_id = user?.reg_id;
-  const user_id = 1; //for testing
+  const user_id = user?.reg_id;
   const [subtaskFiles, setSubtaskFiles] = useState(null);
   const [loading, setLoading] = useState(false);
   //to send DB convert files data structure
 
-  
-
   const handleSubtaskFilesChange = async (newValue, info) => {
-    // if (!newValue || newValue.length === 0) {
-    //   // Show an error message if it is empty
-    //   alert("Subask files cannot be empty");
-    //   return;
-    // }
     setSubtaskFiles(newValue);
     const time = Math.floor(Date.now() / 1000);
     const taskFilesArray = newValue?.map((file, index) => (`${time}_${file.name.toLowerCase()}`));
     const stringFormat = taskFilesArray.join(',')
-    
-    alert(`${JSON.stringify(stringFormat)}`);
+
     try {
       const data = {
         stid: subtask?.stid,

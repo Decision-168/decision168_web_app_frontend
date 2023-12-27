@@ -104,7 +104,6 @@ const SubtaskPopup = ({
     try {
       const response = await getProjectData(subtaskData?.stproject_assign);
       setProjectData(response);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }

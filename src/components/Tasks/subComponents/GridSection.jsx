@@ -17,8 +17,7 @@ const GridSection = ({ rows, setRows }) => {
   const [columns, setColumns] = useState({});
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
-  // const regId = user?.reg_id;
-  const regId = 1; // for testing
+  const regId = user?.reg_id;
 
   const fetchData = async () => {
     setLoading(true);
@@ -89,9 +88,6 @@ const GridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Task Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
       // Log error details for debugging
@@ -114,8 +110,6 @@ const GridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Subtask Status Response:", response);
 
       return response; // Return the response for checking the status code
     } catch (error) {
@@ -129,7 +123,6 @@ const GridSection = ({ rows, setRows }) => {
     const { tid, tassignee } = removed?.content || {};
 
     if (removed?.content?.type === "task") {
-      console.log("This is a task");
       try {
         const response = await updateTaskStatus(tid, tassignee, destColumn?.value);
 
@@ -145,7 +138,7 @@ const GridSection = ({ rows, setRows }) => {
         console.error("Error handling the task status:", error);
       }
     } else {
-      console.log("This is a subtask");
+
       try {
         const response = await updateSubtaskStatus(tid, tassignee, destColumn?.value);
         if (response.status === 200) {
@@ -166,9 +159,6 @@ const GridSection = ({ rows, setRows }) => {
     if (!result.destination) return;
     const { source, destination } = result;
 
-    console.log("source", source);
-    console.log("destination", destination);
-
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
@@ -177,8 +167,6 @@ const GridSection = ({ rows, setRows }) => {
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
 
-      console.log("sourceColumnName", sourceColumn.name);
-      console.log("destColumnName", destColumn.name);
 
       handleStatusChange(removed, destColumn);
 

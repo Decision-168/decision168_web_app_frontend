@@ -98,7 +98,6 @@ const MyAlertDataTable = () => {
     const [filteredTask, setFilterTask] = useState([]);
   const [open, setOpen] = useState(false)
   const handleOpen = (type)=>{
-    console.log(type);
     setOpen(true)
   }
     const handleClose = () => {

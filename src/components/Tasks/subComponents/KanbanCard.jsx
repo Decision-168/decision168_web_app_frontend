@@ -273,7 +273,7 @@ const KanbanCard = ({ cardData, fetchData }) => {
         <TaskPreview styles={styles} taskId={rowId} />
       </CustomDialog>
 
-      <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg">
+      <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg" data={{ tname: cardData?.tname, tproject_assign: cardData?.tproject_assign }}>
         <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} parentTaskName={cardData?.parentTaskName}/>
       </CustomDialog>
     </>

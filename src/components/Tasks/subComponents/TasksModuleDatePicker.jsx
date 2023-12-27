@@ -28,7 +28,6 @@ function TasksModuleDatePicker({
     setUserInteracted(true);
     if (onChange) {
       onChange(date);
-      console.log("New selected value:", date);
     }
   };
 

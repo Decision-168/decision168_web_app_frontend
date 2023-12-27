@@ -92,8 +92,6 @@ const PortfolioGridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Task Status Response:", response);
 
       return response; // Return the response for checking the status code
     } catch (error) {
@@ -117,9 +115,6 @@ const PortfolioGridSection = ({ rows, setRows }) => {
         data: newdata,
       });
 
-      // Log specific properties for debugging
-      console.log("Subtask Status Response:", response);
-
       return response; // Return the response for checking the status code
     } catch (error) {
       // Log error details for debugging
@@ -132,7 +127,6 @@ const PortfolioGridSection = ({ rows, setRows }) => {
     const { tid, tassignee } = removed?.content || {};
 
     if (removed?.content?.type === "task") {
-      console.log("This is a task");
       try {
         const response = await updateTaskStatus(tid, tassignee, destColumn?.value);
         if (response.status === 200) {
@@ -147,7 +141,6 @@ const PortfolioGridSection = ({ rows, setRows }) => {
         console.error("Error handling the task status:", error);
       }
     } else {
-      console.log("This is a subtask");
       try {
         const response = await updateSubtaskStatus(tid, tassignee, destColumn?.value);
         if (response.status === 200) {

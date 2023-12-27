@@ -27,7 +27,6 @@ export default function VerifyInviteMember() {
 
         setUserStatus(response?.user_status);
       } catch (error) {
-        console.log(error.response?.data?.user_status);
         setUserStatus(error.response?.data?.user_status);
         console.error(error);
       } finally {

@@ -49,7 +49,6 @@ export default function SubTaskInfo({ styles, info }) {
       setLoading(true);
 
       const newStatus = event.target.value;
-      alert(`${newStatus}--${subtaskId}--${assignee}`);
 
       const data = {
         stid: subtaskId,

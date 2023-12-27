@@ -35,7 +35,6 @@ const ProjectTabSection = ({ formValues, setFormValues }) => {
     setChecked(event.target.checked)
     if (event.target.checked === true) {
       const newRadioValue = event.target.value;
-      console.log(newRadioValue)
       setFormValues({
         ...formValues,
         cust_project: newRadioValue,

@@ -75,8 +75,6 @@ export default function AddMemberForm({ handleClose }) {
       sent_from: user?.reg_id,
     };
 
-    console.log(data);
-
     try {
       setLoading(true);
       const response = await insertProjectPortfolioMember(data);

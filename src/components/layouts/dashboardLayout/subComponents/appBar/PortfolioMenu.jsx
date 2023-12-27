@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { Menu, MenuItem, Fade } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Stack, Typography, Avatar, Box } from "@mui/material";
@@ -15,18 +14,14 @@ import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import portfolioImage from "../../../../../assets/images/person.png";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useDispatch } from "react-redux";
-import {
-  getPortfolioDetailsAsync,
-  getPortfolioTeamMembersAsync,
-  getProjectAndTaskCountAsync,
-} from "../../../../../redux/action/portfolioSlice";
+import { getPortfolioDetailsAsync, getPortfolioTeamMembersAsync, getProjectAndTaskCountAsync } from "../../../../../redux/action/portfolioSlice";
 import { getPackageDetails } from "../../../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 
-
 const StyledMenu = styled((props) => (
   <Menu
-    elevation={0}
+    elevation={2}
+    TransitionComponent={Fade}
     anchorOrigin={{
       vertical: "bottom",
       horizontal: "left",
@@ -39,13 +34,13 @@ const StyledMenu = styled((props) => (
   />
 ))(({ theme }) => ({
   "& .MuiPaper-root": {
+    border: "0",
     borderRadius: 6,
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(1.5),
     overflowX: "hidden",
-    minWidth: 200,
+    minWidth: 180,
     color: theme.palette.mode === "light" ? "rgb(55, 65, 81)" : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
+
     "& .MuiMenu-list": {
       padding: "4px 0",
     },
@@ -57,7 +52,7 @@ const StyledMenu = styled((props) => (
       },
 
       "&:active": {
-        backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+        backgroundColor: alpha(theme.palette.primary.dark, theme.palette.action.selectedOpacity),
       },
     },
   },
@@ -66,12 +61,10 @@ const StyledMenu = styled((props) => (
 export default function PortfolioMenu() {
   const user = useSelector(selectUserDetails);
   const packageId = user?.package_id;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [portfolios, setPortfolios] = React.useState([]);
-  const [selectedPortfolio, setSelectedPortfolio] = React.useState("portfolio");
-  const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  // const email = user?.email_address;
-  const email = "uzmakarjikar@gmail.com"; // for testing
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [portfolios, setPortfolios] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const email = user?.email_address;
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -80,16 +73,16 @@ export default function PortfolioMenu() {
 
   const fetchPorfolios = async () => {
     try {
-      const response = await getPortfolios({email});
+      const response = await getPortfolios({ email });
       setPortfolios(response);
     } catch (error) {
       console.error(error);
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchPorfolios();
-  }, [email]);
+  }, [email, storedPortfolioId]);
 
   useEffect(() => {
     if (storedPortfolioId && portfolios) {
@@ -118,12 +111,7 @@ export default function PortfolioMenu() {
     const porfolioCountResponse = await getPorfolioCount(79);
     const packageDetailsResponse = await getPackageDetails(packageId);
 
-    if (
-      isValidPortfolioCount(
-        porfolioCountResponse?.portfolio_count_rows,
-        packageDetailsResponse?.pack_portfolio
-      )
-    ) {
+    if (isValidPortfolioCount(porfolioCountResponse?.portfolio_count_rows, packageDetailsResponse?.pack_portfolio)) {
       navigate("/portfolio-create");
       handleClose();
     } else {
@@ -141,7 +129,6 @@ export default function PortfolioMenu() {
     dispatch(getProjectAndTaskCountAsync(portfolioId));
     dispatch(getPortfolioDetailsAsync(portfolioId));
     dispatch(getPortfolioTeamMembersAsync(portfolioId)); // we have to remove from here
-
   };
 
   return (
@@ -155,20 +142,13 @@ export default function PortfolioMenu() {
         variant="text"
         disableElevation
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}>
-        <Avatar
-          alt="portfolio"
-          src={selectedIndex < 0 ? portfolioImage : portfolios[selectedIndex]?.photo}
-          sx={{ bgcolor: "black", height: "30px", width: "30px", fontSize: "0.7rem" }}>
+        endIcon={<KeyboardArrowDownIcon />}
+      >
+        <Avatar alt="portfolio" src={selectedIndex < 0 ? portfolioImage : portfolios[selectedIndex]?.photo} sx={{ bgcolor: "black", height: "30px", width: "30px", fontSize: "0.7rem" }}>
           {selectedIndex < 0 && portfolioImage}
-          {typeof portfolios[selectedIndex]?.photo === "string" && portfolios[selectedIndex]?.photo
-            ? null
-            : stringAvatar(portfolios[selectedIndex]?.portfolio_name?.toUpperCase())}
+          {typeof portfolios[selectedIndex]?.photo === "string" && portfolios[selectedIndex]?.photo ? null : stringAvatar(portfolios[selectedIndex]?.portfolio_name?.toUpperCase())}
         </Avatar>
-        <Typography
-          component="div"
-          variant="subtitle2"
-          sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
+        <Typography component="div" variant="subtitle2" sx={{ textTransform: "capitalize", paddingLeft: "5px", color: "#B9B8B9" }}>
           {selectedIndex < 0 ? "Portfolio" : portfolios[selectedIndex]?.portfolio_name}
         </Typography>
       </Button>
@@ -180,45 +160,44 @@ export default function PortfolioMenu() {
         }}
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}>
+        onClose={handleClose}
+      >
         {/* <PerfectScrollbar style={{ overflowX: "hidden" }}> */}
-          <Box sx={{ height: "100%" }}>
-            {portfolios && portfolios.length > 0 ? (
-              portfolios.map((p, index) => (
-                <MenuItem
-                  onClick={(event) => handleMenuItemClick(event, index, p?.portfolio_id)}
-                  value={p?.portfolio_name}
-                  key={index}
-                  sx={{
-                    color: selectedPortfolio === p?.portfolio_name && "#C7DF19",
-                    bgcolor: selectedPortfolio === p?.portfolio_name && "#F2F2F2",
-                  }}>
-                  <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                    <Avatar
-                      alt={p?.portfolio_name}
-                      src={p?.photo}
-                      sx={{
-                        bgcolor: "#383838",
-                        height: "30px",
-                        width: "30px",
-                        fontSize: "0.7rem",
-                      }}>
-                      {p?.photo ? null : stringAvatar(p?.portfolio_name?.toUpperCase())}
-                    </Avatar>
-                    <Typography
-                      component="h6"
-                      sx={{ textTransform: "capitalize", fontSize: "0.8rem" }}>
-                      {p?.portfolio_name}
-                    </Typography>
-                  </Stack>
-                </MenuItem>
-              ))
-            ) : (
-              <Typography sx={{ fontSize: "12px", color: "gray", p: 1 }}>
-                No portfolios available
-              </Typography>
-            )}
-          </Box>
+        <Box sx={{ height: "100%" }}>
+          {portfolios && portfolios.length > 0 ? (
+            portfolios.map((p, index) => (
+              <MenuItem
+                onClick={(event) => handleMenuItemClick(event, index, p?.portfolio_id)}
+                value={p?.portfolio_name}
+                key={index}
+                sx={{
+                  color: selectedIndex === index ? "#C7DF19" : "",
+                  bgcolor: selectedIndex === index ? "#F2F2F2" : "",
+                }}
+              >
+                <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
+                  <Avatar
+                    alt={p?.portfolio_name}
+                    src={p?.photo}
+                    sx={{
+                      bgcolor: "#383838",
+                      height: "30px",
+                      width: "30px",
+                      fontSize: "0.7rem",
+                    }}
+                  >
+                    {p?.photo ? null : stringAvatar(p?.portfolio_name?.toUpperCase())}
+                  </Avatar>
+                  <Typography component="h6" sx={{ textTransform: "capitalize", fontSize: "0.8rem" }}>
+                    {p?.portfolio_name}
+                  </Typography>
+                </Stack>
+              </MenuItem>
+            ))
+          ) : (
+            <Typography sx={{ fontSize: "12px", color: "gray", p: 1 }}>No portfolios available</Typography>
+          )}
+        </Box>
         {/* </PerfectScrollbar> */}
 
         <Divider />
@@ -230,7 +209,8 @@ export default function PortfolioMenu() {
             fontSize: "13px",
             fontWeight: "700",
             color: "#383838",
-          }}>
+          }}
+        >
           <AddIcon />
           Create New Portfolio
         </MenuItem>

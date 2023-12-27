@@ -49,8 +49,8 @@ const TaskOverviewCard = ({ styles, task }) => {
 
   const handleFileItTaskYes = async () => {
     const task_id = task?.tid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await fileItTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItTaskInOverview" }));
@@ -74,8 +74,7 @@ const TaskOverviewCard = ({ styles, task }) => {
 
   const handleDeleteTaskYes = async () => {
     const task_id = task?.tid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await patchDeleteTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteTaskInOverview" }));

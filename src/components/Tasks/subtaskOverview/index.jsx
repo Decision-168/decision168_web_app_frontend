@@ -15,7 +15,16 @@ export default function SubtaskOverview() {
   const theme = useTheme();
   const styles = taskOverviewStyles();
 
-  const { subTaskId } = useParams();
+  const { subTaskId} = useParams();
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const tname = searchParams.get("tname");
+  const tproject_assign = searchParams.get("tproject_assign");
+
+  // Now 'tname' and 'tproject_assign' will have the values from the URL
+  console.log("tname:", tname);
+  console.log("tproject_assign:", tproject_assign);
+
 
   const [subTask, setSubTask] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -72,7 +81,7 @@ export default function SubtaskOverview() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} lg={8}>
-          <SubtaskOverviewCard styles={styles} subtask={subTask} />
+          <SubtaskOverviewCard styles={styles} subtask={subTask} tname={tname} tproject_assign={tproject_assign}/>
           <SubtaskLinks
             styles={styles}
             links={subTask?.stlink}

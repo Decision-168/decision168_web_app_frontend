@@ -15,13 +15,13 @@ import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
 import { useDispatch } from "react-redux";
 import SelectOption from "../../common/SelectOption";
+import { validateForm } from "../../../helpers/validateForm";
 
 export default function UpdateProfileForm() {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-
   const [formValues, setFormValues] = useState({});
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = React.useState([
@@ -76,37 +76,33 @@ export default function UpdateProfileForm() {
     // Define the required fields for the main form
     const requiredFields = ["first_name", "last_name", "email_address", "dob"];
 
-    // Check for empty required fields in the main form
-    const emptyFields = requiredFields.filter((field) => !formValues[field]);
-
     const fieldLabels = {
       first_name: "First Name",
       last_name: "Last Name",
       email_address: "Email Address",
-      dob:"Date of Birth"
+      dob: "Date of Birth",
     };
 
-    // Display a toast message for empty fields in the main form
-    if (emptyFields.length > 0) {
-      const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(",")}`);
-      return;
-    }
+    // Validate the form
+    const isValid = validateForm(requiredFields, formValues, fieldLabels);
 
-    try {
-      setLoading(true);
-      const icons = fields.map((item) => item.social_media_icon).join(",");
-      const links = fields.map((item) => item.social_media).join(",");
-      const data = { ...formValues, social_media_icon: icons, social_media: links };
-      const userId = user?.reg_id;
-      const response = await updateUserProfile(userId, data);
-      dispatch(getUserDetailsAsync(userId));
-      toast.success(`${response.message}`);
-    } catch (error) {
-      toast.error(`${error.response?.error}`);
-      console.error("Error updating user profile:", error);
-    } finally {
-      setLoading(false);
+    if (isValid) {
+      try {
+        setLoading(true);
+        const icons = fields.map((item) => item.social_media_icon).join(",");
+        const links = fields.map((item) => item.social_media).join(",");
+        const data = { ...formValues, social_media_icon: icons, social_media: links };
+        const userId = user?.reg_id;
+        const response = await updateUserProfile(userId, data);
+        dispatch(getUserDetailsAsync(userId));
+        navigate("/profile");
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.error}`);
+        console.error("Error updating user profile:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -141,7 +137,15 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField label="Email Address" name="email_address" required={true} placeholder="Enter email address" value={formValues.email_address} onChange={handleChange("email_address")} isDisabled={true} />
+          <CustomLabelTextField
+            label="Email Address"
+            name="email_address"
+            required={true}
+            placeholder="Enter email address"
+            value={formValues.email_address}
+            onChange={handleChange("email_address")}
+            isDisabled={true}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -172,16 +176,18 @@ export default function UpdateProfileForm() {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomNumberField label="Phone Number (only numbers)" name="phone_number" required={false} placeholder="Enter phone no" value={formValues.phone_number} onChange={handleChange("phone_number")} />
+          <CustomNumberField
+            label="Phone Number (only numbers)"
+            name="phone_number"
+            required={false}
+            placeholder="Enter phone no"
+            value={formValues.phone_number}
+            onChange={handleChange("phone_number")}
+          />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomDatePicker
-              label="DOB"
-              required
-              value={formValues.dob}
-              onChange={handleDob}
-            />
+          <CustomDatePicker label="DOB" required value={formValues.dob} onChange={handleDob} />
         </Grid>
 
         <Grid item xs={12} sm={12} py={1}>

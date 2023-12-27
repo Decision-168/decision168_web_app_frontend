@@ -11,8 +11,7 @@ const ListSection = ({rows,setRows}) => {
 
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
-  // const regId = user?.reg_id;
-  const regId = 1; // for testing
+  const regId = user?.reg_id;
 
   // Pagination settings
   const [currentPage, setCurrentPage] = useState(1);

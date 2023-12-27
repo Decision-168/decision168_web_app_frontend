@@ -8,51 +8,30 @@ import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import CircularLoader from "../../../common/CircularLoader";
 import AddSocialMediaLinks from "../../../common/AddSocialMediaLinks";
-import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
-import {
-  insertPortfolio,
-  insertProjectPortfolioDepartment,
-  updatePortfolio,
-} from "../../../../api/modules/porfolioModule";
+import { getPortfolios, insertPortfolio, insertProjectPortfolioDepartment, updatePortfolio } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import {
-  getPortfolioDetailsAsync,
-  selectPorfolioDetails,
-} from "../../../../redux/action/portfolioSlice";
+import { getPortfolioDetailsAsync, selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
 import SelectOption from "../../../common/SelectOption";
 import { getCountries } from "../../../../api/modules/dashboardModule";
+import MultiSelectOption from "../../../common/MultiSelectOption";
+import { validateForm } from "../../../../helpers/validateForm";
 
-export default function CompanyForm({ isEditPath, depts }) {
+export default function CompanyForm({ paramId, isEditPath, depts }) {
+  const navigate = useNavigate();
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
   const details = useSelector(selectPorfolioDetails);
   const dispatch = useDispatch();
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState({});
   const [loading, setLoading] = useState(false);
-  const [fields, setFields] = useState([
-    {
-      social_media_icon: "",
-      social_media: "",
-    },
-  ]);
-  const [inputFields, setInputFields] = useState([
-    // {
-    //   cus_department: "",
-    //   error: false,
-    // },
-  ]);
-
-  useEffect(() => {
-    dispatch(getPortfolioDetailsAsync(storedPortfolioId));
-  }, [isEditPath]);
-
   const [formValues, setFormValues] = useState({
-    portfolio_createdby: user?.reg_id,
+    portfolio_createdby: regId,
     portfolio_user: "company",
     portfolio_name: "",
     company_website: "",
@@ -73,44 +52,79 @@ export default function CompanyForm({ isEditPath, depts }) {
     cover_photo: "",
   });
 
-  useEffect(() => {
-    setFormValues({
-      ...formValues,
-      portfolio_createdby: user?.reg_id,
-      portfolio_user: details?.portfolio_user,
-      portfolio_name: details?.portfolio_name,
-      company_website: details?.company_website,
-      email_address: details?.email_address,
-      about_portfolio: details?.about_portfolio,
-      phone_number: details?.phone_number,
-      contact_fname: details?.contact_fname,
-      contact_mname: details?.contact_mname,
-      contact_lname: details?.contact_lname,
-      contact_phone_number: details?.contact_phone_number,
-      street: details?.street,
-      city: details?.city,
-      state: details?.state,
-      country: details?.country,
-      social_media_icon: details?.social_media_icon,
-      social_media: details?.social_media,
-      photo: "",
-      cover_photo: "",
-    });
-  }, [details]);
+  const [companyfields, setCompanyFields] = useState([
+    {
+      social_media_icon: "",
+      social_media: "",
+    },
+  ]);
+
+  const [inputFields, setInputFields] = useState([
+    // {
+    //   cus_department: "",
+    //   error: false,
+    // },
+  ]);
 
   useEffect(() => {
-    // Split the comma-separated strings into arrays
-    const iconsArray = formValues.social_media_icon?.split(",");
-    const linksArray = formValues.social_media?.split(",");
+    if (isEditPath) {
+      dispatch(getPortfolioDetailsAsync(paramId));
+    }
+  }, [isEditPath]);
 
-    // Combine the arrays into an array of objects
-    const resultArray =
-      iconsArray?.map((social_media_icon, index) => ({
-        social_media_icon,
-        social_media: linksArray[index],
-      })) || [];
+  useEffect(() => {
+    if (isEditPath) {
+      setFormValues({
+        ...formValues,
+        portfolio_createdby: regId,
+        portfolio_user: details?.portfolio_user,
+        portfolio_name: details?.portfolio_name,
+        company_website: details?.company_website,
+        email_address: details?.email_address,
+        about_portfolio: details?.about_portfolio,
+        phone_number: details?.phone_number,
+        contact_fname: details?.contact_fname,
+        contact_mname: details?.contact_mname,
+        contact_lname: details?.contact_lname,
+        contact_phone_number: details?.contact_phone_number,
+        street: details?.street,
+        city: details?.city,
+        state: details?.state,
+        country: details?.country,
+        social_media_icon: details?.social_media_icon,
+        social_media: details?.social_media,
+        photo: "",
+        cover_photo: "",
+      });
+    } else {
+      setFormValues({});
+    }
+  }, [details, isEditPath]);
 
-    setFields(resultArray);
+  useEffect(() => {
+    if (isEditPath) {
+      // Split the comma-separated strings into arrays
+      const iconsArray = (formValues.social_media_icon ?? "").split(",");
+      const linksArray = (formValues.social_media ?? "").split(",");
+
+      // Check if arrays have the same length
+      if (iconsArray.length === linksArray.length) {
+        // Combine the arrays into an array of objects
+        const resultArray = iconsArray.map((social_media_icon, index) => ({
+          social_media_icon,
+          social_media: linksArray[index],
+        }));
+
+        // Set the state
+        setCompanyFields(resultArray);
+      } else {
+        // setting CompanyFields to an empty array
+        setCompanyFields([]);
+      }
+    } else {
+      // If not in edit mode, set CompanyFields to an empty array
+      setCompanyFields([]);
+    }
   }, [isEditPath, formValues.social_media_icon, formValues.social_media]);
 
   const handleChange = (fieldName) => (event) => {
@@ -118,13 +132,6 @@ export default function CompanyForm({ isEditPath, depts }) {
       ...formValues,
       [fieldName]: event.target.value,
     });
-  };
-
-  // setMembersIds([...getMembersIds, ...memberIdArray]);
-
-  const handleDepartmentChange = (selectedOptions) => {
-    const departmentsArray = selectedOptions?.map((item) => item.department);
-    setDepartments(departmentsArray);
   };
 
   const handleInputChange = (event, index) => {
@@ -153,57 +160,106 @@ export default function CompanyForm({ isEditPath, depts }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(`${JSON.stringify(formValues)}`);
-    setLoading(true);
 
+    // Validate and update input fields
     const updatedFields = inputFields.map((field) => ({
       ...field,
-      error: !field.cus_department.trim()
-        ? "Department cannot be empty"
-        : !isDepartmentValid(field.cus_department)
-        ? "Invalid department"
-        : false,
+      error: !field.cus_department.trim() ? "Department cannot be empty" : !isDepartmentValid(field.cus_department) ? "Invalid department" : false,
     }));
 
     setInputFields(updatedFields);
 
+    // Check for errors in input fields
     if (updatedFields.some((field) => field.error)) {
       setLoading(false);
       return;
     }
 
-    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
-    const departmentData = {
-      portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
-      departments: departments,
-      cus_departments: customDepartmentArray,
-      createdby: user?.reg_id,
+    // Extract icons and links from fields
+    const icons = companyfields?.map((item) => item.social_media_icon).join(",");
+    const links = companyfields?.map((item) => item.social_media).join(",");
+
+    // Prepare data for submission
+    const data = {
+      ...formValues,
+      portfolio_createdby: regId,
+      portfolio_user: "company",
+      social_media_icon: icons,
+      social_media: links,
     };
 
-    try {
-      const icons = fields?.map((item) => item.social_media_icon).join(",");
-      const links = fields?.map((item) => item.social_media).join(",");
-      const data = {
-        ...formValues,
-        social_media_icon: icons,
-        social_media: links,
-      };
-      if (isEditPath) {
-        const portfolioId = storedPortfolioId;
-        const response = await updatePortfolio(portfolioId, data);
-        toast.success(`${response.message}`);
-      } else {
-        const response = await insertPortfolio(data);
-        await insertProjectPortfolioDepartment(departmentData);
-        toast.success(`${response.message}`);
+    // Prepare department data
+    const customDepartmentArray = updatedFields.map((item) => item.cus_department);
+    const departmentData = {
+      portfolio_id: null,
+      departments: departments?.department,
+      cus_departments: customDepartmentArray,
+      createdby: regId,
+    };
+
+
+    const formDataToInsert = { ...data, ...departmentData };
+
+    const requiredFieldsToInsert = ["portfolio_user", "portfolio_name", "email_address", "phone_number", "contact_fname", "contact_lname", "departments"];
+
+    const fieldLabelsToInsert = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "Company Name",
+      email_address: "Company Email Address",
+      phone_number: "Company Phone No",
+      contact_fname: "Contact Person First Name",
+      contact_lname: "Contact Person Last Name",
+      departments: "Department(s)",
+    };
+
+    const requiredFieldsToEdit = ["portfolio_user", "portfolio_name", "email_address", "phone_number", "contact_fname", "contact_lname"];
+    const fieldLabelsToEdit = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "Company Name",
+      email_address: "Company Email Address",
+      phone_number: "Company Phone No",
+      contact_fname: "Contact Person First Name",
+      contact_lname: "Contact Person Last Name",
+    };
+
+    // Define the required fields for the main form
+    const requiredFields = isEditPath ? requiredFieldsToEdit : requiredFieldsToInsert;
+    // Field labels for error message
+    const fieldLabels = isEditPath ? fieldLabelsToEdit : fieldLabelsToInsert;
+    const formData = isEditPath ? data : formDataToInsert;
+
+    // Validate the form
+    const isValid = validateForm(requiredFields, formData, fieldLabels);
+
+    if (isValid) {
+      try {
+        setLoading(true);
+        // Update or insert portfolio based on the edit path
+        if (isEditPath) {
+          const portfolioId = storedPortfolioId;
+          const response = await updatePortfolio(portfolioId, data);
+          localStorage.setItem("portfolioId", portfolioId);
+          navigate(`/portfolio-view`);
+          toast.success(`${response?.message}`);
+        } else {
+          // Insert new portfolio and associated department data
+          const response = await insertPortfolio(data);
+          localStorage.removeItem("portfolioId");
+          localStorage.setItem("portfolioId", response?.portfolioInsertedId);
+          const depart = {...departmentData, portfolio_id :response?.portfolioInsertedId }
+          await insertProjectPortfolioDepartment(depart);
+          navigate(`/portfolio-view`);
+          toast.success(`${response.message}`);
+        }
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error("Error in inserting new portfolio:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error(`${error.response?.data?.error}`);
-      console.error("Error in inserting new portfolio:", error);
-    } finally {
-      setLoading(false);
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Grid container>
@@ -252,14 +308,7 @@ export default function CompanyForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomNumberField
-            label="Company Phone Number"
-            required={true}
-            placeholder="Enter phone no"
-            name="phone_number"
-            value={formValues.phone_number}
-            onChange={handleChange("phone_number")}
-          />
+          <CustomNumberField label="Company Phone Number" required={true} placeholder="Enter phone no" name="phone_number" value={formValues.phone_number} onChange={handleChange("phone_number")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -307,36 +356,15 @@ export default function CompanyForm({ isEditPath, depts }) {
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Street"
-            required={false}
-            placeholder="Enter Street"
-            name="street"
-            value={formValues.street}
-            onChange={handleChange("street")}
-          />
+          <CustomLabelTextField label="Street" required={false} placeholder="Enter Street" name="street" value={formValues.street} onChange={handleChange("street")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="City"
-            required={false}
-            placeholder="Enter City"
-            name="city"
-            value={formValues.city}
-            onChange={handleChange("city")}
-          />
+          <CustomLabelTextField label="City" required={false} placeholder="Enter City" name="city" value={formValues.city} onChange={handleChange("city")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="State"
-            required={false}
-            placeholder="Enter State"
-            name="state"
-            value={formValues.state}
-            onChange={handleChange("state")}
-          />
+          <CustomLabelTextField label="State" required={false} placeholder="Enter State" name="state" value={formValues.state} onChange={handleChange("state")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -356,13 +384,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
           <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Company Logo</InputLabel>
-          <Button
-            fullWidth
-            variant="outlined"
-            startIcon={<CameraAltIcon />}
-            size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}
-          >
+          <Button fullWidth variant="outlined" startIcon={<CameraAltIcon />} size="medium" sx={{ mt: 1, backgroundColor: "white" }}>
             {isEditPath ? "Add / Change Profile Picture" : " Add Company Logo"}
           </Button>
         </Grid>
@@ -385,13 +407,7 @@ export default function CompanyForm({ isEditPath, depts }) {
 
         <Grid item xs={12} sm={4} px={2} py={1} textAlign="center">
           <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Cover Picture</InputLabel>
-          <Button
-            fullWidth
-            variant="outlined"
-            startIcon={<CameraAltIcon />}
-            size="medium"
-            sx={{ mt: 1, backgroundColor: "white" }}
-          >
+          <Button fullWidth variant="outlined" startIcon={<CameraAltIcon />} size="medium" sx={{ mt: 1, backgroundColor: "white" }}>
             {isEditPath ? "Add / Change Cover Picture" : " Add Cover Picture"}
           </Button>
         </Grid>
@@ -414,29 +430,21 @@ export default function CompanyForm({ isEditPath, depts }) {
         {!isEditPath && (
           <>
             <Grid item xs={12} sm={12} px={2} py={2}>
-              <FilterSelectedOptions
+              <MultiSelectOption
                 label="Add Department(s)"
-                labelColor=""
-                required={false}
-                placeholder="Departments"
-                items={depts}
-                onSelectionChange={handleDepartmentChange}
-                getOptionLabelFn={(option) => option.department}
+                required={true}
+                field="department"
+                idKey="department"
+                getOptionLabel={(option) => option.department}
+                staticOptions={depts}
+                formValues={departments}
+                setFormValues={setDepartments}
               />
             </Grid>
 
             <Grid item xs={12} md={4} px={2} py={2}>
-              <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>
-                Add Custom Department(s)
-              </InputLabel>
-              <Button
-                onClick={handleAddClick}
-                fullWidth
-                variant="contained"
-                startIcon={<DashboardCustomizeIcon />}
-                size="medium"
-                sx={{ mt: 1 }}
-              >
+              <InputLabel sx={{ fontSize: "14px", textAlign: "left" }}>Add Custom Department(s)</InputLabel>
+              <Button onClick={handleAddClick} fullWidth variant="contained" startIcon={<DashboardCustomizeIcon />} size="medium" sx={{ mt: 1 }}>
                 Add Custom Department
               </Button>
             </Grid>
@@ -471,7 +479,7 @@ export default function CompanyForm({ isEditPath, depts }) {
         )}
 
         <Grid item xs={12} sm={12} py={1}>
-          <AddSocialMediaLinks fields={fields} setFields={setFields} />
+          <AddSocialMediaLinks fields={companyfields} setFields={setCompanyFields} />
         </Grid>
 
         <Grid item xs={12} sm={12} py={2} textAlign="end">

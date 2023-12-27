@@ -1,5 +1,5 @@
 import { Box, Button, Grid } from "@mui/material";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import CustomPasswordField from "../../auth/subComponents/CustomPasswordField";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../../auth/authValidations";
@@ -8,6 +8,7 @@ import { updateAuthUserPassword } from "../../../api/modules/authModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 export default function ChangePasswordForm({ handleClose }) {
   const theme = useTheme();
@@ -19,14 +20,11 @@ export default function ChangePasswordForm({ handleClose }) {
   const [loading, setLoading] = useState(false);
   const user = useSelector(selectUserDetails);
   const userId = user?.reg_id;
-;
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
-    alert(JSON.stringify(data));
-
     try {
       setLoading(true);
-      const response = await updateAuthUserPassword(userId, data?.confirmPasswordAuthUser)
-      handleClose();
+      const response = await updateAuthUserPassword(userId, data?.confirmPasswordAuthUser);
       navigate("/");
       toast.success(response.message);
     } catch (error) {

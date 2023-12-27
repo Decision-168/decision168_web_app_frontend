@@ -6,8 +6,6 @@ const MultiSelect = ({ data, labelKey, valueKey, parentCallback }) => {
     const [inputValue, setInputValue] = useState("");
     const [availableOptions, setAvailableOptions] = useState(data);
 
-    console.log(selectedValues);
-
     const handleSelectionChange = (event, newValues) => {
         setSelectedValues(newValues);
         setAvailableOptions(data.filter((option) => !newValues.includes(option)));

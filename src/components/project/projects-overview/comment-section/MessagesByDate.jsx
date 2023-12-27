@@ -9,8 +9,7 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 const MessagesByDate = ({ date, groupedMessages, setMessages, saveMessagesToLocalStorage }) => {
   const user = useSelector(selectUserDetails);
-  // const userID = user?.reg_id;
-  const userID = 1; // for testing
+  const userID = user?.reg_id;
   const [deletePopoverAnchor, setDeletePopoverAnchor] = useState(null);
   const [selectedItemId, setSelectedItemId] = useState(null);
 

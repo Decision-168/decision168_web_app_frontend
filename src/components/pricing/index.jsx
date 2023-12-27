@@ -99,8 +99,6 @@ export default function Pricing() {
     fetchActiveCoupons();
   }, [user_id]);
 
-  // console.log("showFreeBut", showFreeBut);
-  // console.log("userCouponPack", user?.package_coupon_id);
 
   const handleValidity = (event, newValue) => {
     if (newValue !== null) {

@@ -46,16 +46,11 @@ const priorities = [
 ];
 
 export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData }) {
-  console.log("editMode", editMode);
-  console.log("taskData", taskData);
-  console.log("subtaskData", subtaskData);
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUserDetails);
-  // const userId = user?.reg_id;
-  // const email = user?.email_address;
-  const userId = 1; // for testing
+  const userId = user?.reg_id;
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [formValues, setFormValues] = useState({
     tid: taskData?.tid,
@@ -122,9 +117,25 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     const fetchTeamMembers = async () => {
       try {
         const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
-        // Add the user to assignee to assignee list
-        const updatedResponse = [...response, { reg_id: userId, name: "To Me" }];
-        setAssignees(updatedResponse);
+
+        // Find the user in the team members
+        const foundAssignee = response.find((assignee) => assignee.reg_id === userId);
+
+          // Check if an assignee with the given reg_id was found
+          if (foundAssignee) {
+            // Check for duplicates before adding the new entry
+            const isDuplicate = response.some((member) => member.reg_id === userId);
+  
+            // Update state with a new entry only if not a duplicate
+            if (!isDuplicate) {
+              setAssignees([...response, { ...foundAssignee, name: 'Assign to me' }]);
+            } else {
+              setAssignees(response);
+            }
+          } else {
+            // No assignee found, update state with the original team members
+            setAssignees(response);
+          }
       } catch (error) {
         console.error(error);
       }
@@ -148,7 +159,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
   useEffect(() => {
     // stfile = "file1,file2"
     const filenames = subtaskData?.stfile;
-    console.log(subtaskData?.stfile);
     (async () => {
       try {
         const fileArray = await createFileArray(filenames);
@@ -178,21 +188,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     }
   }, [editMode, subtaskData, files]);
 
-  // const fileObjects = [{"0": "file1"}, {"1": "file2"}]
-  // Output will be like [file1,file2 ]
-  // function createFileArrayToValueInField(fileObjects) {
-  //   const filenameArray = fileObjects.map((fileObj) => Object.values(fileObj)[0]);
-  //   const fileArray = [];
-  //   for (const filename of filenameArray) {
-  //     const content = "Placeholder content for" + filename;
-  //     const file = new File([content], filename, {
-  //       type: "text/plain", // adjust the type based on the actual file type
-  //     });
-  //     fileArray.push(file);
-  //   }
-  //   // console.log(fileArray);
-  //   return fileArray;
-  // }
 
 
   const handleFilesChange = (index) => (newValue) => {
@@ -344,8 +339,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     };
 
     const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
-
-    alert(`${JSON.stringify(finalData)}`);
 
     try {
       setLoading(true);
