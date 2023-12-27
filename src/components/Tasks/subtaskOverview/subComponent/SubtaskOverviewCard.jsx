@@ -18,7 +18,8 @@ import { fileItSubTask } from "../../../../api/modules/taskModule";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
-const SubtaskOverviewCard = ({ styles, subtask }) => {
+const SubtaskOverviewCard = ({ styles, subtask , tname, tproject_assign}) => {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -43,8 +44,7 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
 
   const handleFileItSubTaskYes = async () => {
     const subtask_id = subtask?.stid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItSubTaskInOverview" }));
@@ -67,8 +67,8 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
 
   const handleDeleteSubTaskYes = async () => {
     const subtask_id = subtask?.stid;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteSubTaskInOverview" }));
@@ -82,29 +82,12 @@ const SubtaskOverviewCard = ({ styles, subtask }) => {
   return (
     <Paper elevation={0} sx={{ p: 2 }}>
       <Grid container spacing={0}>
-        <SubTaskOverviewCardHeader
-          title={`Subtask: ${subtask?.stname}`}
-          btn1Text={"Edit Subtask"}
-          btn1Icon={<Edit />}
-          handleClick1={handleEditSubTasksDialog}
-          handleDuplicate={handleDuplicateDialog}
-          handleFileIt={handleFileItDialog}
-          handleDelete={handleDeleteDialog}
-        />
-        <SubtakOverviewCardBody styles={styles} subtask={subtask} />
+        <SubTaskOverviewCardHeader title={`Subtask: ${subtask?.stname}`} btn1Text={"Edit Subtask"} btn1Icon={<Edit />} handleClick1={handleEditSubTasksDialog} handleDuplicate={handleDuplicateDialog} handleFileIt={handleFileItDialog} handleDelete={handleDeleteDialog} />
+        <SubtakOverviewCardBody styles={styles} subtask={subtask} tname={tname} tproject_assign={tproject_assign}/>
       </Grid>
 
-      <ReduxDialog
-        value="edit-subtask"
-        modalTitle="Edit Subtask"
-        showModalButton={false}
-        modalSize="md"
-      >
-        <CreateEditSubTasksForm
-          editMode={true}
-          taskData={{}}
-          subtaskData={subtask}
-        />
+      <ReduxDialog value="edit-subtask" modalTitle="Edit Subtask" showModalButton={false} modalSize="md">
+      <CreateEditSubTasksForm editMode={true} taskData={{tname,tproject_assign }} subtaskData={subtask}/>
       </ReduxDialog>
 
       <ReduxDialog

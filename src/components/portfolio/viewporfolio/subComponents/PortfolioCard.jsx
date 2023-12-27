@@ -176,7 +176,6 @@ export default function PortfolioCard({ regId }) {
       toast.success(`${response.message}`);
     } catch (error) {
       dispatch(closeCnfModal({ modalName: "archivePortfolio" }));
-
       toast.error(`${error.response.data?.error}`);
     }
   };

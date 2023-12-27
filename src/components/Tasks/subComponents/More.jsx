@@ -87,8 +87,7 @@ export default function More({
 
   const handleFileItTaskYes = async () => {
     const task_id = rowId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItTask(task_id, user_id);
       fetchData();
@@ -101,8 +100,7 @@ export default function More({
 
   const handleFileItSubTaskYes = async () => {
     const subtask_id = rowId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
       fetchData();
@@ -137,8 +135,8 @@ export default function More({
 
   const handleDeleteTaskYes = async () => {
     const task_id = rowId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
+
     try {
       const response = await patchDeleteTask(task_id, user_id);
       fetchData();
@@ -151,8 +149,7 @@ export default function More({
 
   const handleDeleteSubTaskYes = async () => {
     const subtask_id = rowId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
       fetchData();
@@ -235,50 +232,20 @@ export default function More({
         <CreateEditTaskForm editMode={true} taskEditData={task} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="add-sub-tasks"
-        modalTitle="Add Sub Task"
-        showModalButton={false}
-        modalSize="md"
-      >
+      <ReduxDialog value="add-sub-tasks" modalTitle="Add Sub Task" showModalButton={false} modalSize="md">
         <CreateEditSubTasksForm taskData={task} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="edit-subtask"
-        modalTitle="Edit Sub Task"
-        showModalButton={false}
-        modalSize="md"
-      >
-        <CreateEditSubTasksForm
-          editMode={true}
-          taskData={task}
-          subtaskData={subTask}
-        />
+      <ReduxDialog value="edit-subtask" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md">
+        <CreateEditSubTasksForm editMode={true} taskData={task} subtaskData={subTask} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="duplicate-task"
-        modalTitle="Copy Task"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <DuplicateTaskDialog
-          taskData={task}
-          closeModalName={"duplicate-task"}
-        />
+      <ReduxDialog value="duplicate-task" modalTitle="Copy Task" showModalButton={false} modalSize="sm">
+        <DuplicateTaskDialog taskData={task} closeModalName={"duplicate-task"} />
       </ReduxDialog>
 
-      <ReduxDialog
-        value="duplicate-subtask"
-        modalTitle="Copy Subtask"
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <DuplicateSubtaskDialog
-          subtaskData={subTask}
-          closeModalName={"duplicate-subtask"}
-        />
+      <ReduxDialog value="duplicate-subtask" modalTitle="Copy Subtask" showModalButton={false} modalSize="sm">
+        <DuplicateSubtaskDialog subtaskData={subTask} closeModalName={"duplicate-subtask"} />
       </ReduxDialog>
 
       <ConfirmationDialog

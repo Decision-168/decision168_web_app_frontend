@@ -21,8 +21,8 @@ import { toast } from "react-toastify";
 const SelectAssignee = ({ rowID, assigneeID, gID, type }) => {
   const portfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const user = useSelector(selectUserDetails);
-  //   const regId = user?.reg_id;
-  const regId = 1; // for testing
+  const regId = user?.reg_id;
+
   const [editAssignee, setEditAssignee] = useState(null);
   const [assignees, setAssignees] = useState([]);
   const [selectedAssignee, setSelectedAssignee] = useState(null);

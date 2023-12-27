@@ -1,7 +1,6 @@
-import { Box, Button, DialogContent } from "@mui/material";
+import { Box,DialogContent } from "@mui/material";
 import React, { memo, useState } from "react";
 import CustomFileInput from "../../common/CustomFileInput";
-import CircularLoader from "../../common/CircularLoader";
 import { insertTaskFile } from "../../../api/modules/taskModule";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
@@ -15,8 +14,7 @@ const AttachTaskFile = ({ task }) => {
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  // const user_id = user?.reg_id;
-  const user_id = 1; //for testing
+  const user_id = user?.reg_id;
   const [taskFiles, setTaskFiles] = useState(null);
   const [loading, setLoading] = useState(false);
   //to send DB convert files data structure
@@ -28,7 +26,6 @@ const AttachTaskFile = ({ task }) => {
       (file, index) => `${time}_${file.name.toLowerCase()}`
     );
     const stringFormat = taskFilesArray.join(",");
-
     try {
       const data = {
         tid: task?.tid,

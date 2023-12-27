@@ -228,7 +228,6 @@ const GoalsAndStrategiesTable = ({
       </Typography>
     ),
   });
-
   return <MaterialReactTable table={table} />;
 };
 

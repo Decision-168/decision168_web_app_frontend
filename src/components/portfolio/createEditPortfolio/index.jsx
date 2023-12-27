@@ -8,7 +8,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
-  getPortfolioDeparmentsAsync,
+  getPortfolioDetailsAsync,
   selectPorfolioDepartments,
   selectPorfolioDetails,
 } from "../../../redux/action/portfolioSlice";
@@ -18,29 +18,49 @@ const items = [
   { value: "individual", text: "Individual", selected: false },
 ];
 
+const StaticDepartments = [
+  { department: "Research and development" },
+  { department: "Sales" },
+  { department: "Marketing" },
+  { department: "Human resources" },
+  { department: "Customer service" },
+  { department: "Accounting & Finance" },
+  { department: "Administration" },
+];
+
 export default function CreateEditPortfolio() {
   const [value, setValue] = React.useState("company");
   const details = useSelector(selectPorfolioDetails);
+  const dispatch = useDispatch();
   const { id } = useParams();
   const isEditPath = !!id; // Check if id is defined or not
   const departments = useSelector(selectPorfolioDepartments);
+  const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
   useEffect(() => {
-    if(details?.portfolio_user){
+    if (storedPortfolioId) {
+      dispatch(getPortfolioDetailsAsync(storedPortfolioId));
+    }
+  }, [storedPortfolioId]);
+
+  useEffect(() => {
+    if (details?.portfolio_user) {
       setValue(details?.portfolio_user);
-    }else{
+    } else {
       setValue("company");
     }
-  
-  }, [isEditPath]);
+  }, [details]);
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <BasicBreadcrumbs currentPage={isEditPath ? "Edit" : "Create"} showBackButton={true} />
+      <BasicBreadcrumbs
+        currentPage={isEditPath ? "Edit" : "Create"}
+        showBackButton={true}
+      />
 
       <Paper elevation={0}>
         <Grid container p={2}>
@@ -58,9 +78,29 @@ export default function CreateEditPortfolio() {
 
           <Grid item xs={12}>
             {value === "company" ? (
-              <CompanyForm paramId={id} isEditPath={isEditPath} depts={departments ? departments : []} />
+              <CompanyForm
+                paramId={id}
+                isEditPath={isEditPath}
+                depts={
+                  isEditPath
+                    ? departments
+                      ? departments
+                      : []
+                    : StaticDepartments
+                }
+              />
             ) : (
-              <IndividualForm paramId={id} isEditPath={isEditPath} depts={departments ? departments : []} />
+              <IndividualForm
+                paramId={id}
+                isEditPath={isEditPath}
+                depts={
+                  isEditPath
+                    ? departments
+                      ? departments
+                      : []
+                    : StaticDepartments
+                }
+              />
             )}
           </Grid>
         </Grid>

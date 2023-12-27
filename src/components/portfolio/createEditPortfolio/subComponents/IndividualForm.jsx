@@ -9,11 +9,8 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import CustomLabelTextField from "../../../common/CustomLabelTextField";
-import { globalValidations } from "../../../../utils/GlobalValidation";
-import { useTheme } from "@mui/material/styles";
-import CustomAutocomplete from "../../../common/CustomAutocomplete";
 import { useNavigate } from "react-router-dom";
 import AddSocialMediaLinks from "../../../common/AddSocialMediaLinks";
 import CustomNumberField from "../../../common/CustomNumberField";
@@ -22,33 +19,34 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import GenderRadioGroup from "../../../common/GenderRadioGroup";
 import CoverImage from "../../../../assets/images/cover-image.png";
-import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 import CircularLoader from "../../../common/CircularLoader";
-import { updatePortfolio } from "../../../../api/modules/porfolioModule";
+import {
+  insertPortfolio,
+  insertProjectPortfolioDepartment,
+  updatePortfolio,
+} from "../../../../api/modules/porfolioModule";
 import { useSelector } from "react-redux";
-import { getPortfolioDetailsAsync, selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
+import {
+  getPortfolioDetailsAsync,
+  selectPorfolioDetails,
+} from "../../../../redux/action/portfolioSlice";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import SelectOption from "../../../common/SelectOption";
 import { getCountries } from "../../../../api/modules/dashboardModule";
-import { useDispatch } from "react-redux";
+import MultiSelectOption from "../../../common/MultiSelectOption";
+import { validateForm } from "../../../../helpers/validateForm";
 import { toast } from "react-toastify";
-
-const countries = [
-  { label: "India" },
-  { label: "China" },
-  { label: "Pakistan" },
-  { label: "Afganistan" },
-  { label: "Russia" },
-  { label: "Bangladesh" },
-];
+import { useDispatch } from "react-redux";
 
 export default function IndividualForm({ paramId, isEditPath, depts }) {
+  const navigate = useNavigate();
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
+  const dispatch = useDispatch();
   const details = useSelector(selectPorfolioDetails);
   const user = useSelector(selectUserDetails);
-  const dispatch = useDispatch();
+  const regId = user?.reg_id;
   const [formValues, setFormValues] = useState({
-    portfolio_createdby: user?.reg_id,
+    portfolio_createdby: regId,
     portfolio_user: "individual",
     portfolio_name: "",
     portfolio_mname: "",
@@ -69,32 +67,32 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
     photo: "",
     cover_photo: "",
   });
+  const [departments, setDepartments] = useState({});
   const [loading, setLoading] = useState(false);
+  const [individualFields, setIndividualFields] = useState([
+    {
+      social_media_icon: "",
+      social_media: "",
+    },
+  ]);
   const [inputFields, setInputFields] = useState([
     // {
     //   cus_department: "",
     //   error: false,
     // },
   ]);
-  const [fields, setFields] = useState([
-    {
-      social_media_icon: "",
-      social_media: "",
-    },
-  ]);
 
   useEffect(() => {
-    // dispatch(getPortfolioDetailsAsync(storedPortfolioId));
-    if(isEditPath){
+    if (isEditPath) {
       dispatch(getPortfolioDetailsAsync(paramId));
     }
   }, [isEditPath]);
 
   useEffect(() => {
-    if(isEditPath){
+    if (isEditPath) {
       setFormValues({
         ...formValues,
-        portfolio_createdby: user?.reg_id,
+        portfolio_createdby: regId,
         portfolio_user: details?.portfolio_user,
         portfolio_name: details?.portfolio_name,
         portfolio_mname: details?.portfolio_mname,
@@ -115,35 +113,42 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
         photo: "",
         cover_photo: "",
       });
-    }else{
+    } else {
       setFormValues({});
     }
-  }, [isEditPath]);
+  }, [details, isEditPath]);
 
   useEffect(() => {
-    // Split the comma-separated strings into arrays
-    const iconsArray = formValues.social_media_icon?.split(",");
-    const linksArray = formValues.social_media?.split(",");
+    if (isEditPath) {
+      // Split the comma-separated strings into arrays
+      const iconsArray = (formValues.social_media_icon ?? "").split(",");
+      const linksArray = (formValues.social_media ?? "").split(",");
 
-    // Combine the arrays into an array of objects
-    const resultArray = iconsArray?.map((social_media_icon, index) => ({
-      social_media_icon,
-      social_media: linksArray[index],
-    }));
-    setFields(resultArray);
-  }, [formValues.social_media_icon, formValues.social_media]);
+      // Check if arrays have the same length
+      if (iconsArray.length === linksArray.length) {
+        // Combine the arrays into an array of objects
+        const resultArray = iconsArray.map((social_media_icon, index) => ({
+          social_media_icon,
+          social_media: linksArray[index],
+        }));
+
+        // Set the state
+        setIndividualFields(resultArray);
+      } else {
+        // setting IndividualFields to an empty array
+        setIndividualFields([]);
+      }
+    } else {
+      // If not in edit mode, set IndividualFields to an empty array
+      setIndividualFields([]);
+    }
+  }, [isEditPath, formValues.social_media_icon, formValues.social_media]);
 
   const handleChange = (fieldName) => (event) => {
     setFormValues({
       ...formValues,
       [fieldName]: event.target.value,
     });
-  };
-
-  const [departments, setDepartments] = React.useState([]);
-  const handleDepartmentChange = (selectedOptions) => {
-    const departmentsArray = selectedOptions?.map((item) => item.department);
-    setDepartments(departmentsArray);
   };
 
   const handleInputChange = (event, index) => {
@@ -165,10 +170,16 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
     }
   };
 
+  const isDepartmentValid = (department) => {
+    const departmentPattern = /^[A-Za-z ]+$/;
+    return departmentPattern.test(department);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
+    // Validate and update input fields
     const updatedFields = inputFields.map((field) => ({
       ...field,
       error: !field.cus_department.trim()
@@ -177,45 +188,120 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
         ? "Invalid department"
         : false,
     }));
-
     setInputFields(updatedFields);
 
+    // Check for errors in input fields
     if (updatedFields.some((field) => field.error)) {
       setLoading(false);
       return;
     }
 
+    // Extract icons and links from fields
+    const icons = individualFields
+      ?.map((item) => item.social_media_icon)
+      .join(",");
+    const links = individualFields?.map((item) => item.social_media).join(",");
+
+    // Prepare data for submission
+    const data = {
+      ...formValues,
+      portfolio_createdby: regId,
+      portfolio_user: "individual",
+      social_media_icon: icons,
+      social_media: links,
+    };
+
+    // Prepare department data
     const customDepartmentArray = updatedFields.map(
       (item) => item.cus_department
     );
     const departmentData = {
-      portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
-      departments: departments,
+      portfolio_id: null,
+      departments: departments?.department,
       cus_departments: customDepartmentArray,
-      createdby: user?.reg_id,
+      createdby: regId,
     };
 
-    try {
-      const icons = fields.map((item) => item.social_media_icon).join(",");
-      const links = fields.map((item) => item.social_media).join(",");
-      const data = {
-        ...formValues,
-        social_media_icon: icons,
-        social_media: links,
-      };
-      if (isEditPath) {
-        const portfolioId = storedPortfolioId;
-        const response = await updatePortfolio(portfolioId, data);
-        toast.success(`${response.message}`);
-      } else {
-        const response = await insertPortfolio(data);
-        await insertProjectPortfolioDepartment(departmentData);
-        toast.success(`${response.message}`);
+    const formDataToInsert = { ...data, ...departmentData };
+
+    const requiredFieldsToInsert = [
+      "portfolio_user",
+      "portfolio_name",
+      "portfolio_lname",
+      "phone_number",
+      "email_address",
+      "company_individual",
+      "departments",
+    ];
+
+    // Field labels for error message
+    const fieldLabelsToInsert = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "First Name",
+      portfolio_lname: "Last Name",
+      phone_number: "Phone No",
+      email_address: "Email Address",
+      company_individual: "Company Name",
+      departments: "Department(s)",
+    };
+
+    const requiredFieldsToEdit = [
+      "portfolio_user",
+      "portfolio_name",
+      "portfolio_lname",
+      "phone_number",
+      "email_address",
+      "company_individual",
+    ];
+
+    const fieldLabelsToEdit = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "First Name",
+      portfolio_lname: "Last Name",
+      phone_number: "Phone No",
+      email_address: "Email Address",
+      company_individual: "Company Name",
+    };
+
+    // Define the required fields for the main form
+    const requiredFields = isEditPath
+      ? requiredFieldsToEdit
+      : requiredFieldsToInsert;
+    // Field labels for error message
+    const fieldLabels = isEditPath ? fieldLabelsToEdit : fieldLabelsToInsert;
+    const formData = isEditPath ? data : formDataToInsert;
+
+    // Validate the form
+    const isValid = validateForm(requiredFields, formData, fieldLabels);
+
+    if (isValid) {
+      try {
+        setLoading(true);
+        // Update or insert portfolio based on the edit path
+        if (isEditPath) {
+          const portfolioId = storedPortfolioId;
+          const response = await updatePortfolio(portfolioId, data);
+          localStorage.setItem("portfolioId", portfolioId);
+          navigate(`/portfolio-view`);
+          toast.success(`${response.message}`);
+        } else {
+          // Insert new portfolio and associated department data
+          const response = await insertPortfolio(data);
+          localStorage.setItem("portfolioId", response?.portfolioInsertedId);
+          const depart = {
+            ...departmentData,
+            portfolio_id: response?.portfolioInsertedId,
+          };
+          await insertProjectPortfolioDepartment(depart);
+          navigate(`/portfolio-view`);
+          toast.success(`${response.message}`);
+        }
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error("Error in inserting new individual portfolio:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error(`${error.response?.data?.error}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -437,16 +523,16 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
 
         {!isEditPath && (
           <>
-            {" "}
             <Grid item xs={12} px={2} py={1}>
-              <FilterSelectedOptions
-                label="Add Department"
-                labelColor=""
-                required={false}
-                placeholder="Departments"
-                items={depts}
-                onSelectionChange={handleDepartmentChange}
-                getOptionLabelFn={(option) => option.department}
+              <MultiSelectOption
+                label="Add Department(s)"
+                required={true}
+                field="department"
+                idKey="department"
+                getOptionLabel={(option) => option.department}
+                staticOptions={depts}
+                formValues={departments}
+                setFormValues={setDepartments}
               />
             </Grid>
             <Grid item xs={12} md={4} px={2} py={2}>
@@ -505,7 +591,10 @@ export default function IndividualForm({ paramId, isEditPath, depts }) {
         )}
 
         <Grid item xs={12} sm={12} py={1}>
-          <AddSocialMediaLinks fields={fields} setFields={setFields} />
+          <AddSocialMediaLinks
+            fields={individualFields}
+            setFields={setIndividualFields}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={2} textAlign="end">

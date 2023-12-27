@@ -22,13 +22,7 @@ import { toast } from "react-toastify";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
-export default function SubtaskPreview({
-  styles,
-  subtaskId,
-  taskData,
-  closePreview,
-  fetchData,
-}) {
+export default function SubtaskPreview({ styles, subtaskId, taskData, closePreview, fetchData }) {
   const dispatch = useDispatch();
 
   const [subTask, setSubTask] = React.useState({});
@@ -70,8 +64,7 @@ export default function SubtaskPreview({
 
   const handleFileItSubTaskYes = async () => {
     const subtask_id = subtaskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
       fetchData();
@@ -94,8 +87,7 @@ export default function SubtaskPreview({
 
   const handleDeleteSubTaskYes = async () => {
     const subtask_id = subtaskId;
-    // const user_id = user?.reg_id;
-    const user_id = 1; // for testing
+    const user_id = user?.reg_id;
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteSubTaskInPreview" }));
@@ -111,10 +103,7 @@ export default function SubtaskPreview({
     <>
       <Grid container>
         <Grid item xs={12} lg={8}>
-          <Paper
-            elevation={0}
-            sx={{ p: 2, bgcolor: "#F7F7F7", width: "700px" }}
-          >
+          <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width: "100%px" }}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
               <PerfectScrollbar>
                 <SubTaskOverviewCardHeader
@@ -203,28 +192,14 @@ export default function SubtaskPreview({
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <Paper elevation={0} sx={{ height: "100%", width: "350px" }}>
-            <CommentSection
-              projectId={subTask?.stproject_assign}
-              taskId={0}
-              subtaskId={subTask?.stid}
-              commentModule={"subtask"}
-            />
+          <Paper elevation={0} sx={{ height: "100%", width: "100%" }}>
+            <CommentSection projectId={subTask?.stproject_assign} taskId={0} subtaskId={subTask?.stid} commentModule={"subtask"} />
           </Paper>
         </Grid>
       </Grid>
 
-      <ReduxDialog
-        value="edit-preview-subtask"
-        modalTitle="Edit Sub Task"
-        showModalButton={false}
-        modalSize="md"
-      >
-        <CreateEditSubTasksForm
-          editMode={true}
-          taskData={taskData}
-          subtaskData={subTask}
-        />
+      <ReduxDialog value="edit-preview-subtask" modalTitle="Edit Sub Task" showModalButton={false} modalSize="md" >
+        <CreateEditSubTasksForm editMode={true} taskData={taskData} subtaskData={subTask} />
       </ReduxDialog>
 
       <ReduxDialog

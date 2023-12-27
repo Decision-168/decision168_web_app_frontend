@@ -69,10 +69,17 @@ export const getAlertsAndNotifications = async (userId) => {
 //update dashboard + bell icon clear alert notifications by different id's, user id and type
 export const updateAlertsAndNotifications = async (id, userId, type) => {
   try {
-    const response = await axios.patch(
-      `${apiUrl}${api.updateAlertsAndNotifications}${id}/${userId}`,
-      { type: type }
-    );
+    const response = await axios.patch(`${apiUrl}${api.updateAlertsAndNotifications}${id}/${userId}`, { type: type });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//update bell icon clear all alert notifications by user_id
+export const clearAllNotificaions = async (user_id) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.clearAllNotificaions}${user_id}`);
     return response;
   } catch (error) {
     throw error;

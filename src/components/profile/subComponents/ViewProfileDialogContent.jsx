@@ -22,6 +22,8 @@ export default function ViewProfileDialogContent() {
   const handleCloseChangePasswordDailog = () => {
     setOpenChangePasswordDialog(false);
   };
+
+
   return (
     <Paper elevation={0} sx={{ height: "80vh" }}>
       <Grid container>

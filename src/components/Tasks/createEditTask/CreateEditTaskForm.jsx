@@ -43,10 +43,8 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  // const userId = user?.reg_id;
-  // const email = user?.email_address;
-  const userId = 1; // for testing
-  const email = "uzmakarjikar@gmail.com"; // for testing
+  const userId = user?.reg_id;
+  const email = user?.email_address;
 
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const [projects, setProjects] = useState([]);
@@ -164,10 +162,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
 
   useEffect(() => {
     // it will return the object of the selected project id from that we require dept_id
-    const selectedProjectObject = projects?.find(
-      (p) => p.pid === selectedProjectIdObject?.project_id
-    );
-
+    const selectedProjectObject = projects?.find((p) => p.pid === selectedProjectIdObject?.project_id);
     setSelectedProjectDeptId(selectedProjectObject?.dept_id);
   }, [projects, selectedProjectIdObject?.project_id]);
 
@@ -201,19 +196,33 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        const response = await getProjectTeamMembers({
-          pid: selectedProjectIdObject?.project_id,
-        });
+        // Fetch project team members
+        const response = await getProjectTeamMembers({ pid: selectedProjectIdObject?.project_id });
 
-        // Add the user to assignee to assignee list
-        const updatedResponse = [
-          ...response,
-          { reg_id: userId, name: "To Me" },
-        ];
-        setTeamMembers(updatedResponse);
-      } catch (error) {}
+        // Find the user in the team members
+        const foundAssignee = response.find((assignee) => assignee.reg_id === userId);
+
+        // Check if an assignee with the given reg_id was found
+        if (foundAssignee) {
+          // Check for duplicates before adding the new entry
+          const isDuplicate = response.some((member) => member.reg_id === userId);
+
+          // Update state with a new entry only if not a duplicate
+          if (!isDuplicate) {
+            setTeamMembers([...response, { ...foundAssignee, name: 'Assign to me' }]);
+          } else {
+            setTeamMembers(response);
+          }
+        } else {
+          // No assignee found, update state with the original team members
+          setTeamMembers(response);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
+    // Fetch team members when the component mounts or when dependencies change
     fetchTeamMembers();
   }, [selectedProjectIdObject?.project_id, userId]);
 
@@ -352,13 +361,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
                   idKey="portfolio_dept_id"
                   getOptionLabel={(option) => option.department}
                   dynamicOptions={false}
-                  staticOptions={
-                    selectedProjectDeptId !== undefined &&
-                    selectedProjectDeptId !== null &&
-                    selectedProjectDeptId !== 0
-                      ? filteredDepartments
-                      : departments
-                  }
+                  staticOptions={selectedProjectDeptId !== undefined && selectedProjectDeptId !== null && selectedProjectDeptId !== 0 ? filteredDepartments : departments}
                   formValues={formValues}
                   setFormValues={setFormValues}
                 />

@@ -16,7 +16,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { updatePortfolioDepartment } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
-import { getPortfolioDeparmentsAsync } from "../../../../redux/action/portfolioSlice";
+import {
+  getPortfolioDeparmentsAsync, getPortfolioDetailsAsync,
+} from "../../../../redux/action/portfolioSlice";
 
 const ViewDepartmentTable = ({ data }) => {
   const dispatch = useDispatch();
@@ -31,7 +33,6 @@ const ViewDepartmentTable = ({ data }) => {
   const handleReopen = (departmentId, department, status) => {
     setDeptId(departmentId);
     setdDeptStatus(status);
-
     dispatch(
       openCnfModal({
         modalName: "changeStatus",
@@ -72,6 +73,7 @@ const ViewDepartmentTable = ({ data }) => {
         department: editDeptName,
       });
       dispatch(getPortfolioDeparmentsAsync(storedPorfolioId));
+      dispatch(getPortfolioDetailsAsync(storedPorfolioId));
       toast.success(`${response.message}`);
       setIsEditing(false);
     } catch (error) {
@@ -89,7 +91,7 @@ const ViewDepartmentTable = ({ data }) => {
       {
         accessorKey: "department",
         header: "Departments",
-        size: 400,
+        size: 500,
         enableEditing: true, // Enable editing for this cell
         Cell: ({ row }) => {
           if (isEditing && row.original.portfolio_dept_id === depId) {
@@ -102,18 +104,17 @@ const ViewDepartmentTable = ({ data }) => {
                 }}
               >
                 <TextField
+                fullWidth
                   size="small"
                   variant="outlined"
                   value={editDeptName}
                   onChange={(e) => setEditDeptName(e.target.value)}
                 />
-                <IconButton
-                  onClick={() => handleSave(row.original.portfolio_dept_id)}
-                >
-                  <SaveIcon />
+                <IconButton size="small" sx={{fontSize:"1rem"}} onClick={() => handleSave(row.original.portfolio_dept_id)}>
+                  <SaveIcon fontSize="inherite"/>
                 </IconButton>
-                <IconButton onClick={handleCancel}>
-                  <CancelIcon />
+                <IconButton size="small" sx={{fontSize:"1rem"}}  onClick={handleCancel}>
+                  <CancelIcon fontSize="inherite" />
                 </IconButton>
               </Box>
             );
@@ -127,15 +128,11 @@ const ViewDepartmentTable = ({ data }) => {
                 }}
               >
                 <Typography>{row.original.department}</Typography>
-                <IconButton
+                <IconButton size="small" sx={{fontSize:"1rem"}}
                   onClick={() =>
-                    handleEditStart(
-                      row.original.department,
-                      row.original.portfolio_dept_id
-                    )
-                  }
-                >
-                  <EditIcon />
+                    handleEditStart(row.original.department, row.original.portfolio_dept_id)
+                  }>
+                  <EditIcon  fontSize="inherite"/>
                 </IconButton>
               </Box>
             );

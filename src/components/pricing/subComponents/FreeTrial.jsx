@@ -46,7 +46,6 @@ const FreeTrial = () => {
 
     try {
       const data = { ...formFreeTrialValues };
-
       const response = await AddFreeTrialAccountAccess(data);
       if (response.message == "Enjoy free trial!") {
         toast.success(`${response.message}`);

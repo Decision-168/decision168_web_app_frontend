@@ -1,12 +1,9 @@
-import { Box, Paper, Typography, Grid, Stack, IconButton } from "@mui/material";
+import { Box, Paper, Typography, Grid, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import SocialMedia from "../../common/SocialMedia";
 
 export default function PersonalInfo() {
   const theme = useTheme();
@@ -81,29 +78,7 @@ export default function PersonalInfo() {
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
-                  {user?.social_media_icon?.includes("YouTube") && (
-                    <IconButton aria-label="youTube">
-                      <YouTubeIcon sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                  )}
-
-                  {user?.social_media_icon?.includes("LinkedIn") && (
-                    <IconButton aria-label="linkedIn">
-                      <LinkedInIcon sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                  )}
-
-                  {user?.social_media_icon?.includes("Instagram") && (
-                    <IconButton aria-label="instagram">
-                      <InstagramIcon sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                  )}
-
-                  {user?.social_media_icon?.includes("Facebook") && (
-                    <IconButton aria-label="facebook">
-                      <FacebookIcon sx={{ color: theme.palette.primary.main }} />
-                    </IconButton>
-                  )}
+                  <SocialMedia links={user?.social_media} icons={user?.social_media_icon} />
                 </Stack>
               </Grid>
             </Grid>

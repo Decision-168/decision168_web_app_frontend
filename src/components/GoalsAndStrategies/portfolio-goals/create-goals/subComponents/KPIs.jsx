@@ -56,7 +56,6 @@ const KPIs = ({
       gid: passGID,
     });
     const okdata = oktemp();
-
     const isSnameEmpty = okdata.kpiArray.some((kpi) => kpi.sname.trim() === "");
     if (isSnameEmpty) {
       toast.error("Please fill in all required fields");

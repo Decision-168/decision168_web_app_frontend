@@ -1,70 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Box, Paper, Typography, Grid, Stack, IconButton } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Paper, Typography, Grid, Stack } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import PinterestIcon from "@mui/icons-material/Pinterest";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import { useSelector } from "react-redux";
-import {
-  getPortfolioDetailsAsync,
-  selectPorfolioDetails,
-} from "../../../../redux/action/portfolioSlice";
+import { getPortfolioDetailsAsync, selectPorfolioDetails } from "../../../../redux/action/portfolioSlice";
 import { useDispatch } from "react-redux";
 import SocialMedia from "../../../common/SocialMedia";
 import useCountryName from "../../../../hooks/useCountryName";
-
-const PortfolioDetails = {
-  contactPersonName: "John Doe",
-  createdBy: "John Doe",
-  type: "company",
-  email: "johnDoe@decision168.com",
-  website: "www.decision168.com",
-  country: "United States",
-  socialMedia: [
-    {
-      icon: (
-        <YouTubeIcon sx={{ color: (theme) => theme.palette.primary.main }} />
-      ),
-      name: "YouTube",
-    },
-    {
-      icon: (
-        <PinterestIcon sx={{ color: (theme) => theme.palette.primary.main }} />
-      ),
-      name: "Pinterest",
-    },
-    {
-      icon: (
-        <InstagramIcon sx={{ color: (theme) => theme.palette.primary.main }} />
-      ),
-      name: "Instagram",
-    },
-    {
-      icon: (
-        <LinkedInIcon sx={{ color: (theme) => theme.palette.primary.main }} />
-      ),
-      name: "linkedIn",
-    },
-    {
-      icon: (
-        <TwitterIcon sx={{ color: (theme) => theme.palette.primary.main }} />
-      ),
-      name: "Twitter",
-    },
-    {
-      icon: (
-        <FacebookRoundedIcon
-          sx={{ color: (theme) => theme.palette.primary.main }}
-        />
-      ),
-      name: "Facebook",
-    },
-  ],
-  departments: ["Marketing", "Implementation", "Marketing & Sales"],
-};
 
 export default function PersonalInfo() {
   const theme = useTheme();
@@ -86,11 +27,7 @@ export default function PersonalInfo() {
   return (
     <Paper elevation={0}>
       <Box p={2} textAlign="left">
-        <Typography
-          variant="subtitle1"
-          sx={{ color: theme.palette.secondary.dark, fontWeight: "700" }}
-          textAlign="left"
-        >
+        <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark, fontWeight: "700" }} textAlign="left">
           Information
         </Typography>
 
@@ -109,13 +46,7 @@ export default function PersonalInfo() {
             {details?.portfolio_user === "company" && (
               <>
                 {details?.contact_fname && details?.contact_lname && (
-                  <Grid
-                    container
-                    p={1}
-                    borderBottom={1}
-                    borderColor={theme.palette.secondary.light}
-                    color={theme.palette.secondary.main}
-                  >
+                  <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                     <Grid item xs={12} sm={4}>
                       <Typography variant="subtitle2" textAlign="left">
                         Contact Person Name :
@@ -135,13 +66,7 @@ export default function PersonalInfo() {
                 )}
 
                 {details?.designation && (
-                  <Grid
-                    container
-                    p={1}
-                    borderBottom={1}
-                    borderColor={theme.palette.secondary.light}
-                    color={theme.palette.secondary.main}
-                  >
+                  <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                     <Grid item xs={12} sm={4}>
                       <Typography variant="subtitle2" textAlign="left">
                         Designation :
@@ -163,39 +88,22 @@ export default function PersonalInfo() {
             )}
 
             {details?.portfolio_createdby && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Created By :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    gutterBottom
-                    textAlign="left"
-                  >
-                    {details?.portfolio_createdby}
+                  <Typography variant="caption" display="block" gutterBottom textAlign="left">
+                    {details?.portflioCreatedByName}
                   </Typography>
                 </Grid>
               </Grid>
             )}
 
             {details?.portfolio_user && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Type :
@@ -215,13 +123,7 @@ export default function PersonalInfo() {
             )}
 
             {details?.email_address && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Email Address :
@@ -241,13 +143,7 @@ export default function PersonalInfo() {
             )}
 
             {details?.company_website && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Company Website :
@@ -267,13 +163,7 @@ export default function PersonalInfo() {
             )}
 
             {countryName && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Country :
@@ -293,39 +183,22 @@ export default function PersonalInfo() {
             )}
 
             {details?.social_media && details?.social_media_icon && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left">
                     Social Media Link(s) :
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  <Stack
-                    direction="row"
-                    justifyContent="start"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    {/* <SocialMedia links={details?.social_media} icons={details?.social_media_icon} /> */}
+                  <Stack direction="row" justifyContent="start" alignItems="center" spacing={1}>
+                    <SocialMedia links={details?.social_media} icons={details?.social_media_icon} />
                   </Stack>
                 </Grid>
               </Grid>
             )}
 
             {details?.departments?.length > 0 && (
-              <Grid
-                container
-                p={1}
-                borderBottom={1}
-                borderColor={theme.palette.secondary.light}
-                color={theme.palette.secondary.main}
-              >
+              <Grid container p={1} borderBottom={1} borderColor={theme.palette.secondary.light} color={theme.palette.secondary.main}>
                 <Grid item xs={12} sm={4}>
                   <Typography variant="subtitle2" textAlign="left" pb={1}>
                     Department(s) :

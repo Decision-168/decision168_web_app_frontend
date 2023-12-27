@@ -17,12 +17,12 @@ import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import CircularLoader from "../../../common/CircularLoader";
 import AddSocialMediaLinks from "../../../common/AddSocialMediaLinks";
-import FilterSelectedOptions from "../../../common/FilterSelectedOptions";
 import CoverImage from "../../../../assets/images/cover-image.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
 import {
+  getPortfolios,
   insertPortfolio,
   insertProjectPortfolioDepartment,
   updatePortfolio,
@@ -35,36 +35,20 @@ import {
 } from "../../../../redux/action/portfolioSlice";
 import SelectOption from "../../../common/SelectOption";
 import { getCountries } from "../../../../api/modules/dashboardModule";
+import MultiSelectOption from "../../../common/MultiSelectOption";
+import { validateForm } from "../../../../helpers/validateForm";
 
 export default function CompanyForm({ paramId, isEditPath, depts }) {
+  const navigate = useNavigate();
   const storedPortfolioId = JSON.parse(localStorage.getItem("portfolioId"));
   const user = useSelector(selectUserDetails);
+  const regId = user?.reg_id;
   const details = useSelector(selectPorfolioDetails);
   const dispatch = useDispatch();
-  const [departments, setDepartments] = useState([]);
+  const [departments, setDepartments] = useState({});
   const [loading, setLoading] = useState(false);
-  const [fields, setFields] = useState([
-    {
-      social_media_icon: "",
-      social_media: "",
-    },
-  ]);
-  const [inputFields, setInputFields] = useState([
-    // {
-    //   cus_department: "",
-    //   error: false,
-    // },
-  ]);
-
-  useEffect(() => {
-    // dispatch(getPortfolioDetailsAsync(storedPortfolioId));
-    if(isEditPath){
-      dispatch(getPortfolioDetailsAsync(paramId));
-    }
-  }, [isEditPath]);
-
   const [formValues, setFormValues] = useState({
-    portfolio_createdby: user?.reg_id,
+    portfolio_createdby: regId,
     portfolio_user: "company",
     portfolio_name: "",
     company_website: "",
@@ -85,11 +69,31 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
     cover_photo: "",
   });
 
+  const [companyfields, setCompanyFields] = useState([
+    {
+      social_media_icon: "",
+      social_media: "",
+    },
+  ]);
+
+  const [inputFields, setInputFields] = useState([
+    // {
+    //   cus_department: "",
+    //   error: false,
+    // },
+  ]);
+
   useEffect(() => {
-    if(isEditPath){
+    if (isEditPath) {
+      dispatch(getPortfolioDetailsAsync(paramId));
+    }
+  }, [isEditPath]);
+
+  useEffect(() => {
+    if (isEditPath) {
       setFormValues({
         ...formValues,
-        portfolio_createdby: user?.reg_id,
+        portfolio_createdby: regId,
         portfolio_user: details?.portfolio_user,
         portfolio_name: details?.portfolio_name,
         company_website: details?.company_website,
@@ -109,24 +113,35 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
         photo: "",
         cover_photo: "",
       });
-    }else{
+    } else {
       setFormValues({});
     }
-  }, [isEditPath]);
+  }, [details, isEditPath]);
 
   useEffect(() => {
-    // Split the comma-separated strings into arrays
-    const iconsArray = formValues.social_media_icon?.split(",");
-    const linksArray = formValues.social_media?.split(",");
+    if (isEditPath) {
+      // Split the comma-separated strings into arrays
+      const iconsArray = (formValues.social_media_icon ?? "").split(",");
+      const linksArray = (formValues.social_media ?? "").split(",");
 
-    // Combine the arrays into an array of objects
-    const resultArray =
-      iconsArray?.map((social_media_icon, index) => ({
-        social_media_icon,
-        social_media: linksArray[index],
-      })) || [];
+      // Check if arrays have the same length
+      if (iconsArray.length === linksArray.length) {
+        // Combine the arrays into an array of objects
+        const resultArray = iconsArray.map((social_media_icon, index) => ({
+          social_media_icon,
+          social_media: linksArray[index],
+        }));
 
-    setFields(resultArray);
+        // Set the state
+        setCompanyFields(resultArray);
+      } else {
+        // setting CompanyFields to an empty array
+        setCompanyFields([]);
+      }
+    } else {
+      // If not in edit mode, set CompanyFields to an empty array
+      setCompanyFields([]);
+    }
   }, [isEditPath, formValues.social_media_icon, formValues.social_media]);
 
   const handleChange = (fieldName) => (event) => {
@@ -134,13 +149,6 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
       ...formValues,
       [fieldName]: event.target.value,
     });
-  };
-
-  // setMembersIds([...getMembersIds, ...memberIdArray]);
-
-  const handleDepartmentChange = (selectedOptions) => {
-    const departmentsArray = selectedOptions?.map((item) => item.department);
-    setDepartments(departmentsArray);
   };
 
   const handleInputChange = (event, index) => {
@@ -170,8 +178,7 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    setLoading(true);
-
+    // Validate and update input fields
     const updatedFields = inputFields.map((field) => ({
       ...field,
       error: !field.cus_department.trim()
@@ -183,44 +190,120 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
 
     setInputFields(updatedFields);
 
+    // Check for errors in input fields
     if (updatedFields.some((field) => field.error)) {
       setLoading(false);
       return;
     }
 
+    // Extract icons and links from fields
+    const icons = companyfields
+      ?.map((item) => item.social_media_icon)
+      .join(",");
+    const links = companyfields?.map((item) => item.social_media).join(",");
+
+    // Prepare data for submission
+    const data = {
+      ...formValues,
+      portfolio_createdby: regId,
+      portfolio_user: "company",
+      social_media_icon: icons,
+      social_media: links,
+    };
+
+    // Prepare department data
     const customDepartmentArray = updatedFields.map(
       (item) => item.cus_department
     );
     const departmentData = {
-      portfolio_id: JSON.parse(localStorage.getItem("portfolioId")),
-      departments: departments,
+      portfolio_id: null,
+      departments: departments?.department,
       cus_departments: customDepartmentArray,
-      createdby: user?.reg_id,
+      createdby: regId,
     };
 
-    try {
-      const icons = fields?.map((item) => item.social_media_icon).join(",");
-      const links = fields?.map((item) => item.social_media).join(",");
-      const data = {
-        ...formValues,
-        social_media_icon: icons,
-        social_media: links,
-      };
-      if (isEditPath) {
-        const portfolioId = storedPortfolioId;
-        const response = await updatePortfolio(portfolioId, data);
-        toast.success(`${response.message}`);
-      } else {
-        const response = await insertPortfolio(data);
-        await insertProjectPortfolioDepartment(departmentData);
-        toast.success(`${response.message}`);
+    const formDataToInsert = { ...data, ...departmentData };
+
+    const requiredFieldsToInsert = [
+      "portfolio_user",
+      "portfolio_name",
+      "email_address",
+      "phone_number",
+      "contact_fname",
+      "contact_lname",
+      "departments",
+    ];
+
+    const fieldLabelsToInsert = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "Company Name",
+      email_address: "Company Email Address",
+      phone_number: "Company Phone No",
+      contact_fname: "Contact Person First Name",
+      contact_lname: "Contact Person Last Name",
+      departments: "Department(s)",
+    };
+
+    const requiredFieldsToEdit = [
+      "portfolio_user",
+      "portfolio_name",
+      "email_address",
+      "phone_number",
+      "contact_fname",
+      "contact_lname",
+    ];
+    const fieldLabelsToEdit = {
+      portfolio_user: "Portfolio Type",
+      portfolio_name: "Company Name",
+      email_address: "Company Email Address",
+      phone_number: "Company Phone No",
+      contact_fname: "Contact Person First Name",
+      contact_lname: "Contact Person Last Name",
+    };
+
+    // Define the required fields for the main form
+    const requiredFields = isEditPath
+      ? requiredFieldsToEdit
+      : requiredFieldsToInsert;
+    // Field labels for error message
+    const fieldLabels = isEditPath ? fieldLabelsToEdit : fieldLabelsToInsert;
+    const formData = isEditPath ? data : formDataToInsert;
+
+    // Validate the form
+    const isValid = validateForm(requiredFields, formData, fieldLabels);
+
+    if (isValid) {
+      try {
+        setLoading(true);
+        // Update or insert portfolio based on the edit path
+        if (isEditPath) {
+          const portfolioId = storedPortfolioId;
+          const response = await updatePortfolio(portfolioId, data);
+          localStorage.setItem("portfolioId", portfolioId);
+          navigate(`/portfolio-view`);
+          toast.success(`${response?.message}`);
+        } else {
+          // Insert new portfolio and associated department data
+          const response = await insertPortfolio(data);
+          localStorage.removeItem("portfolioId");
+          localStorage.setItem("portfolioId", response?.portfolioInsertedId);
+          const depart = {
+            ...departmentData,
+            portfolio_id: response?.portfolioInsertedId,
+          };
+          await insertProjectPortfolioDepartment(depart);
+          navigate(`/portfolio-view`);
+          toast.success(`${response.message}`);
+        }
+      } catch (error) {
+        toast.error(`${error.response?.data?.error}`);
+        console.error("Error in inserting new portfolio:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error(`${error.response?.data?.error}`);
-    } finally {
-      setLoading(false);
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
       <Grid container>
@@ -435,14 +518,15 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
         {!isEditPath && (
           <>
             <Grid item xs={12} sm={12} px={2} py={2}>
-              <FilterSelectedOptions
+              <MultiSelectOption
                 label="Add Department(s)"
-                labelColor=""
-                required={false}
-                placeholder="Departments"
-                items={depts}
-                onSelectionChange={handleDepartmentChange}
-                getOptionLabelFn={(option) => option.department}
+                required={true}
+                field="department"
+                idKey="department"
+                getOptionLabel={(option) => option.department}
+                staticOptions={depts}
+                formValues={departments}
+                setFormValues={setDepartments}
               />
             </Grid>
 
@@ -503,7 +587,10 @@ export default function CompanyForm({ paramId, isEditPath, depts }) {
         )}
 
         <Grid item xs={12} sm={12} py={1}>
-          <AddSocialMediaLinks fields={fields} setFields={setFields} />
+          <AddSocialMediaLinks
+            fields={companyfields}
+            setFields={setCompanyFields}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} py={2} textAlign="end">

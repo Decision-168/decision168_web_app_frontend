@@ -32,17 +32,7 @@ export const authValidations = {
             message: "Password must not exceed 32 characters",
         },
     },
-    newPassword: {
-        required: "New password is required",
-        pattern: {
-            value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
-            message: "Invaid New password",
-        },
-        maxLength: {
-            value: 32,
-            message: "Password must not exceed 32 characters",
-        },
-    },
+
     currentPassword: {
         required: "current password is required",
         pattern: {
@@ -54,10 +44,30 @@ export const authValidations = {
             message: "Password must not exceed 32 characters",
         },
     },
+    newPassword: {
+        required: "New password is required",
+        pattern: {
+            value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,32}$/gm,
+            message: "Invaid New password",
+        },
+        maxLength: {
+            value: 32,
+            message: "Password must not exceed 32 characters",
+        },
+    },
     confirmPassword: {
         required: "Confirm Password is required",
         validate: (value, values) => {
             if (value === values.password) {
+                return true;
+            }
+            return "Passwords do not match";
+        },
+    },
+    confirmPasswordAuthUser: {
+        required: "Confirm Password is required",
+        validate: (value, values) => {
+            if (value === values.newPassword) {
                 return true;
             }
             return "Passwords do not match";

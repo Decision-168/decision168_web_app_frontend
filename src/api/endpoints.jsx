@@ -16,6 +16,9 @@ const api = {
   //user change-password api
   userChangePass: "user/change-password/",
 
+  //update Auth User Password inside the App by user id
+  updateAuthUserPassword:"user/update-password/",
+
   //-----------------------------Dashboard Module Start----------------
 
   //user details by user id
@@ -44,6 +47,10 @@ const api = {
 
   //update dashboard + bell icon clear alert notifications by different id's, user id and type
   updateAlertsAndNotifications: "user/update-alert-notifications/",
+
+
+  //update bell icon clear all alert notifications by user_id
+  clearAllNotificaions : "user/update-all-alert-notifications/",
 
   //get countries
   countries: "user/get-countries",

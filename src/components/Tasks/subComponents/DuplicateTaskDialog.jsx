@@ -25,8 +25,7 @@ const DuplicateTaskDialog = ({ taskData, closeModalName }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUserDetails);
-  // const userId = user?.reg_id;
-  const userId = 1; // for testing
+  const userId = user?.reg_id;
 
   useEffect(() => {
     if (taskData) {

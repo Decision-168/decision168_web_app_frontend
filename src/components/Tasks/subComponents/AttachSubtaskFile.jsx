@@ -14,8 +14,7 @@ const AttachSubtaskFile = ({ subtask }) => {
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-  // const user_id = user?.reg_id;
-  const user_id = 1; //for testing
+  const user_id = user?.reg_id;
   const [subtaskFiles, setSubtaskFiles] = useState(null);
   const [loading, setLoading] = useState(false);
   //to send DB convert files data structure
@@ -23,10 +22,8 @@ const AttachSubtaskFile = ({ subtask }) => {
   const handleSubtaskFilesChange = async (newValue, info) => {
     setSubtaskFiles(newValue);
     const time = Math.floor(Date.now() / 1000);
-    const taskFilesArray = newValue?.map(
-      (file, index) => `${time}_${file.name.toLowerCase()}`
-    );
-    const stringFormat = taskFilesArray.join(",");
+    const taskFilesArray = newValue?.map((file, index) => (`${time}_${file.name.toLowerCase()}`));
+    const stringFormat = taskFilesArray.join(',')
 
     try {
       const data = {

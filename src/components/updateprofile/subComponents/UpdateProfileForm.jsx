@@ -19,16 +19,15 @@ import {
 } from "../../../api/modules/dashboardModule";
 import { toast } from "react-toastify";
 import CircularLoader from "../../common/CircularLoader";
-import { parseISO } from "date-fns";
 import { useDispatch } from "react-redux";
 import SelectOption from "../../common/SelectOption";
+import { validateForm } from "../../../helpers/validateForm";
 
 export default function UpdateProfileForm() {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
-
   const [formValues, setFormValues] = useState({});
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = React.useState([
@@ -54,7 +53,7 @@ export default function UpdateProfileForm() {
       country: user?.country,
       social_media_icon: user?.social_media_icon,
       social_media: user?.social_media,
-      dob: user?.dob ? parseISO(user.dob) : null,
+      dob: user?.dob ? new Date(user?.dob) : "",
     });
   }, [user]);
 
@@ -80,26 +79,36 @@ export default function UpdateProfileForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
+    // Define the required fields for the main form
+    const requiredFields = ["first_name", "last_name", "email_address", "dob"];
 
-    try {
-      const icons = fields.map((item) => item.social_media_icon).join(",");
-      const links = fields.map((item) => item.social_media).join(",");
-      const data = {
-        ...formValues,
-        social_media_icon: icons,
-        social_media: links,
-      };
-      const userId = user?.reg_id;
-      const response = await updateUserProfile(userId, data);
-      dispatch(getUserDetailsAsync(userId));
-      // Handling success
-      toast.success(`${response.message}`);
-    } catch (error) {
-      // Handling error
-      toast.error(`${error.response?.error}`);
-    } finally {
-      setLoading(false);
+    const fieldLabels = {
+      first_name: "First Name",
+      last_name: "Last Name",
+      email_address: "Email Address",
+      dob: "Date of Birth",
+    };
+
+    // Validate the form
+    const isValid = validateForm(requiredFields, formValues, fieldLabels);
+
+    if (isValid) {
+      try {
+        setLoading(true);
+        const icons = fields.map((item) => item.social_media_icon).join(",");
+        const links = fields.map((item) => item.social_media).join(",");
+        const data = { ...formValues, social_media_icon: icons, social_media: links };
+        const userId = user?.reg_id;
+        const response = await updateUserProfile(userId, data);
+        dispatch(getUserDetailsAsync(userId));
+        navigate("/profile");
+        toast.success(`${response.message}`);
+      } catch (error) {
+        toast.error(`${error.response?.error}`);
+        console.error("Error updating user profile:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -118,47 +127,19 @@ export default function UpdateProfileForm() {
     <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
       <Grid container>
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="First Name"
-            name="first_name"
-            required={true}
-            placeholder="Enter first name"
-            value={formValues.first_name}
-            onChange={handleChange("first_name")}
-          />
+          <CustomLabelTextField label="First Name" name="first_name" required={true} placeholder="Enter first name" value={formValues.first_name} onChange={handleChange("first_name")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Middle Name"
-            name="middle_name"
-            required={false}
-            placeholder="Enter middle name"
-            value={formValues.middle_name}
-            onChange={handleChange("middle_name")}
-          />
+          <CustomLabelTextField label="Middle Name" name="middle_name" required={false} placeholder="Enter middle name" value={formValues.middle_name} onChange={handleChange("middle_name")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Last Name"
-            name="last_name"
-            required={true}
-            placeholder="Enter last name"
-            value={formValues.last_name}
-            onChange={handleChange("last_name")}
-          />
+          <CustomLabelTextField label="Last Name" name="last_name" required={true} placeholder="Enter last name" value={formValues.last_name} onChange={handleChange("last_name")} />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>
-          <CustomMultilineTextField
-            label="About me"
-            name="about_me"
-            required={false}
-            placeholder="About me"
-            value={formValues.about_me}
-            onChange={handleChange("about_me")}
-          />
+          <CustomMultilineTextField label="About me" name="about_me" required={false} placeholder="About me" value={formValues.about_me} onChange={handleChange("about_me")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
@@ -169,29 +150,16 @@ export default function UpdateProfileForm() {
             placeholder="Enter email address"
             value={formValues.email_address}
             onChange={handleChange("email_address")}
+            isDisabled={true}
           />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Designation"
-            name="designation"
-            required={false}
-            placeholder="Enter designation"
-            value={formValues.designation}
-            onChange={handleChange("designation")}
-          />
+          <CustomLabelTextField label="Designation" name="designation" required={false} placeholder="Enter designation" value={formValues.designation} onChange={handleChange("designation")} />
         </Grid>
 
         <Grid item xs={12} sm={4} px={2} py={1}>
-          <CustomLabelTextField
-            label="Company"
-            name="company"
-            required={false}
-            placeholder="Enter company"
-            value={formValues.company}
-            onChange={handleChange("company")}
-          />
+          <CustomLabelTextField label="Company" name="company" required={false} placeholder="Enter company" value={formValues.company} onChange={handleChange("company")} />
         </Grid>
 
         <Grid item xs={12} sm={12} px={2} py={1}>

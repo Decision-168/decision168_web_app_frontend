@@ -18,7 +18,6 @@ const KPISection = ({ goalID }) => {
     const fetchAllData = async () => {
       try {
         const response = await getGoalsAllStrategiesList(goalID);
-
         setGoalInfo(response.goalRes);
         setGoalkpidetails(response.listResults);
       } catch (error) {}
