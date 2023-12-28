@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../../redux/action/userSlice";
 import { useSelector } from "react-redux";
-import { Grid, Stack, Typography } from "@mui/material";
+import { Grid, Skeleton, Stack, Typography } from "@mui/material";
 import { getAllCounts } from "../../api/modules/dashboardModule";
 
 export default function CardFeatures() {
@@ -56,14 +56,14 @@ export default function CardFeatures() {
     <Grid container>
       {items.map((item, index) => (
         <Grid item xs={6} sm={3} p={2} key={index}>
-          <Stack alignItems="flex-start" flexDirection={"column"}>
+          <Stack alignItems="center" justifyContent={"center"} flexDirection={"column"}>
             <Typography
               variant="caption"
-              textAlign={"left"}
+              textAlign={"center"}
               display="block"
               gutterBottom
             >
-              {item.count}
+              {item?.count ? item.count : <Skeleton variant="circular" width={30} height={30} animation="wave"/>  }
             </Typography>
             <Typography
               variant="text"
@@ -78,7 +78,7 @@ export default function CardFeatures() {
               }}
               onClick={() => navigate(item.link)}
             >
-              {item.label}
+              {item?.label ? item?.label : <Skeleton variant="rounded" width={100} height={20} animation="wave"/> }
             </Typography>
           </Stack>
         </Grid>
