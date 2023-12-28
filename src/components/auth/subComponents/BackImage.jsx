@@ -10,7 +10,7 @@ export default function BackImage() {
   const theme = useTheme();
   const styles = AuthStyles();
   return (
-    <Box sx={styles.backGroundImage} p={4} color="white">
+    <Box sx={styles.backGroundImage} p={3} color="white">
       <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
         <img src={logo} alt="logo" style={{ width: "10%" }} />
         <Grid container wrap="nowrap" spacing={4}>

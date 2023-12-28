@@ -16,7 +16,7 @@ export default function Register() {
 
   return (
     <Grid container component="main" sx={{ maxHeight: "100vh", minHeight:"100vh", maxWidth:"100vw", boxSizing:"border-box" }}>
-      <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
+      <Grid item xs={12} sm={12} md={8} lg={9} xl={9} elevation={0} square bgcolor={theme.palette.secondary.main}>
         <BackImage />
       </Grid>
       <Grid
@@ -30,22 +30,23 @@ export default function Register() {
         elevation={6}
         square
         bgcolor={theme.palette.secondary.main}
-        sx={{ position: "relative", minHeight: "100vh" }}
+        sx={{ position: "relative"}}
       >
         <Stack
           direction="column"
           justifyContent="space-between"
-          alignItems="center"
+          alignItems="left"
           color="white"
-          p={4}
+          p={3}
           sx={{ height: "100%" }}
         >
-          <Box>
+  
             {/* Decision-168 logo */}
             <Box mb={2}>
               <Brand />
             </Box>
 
+            <Box sx={{m:0.3}}>
             {/* Welcome and text */}
             <Header
               title="Register account"
@@ -56,12 +57,13 @@ export default function Register() {
             <Box my={0}>
               <Form />
             </Box>
+            </Box>
 
             {/* Social Media platforms */}
             {/* <Box mt={2}>
               <SocialMedia title="Sign up using" />
             </Box> */}
-          </Box>
+      
           {/* Navigation */}
           <Navigation
             question="Already have an account?"

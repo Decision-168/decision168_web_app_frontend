@@ -47,7 +47,7 @@ const generateMenuItems = (portfolioId) => {
       { icon: <DeleteForever />, text: "Trash", link: "/trash" },
     ];
 
-    return [...baseItems, ...portfolioItems];
+    return [baseItems[0], ...portfolioItems, baseItems[1], baseItems[2]];
   }
 
   return baseItems;

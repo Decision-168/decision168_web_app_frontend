@@ -54,7 +54,7 @@ export default function Form() {
       component="form"
       noValidate
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ mt: 1 }}
+      // sx={{ mt: 1 }}
     >
       <Box sx={{ height: "65px" }}>
         <CustomTextField
@@ -87,7 +87,7 @@ export default function Form() {
         />
       </Box>
 
-      <Box mb={1}>
+      <Box mb={1} sx={{maxWidth:"100%", overflow:"hidden"}}>
         <ReCAPTCHA
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           onChange={handleCaptchaChange}

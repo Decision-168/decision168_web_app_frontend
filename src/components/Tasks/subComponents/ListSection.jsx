@@ -61,4 +61,4 @@ const ListSection = ({ rows, setRows }) => {
   );
 };
 
-export default memo(ListSection);
+export default ListSection;
