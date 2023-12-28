@@ -36,10 +36,7 @@ const ProjectOverview = () => {
   const fetchNotifications = async () => {
     try {
       const response = await notificationsClear(pid, userID);
-      console.log(response.message);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -149,7 +146,9 @@ const ProjectOverview = () => {
                   startIcon={<ArrowBack />}
                   size="small"
                   sx={{ background: "#383838", color: "#fff" }}
-                  onClick={() => navigate("/kpi-overview")}
+                  onClick={() =>
+                    navigate(`/kpi-overview/${projectData?.project?.sid}`)
+                  }
                 >
                   Go TO KPI
                 </Button>

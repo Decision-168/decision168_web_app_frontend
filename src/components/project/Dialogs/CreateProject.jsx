@@ -267,6 +267,7 @@ const CreateProject = ({ flag, gid, sid, passPID, refreshData }) => {
         plink_comment: projectLinkComments,
       };
       const response = await InsertProjectData(data);
+      dispatch(closeModal("create-project"));
       toast.success(`${response.message}`);
       navigate(`/projects-overview/${response.pid}`);
     } catch (error) {

@@ -43,31 +43,18 @@ export default function Pricing() {
   const styles = pricingStyles();
   const dispatch = useDispatch();
   const theme = useTheme();
-  // const [btnIndex, setBtnIndex] = useState();
-  // const subscriptionPlan = "Professional";
-
-  // useEffect(() => {
-  //   if (subscriptionPlan === "Solo") {
-  //     setBtnIndex(0);
-  //   }
-  //   if (subscriptionPlan === "Professional") {
-  //     setBtnIndex(1);
-  //   }
-  //   if (subscriptionPlan === "Business") {
-  //     setBtnIndex(2);
-  //   }
-  // }, []);
 
   const [getPackages, setPackages] = useState();
   const [showFreeBut, setShowFreeBut] = useState("no");
   const [userPackagePrice, setUserPackagePrice] = useState();
   const [userCouponPack, setuserCouponPack] = useState("no");
+  const [userPackValidity, setuserPackValidity] = useState();
 
   const fetchPricingPackages = async () => {
     try {
       const response = await getAllPack(user_id);
       const response3 = await getPackageDetails(user_package_id);
-      console.log(response, response3);
+      setuserPackValidity(response3.validity);
       setuserCouponPack(response3.coupon_pack);
       setUserPackagePrice(response3.pack_price);
       setPackages(response);
@@ -102,11 +89,18 @@ export default function Pricing() {
   const monthly = filterByValidity(getPackages, "billed monthly");
   const annually = filterByValidity(getPackages, "billed annually");
   const enterprise = filterByValidity(getPackages, " Days");
+
   const monthlyCards = [...free, ...monthly, ...enterprise];
+
+  const filterByCoupon = (packages, coupon_pack) =>
+    packages ? packages.filter((i) => i.coupon_pack === coupon_pack) : [];
+  const getfree = filterByCoupon(getPackages, "yes");
+
   const yearlyFilter = (packName) =>
     annually.filter((i) => i.pack_name === packName);
+
   const yearlyCards = [
-    ...free,
+    ...(free.length > 0 ? free : getfree),
     ...yearlyFilter("Professional"),
     ...yearlyFilter("Business"),
     ...enterprise,
@@ -117,6 +111,15 @@ export default function Pricing() {
       setValidity(newValue);
     }
   };
+
+  useEffect(() => {
+    if (userPackValidity != undefined) {
+      if (userPackValidity === "monthly" || userPackValidity === "yearly") {
+        setValidity(userPackValidity);
+      }
+    }
+  }, [userPackValidity]);
+
   const iconStyles = {
     color: "#C7DF19",
     width: "35px",
@@ -207,65 +210,69 @@ export default function Pricing() {
         )}
       </Stack>
       <Grid container spacing={2}>
-        {getPackages && validity === "monthly"
-          ? monthlyCards?.map((plan, index) => (
-              <Grid key={index} item xs={12} sm={6} lg={3}>
-                <Paper elevation={2} sx={{ p: 2 }}>
-                  <PricingCardHeader
-                    name={plan.pack_name}
-                    icon={getIconByPackId(plan.pack_name)}
-                    description={plan.pack_tagline}
-                  />
-                  <PricingCardBody
-                    styles={styles}
-                    features={plan.features}
-                    priceID={plan.stripe_price_id}
-                    price={plan.pack_price}
-                    validity={plan.validity}
-                    isSpecialOffer={plan.pack_name == "Business" && true}
-                    contactUs={
-                      plan.stripe_link == "no" &&
-                      plan.coupon_pack == "no" &&
-                      true
-                    }
-                    packID={plan.pack_id}
-                    selectedPackID={user_package_id}
-                    packPrice={plan.pack_price}
-                    selectedPackPrice={userPackagePrice}
-                    CouponPack={userCouponPack}
-                  />
-                </Paper>
-              </Grid>
-            ))
-          : yearlyCards?.map((plan, index) => (
-              <Grid key={index} item xs={12} sm={6} lg={3}>
-                <Paper elevation={2} sx={{ p: 2 }}>
-                  <PricingCardHeader
-                    name={plan.pack_name}
-                    icon={getIconByPackId(plan.pack_name)}
-                    description={plan.pack_tagline}
-                  />
-                  <PricingCardBody
-                    styles={styles}
-                    features={plan.features}
-                    priceID={plan.stripe_price_id}
-                    price={plan.pack_price}
-                    validity={plan.validity}
-                    isSpecialOffer={plan.pack_name == "Business" && true}
-                    contactUs={
-                      plan.stripe_link == "no" &&
-                      plan.coupon_pack == "no" &&
-                      true
-                    }
-                    packID={plan.pack_id}
-                    selectedPackID={user_package_id}
-                    packPrice={plan.pack_price}
-                    selectedPackPrice={userPackagePrice}
-                    CouponPack={userCouponPack}
-                  />
-                </Paper>
-              </Grid>
-            ))}
+        {getPackages &&
+          userPackagePrice !== undefined &&
+          validity === "monthly" &&
+          monthlyCards?.map((plan, index) => (
+            <Grid key={index} item xs={12} sm={6} lg={3}>
+              <Paper elevation={2} sx={{ p: 2 }}>
+                <PricingCardHeader
+                  name={plan.pack_name}
+                  icon={getIconByPackId(plan.pack_name)}
+                  description={plan.pack_tagline}
+                />
+                <PricingCardBody
+                  styles={styles}
+                  features={plan.features}
+                  priceID={plan.stripe_price_id}
+                  price={plan.pack_price}
+                  validity={plan.validity}
+                  isSpecialOffer={plan.pack_name === "Business" && true}
+                  contactUs={
+                    plan.stripe_link === "no" &&
+                    plan.coupon_pack === "no" &&
+                    true
+                  }
+                  packID={plan.pack_id}
+                  selectedPackID={user_package_id}
+                  packPrice={plan.pack_price}
+                  selectedPackPrice={userPackagePrice}
+                  CouponPack={userCouponPack}
+                />
+              </Paper>
+            </Grid>
+          ))}
+        {userPackagePrice !== undefined &&
+          validity === "yearly" &&
+          yearlyCards?.map((plan, index) => (
+            <Grid key={index} item xs={12} sm={6} lg={3}>
+              <Paper elevation={2} sx={{ p: 2 }}>
+                <PricingCardHeader
+                  name={plan.pack_name}
+                  icon={getIconByPackId(plan.pack_name)}
+                  description={plan.pack_tagline}
+                />
+                <PricingCardBody
+                  styles={styles}
+                  features={plan.features}
+                  priceID={plan.stripe_price_id}
+                  price={plan.pack_price}
+                  validity={plan.validity}
+                  isSpecialOffer={plan.pack_name === "Business" && true}
+                  contactUs={
+                    plan.stripe_link === "no" &&
+                    plan.coupon_pack === "no" &&
+                    true
+                  }
+                  packID={plan.pack_id}
+                  selectedPackID={user_package_id}
+                  packPrice={plan.pack_price}
+                  selectedPackPrice={userPackagePrice}
+                  CouponPack={userCouponPack}
+                />
+              </Paper>
+            </Grid>
+          ))}
       </Grid>
       <ReduxDialog
         value="free-trial"

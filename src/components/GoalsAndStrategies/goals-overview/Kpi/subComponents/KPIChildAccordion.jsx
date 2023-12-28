@@ -18,7 +18,7 @@ import CustomDialog from "../../../../common/CustomDialog";
 import { useNavigate } from "react-router";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 
-const KPIChildAccordion = ({project}) => {
+const KPIChildAccordion = ({ project }) => {
   const [openProject, setOpenProject] = useState(false);
   const navigate = useNavigate();
   const handleProjectClose = () => {
@@ -27,9 +27,9 @@ const KPIChildAccordion = ({project}) => {
   const handleProjectOpen = () => {
     setOpenProject(true);
   };
-    const handleViewTasks = () => {
-      navigate("/project-tasks-list");
-    };
+  const handleViewTasks = () => {
+    navigate("/project-tasks-list");
+  };
   return (
     <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
       <AccordionSummary
@@ -61,11 +61,11 @@ const KPIChildAccordion = ({project}) => {
         >
           <Grid item xs={7} textAlign={"left"}>
             <Typography sx={{ fontSize: 12 }}>
-            {project?.pdes ? project?.pdes : "No Description!"}
+              {project?.pdes ? project?.pdes : "No Description!"}
             </Typography>
           </Grid>
           <Grid xs={3} alignSelf={"center"}>
-            <LinearProgressWithLabel value={project?.progressRes}/>
+            <LinearProgressWithLabel value={project?.progressRes} />
           </Grid>
           <Grid
             xs={2}
@@ -100,11 +100,11 @@ const KPIChildAccordion = ({project}) => {
         handleClose={handleProjectClose}
         open={openProject}
         modalTitle="Dashboard Module"
-        redirectPath={"/projects-overview"}
+        redirectPath={`/projects-overview/${project?.pid}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup />
+        <ViewProjectPopup pid={project?.pid} refreshData={project} />
       </CustomDialog>
     </Accordion>
   );

@@ -119,9 +119,14 @@ const ViewKpiPopup = ({ kpi_id }) => {
   const handleProjectClose = () => {
     setOpenProject(false);
   };
-  const handleProjectOpen = () => {
+
+  const [projectDetail, setProjectDetail] = useState([]);
+
+  const handleProjectOpen = (get_projectDetail) => {
+    setProjectDetail(get_projectDetail);
     setOpenProject(true);
   };
+
   const handleFileIt = () => {
     dispatch(
       openCnfModal({
@@ -285,11 +290,14 @@ const ViewKpiPopup = ({ kpi_id }) => {
         handleClose={handleProjectClose}
         open={openProject}
         modalTitle="Dashboard Module"
-        redirectPath={"/projects-overview"}
+        redirectPath={`/projects-overview/${projectDetail?.pid}`}
         showModalButton={true}
         modalSize="md"
       >
-        <ViewProjectPopup />
+        <ViewProjectPopup
+          pid={projectDetail?.pid}
+          refreshData={projectDetail}
+        />
       </CustomDialog>
       <ReduxDialog
         value="create-project"
