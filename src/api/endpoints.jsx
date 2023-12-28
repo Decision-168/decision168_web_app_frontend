@@ -72,8 +72,8 @@ const api = {
   //goal-request
   GoalRequest: "goal-request/",
 
-  // //goal-invite-reject-request
-  // GoalInviteRejectRequest: "goal-invite-reject-request/",
+  //goal-invite-reject-request
+  GoalInviteRejectRequest: "goal-invite-reject-request/",
 
   //goal-overview-request
   GoalOverviewRequest: "goal/goal-overview-request/",

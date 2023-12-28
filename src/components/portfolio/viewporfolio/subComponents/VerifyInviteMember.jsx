@@ -106,6 +106,10 @@ export default function VerifyInviteMember() {
 
             {userStatus === "already_rejected" &&
               "You've already REJECTED the invitation!"}
+
+            {userStatus === "accepted" && "You've  ACCEPTED the invitation!"}
+
+            {userStatus === "rejected" && "You've  REJECTED the invitation!"}
           </Typography>
 
           {userStatus === "registered" && (

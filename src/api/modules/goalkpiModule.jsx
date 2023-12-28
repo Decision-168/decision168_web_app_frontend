@@ -57,16 +57,16 @@ export const getGoalRequest = async (gid, gmid, flag) => {
   }
 };
 
-// export const getGoalInviteRejectRequest = async (gid, igm_id, flag) => {
-//   try {
-//     const response = await axios.get(
-//       `${apiUrl}${api.GoalInviteRejectRequest}${gid}/${igm_id}/${flag}`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const getGoalInviteRejectRequest = async (gid, igm_id, flag) => {
+  try {
+    const response = await axios.get(
+      `${apiUrl}${api.GoalInviteRejectRequest}${gid}/${igm_id}/${flag}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getGoalOverviewRequest = async (user_id, gid) => {
   try {

@@ -380,7 +380,9 @@ const BasicAccordion = ({ pid, pending, displayBtns }) => {
             bgColor={"#fde1e1"}
             pending={pending}
             displayBtns={displayBtns}
-            data={gAllDetails.InvitedProjectMemberRes}
+            data={gAllDetails.InvitedProjectMemberRes?.filter(
+              (i) => i.status === "pending"
+            )}
           />
           {!pending && (
             <MembersChildAccordion
