@@ -183,7 +183,7 @@ const ViewProjectPopup = ({
     dispatch(openModal("create-new-task"));
   };
   const handleViewAllTask = () => {
-    navigate("/project-tasks-list");
+    navigate(`/project-tasks-list/${pid}`);
   };
 
   //Check Button Visibility

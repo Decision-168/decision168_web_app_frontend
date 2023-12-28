@@ -27,6 +27,7 @@ export default function More({
   subTask,
   isParentRow,
   fetchData,
+  currentPage,
   anchorEl,
   setAnchorEl,
 }) {
@@ -90,7 +91,11 @@ export default function More({
     const user_id = user?.reg_id;
     try {
       const response = await fileItTask(task_id, user_id);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "fileItTask" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -103,7 +108,11 @@ export default function More({
     const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "fileItSubTask" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -139,7 +148,11 @@ export default function More({
 
     try {
       const response = await patchDeleteTask(task_id, user_id);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "deleteTask" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -152,7 +165,11 @@ export default function More({
     const user_id = user?.reg_id;
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "deleteSubTask" }));
       toast.success(`${response.message}`);
     } catch (error) {

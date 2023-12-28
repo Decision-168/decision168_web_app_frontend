@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
@@ -41,20 +41,22 @@ export default function DashboardLayout({ children }) {
     }
   }, [dispatch, decodedToken?.id]);
 
-  useEffect(() => {
-    dispatch(getUserDetailsAsync(decodedToken?.id));
-  }, [dispatch, decodedToken?.id]);
-
-  useEffect(() => {
-    const alerts = async () => {
-      try {
-        const userId = user?.reg_id;
+  const alerts = useCallback(async () => {
+    try {
+      const userId = user?.reg_id;
+      if (userId) {
         dispatch(getAlertNotificationsAsync(userId));
-      } catch (error) {}
-    };
-
+      }
+    } catch (error) {
+      console.error('Error while fetching alert notifications:', error);
+      // Handle error as needed
+    }
+  }, [dispatch, user]);
+  
+  useEffect(() => {
     alerts();
-  }, [dispatch]);
+  }, [alerts]);
+  
 
   const toggleDrawer = () => {
     setOpen(!open);

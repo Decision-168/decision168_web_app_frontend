@@ -95,8 +95,9 @@ export default function Form() {
         />
       </Box>
 
-      <Box mb={1} sx={{maxWidth:"100%", overflow:"hidden"}}>
+      <Box mb={1} sx={{maxWidth:"100%", overflow:"hidden", bgcolor:"#FFF", borderRadius:"3px"}}>
         <ReCAPTCHA
+        style={{border:"none"}}
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           onChange={handleCaptchaChange}
         />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useCallback} from "react";
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { selectUserDetails } from "../../../redux/action/userSlice";
@@ -13,20 +13,25 @@ export default function ResponsiveGrid() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
 
-  useEffect(() => {
-    const recentNotifications = async () => {
-      try {
-        const id = user?.reg_id;
+  const recentNotifications = useCallback(async () => {
+    try {
+      const id = user?.reg_id;
+      // Check if id is valid before making the API call
+      if (id) {
         const response = await getRecentNotifications(id);
         setData(response);
-      } catch (error) {
-      } finally {
-        setLoading(false);
       }
-    };
-
+    } catch (error) {
+      console.error('Error while fetching recent notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+  
+  useEffect(() => {
     recentNotifications();
-  }, []);
+  }, [recentNotifications]);
+  
 
   return (
     <Box sx={{ flexGrow: 1 }}>

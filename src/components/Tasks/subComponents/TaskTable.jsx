@@ -65,7 +65,7 @@ import TasksModuleDatePicker from "./TasksModuleDatePicker";
 import AttachTaskFile from "./AttachTaskFile";
 import AttachSubtaskFile from "./AttachSubtaskFile";
 
-export default function TaskTable({ rows, setRows, fetchData }) {
+export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
   const theme = useTheme();
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
@@ -194,7 +194,11 @@ export default function TaskTable({ rows, setRows, fetchData }) {
     const data = { tid: rowId, tassignee: taskAssignee };
     try {
       const response = await changeTaskStatusCheckox(regId, data);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "changeTaskCheckboxStatus" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -239,7 +243,11 @@ export default function TaskTable({ rows, setRows, fetchData }) {
     const data = { stid: subRowId, stassignee: subTaskAssignee };
     try {
       const response = await changeSubTaskStatusCheckox(regId, data);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "changeSubTaskCheckboxStatus" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -567,8 +575,6 @@ export default function TaskTable({ rows, setRows, fetchData }) {
       toast.error(`${error?.response?.data?.message}`);
     }
   };
-
-  //Task Duedate
   const handleSubTaskDueDate = (subtaskId) => async (date) => {
     try {
       const newDate = date;
@@ -869,6 +875,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                               handleCloseTaskPreviewDialog
                                             }
                                             fetchData={fetchData}
+                                            currentPage={currentPage}
                                           />
                                         </CustomDialog>
                                       )}
@@ -1180,6 +1187,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
                                     task={taskToEdit}
                                     isParentRow={true}
                                     fetchData={fetchData}
+                                    currentPage={currentPage}
                                     anchorEl={openTaskMenu}
                                     setAnchorEl={setOpenTaskMenu}
                                   />
@@ -1297,7 +1305,7 @@ export default function TaskTable({ rows, setRows, fetchData }) {
 
                                         {subRowId === subrow?.stid && (
                                           <CustomDialog handleClose={handleCloseSubTaskPreviewDialog} open={openSubTaskPreviewDialog} modalTitle="Subtask" redirectPath={`/subtasks-overview/${subRowId}`} showModalButton={true} modalSize="lg" data={{tname: row?.tname, tproject_assign: row?.tproject_assign}}>
-                                            <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData}  taskData={row} />
+                                            <SubtaskPreview styles={styles} subtaskId={subRowId} closePreview={handleCloseSubTaskPreviewDialog} fetchData={fetchData} currentPage={currentPage}  taskData={row} />
                                           </CustomDialog>
                                         )}
                                       </>

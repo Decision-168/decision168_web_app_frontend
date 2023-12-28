@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../../redux/action/userSlice";
 import { useSelector } from "react-redux";
@@ -11,21 +11,28 @@ export default function CardFeatures() {
   const [loading, setLoading] = useState(true);
   const [counts, setCounts] = useState({});
 
-  useEffect(() => {
-    const allCounts = async () => {
-      try {
-        const email = user?.email_address;
-        const id = user?.reg_id;
+  const fetchAllCounts = useCallback(async (email, id) => {
+    try {
+      // Check if both email and id are valid before making the API call
+      if (email && id) {
         const response = await getAllCounts(email, id);
         setCounts(response);
-      } catch (error) {
-      } finally {
-        setLoading(false);
       }
-    };
-
-    allCounts();
-  }, [user?.email_address, user?.reg_id]);
+    } catch (error) {
+      // Handle error as needed
+    } finally {
+      setLoading(false);
+    }
+  }, [setCounts, getAllCounts]);
+  
+  useEffect(() => {
+    const email = user?.email_address;
+    const id = user?.reg_id;
+    if (email && id) {
+      fetchAllCounts(email, id);
+    }
+  }, [fetchAllCounts, user]);
+  
 
   const items = [
     {
