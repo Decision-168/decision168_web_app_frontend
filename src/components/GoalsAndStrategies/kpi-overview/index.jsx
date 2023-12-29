@@ -108,7 +108,7 @@ const KPIOverview = () => {
                   sx={{ background: "#383838", color: "#fff" }}
                   onClick={() => navigate(`/goal-overview/${getKPIName.gid}`)}
                 >
-                  Back
+                  Go To Goal
                 </Button>
               </Box>
             </Box>

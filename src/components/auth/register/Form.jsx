@@ -13,7 +13,10 @@ import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import CustomTextField from "../../common/CustomTextField";
 import ReCAPTCHA from "react-google-recaptcha";
-import { registerUser } from "../../../api/modules/authModule";
+import {
+  RecaptchaVerification,
+  registerUser,
+} from "../../../api/modules/authModule";
 import { toast } from "react-toastify";
 import AuthButton from "../subComponents/AuthButton";
 export default function Form() {
@@ -23,12 +26,35 @@ export default function Form() {
     formState: { errors },
   } = useForm();
   const [isCaptchaVerified, setCaptchaVerified] = useState(false);
+  const [recaptchaKey, setRecaptchaKey] = useState(1);
+  const [recaptchaKeyError, setRecaptchaKeyError] = useState(null);
   const [agreeTermsPrivacy, setAgreeTermsPrivacy] = useState("no");
   const [loading, setLoading] = useState(false);
 
-  const handleCaptchaChange = (response) => {
-    if (response) {
-      setCaptchaVerified(true);
+  const handleCaptchaChange = async (token) => {
+    if (token) {
+      try {
+        const passData = {
+          recaptchaToken: token,
+        };
+        const response = await RecaptchaVerification(passData);
+        if (response.success === true) {
+          setCaptchaVerified(true);
+          setRecaptchaKeyError(null);
+        } else {
+          setCaptchaVerified(false);
+          setRecaptchaKey((prevKey) => prevKey + 1);
+          setRecaptchaKeyError(
+            "ReCAPTCHA verification failed. Please try again."
+          );
+        }
+      } catch (error) {
+        setCaptchaVerified(false);
+        setRecaptchaKey((prevKey) => prevKey + 1);
+        setRecaptchaKeyError(
+          "ReCAPTCHA verification failed. Please try again."
+        );
+      }
     }
   };
 
@@ -89,9 +115,15 @@ export default function Form() {
 
       <Box mb={1} sx={{maxWidth:"100%", overflow:"hidden"}}>
         <ReCAPTCHA
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          key={recaptchaKey}
+          sitekey="6Lcljz4pAAAAAHq2EuMksbFq3ZM7AceT5527GkFT"
           onChange={handleCaptchaChange}
         />
+        {recaptchaKeyError && (
+          <div style={{ color: "red", marginTop: "10px", fontSize: "12px" }}>
+            <span>{recaptchaKeyError}</span>
+          </div>
+        )}
       </Box>
 
       <FormControlLabel

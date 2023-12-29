@@ -13,7 +13,9 @@ export const registerUser = async (formData) => {
 
 export const verifyUser = async (token) => {
   try {
-    const response = await axios.get(`${apiUrl}${api.userVerification}${token}`);
+    const response = await axios.get(
+      `${apiUrl}${api.userVerification}${token}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -31,7 +33,10 @@ export const loginUser = async (formData) => {
 
 export const forgotPassword = async (formData) => {
   try {
-    const response = await axios.post(`${apiUrl}${api.userForgotPass}`, formData);
+    const response = await axios.post(
+      `${apiUrl}${api.userForgotPass}`,
+      formData
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -49,12 +54,23 @@ export const changePassword = async (password, id) => {
   }
 };
 
-
 export const updateAuthUserPassword = async (userId, password) => {
   try {
-    const response = await axios.patch(`${apiUrl}${api.updateAuthUserPassword}${userId}`, {
-      password: password,
-    });
+    const response = await axios.patch(
+      `${apiUrl}${api.updateAuthUserPassword}${userId}`,
+      {
+        password: password,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const RecaptchaVerification = async (data) => {
+  try {
+    const response = await axios.post(`${apiUrl}${api.VerifyRecaptcha}`, data);
     return response.data;
   } catch (error) {
     throw error;
