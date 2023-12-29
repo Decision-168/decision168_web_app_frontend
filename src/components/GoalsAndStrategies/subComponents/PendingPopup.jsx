@@ -83,6 +83,7 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
     const RequestPerformAction = async () => {
       try {
         const response = await getGoalRequest(gid, gmid, flag);
+
         if (response?.user_status === "pages-404") {
           return navigate("/portfolio-goals", { replace: true });
         }
@@ -93,10 +94,10 @@ const PendingPopup = ({ goalID, id, handleClose, fetchAllData }) => {
         }
         if (["/portfolio-goals"].includes(window.location.pathname)) {
           handleClose();
+          fetchAllData();
         } else {
           navigate("/portfolio-goals");
         }
-        fetchAllData();
       } catch (error) {
         toast.error(`${error.response?.data?.error}`);
       }
