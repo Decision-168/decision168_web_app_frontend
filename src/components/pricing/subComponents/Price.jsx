@@ -92,12 +92,14 @@ const Price = ({
       if (packID == 1) {
         return "Downgrade";
       }
-      if (selectedPackPrice >= packPrice) {
-        if (selectedPackPrice < packPrice) {
-          return "Upgrade";
-        }
-        return null;
+
+      if (
+        parseFloat(Number(selectedPackPrice).toFixed(2)) <=
+        parseFloat(Number(packPrice).toFixed(2))
+      ) {
+        return "Upgrade";
       }
+      return null;
     }
   };
 

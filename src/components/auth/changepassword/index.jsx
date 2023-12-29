@@ -16,7 +16,7 @@ export default function ChangePassword() {
 
   return (
     <Grid container component="main" sx={{ maxHeight: "100vh", minHeight:"100vh", maxWidth:"100vw", boxSizing:"border-box" }}>
-      <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+      <Grid item xs={12} sm={12} md={9} lg={9} xl={9} elevation={0} square bgcolor={theme.palette.secondary.main}>
         <BackImage />
       </Grid>
       <Grid
@@ -37,7 +37,7 @@ export default function ChangePassword() {
           justifyContent="space-between"
           alignItems="center"
           color="white"
-          p={4}
+          p={3}
           sx={{ height: "100%" }}
         >
           <Box color="white">
@@ -46,6 +46,8 @@ export default function ChangePassword() {
               <Brand />
             </Box>
 
+
+            <Box sx={{m:0.3}}>
             {/* Welcome and text */}
             <Header
               title="Change Password"
@@ -53,8 +55,9 @@ export default function ChangePassword() {
             />
 
             {/* Form */}
-            <Box my={2}>
+            <Box my={1}>
               <Form />
+            </Box>
             </Box>
           </Box>
 

@@ -236,7 +236,7 @@ const ProjectIndex = () => {
               onClick={() => dispatch(openModal("create-project"))}
             >
               Create New
-            </Button>
+            </Button>   
           </Box>
         </Grid>
         <Grid

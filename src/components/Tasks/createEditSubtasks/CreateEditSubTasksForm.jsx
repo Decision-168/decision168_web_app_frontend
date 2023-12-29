@@ -1,20 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Chip,
-  DialogActions,
-  DialogContent,
-  Divider,
-  Grid,
-  InputLabel,
-  Paper,
-  Stack,
-  Tooltip,
-  IconButton,
-  Autocomplete,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Chip, DialogActions, DialogContent, Divider, Grid, InputLabel, Paper, Stack, Tooltip, IconButton, Autocomplete, TextField } from "@mui/material";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { useTheme } from "@mui/material/styles";
 import CustomMultilineTextField from "../../common/CustomMultilineTextField";
@@ -25,12 +10,7 @@ import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import SelectOption from "../../common/SelectOption";
-import {
-  getProjectTeamMembers,
-  getProjectsForSelectMenu,
-  insertSubtask,
-  updateSubtask,
-} from "../../../api/modules/taskModule";
+import { getProjectTeamMembers, getProjectsForSelectMenu, insertSubtask, updateSubtask } from "../../../api/modules/taskModule";
 import CircularLoader from "../../common/CircularLoader";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import SelectOptionSubtaskForm from "../../common/SelectOptionSubtaskForm";
@@ -38,6 +18,7 @@ import AddAnotherLinkSubtaskForm from "../subComponents/AddAnotherLinkSubtaskFor
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { createFileArray } from "../../../helpers/createFileArray";
+import { fetchAssignees } from "../../../helpers/fetchAssignees";
 
 const priorities = [
   { name: "High", value: "high" },
@@ -110,37 +91,9 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     fetchProjects();
   }, [storedPortfolioId, userId]);
 
-  // fetch project team member (Assignees)
   useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await getProjectTeamMembers({ pid: taskData?.tproject_assign });
-
-        // Find the user in the team members
-        const foundAssignee = response.find((assignee) => assignee.reg_id === userId);
-
-          // Check if an assignee with the given reg_id was found
-          if (foundAssignee) {
-            // Check for duplicates before adding the new entry
-            const isDuplicate = response.some((member) => member.reg_id === userId);
-  
-            // Update state with a new entry only if not a duplicate
-            if (!isDuplicate) {
-              setAssignees([...response, { ...foundAssignee, name: 'Assign to me' }]);
-            } else {
-              setAssignees(response);
-            }
-          } else {
-            // No assignee found, update state with the original team members
-            setAssignees(response);
-          }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchTeamMembers();
-  }, [taskData?.tproject_assign, userId]);
+    fetchAssignees(taskData?.gid, storedPortfolioId, userId, setAssignees);
+  }, [taskData?.gid, storedPortfolioId]);
 
   useEffect(() => {
     if (editMode) {
@@ -174,9 +127,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
           stnote: subtaskData?.stnote,
           stfile: files ? files : [],
           stpriority: subtaskData?.stpriority,
-          stdue_date: subtaskData?.stdue_date
-            ? new Date(subtaskData?.stdue_date)
-            : "",
+          stdue_date: subtaskData?.stdue_date ? new Date(subtaskData?.stdue_date) : "",
           team_member2: subtaskData?.stassignee,
           slinks: [],
           slink_comments: [],
@@ -184,7 +135,6 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       ]);
     }
   }, [editMode, subtaskData, files]);
-
 
   const handleFilesChange = (index) => (newValue) => {
     setFiles(newValue);
@@ -298,35 +248,22 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
     // Display a toast message for empty fields in the main form
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(
-        `Please fill in all required fields: ${errorFields.join(", ")}`
-      );
+      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
       return;
     }
 
     // Validate each task within taskArray
     for (const task of formData.taskArray) {
       // Define the required fields for each task
-      const taskRequiredFields = [
-        "stname",
-        "stdue_date",
-        "stpriority",
-        "team_member2",
-      ];
+      const taskRequiredFields = ["stname", "stdue_date", "stpriority", "team_member2"];
 
       // Check for empty required fields in each task
-      const emptyTaskFields = taskRequiredFields.filter(
-        (field) => !task[field]
-      );
+      const emptyTaskFields = taskRequiredFields.filter((field) => !task[field]);
 
       // Display a toast message for empty fields in each task
       if (emptyTaskFields.length > 0) {
-        const errorTaskFields = emptyTaskFields.map(
-          (field) => fieldLabels[field]
-        );
-        toast.error(
-          `Please fill in all required fields: ${errorTaskFields.join(", ")}`
-        );
+        const errorTaskFields = emptyTaskFields.map((field) => fieldLabels[field]);
+        toast.error(`Please fill in all required fields: ${errorTaskFields.join(", ")}`);
         return;
       }
     }
@@ -341,14 +278,12 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       stname: formData?.taskArray[0]?.stname,
       stdes: formData?.taskArray[0]?.stdes,
       stnote: formData?.taskArray[0]?.stnote,
-      stfile:
-        files?.map((file, index) => ({ [index]: file.name })) ||
-        formData?.taskArray[0]?.stfile,
+      stfile: files?.map((file, index) => ({ [index]: file.name })) || formData?.taskArray[0]?.stfile,
       tpriority: formData?.taskArray[0]?.stpriority,
       tdue_date: formData?.taskArray[0]?.stdue_date,
     };
 
-    const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData }
+    const finalData = { user_id: userId, portfolio_id: storedPortfolioId, data: editeData };
 
     try {
       setLoading(true);
@@ -368,9 +303,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       navigate(`/tasks-overview/${taskData?.tid}`); // it is creating issue if adding multiple subtasks
       toast.success(response.message);
     } catch (error) {
-      toast.error(
-        error.response?.data?.error || "An error occurred. Please try again."
-      );
+      toast.error(error.response?.data?.error || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -381,15 +314,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
       <DialogContent dividers>
         <Grid container>
           <Grid item xs={12} sm={6} px={2} py={1}>
-            <CustomLabelTextField
-              label="Task"
-              name="tname"
-              required={true}
-              placeholder="Enter Task Name"
-              value={formValues.tname}
-              onChange={handleChange("tname")}
-              isDisabled={true}
-            />
+            <CustomLabelTextField label="Task" name="tname" required={true} placeholder="Enter Task Name" value={formValues.tname} onChange={handleChange("tname")} isDisabled={true} />
           </Grid>
 
           <Grid item xs={12} sm={6} px={2} py={1}>
@@ -412,26 +337,12 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
         {fields?.map((field, index) => (
           <Box key={index}>
             <Divider sx={{ my: 3 }}>
-              <Chip
-                label={
-                  field.length === 1
-                    ? "Please Enter Subtask Details"
-                    : `Please enter details for Subtask ${index + 1}`
-                }
-              />
+              <Chip label={field.length === 1 ? "Please Enter Subtask Details" : `Please enter details for Subtask ${index + 1}`} />
             </Divider>
-            <Paper
-              elevation={0}
-              sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}
-            >
+            <Paper elevation={0} sx={{ width: "100%", padding: "5px", bgcolor: "#F7F7F7" }}>
               <Stack direction="row" justifyContent="end" alignItems="center">
                 {field.length > 1 && (
-                  <Tooltip
-                    arrow
-                    title="Remove Subtask"
-                    size="small"
-                    placement="top-end"
-                  >
+                  <Tooltip arrow title="Remove Subtask" size="small" placement="top-end">
                     <IconButton onClick={handleRemoveClick}>
                       <RemoveCircleRoundedIcon />
                     </IconButton>
@@ -447,9 +358,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Name"
                     name="stname"
                     value={fields[index].stname || ""}
-                    onChange={(event) =>
-                      handleFieldChange("stname")(event, index)
-                    }
+                    onChange={(event) => handleFieldChange("stname")(event, index)}
                   />
                 </Grid>
 
@@ -471,9 +380,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Description..."
                     name="stdes"
                     value={fields[index].stdes || ""}
-                    onChange={(event) =>
-                      handleFieldChange("stdes")(event, index)
-                    }
+                    onChange={(event) => handleFieldChange("stdes")(event, index)}
                   />
                 </Grid>
 
@@ -484,9 +391,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                     placeholder="Enter Subtask Note"
                     name="stnote"
                     value={fields[index].stnote || ""}
-                    onChange={(event) =>
-                      handleFieldChange("stnote")(event, index)
-                    }
+                    onChange={(event) => handleFieldChange("stnote")(event, index)}
                   />
                 </Grid>
 
@@ -523,15 +428,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
                 </Grid>
 
                 <Grid item xs={12} sm={6} px={2} py={1}>
-                  <CustomFileInput
-                    label="Attached File(s)"
-                    placeholder="Choose files..."
-                    multiple
-                    required={false}
-                    name="stfile"
-                    value={files}
-                    handleFilesChange={handleFilesChange(index)}
-                  />
+                  <CustomFileInput label="Attached File(s)" placeholder="Choose files..." multiple required={false} name="stfile" value={files} handleFilesChange={handleFilesChange(index)} />
                 </Grid>
 
                 {/* <Grid item xs={12} sm={12} px={2} py={2}>
@@ -580,20 +477,8 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
               </Button>
             )}
 
-            <Button
-              onClick={handleSubmit}
-              size="small"
-              type="submit"
-              variant="contained"
-              sx={{ ml: 1 }}
-            >
-              {loading ? (
-                <CircularLoader />
-              ) : editMode ? (
-                "Save Changes"
-              ) : (
-                "Create"
-              )}
+            <Button onClick={handleSubmit} size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
+              {loading ? <CircularLoader /> : editMode ? "Save Changes" : "Create"}
             </Button>
           </Grid>
         </Grid>

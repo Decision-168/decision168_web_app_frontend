@@ -1,13 +1,16 @@
 import { Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { memo } from "react";
 import LinearProgressWithLabel from "../../common/LinearProgressWithLabel";
-import { AssignmentTurnedInOutlined, VisibilityOutlined } from "@mui/icons-material";
+import {
+  AssignmentTurnedInOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
   const navigate = useNavigate();
-  const handleViewTasks = () => {
-    navigate("/project-tasks-list");
+  const handleViewTasks = (pid) => {
+    navigate(`/project-tasks-list/${pid}`);
   };
 
   return (
@@ -64,7 +67,7 @@ const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
                   <IconButton
                     aria-label="view"
                     size="small"
-                    onClick={handleViewTasks}
+                    onClick={()=>handleViewTasks(item.pid)}
                   >
                     <AssignmentTurnedInOutlined fontSize="small" />
                   </IconButton>
@@ -72,7 +75,10 @@ const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
 
                 <Tooltip title="Preview Project" placement="top">
                   <IconButton aria-label="view" size="small">
-                    <VisibilityOutlined fontSize="small" onClick={() => handleOpen()}/>
+                    <VisibilityOutlined
+                      fontSize="small"
+                      onClick={() => handleOpen(item)}
+                    />
                   </IconButton>
                 </Tooltip>
               </Grid>
