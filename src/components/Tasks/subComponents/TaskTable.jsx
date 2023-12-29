@@ -39,8 +39,6 @@ import AttachTaskFile from "./AttachTaskFile";
 import AttachSubtaskFile from "./AttachSubtaskFile";
 
 export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
-
-  console.log("currentPage  TaskTable====> ",currentPage)
   const theme = useTheme();
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
@@ -74,13 +72,10 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
   const [parenTaskIdFromChild, setParentTaskIdFromChild] = useState(null); 
 
   const handleTaskIdFromChild = (parentTaskId)  => {
-       console.log("parentTaskId ===>",parentTaskId)
-      //  setParentTaskIdFromChild(parentTaskId);
-       handleOpenSubrows(parentTaskId);
+      //setParentTaskIdFromChild(parentTaskId);
   }
 
   // useEffect(() => {
-  //   console.log("parenTaskIdFromChild =====>",parenTaskIdFromChild)
   //   handleOpenSubrows(parenTaskIdFromChild);
   // }, []) 
 

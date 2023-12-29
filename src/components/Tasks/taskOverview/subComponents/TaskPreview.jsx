@@ -283,7 +283,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) =
         showModalButton={false}
         modalSize="md"
       >
-        <CreateEditSubTasksForm taskData={task} />
+        <CreateEditSubTasksForm  taskData={task} />
       </ReduxDialog>
 
       <ReduxDialog

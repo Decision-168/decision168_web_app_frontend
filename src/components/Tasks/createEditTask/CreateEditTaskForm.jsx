@@ -11,7 +11,7 @@ import SelectOption from "../../common/SelectOption";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPorfolioDepartments, getPortfolios } from "../../../api/modules/porfolioModule";
-import { getProjectTeamMembers, getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
+import { getProjectTeamMembers, getProjectsForSelectMenu, getTaskDetails, insertTask, updateTask } from "../../../api/modules/taskModule";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +45,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   const [filteredDepartments, setFilteredDepartments] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(false);
+
 
   const [fields, setFields] = useState([
     {
@@ -86,6 +87,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       setSelectedProjectIdObject({ project_id: taskEditData?.tproject_assign });
     }
   }, [editMode, taskEditData]);
+
 
   useEffect(() => {
     if (editMode && taskEditData?.tlink && taskEditData?.tlink_comment) {
@@ -149,7 +151,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     // it will return the object of the selected project id from that we require dept_id
     const selectedProjectObject = projects?.find((p) => p.pid === selectedProjectIdObject?.project_id);
-    console.log("selectedProjectObject ====>",selectedProjectObject)
     setSelectedProjectDeptId(selectedProjectObject?.dept_id);
     setSelectedProjectGID(selectedProjectObject?.gid);
   }, [projects, selectedProjectIdObject?.project_id]);
@@ -219,6 +220,8 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       link_comments: commentsData,
     };
 
+    alert(`${JSON.stringify(formData)}`);
+
     const fieldLabels = {
       tname: "Task Name",
       portfolio_id: "Portfolio",
@@ -229,13 +232,15 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     };
 
     // Check for empty required fields
-    const requiredFields = Object.keys(formData);
+    // const requiredFields = Object.keys(formData);
+
+    const requiredFields = ["tname", "portfolio_id", "dept", "tdue_date", "tpriority", "team_member2"];
     const emptyFields = requiredFields.filter((field) => !formData[field]);
 
     // Display a toast message with custom field names
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      toast.error(`Please fill in all required fields: ${errorFields.join(",")}`);
       return;
     }
 

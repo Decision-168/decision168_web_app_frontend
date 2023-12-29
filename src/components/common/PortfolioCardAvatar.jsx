@@ -6,10 +6,7 @@ import Client from "./Client";
 import PortfolioClient from "./PortfolioClient";
 
 export default function PortfolioCardAvatar({ fullName, photo, designation }) {
-  console.log(fullName,photo, designation )
-
   const theme = useTheme();
-
   // Function to render either the avatar image or the skeleton based on the presence of the photo
   // const renderAvatar = () => {
   //   if (typeof photo === "string" && photo) {

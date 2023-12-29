@@ -20,12 +20,7 @@ export default function SubtaskOverview() {
   const searchParams = new URLSearchParams(window.location.search);
   const tname = searchParams.get("tname");
   const tproject_assign = searchParams.get("tproject_assign");
-
-  // Now 'tname' and 'tproject_assign' will have the values from the URL
-  console.log("tname:", tname);
-  console.log("tproject_assign:", tproject_assign);
-
-
+  
   const [subTask, setSubTask] = React.useState({});
   const [loading, setLoading] = React.useState(false);
 
