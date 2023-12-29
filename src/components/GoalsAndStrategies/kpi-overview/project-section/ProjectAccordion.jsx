@@ -28,8 +28,8 @@ const ProjectAccordion = ({ project }) => {
   const handleProjectOpen = () => {
     setOpenProject(true);
   };
-  const handleViewTasks = () => {
-    navigate("/project-tasks-list");
+  const handleViewTasks = (pid) => {
+    navigate(`/project-tasks-list/${pid}`);
   };
   return (
     <>
@@ -83,7 +83,7 @@ const ProjectAccordion = ({ project }) => {
                 <IconButton
                   aria-label="view"
                   size="small"
-                  onClick={handleViewTasks}
+                  onClick={()=>handleViewTasks(project?.pid)}
                 >
                   <AssignmentTurnedInOutlined fontSize="small" />
                 </IconButton>

@@ -27,8 +27,8 @@ const KPIChildAccordion = ({ project }) => {
   const handleProjectOpen = () => {
     setOpenProject(true);
   };
-  const handleViewTasks = () => {
-    navigate("/project-tasks-list");
+  const handleViewTasks = (pid) => {
+    navigate(`/project-tasks-list/${pid}`);
   };
   return (
     <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
@@ -79,7 +79,7 @@ const KPIChildAccordion = ({ project }) => {
               <IconButton
                 aria-label="view"
                 size="small"
-                onClick={handleViewTasks}
+                onClick={()=>handleViewTasks(project?.pid)}
               >
                 <AssignmentTurnedInOutlined fontSize="small" />
               </IconButton>

@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
   const navigate = useNavigate();
-  const handleViewTasks = () => {
-    navigate("/project-tasks-list");
+  const handleViewTasks = (pid) => {
+    navigate(`/project-tasks-list/${pid}`);
   };
 
   return (
@@ -67,7 +67,7 @@ const ProjectListOfDialog = ({ heading, title, data, handleOpen }) => {
                   <IconButton
                     aria-label="view"
                     size="small"
-                    onClick={handleViewTasks}
+                    onClick={()=>handleViewTasks(item.pid)}
                   >
                     <AssignmentTurnedInOutlined fontSize="small" />
                   </IconButton>
