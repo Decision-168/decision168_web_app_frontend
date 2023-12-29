@@ -12,6 +12,7 @@ import VerifyGoalRequestMember from "../components/GoalsAndStrategies/subCompone
 import VerifyGoalInviteRequestMember from "../components/GoalsAndStrategies/subComponents/VerifyGoalInviteRequestMember";
 import VerifyProjectInviteRequestMember from "../components/project/subComponents/VerifyProjectInviteRequestMember";
 import VerifyProjectRequestMember from "../components/project/subComponents/VerifyProjectRequestMember";
+import ProjectTasksList from "../components/Tasks/ProjectTasksList";
 
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
@@ -180,10 +181,10 @@ const RouteIndex = () => {
             }
           />
           <Route
-            path="/project-tasks-list"
+            path="/project-tasks-list/:project_id"
             element={
               <DashboardLayout>
-                <h1>Project's tasks</h1>
+                <ProjectTasksList/>
               </DashboardLayout>
             }
           />

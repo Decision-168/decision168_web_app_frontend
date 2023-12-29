@@ -56,7 +56,7 @@ const PortfolioListSection = ({ rows, setRows }) => {
           <Loader />
         ) : (
           <>
-            <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} />
+            <TaskTable rows={rows} setRows={setRows} fetchData={fetchData} currentPage={currentPage}/>
             {rows?.length > 0 && (
               <MyPagination
                 currentPage={currentPage}

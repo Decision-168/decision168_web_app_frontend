@@ -338,6 +338,9 @@ const api = {
   //get Subask comments by stid and userid
   geSubtaskComments: "subtask/get-subtask-comments/",
 
+  //get project tasks lists by project id
+  getProjectTasksList: "task/project-tasks-list/",
+
   //-----------------------------File Cabinet Module Start----------------
 
   // Get All portfolio departments wise modules

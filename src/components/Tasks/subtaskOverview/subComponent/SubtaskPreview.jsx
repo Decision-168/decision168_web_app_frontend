@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
 
-export default function SubtaskPreview({ styles, subtaskId, taskData, closePreview, fetchData }) {
+export default function SubtaskPreview({ styles, subtaskId, taskData, closePreview, fetchData, currentPage }) {
   const dispatch = useDispatch();
 
   const [subTask, setSubTask] = React.useState({});
@@ -67,7 +67,11 @@ export default function SubtaskPreview({ styles, subtaskId, taskData, closePrevi
     const user_id = user?.reg_id;
     try {
       const response = await fileItSubTask(subtask_id, user_id);
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       dispatch(closeCnfModal({ modalName: "fileItSubTaskInPreview" }));
       toast.success(`${response.message}`);
     } catch (error) {
@@ -91,7 +95,11 @@ export default function SubtaskPreview({ styles, subtaskId, taskData, closePrevi
     try {
       const response = await patchDeleteSubtask(subtask_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteSubTaskInPreview" }));
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       closePreview();
       toast.success(`${response.message}`);
     } catch (error) {

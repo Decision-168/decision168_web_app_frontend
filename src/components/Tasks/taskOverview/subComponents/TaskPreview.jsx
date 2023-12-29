@@ -25,7 +25,7 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
-const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
+const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   //Dailog code
@@ -96,7 +96,11 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
     try {
       const response = await fileItTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "fileItTaskInPreview" }));
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       closePreview();
       toast.success(`${response.message}`);
     } catch (error) {
@@ -121,7 +125,11 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData }) => {
     try {
       const response = await patchDeleteTask(task_id, user_id);
       dispatch(closeCnfModal({ modalName: "deleteTaskInPreview" }));
-      fetchData();
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       closePreview();
       toast.success(`${response.message}`);
     } catch (error) {
