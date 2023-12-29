@@ -6,10 +6,17 @@ on:
       - dev
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -18,16 +25,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Install Dependencies and Build Vite App
-        run: |
-          npm install
-          npm run build
+      - name: Build Frontend
+        run: npm run build  # Adjust this command based on your Vite.js build script
 
-      - name: Deploy app build to S3 bucket
+      - name: Deploy to AWS S3
         run: |
-          aws s3 sync ./dist/ s3://decesion168-s3-cicd --delete
+          aws s3 sync dist/ s3://decesion168-s3-cicd --delete
+       
