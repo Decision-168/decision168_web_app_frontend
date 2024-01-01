@@ -1,6 +1,10 @@
-import React from 'react';
+import React from "react";
 import {
   Dashboard,
+  CalendarMonth,
+  Event,
+  ListAlt,
+  Groups,
   Badge,
   Adjust,
   AccountTree,
@@ -30,8 +34,26 @@ const generateMenuItems = (portfolioId) => {
   // Check if a portfolioId is provided
   if (portfolioId) {
     const portfolioItems = [
+      {
+        icon: <CalendarMonth />,
+        text: "Calendar",
+        link: "/calendar",
+        subItems: [
+          { icon: <Event />, text: "Events", link: "/calendar-event-list" },
+          { icon: <ListAlt />, text: "To Do's", link: "/calendar-todo-list" },
+          {
+            icon: <Groups />,
+            text: "Meetings",
+            link: "/calendar-meeting-list",
+          },
+        ],
+      },
       { icon: <Badge />, text: "Portfolio", link: "/portfolio-view" },
-      { icon: <Adjust />, text: "Goals & Strategies", link: "/portfolio-goals" },
+      {
+        icon: <Adjust />,
+        text: "Goals & Strategies",
+        link: "/portfolio-goals",
+      },
       {
         icon: <AccountTree />,
         text: "Projects",

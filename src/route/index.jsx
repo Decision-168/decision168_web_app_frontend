@@ -13,7 +13,6 @@ import VerifyGoalInviteRequestMember from "../components/GoalsAndStrategies/subC
 import VerifyProjectInviteRequestMember from "../components/project/subComponents/VerifyProjectInviteRequestMember";
 import VerifyProjectRequestMember from "../components/project/subComponents/VerifyProjectRequestMember";
 import ProjectTasksList from "../components/Tasks/ProjectTasksList";
-
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -68,6 +67,13 @@ const PortfolioProjects = lazy(() =>
   import("../components/project/portfolio-projects")
 );
 const ProjectsList = lazy(() => import("../components/project/projects-list"));
+const EventList = lazy(() =>
+  import("../components/calendar/subPages/EventList")
+);
+const TodoList = lazy(() => import("../components/calendar/subPages/TodoList"));
+const MeetingList = lazy(() =>
+  import("../components/calendar/subPages/MeetingList")
+);
 
 const RouteIndex = () => {
   return (
@@ -97,6 +103,30 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <Calendar />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-event-list"
+            element={
+              <DashboardLayout>
+                <EventList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-todo-list"
+            element={
+              <DashboardLayout>
+                <TodoList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-meeting-list"
+            element={
+              <DashboardLayout>
+                <MeetingList />
               </DashboardLayout>
             }
           />
@@ -184,11 +214,10 @@ const RouteIndex = () => {
             path="/project-tasks-list/:project_id"
             element={
               <DashboardLayout>
-                <ProjectTasksList/>
+                <ProjectTasksList />
               </DashboardLayout>
             }
           />
-
           <Route
             path="/all-tasks"
             element={
@@ -317,7 +346,6 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-
           <Route
             path="/archive"
             element={
@@ -339,25 +367,21 @@ const RouteIndex = () => {
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
             element={<VerifyInviteMember />}
           />
-
           <Route
             exact
             path="/goal-request/:goalId/:primaryId/:flag"
             element={<VerifyGoalRequestMember />}
           />
-
           <Route
             exact
             path="/goal-invite-reject-request/:goalId/:primaryId/:flag"
             element={<VerifyGoalInviteRequestMember />}
           />
-
           <Route
             exact
             path="/project-request/:projectId/:primaryId/:flag"
             element={<VerifyProjectRequestMember />}
           />
-
           <Route
             exact
             path="/project-invite-reject-request/:projectId/:primaryId/:flag"
