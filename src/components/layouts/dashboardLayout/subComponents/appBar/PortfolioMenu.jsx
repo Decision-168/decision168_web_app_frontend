@@ -9,10 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { selectUserDetails } from "../../../../../redux/action/userSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  getPorfolioCount,
-  getPortfolios,
-} from "../../../../../api/modules/porfolioModule";
+import { getPorfolioCount, getPortfolios } from "../../../../../api/modules/porfolioModule";
 import { stringAvatar } from "../../../../../helpers/stringAvatar";
 import portfolioImage from "../../../../../assets/images/person.png";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -87,9 +84,7 @@ export default function PortfolioMenu() {
 
   useEffect(() => {
     if (storedPortfolioId && portfolios) {
-      const portfolioIndex = portfolios?.findIndex(
-        (p) => p?.portfolio_id === storedPortfolioId
-      );
+      const portfolioIndex = portfolios?.findIndex((p) => p?.portfolio_id === storedPortfolioId);
 
       if (portfolioIndex !== -1) {
         setSelectedIndex(portfolioIndex);
@@ -106,23 +101,20 @@ export default function PortfolioMenu() {
   };
 
   const isValidPortfolioCount = (count, packCount) => {
-    return (
-      typeof count === "number" &&
-      typeof packCount === "number" &&
-      count === packCount
-    );
+    // console.log(`countType : ${typeof count}  countValue : ${count} -- packCountType ${typeof packCount} packCountValue: ${packCount} `);
+    return count === packCount;
   };
 
   const handleCreatePortfolioClick = async (event) => {
-    const porfolioCountResponse = await getPorfolioCount(79);
+    const porfolioCountResponse = await getPorfolioCount(storedPortfolioId);
     const packageDetailsResponse = await getPackageDetails(packageId);
 
-    if (isValidPortfolioCount(porfolioCountResponse?.portfolio_count_rows, packageDetailsResponse?.pack_portfolio)) {
-      navigate("/portfolio-create");
-      handleClose();
-    } else {
+    if (isValidPortfolioCount(Number(porfolioCountResponse?.portfolio_count_rows), Number(packageDetailsResponse?.pack_portfolio))) {
       handleClose();
       toast.warn("Please Upgrade your plan!");
+    } else {
+      navigate("/portfolio-create");
+      handleClose();
     }
   };
 
@@ -167,6 +159,8 @@ export default function PortfolioMenu() {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
+        onBlur={handleClose}
       >
         {/* <PerfectScrollbar style={{ overflowX: "hidden" }}> */}
         <Box sx={{ height: "100%" }}>

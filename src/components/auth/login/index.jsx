@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -34,6 +34,7 @@ export default function Login() {
         <BackImage />
       </Grid>
       <Grid item xs={12} sm={12} md={4} lg={3} xl={3} component={Paper} elevation={6} square bgcolor={theme.palette.secondary.main} sx={{ position: "relative" }}>
+
         <Hidden mdDown>
           <Ribbon />
         </Hidden>
@@ -44,7 +45,7 @@ export default function Login() {
             <Brand />
           </Box>
 
-          <Box sx={{m:0.3}}>
+          <Box sx={{ m: 0.3 }}>
             {/* Welcome and text */}
             <Header title=" Welcome Back!" text="Sign in to continue with Decision 168" />
 
@@ -56,6 +57,8 @@ export default function Login() {
           {/* <Box mt={2}>
               <SocialMedia title="Sign in With" />
             </Box> */}
+
+            
           {/* Navigation */}
           <Navigation question="Don't have an account?" linkLabel="Sign Up Now" path="/register" />
           {/* Copyright */}

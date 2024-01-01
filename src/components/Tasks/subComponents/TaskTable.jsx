@@ -462,11 +462,6 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
       const newStatus = event.target.value;
       await updateTaskStatus(taskId, newStatus);
 
-      // // Update the local state to reflect the change
-      // setSelectedStatuses((prevSelected) => ({
-      //   ...prevSelected,
-      //   [taskId]: newStatus,
-      // }));
       // Close the status editing
       setEditTaskStatus(null);
     } catch (error) {}
@@ -508,11 +503,6 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
       const newStatus = event.target.value;
       await updateSubTaskStatus(subtaskId, newStatus);
 
-      // // Update the local state to reflect the change
-      // setSelectedStatuses((prevSelected) => ({
-      //   ...prevSelected,
-      //   [subtaskId]: newStatus,
-      // }));
       // Close the status editing
       setEditSubTaskStatus(null);
     } catch (error) {}
@@ -577,8 +567,9 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
   const [openSubTaskPreviewDialog, setOpenSubTaskPreviewDialog] = React.useState(false);
 
   // Task prview Dailog Code
-  const handleOpenTaskPreviewDialog = (rowId) => {
+  const handleOpenTaskPreviewDialog = (rowId, row) => {
     setRowId(rowId);
+    setTaskToEdit(row);
     setOpenTaskPreviewDialog(true);
   };
 
@@ -781,7 +772,7 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
                                         gutterBottom
                                         ml={1}
                                         textAlign="left"
-                                        onClick={() => handleOpenTaskPreviewDialog(row?.tid)}
+                                        onClick={() => handleOpenTaskPreviewDialog(row?.tid, row)}
                                       >
                                         {rowStates[row?.tid]?.taskName || row?.tname}
                                       </Typography>
@@ -795,7 +786,7 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
                                           showModalButton={true}
                                           modalSize="lg"
                                         >
-                                          <TaskPreview styles={styles} taskId={rowId} closePreview={handleCloseTaskPreviewDialog} fetchData={fetchData} currentPage={currentPage} />
+                                          <TaskPreview styles={styles} taskId={rowId} taskToEdit={taskToEdit} closePreview={handleCloseTaskPreviewDialog} fetchData={fetchData} currentPage={currentPage} />
                                         </CustomDialog>
                                       )}
                                     </>
@@ -942,7 +933,7 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
 
                                 {rowId === row?.tid && (
                                   <ReduxDialog value="task-attach-file" modalTitle={row?.tname} showModalButton={true} redirectPath={`/tasks-overview/${rowId}`} modalSize="sm">
-                                    <AttachTaskFile task={taskToEdit} />
+                                    <AttachTaskFile task={taskToEdit} fetchData={fetchData} currentPage={currentPage} />
                                   </ReduxDialog>
                                 )}
 
@@ -1215,7 +1206,7 @@ export default function TaskTable({ rows, setRows, fetchData, currentPage }) {
 
                                     {subRowId === subrow?.stid && (
                                       <ReduxDialog value="subtask-attach-file" modalTitle={subrow?.stname} showModalButton={true} redirectPath={`/subtasks-overview/${subRowId}`} modalSize="sm">
-                                        <AttachSubtaskFile subtask={subTaskToEdit} />
+                                        <AttachSubtaskFile subtask={subTaskToEdit} fetchData={fetchData} currentPage={currentPage}/>
                                       </ReduxDialog>
                                     )}
 

@@ -25,7 +25,8 @@ import { selectUserDetails } from "../../../../redux/action/userSlice";
 import { toast } from "react-toastify";
 import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
 
-const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) => {
+const TaskPreview = ({ styles, taskId, taskToEdit, closePreview, fetchData, currentPage }) => {
+
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   //Dailog code
@@ -139,7 +140,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) =
 
   return (
     <>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={12} lg={8}>
           <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", width:"100%"}}>
             <Box sx={{ height: "500px", overflow: "auto" }}>
@@ -274,7 +275,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) =
         showModalButton={false}
         modalSize="md"
       >
-        <CreateEditTaskForm editMode={true} taskEditData={task} />
+        <CreateEditTaskForm editMode={true} taskEditData={taskToEdit} />
       </ReduxDialog>
 
       <ReduxDialog
@@ -319,7 +320,7 @@ const TaskPreview = ({ styles, taskId, closePreview, fetchData, currentPage }) =
         <SubtaskPreview
           styles={styles}
           subtaskId={subTaskId}
-          parentTaskName={task?.tname}
+          taskData={taskToEdit}
         />
       </CustomDialog>
     </>
