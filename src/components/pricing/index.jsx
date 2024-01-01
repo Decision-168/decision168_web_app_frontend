@@ -1,14 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { plans } from "./subComponents/plansData";
+import React, { useEffect, useState, memo } from "react";
+import { Box, Button, Grid, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { pricingStyles } from "./styles";
 import PricingCardHeader from "./subComponents/PricingCardHeader";
 import PricingCardBody from "./subComponents/PricingCardBody";
@@ -21,23 +12,18 @@ import { openModal } from "../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../redux/action/userSlice";
-import {
-  getActiveCoupons,
-  getAllPack,
-} from "../../api/modules/upgradeplanModule";
+import { getActiveCoupons, getAllPack } from "../../api/modules/upgradeplanModule";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import FlightIcon from "@mui/icons-material/Flight";
 import { getPackageDetails } from "../../api/modules/dashboardModule";
 
-export default function Pricing() {
-  //get user id
+const Pricing = () => {
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
   const user_used_co_id = user?.used_package_coupon_id;
   const user_package_id = user?.package_id;
-  //get user id
 
   const [validity, setValidity] = useState("monthly");
   const styles = pricingStyles();
@@ -83,8 +69,7 @@ export default function Pricing() {
     fetchActiveCoupons();
   }, [user_id]);
 
-  const filterByValidity = (packages, validity) =>
-    packages ? packages.filter((i) => i.validity === validity) : [];
+  const filterByValidity = (packages, validity) => (packages ? packages.filter((i) => i.validity === validity) : []);
   const free = filterByValidity(getPackages, "free forever");
   const monthly = filterByValidity(getPackages, "billed monthly");
   const annually = filterByValidity(getPackages, "billed annually");
@@ -92,19 +77,12 @@ export default function Pricing() {
 
   const monthlyCards = [...free, ...monthly, ...enterprise];
 
-  const filterByCoupon = (packages, coupon_pack) =>
-    packages ? packages.filter((i) => i.coupon_pack === coupon_pack) : [];
+  const filterByCoupon = (packages, coupon_pack) => (packages ? packages.filter((i) => i.coupon_pack === coupon_pack) : []);
   const getfree = filterByCoupon(getPackages, "yes");
 
-  const yearlyFilter = (packName) =>
-    annually.filter((i) => i.pack_name === packName);
+  const yearlyFilter = (packName) => annually.filter((i) => i.pack_name === packName);
 
-  const yearlyCards = [
-    ...(free.length > 0 ? free : getfree),
-    ...yearlyFilter("Professional"),
-    ...yearlyFilter("Business"),
-    ...enterprise,
-  ];
+  const yearlyCards = [...(free.length > 0 ? free : getfree), ...yearlyFilter("Professional"), ...yearlyFilter("Business"), ...enterprise];
 
   const handleValidity = (event, newValue) => {
     if (newValue !== null) {
@@ -139,12 +117,7 @@ export default function Pricing() {
   };
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        py={2}
-      >
+      <Stack direction="row" justifyContent="space-between" alignItems="center" py={2}>
         <Typography
           component="h4"
           variant="subtitle2"
@@ -160,11 +133,11 @@ export default function Pricing() {
           <ToggleButton value="monthly">
             <Typography
               component="h6"
-              variant="subtitle2"
               sx={{
-                color: theme.palette.secondary.dark,
+                color: theme.palette.secondary.main,
+                fontSize: "0.7rem",
                 textTransform: "uppercase",
-                fontWeight: "bold",
+                fontWeight: "700",
               }}
             >
               Monthly
@@ -173,20 +146,18 @@ export default function Pricing() {
           <ToggleButton value="yearly">
             <Typography
               component="h6"
-              variant="subtitle2"
               sx={{
-                color: theme.palette.secondary.dark,
+                color: theme.palette.secondary.main,
+                fontSize: "0.7rem",
                 textTransform: "uppercase",
-                fontWeight: "bold",
+                fontWeight: "700",
               }}
             >
               Yearly
             </Typography>
           </ToggleButton>
         </ToggleButtonGroup>
-        {showFreeBut === "yes" &&
-        user?.package_coupon_id === 0 &&
-        user_package_id == 1 ? (
+        {showFreeBut === "yes" && user?.package_coupon_id === 0 && user_package_id == 1 ? (
           <Button
             startIcon={<KeyboardDoubleArrowRight />}
             size="small"
@@ -209,18 +180,20 @@ export default function Pricing() {
           ></Box>
         )}
       </Stack>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {getPackages &&
           userPackagePrice !== undefined &&
           validity === "monthly" &&
           monthlyCards?.map((plan, index) => (
             <Grid key={index} item xs={12} sm={6} lg={3}>
-              <Paper elevation={2} sx={{ p: 2 }}>
-                <PricingCardHeader
-                  name={plan.pack_name}
-                  icon={getIconByPackId(plan.pack_name)}
-                  description={plan.pack_tagline}
-                />
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 2,
+                  border: plan.pack_id === user_package_id ? `1px solid ${theme.palette.primary.dark}` : "none",
+                }}
+              >
+                <PricingCardHeader name={plan.pack_name} icon={getIconByPackId(plan.pack_name)} description={plan.pack_tagline} />
                 <PricingCardBody
                   styles={styles}
                   features={plan.features}
@@ -228,11 +201,7 @@ export default function Pricing() {
                   price={plan.pack_price}
                   validity={plan.validity}
                   isSpecialOffer={plan.pack_name === "Business" && true}
-                  contactUs={
-                    plan.stripe_link === "no" &&
-                    plan.coupon_pack === "no" &&
-                    true
-                  }
+                  contactUs={plan.stripe_link === "no" && plan.coupon_pack === "no" && true}
                   packID={plan.pack_id}
                   selectedPackID={user_package_id}
                   packPrice={plan.pack_price}
@@ -246,12 +215,14 @@ export default function Pricing() {
           validity === "yearly" &&
           yearlyCards?.map((plan, index) => (
             <Grid key={index} item xs={12} sm={6} lg={3}>
-              <Paper elevation={2} sx={{ p: 2 }}>
-                <PricingCardHeader
-                  name={plan.pack_name}
-                  icon={getIconByPackId(plan.pack_name)}
-                  description={plan.pack_tagline}
-                />
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 2,
+                  border: plan.pack_id === user_package_id ? `1px solid ${theme.palette.primary.dark}` : "none",
+                }}
+              >
+                <PricingCardHeader name={plan.pack_name} icon={getIconByPackId(plan.pack_name)} description={plan.pack_tagline} />
                 <PricingCardBody
                   styles={styles}
                   features={plan.features}
@@ -259,11 +230,7 @@ export default function Pricing() {
                   price={plan.pack_price}
                   validity={plan.validity}
                   isSpecialOffer={plan.pack_name === "Business" && true}
-                  contactUs={
-                    plan.stripe_link === "no" &&
-                    plan.coupon_pack === "no" &&
-                    true
-                  }
+                  contactUs={plan.stripe_link === "no" && plan.coupon_pack === "no" && true}
                   packID={plan.pack_id}
                   selectedPackID={user_package_id}
                   packPrice={plan.pack_price}
@@ -274,14 +241,11 @@ export default function Pricing() {
             </Grid>
           ))}
       </Grid>
-      <ReduxDialog
-        value="free-trial"
-        modalTitle="Free Trial"
-        showModalButton={false}
-        modalSize="xs"
-      >
+      <ReduxDialog value="free-trial" modalTitle="Free Trial" showModalButton={false} modalSize="xs">
         <FreeTrial />
       </ReduxDialog>
     </Box>
   );
-}
+};
+
+export default memo(Pricing);

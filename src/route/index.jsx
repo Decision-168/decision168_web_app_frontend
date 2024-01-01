@@ -74,6 +74,9 @@ const TodoList = lazy(() => import("../components/calendar/subPages/TodoList"));
 const MeetingList = lazy(() =>
   import("../components/calendar/subPages/MeetingList")
 );
+const ProjectTeamMembersTasksList = lazy(() =>
+  import("../components/Tasks/ProjectTeamMembersTasksList")
+);
 
 const RouteIndex = () => {
   return (
@@ -215,6 +218,14 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <ProjectTasksList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/team-member-tasks-list/:project_id/:task_assignee"
+            element={
+              <DashboardLayout>
+                <ProjectTeamMembersTasksList />
               </DashboardLayout>
             }
           />
@@ -367,21 +378,25 @@ const RouteIndex = () => {
             path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
             element={<VerifyInviteMember />}
           />
+
           <Route
             exact
             path="/goal-request/:goalId/:primaryId/:flag"
             element={<VerifyGoalRequestMember />}
           />
+
           <Route
             exact
             path="/goal-invite-reject-request/:goalId/:primaryId/:flag"
             element={<VerifyGoalInviteRequestMember />}
           />
+
           <Route
             exact
             path="/project-request/:projectId/:primaryId/:flag"
             element={<VerifyProjectRequestMember />}
           />
+
           <Route
             exact
             path="/project-invite-reject-request/:projectId/:primaryId/:flag"

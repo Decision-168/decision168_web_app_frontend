@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button, Typography } from "@mui/material";
 import { memo, useState, useCallback } from "react";
 import BasicBreadcrumbs from "../../common/BasicBreadcrumbs";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -14,6 +14,8 @@ import ReduxDialog from "../../common/ReduxDialog";
 import CreateEditTaskForm from "../createEditTask/CreateEditTaskForm";
 import CustomFilter from "../../common/CustomFilter";
 import { SearchWithFuse } from "../../../helpers/SearchWithFuse";
+import ProjectListSection from "../subComponents/ProjectListSection";
+import ProjectTeamMembersListSection from "../subComponents/ProjectTeamMembersListSection";
 
 const filterOption = [
   {
@@ -46,16 +48,12 @@ const filterOption = [
   },
 ];
 
-const DashboardTasks = () => {
-  const [alignment, setAlignment] = useState("list");
+const ProjectTeamMembersTasksList = () => {
   const [value, setValue] = useState("all");
   const dispatch = useDispatch();
+  const [projectDetails, setProjectDetails] = useState({});
   const [rows, setRows] = useState([]);
-  const handleChange = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
-    }
-  };
+
 
   const handleChangeRadio = useCallback((event) => {
     setValue(event.target.value);
@@ -65,6 +63,10 @@ const DashboardTasks = () => {
   const newResults = SearchWithFuse(["tname", "tcode", "tdue_date", "tpriority", "tstatus"], query, rows);
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
+      <Box sx={{ display: "flex", alignItems: "center",mb:1 }}>
+        <Typography sx={{ fontSize: "16px", fontWeight: "900", textTransform:"upperCase" }}>Project:</Typography>
+        <Typography sx={{ fontSize: "14px", fontWeight: "400", marginLeft: "8px" }}>{projectDetails?.pname}</Typography>
+      </Box>
       <Grid container>
         <Grid item xs={10} sm={6} md={6} lg={7} xl={7}>
           <Box
@@ -75,17 +77,9 @@ const DashboardTasks = () => {
               flexDirection: "row",
             }}
           >
-            <BasicBreadcrumbs currentPage="Tasks" />
-            <ToggleButtonGroup color="primary" value={alignment} exclusive onChange={handleChange} aria-label="Platform" sx={{ mx: 1 }}>
-              <ToggleButton value="list">
-                <FormatListBulleted sx={{ fontSize: 14 }} />
-              </ToggleButton>
-              <ToggleButton value="grid">
-                <GridView sx={{ fontSize: 14 }} />
-              </ToggleButton>
-            </ToggleButtonGroup>
+            <BasicBreadcrumbs currentPage="Tasks" showBackButton={true} />
 
-            <Button onClick={() => dispatch(openModal("create-new-task"))} variant="contained" startIcon={<Add />} size="small">
+            <Button onClick={() => dispatch(openModal("create-new-task"))} variant="contained" startIcon={<Add />} size="small" sx={{ mx: 2 }}>
               Create New
             </Button>
 
@@ -113,11 +107,11 @@ const DashboardTasks = () => {
         </Grid>
 
         <Grid item xs={12} lg={12}>
-          {alignment === "list" ? <ListSection setRows={setRows} rows={newResults} /> : <GridSection setRows={setRows} rows={newResults} />}
+          <ProjectTeamMembersListSection setRows={setRows} rows={newResults} setProjectDetails={setProjectDetails}/>
         </Grid>
       </Grid>
     </Box>
   );
 };
 
-export default memo(DashboardTasks);
+export default memo(ProjectTeamMembersTasksList);

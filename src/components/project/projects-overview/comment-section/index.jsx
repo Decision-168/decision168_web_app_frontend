@@ -1,34 +1,22 @@
 import React, { useState, useEffect, Fragment } from "react";
-import {
-  Button,
-  Popover,
-  Typography,
-  Box,
-  Grid,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material";
+import { Button, Popover, Typography, Box, Grid, IconButton, useMediaQuery, Paper } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { MentionsInput, Mention } from "react-mentions";
 import { ArrowUpward, Send } from "@mui/icons-material";
 import ScrollBar from "react-perfect-scrollbar";
 import mentionsInputStyle from "./mentionInputStyle";
 import MessagesByDate from "./MessagesByDate";
-import {
-  getMentionList,
-  getProjectComments,
-  insertComments,
-} from "../../../../api/modules/ProjectModule";
+import { getMentionList, getProjectComments, insertComments } from "../../../../api/modules/ProjectModule";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../../redux/action/userSlice";
-import {
-  getSubtaskComments,
-  getTaskComments,
-} from "../../../../api/modules/taskModule";
+import { getSubtaskComments, getTaskComments } from "../../../../api/modules/taskModule";
+import { useTheme } from "@mui/material/styles";
+import Loader from "../../../common/Loader";
 const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   const user = useSelector(selectUserDetails);
   const userID = user?.reg_id;
+  const theme = useTheme();
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -36,8 +24,6 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mentionInput, setMentionInput] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const isSmallScreen = useMediaQuery("(max-width: 600px)");
 
   const fetchCommentData = async () => {
     setLoading(true);
@@ -183,169 +169,106 @@ const CommentSection = ({ projectId, taskId, subtaskId, commentModule }) => {
 
     return Object.keys(groupedMessages).map((date, index) => (
       <Fragment key={index}>
-        <MessagesByDate
-          date={date}
-          groupedMessages={groupedMessages}
-          setMessages={setMessages}
-          saveMessagesToLocalStorage={saveMessagesToLocalStorage}
-        />
+        <MessagesByDate date={date} groupedMessages={groupedMessages} setMessages={setMessages} saveMessagesToLocalStorage={saveMessagesToLocalStorage} />
       </Fragment>
     ));
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        width: "100%",
-        background: "white",
-        p: 2,
-        // mt: 2,
-        borderRadius: 1,
-      }}
-      mb={2}
-    >
-      <Typography
+   <Box sx={{ p: 2}}>
+     <Paper elevation={0} sx={{ p: 2, bgcolor: "#F7F7F7", maxWidth: "100%" }}>
+      {/* <Typography
         sx={{
-          color: "#495057",
-          fontSize: 15,
-          fontWeight: "600",
-          textAlign: "left",
+          bgcolor: theme.palette.primary.main,
+          color: "#FFFFFF",
+          fontSize: 16,
+          fontWeight: "500",
+          textAlign: "center",
+          borderTopLeftRadius:"5px" ,
+          borderTopRightRadius:"5px", 
+          borderBottom:"2px solid #D9D9D9",
         }}
       >
         Comment Section
-      </Typography>
-      <Box sx={{ border: "1px solid #E0E0E0", borderRadius: "5px" }}>
-        {loading ? (
-          <Box sx={{ width: "100%", textAlign: "center" }}>
-            <Typography
-              sx={{
-                color: "#495057",
-                fontSize: 13,
-              }}
-            >
-              Loading...
-            </Typography>
-          </Box>
-        ) : messages.length > 0 ? (
-          <ScrollBar>
-            <Box sx={{ height: "100%" }}>{renderMessagesByDate()}</Box>
-          </ScrollBar>
-        ) : (
-          <Box
+      </Typography> */}
+
+      {loading ? (
+        <Box sx={{ width: "100%", textAlign: "center" }}>
+          <Typography
             sx={{
-              // maxHeight: "380px",
-              display: "flex",
-              alignItems: "top",
-              flexDirection: "row",
-              justifyContent: "center",
-              padding: "10px",
-              minHeight: "300px",
+              color: "#495057",
+              fontSize: 13,
             }}
           >
-            <Typography
-              sx={{
-                fontFamily: "roboto",
-                color: "#495057",
-                fontSize: 13,
-              }}
-            >
-              No Comments Available
-            </Typography>
-          </Box>
-        )}
-
+            <Loader />
+          </Typography>
+        </Box>
+      ) : messages.length > 0 ? (
+        <ScrollBar>
+          <Box sx={{ maxHeight: "50vh" }}>{renderMessagesByDate()}</Box>
+        </ScrollBar>
+      ) : (
         <Box
           sx={{
-            p: 1,
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-            backgroundColor: "#F5F5F5",
-            padding: "2px 4px",
-            margin: "3px",
-            border: "1px solid #B9B8B9",
-            borderRadius: "25px",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: "10px",
+            minHeight: "300px",
           }}
         >
-          <Box
+          <Typography
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
+              fontFamily: "roboto",
+              color: "#495057",
+              fontSize: 13,
             }}
           >
-            <Box sx={{ width: isSmallScreen ? "100%" : "80%" }}>
-              {/* Your first section */}
-              <MentionsInput
-                value={newMessage}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                style={mentionsInputStyle}
-                placeholder="Write Comment..."
-              >
-                <Mention
-                  trigger="@"
-                  data={mentionList}
-                  renderSuggestion={(
-                    suggestion,
-                    search,
-                    highlightedDisplay
-                  ) => <Box>{highlightedDisplay}</Box>}
-                  onAdd={handleMentionClick}
-                />
-              </MentionsInput>
-            </Box>
-            <Box>
-              {/* Your second section */}
-              {isSmallScreen ? (
-                <IconButton
-                  onClick={handleSendMessage}
-                  color="primary"
-                  size="small"
-                >
-                  <ArrowUpward sx={{ fontSize: 20 }} />
-                </IconButton>
-              ) : (
-                // <Button sx={{ width: "20%", height: "100%" }} onClick={handleSendMessage} variant="contained" color="primary" size="small" endIcon={<Send sx={{ fontSize: 7 }} />}>
-                //   Send
-                // </Button>
+            No Comments Available
+          </Typography>
+        </Box>
+      )}
 
-                <IconButton
-                  onClick={handleSendMessage}
-                  size="small"
-                  type="button"
-                  sx={{
-                    fontSize: "1.2rem",
-                    bgcolor: "#B9B8B9",
-                    color: "#000000",
-                  }}
-                >
-                  <SendIcon fontSize="inherit" />
-                </IconButton>
-              )}
-            </Box>
+  
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "end",
+            width: "100%",
+            overflow: "hidden",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#F5F5F5",
+            padding: "3px 4px",
+            margin: "3px",
+            borderRadius: "5px",
+          }}
+        >
+          <Box sx={{ flex: 1, overflow: "hidden" }}>
+            <MentionsInput value={newMessage} onChange={handleInputChange} onKeyDown={handleKeyDown} style={mentionsInputStyle} placeholder="Write Comment...">
+              <Mention trigger="@" data={mentionList} renderSuggestion={(suggestion, search, highlightedDisplay) => <Box>{highlightedDisplay}</Box>} onAdd={handleMentionClick} />
+            </MentionsInput>
+          </Box>
+          <Box>
+            <Button onClick={handleSendMessage} variant="contained" color="primary" size="small" sx={{mb:0.8}}>
+              Send
+            </Button>
           </Box>
         </Box>
+      
 
-        <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handlePopoverClose}
-        >
-          <Typography>
-            {mentionList.map((mention) => (
-              <Box
-                key={mention.id}
-                onClick={() => handleMentionClick(mention)}
-                style={{ cursor: "pointer" }}
-              >
-                {mention.display}
-              </Box>
-            ))}
-          </Typography>
-        </Popover>
-      </Box>
-    </Box>
+      <Popover open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={handlePopoverClose}>
+        <Typography>
+          {mentionList.map((mention) => (
+            <Box key={mention.id} onClick={() => handleMentionClick(mention)} style={{ cursor: "pointer" }}>
+              {mention.display}
+            </Box>
+          ))}
+        </Typography>
+      </Popover>
+    </Paper>
+   </Box>
   );
 };
 

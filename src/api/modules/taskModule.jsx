@@ -312,10 +312,20 @@ export const getSubtaskComments = async (subtask_id, user_id) => {
   }
 };
 
-//get project tasks lists by project id
+//get project tasks lists by project_id
 export const getProjectTasksList = async (project_id) => {
   try {
     const response = await axios.get(`${apiUrl}${api.getProjectTasksList}${project_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//get project team members tasks lists by project_id and task_assignee
+export const getProjectTeamMembersTasksList = async (project_id, task_assignee) => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getProjectTeamMembersTasksList}${project_id}/${task_assignee}`);
     return response.data;
   } catch (error) {
     throw error;

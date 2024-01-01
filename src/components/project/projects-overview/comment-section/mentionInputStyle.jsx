@@ -53,13 +53,15 @@
 
 export default {
   control: {
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
+    backgroundColor:"green",
     fontSize: 13,
     fontWeight: "normal",
   },
 
   "&multiLine": {
     control: {
+      backgroundColor:"red",
       fontFamily: "monospace",
       borderRadius: "25px",
     },
@@ -68,9 +70,9 @@ export default {
       border: "1px solid transparent",
     },
     input: {
-      padding: "10px",
+      padding: "11px",
       border: "0px",
-      borderRadius: "25px",
+      borderRadius: "5px",
       fontSize: 14,
       fontFamily: "Your Desired Font, sans-serif",
       backgroundColor: "#F5F5F5",
@@ -86,28 +88,28 @@ export default {
     },
   },
 
-  "&singleLine": {
-    display: "inline-block",
-    highlighter: {
-      padding: 1,
-      border: "2px inset transparent",
-    },
-    input: {
-      borderRadius: "25px",
-      padding: "10px",
-      border: "2px inset",
-      fontSize: 14,
-      fontFamily: "Your Desired Font, sans-serif",
-      "&:focus": {
-        boxShadow: "none",
-      },
-      "&::placeholder": {
-        color: "#666666",
-        fontWeight: "100", // Make placeholder text lighter
-      },
-      color: "#383838",
-    },
-  },
+  // "&singleLine": {
+  //   display: "inline-block",
+  //   highlighter: {
+  //     padding: 1,
+  //     border: "2px inset transparent",
+  //   },
+  //   input: {
+  //     borderRadius: "25px",
+  //     padding: "10px",
+  //     border: "2px inset",
+  //     fontSize: 14,
+  //     fontFamily: "Your Desired Font, sans-serif",
+  //     "&:focus": {
+  //       boxShadow: "none",
+  //     },
+  //     "&::placeholder": {
+  //       color: "#666666",
+  //       fontWeight: "100", // Make placeholder text lighter
+  //     },
+  //     color: "#383838",
+  //   },
+  // },
 
   suggestions: {
     list: {

@@ -84,14 +84,14 @@ export default function PortfolioCard({ regId }) {
   };
 
   //Add Member Dailog code
-  const [openMemberDialog, setOpenMemberDialog] = React.useState(false);
+  // const [openMemberDialog, setOpenMemberDialog] = React.useState(false);
 
-  const handleOpenMemberDailog = () => {
-    setOpenMemberDialog(true);
-  };
-  const handleCloseMemberDailog = () => {
-    setOpenMemberDialog(false);
-  };
+  // const handleOpenMemberDailog = () => {
+  //   setOpenMemberDialog(true);
+  // };
+  // const handleCloseMemberDailog = () => {
+  //   setOpenMemberDialog(false);
+  // };
 
   //Add Department Dailog code
   const [openDepartmentDialog, setOpenDepartmentDialog] = React.useState(false);
@@ -234,18 +234,18 @@ export default function PortfolioCard({ regId }) {
         </Grid> */}
 
         <Grid item xs={12} md={8} textAlign={isSmallScreen ? "left" : "end"} p={1}>
-          <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }} onClick={() => dispatch(openModal("create-project"))}>
+          {/* <Button variant="contained" endIcon={<ArrowForwardIcon />} size="small" sx={{ m: 1 }} onClick={() => dispatch(openModal("create-project"))}>
             Add project
-          </Button>
+          </Button> */}
 
-          <Box display="inline-block" sx={{ m: 1 }}>
+          {/* <Box display="inline-block" sx={{ m: 1 }}>
             <Button onClick={handleOpenMemberDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">
               Add member
             </Button>
             <CustomDialog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
               <AddMemberForm handleClose={handleCloseMemberDailog} />
             </CustomDialog>
-          </Box>
+          </Box> */}
 
           <Box display="inline-block" sx={{ m: 1 }}>
             <Button onClick={handleOpenMembersDailog} variant="contained" endIcon={<ArrowForwardIcon />} size="small">

@@ -325,11 +325,12 @@ export default function DesktopAppBar({ open, toggleDrawer }) {
                   aria-expanded={open_menu ? "true" : undefined}
                   onClick={handleClick}
                   color="black"
+                  size="small"
                   sx={{ width: "50px", height: "50px", cursor: "pointer" }}
                 >
                   <Badge
                     badgeContent={totalLength ? totalLength : 0}
-                    color="primary"
+                    color="error"
                   >
                     <NotificationsNoneIcon />
                   </Badge>

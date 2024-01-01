@@ -10,6 +10,7 @@ import {
   Accordion,
 } from "@mui/material";
 import UserList from "./UserList";
+import { useTheme } from "@mui/material/styles";
 
 const MembersChildAccordion = ({
   value,
@@ -22,6 +23,8 @@ const MembersChildAccordion = ({
   displayBtns,
   data
 }) => {
+
+  const theme = useTheme();
   return (
     <Accordion expanded={expanded === value} onChange={handleChange(value)}>
       <AccordionSummary
@@ -50,18 +53,20 @@ const MembersChildAccordion = ({
           >
             {title}
           </Typography>
-          {!pending && (
+          {(!pending && data?.length > 0) && (
             <Avatar
               sx={{
                 width: 16,
                 height: 16,
-                background: "tomato",
-                p: 0.2,
-                fontSize: 10,
+                background:theme.palette.tertiary.main,
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center",
+                fontSize: "0.6rem",
                 ml: 1,
               }}
             >
-              {data?.length}
+              {data?.length} 
             </Avatar>
           )}
         </Box>
