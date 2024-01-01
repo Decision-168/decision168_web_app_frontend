@@ -11,7 +11,7 @@ import SelectOption from "../../common/SelectOption";
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../redux/action/userSlice";
 import { getPorfolioDepartments, getPortfolios } from "../../../api/modules/porfolioModule";
-import { getProjectTeamMembers, getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
+import { getProjectsForSelectMenu, insertTask, updateTask } from "../../../api/modules/taskModule";
 import CustomDatePicker from "../../common/CustomDatePicker";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+
   const [fields, setFields] = useState([
     {
       link: "",
@@ -53,18 +54,20 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     },
   ]);
   const [formValues, setFormValues] = useState({
+    portfolio_id: storedPortfolioId,
     tname: "",
     tdes: "",
     dept: "",
     tnote: "",
     tpriority: "",
     team_member2: null, //Assignee
-    portfolio_id: storedPortfolioId,
+  
   });
 
   // Attach File
   const [files, setFiles] = useState(null);
-  const filesArray = files?.map((file, index) => ({ [index]: file.name }));
+  const time = Math.floor(Date.now() / 1000);
+  const filesArray = files?.length ? files.map((file, index) => ({ [index]: `${time}_${file.name.toLowerCase()}`})) : [];
 
   const handleFilesChange = (newValue, info) => {
     setFiles(newValue);
@@ -86,6 +89,7 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
       setSelectedProjectIdObject({ project_id: taskEditData?.tproject_assign });
     }
   }, [editMode, taskEditData]);
+
 
   useEffect(() => {
     if (editMode && taskEditData?.tlink && taskEditData?.tlink_comment) {
@@ -149,7 +153,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
   useEffect(() => {
     // it will return the object of the selected project id from that we require dept_id
     const selectedProjectObject = projects?.find((p) => p.pid === selectedProjectIdObject?.project_id);
-    console.log("selectedProjectObject ====>",selectedProjectObject)
     setSelectedProjectDeptId(selectedProjectObject?.dept_id);
     setSelectedProjectGID(selectedProjectObject?.gid);
   }, [projects, selectedProjectIdObject?.project_id]);
@@ -174,7 +177,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     // Fetch portfolios when the component mounts
     fetchPortfolios();
   }, []);
-
 
 
   useEffect(() => {
@@ -211,12 +213,13 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
 
     const linksData = convertFieldsToObjects(fields, "link");
     const commentsData = convertFieldsToObjects(fields, "linkComment");
+
     const formData = {
       ...formValues,
       project_id: (selectedProjectIdObject || {}).project_id,
-      tfile: filesArray,
-      links: linksData,
-      link_comments: commentsData,
+      tfile: filesArray || [],
+      links: linksData || [],
+      link_comments: commentsData || [],
     };
 
     const fieldLabels = {
@@ -229,13 +232,13 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
     };
 
     // Check for empty required fields
-    const requiredFields = Object.keys(formData);
+    const requiredFields = ["tname", "portfolio_id", "dept", "tdue_date", "tpriority", "team_member2"];
     const emptyFields = requiredFields.filter((field) => !formData[field]);
 
     // Display a toast message with custom field names
     if (emptyFields.length > 0) {
       const errorFields = emptyFields.map((field) => fieldLabels[field]);
-      toast.error(`Please fill in all required fields: ${errorFields.join(", ")}`);
+      toast.error(`Please fill in all required fields: ${errorFields.join(",")}`);
       return;
     }
 
@@ -332,7 +335,6 @@ export default function CreateEditTaskForm({ editMode, taskEditData }) {
                   idKey="value" // Key to identify each option
                   getOptionLabel={(option) => option.name} // which want to display after select
                   dynamicOptions={false} // true or false based on your condition
-                  // loadOptions={loadOptionsFromApi} //pass only if dynamicOptions true
                   staticOptions={priorities} // Your static options array
                   formValues={formValues}
                   setFormValues={setFormValues}

@@ -17,11 +17,14 @@ import { useNavigate } from "react-router-dom";
 import { fileItSubTask } from "../../../../api/modules/taskModule";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const SubtaskOverviewCard = ({ styles, subtask , tname, tproject_assign}) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(selectUserDetails);
 
   const handleEditSubTasksDialog = () => {
     dispatch(openModal("edit-subtask"));

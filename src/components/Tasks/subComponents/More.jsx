@@ -16,7 +16,6 @@ import DuplicateTaskDialog from "./DuplicateTaskDialog";
 import DuplicateSubtaskDialog from "./DuplicateSubtaskDialog";
 
 export default function More({ rowId, task, subTask, isParentRow, fetchData, currentPage, anchorEl, setAnchorEl, passTaskIdToParent }) {
-  console.log("currentPage  More====> ", currentPage);
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
   const open = Boolean(anchorEl);
@@ -91,7 +90,6 @@ export default function More({ rowId, task, subTask, isParentRow, fetchData, cur
 
   const handleFileItSubTaskYes = async () => {
     passTaskIdToParent(task?.tid);
-    console.log("currentPage yes====> ", currentPage);
     const subtask_id = rowId;
     const user_id = user?.reg_id;
     try {

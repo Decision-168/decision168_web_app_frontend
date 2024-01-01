@@ -30,7 +30,6 @@ const ProjectsOverviewRequest = () => {
   const fetchNotifications = async () => {
     try {
       const response = await notificationsClear(pid, userID);
-      console.log(response.message);
     } catch (error) {
       console.error(error);
     }

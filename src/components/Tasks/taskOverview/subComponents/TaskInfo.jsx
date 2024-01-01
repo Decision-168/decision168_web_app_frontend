@@ -55,7 +55,7 @@ export default function TaskInfo({ styles, info }) {
       const response = await changeTaskStatus(regId, data);
 
       // Update local state
-      setSelectedStatus(newStatus);
+      setSelectedStatus(response?.updatedStatus);
       setEditStatus(false);
 
       toast.success(`${response.message}`);

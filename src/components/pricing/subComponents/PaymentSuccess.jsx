@@ -1,5 +1,5 @@
+import React, { useEffect, memo } from "react";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
-import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { InsertCheckoutPayment } from "../../../api/modules/upgradeplanModule";
@@ -43,10 +43,7 @@ const PaymentSuccess = () => {
         }}
       >
         <Typography variant="h4" textAlign="center">
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={true}
-          >
+          <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={true}>
             <CircularProgress color="inherit" />
           </Backdrop>
           Hold On! Don't Press BACK button or RELOAD page!
@@ -56,4 +53,4 @@ const PaymentSuccess = () => {
   );
 };
 
-export default PaymentSuccess;
+export default memo(PaymentSuccess);

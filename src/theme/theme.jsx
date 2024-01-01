@@ -21,6 +21,12 @@ export const theme = createTheme({
       light: "#CCCCCC",
       main: "#666666",
     },
+    error: {
+      contrastText: "#FFFFFF",
+      dark: "#FF0000",      // Darker shade of red
+      light: "#FFCDD2",     // Lighter shade of red
+      main: "#FF5252",      // Main red color
+    },
   },
   typography: {
     h2: {
@@ -79,12 +85,14 @@ export const theme = createTheme({
           "&:hover": {
             boxShadow: "none",
           },
-          // borderRadius: "50px",
           textTransform: "capitalize",
           color: "#383838",
+          fontSize: "0.7rem",
+          padding: "3px 7px",
         },
       },
     },
+
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -112,12 +120,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#FFFFFF",
-          // padding: "0", // But it is changing the style for date picker field
         },
-        // input: {
-        //   padding: "7px 10px",
-        //   font: "revert",
-        // },
       },
     },
     MuiCheckbox: {
@@ -131,7 +134,6 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "transparent",
-          // height: "55px",
         },
       },
     },
@@ -160,7 +162,7 @@ export const theme = createTheme({
           // marginTop: "8px",
           // height: "37px",
           height: "25px",
-          borderRadius:"25px"
+          borderRadius: "25px",
         },
       },
     },
@@ -181,12 +183,15 @@ export const theme = createTheme({
     MuiToggleButton: {
       styleOverrides: {
         root: {
+          boxShadow: "0 2px 2px rgba(0, 0, 0, 0.1)",
+          // "&:hover": {
+          //   boxShadow: "none",
+          // },
           borderRadius: 4,
-          padding: '7px', // Adjust border-radius and padding as needed
-          // Add other style overrides for the unselected state here
-          '&.Mui-selected': {
-            backgroundColor: '#C7DF19', // Change the background color as needed
-            color: 'white', // Change the text color as needed
+          padding: "5px",
+          "&.Mui-selected": {
+            backgroundColor: "#C7DF19",
+            color: "white",
           },
         },
       },

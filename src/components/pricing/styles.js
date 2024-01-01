@@ -85,31 +85,39 @@ export const pricingStyles = () => {
         position: "absolute",
         left: "-0.7rem",
         top: "50%",
-        width: "90%",
+        width: "60%",
         height: "3rem",
         lineHeight: "3rem",
         background: '#006E3E',
         color: "#FFFFFF",
         fontWeight: 700,
-        overflow: "hidden", // Corrected typo here
-        borderRadius: "2rem",
+        // overflow: "hidden", // Corrected typo here
         borderTopLeftRadius: 0,
         transform: "translateY(-50%)",
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
+        "&::before": {
+            content: '""',
+            position: "absolute",
+            top: "-0.7rem",
+            left: "0rem",
+            borderLeft: `0.35rem solid transparent`,
+            borderRight: "0.35rem solid #033d23",
+            borderTop: "0.35rem solid transparent",
+            borderBottom: "0.35rem solid #033d23",
+          },
+        "&::after": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: "-3rem",
+            borderLeft: `1.5rem solid #006E3E`,
+            borderRight: "1.5rem solid transparent",
+            borderTop: "1.5rem solid transparent",
+            borderBottom: "1.5rem solid transparent",
+          },
     };
-
-    const ribbonTail = {
-      position: "absolute",
-      left: "-0.7rem",
-      bottom: "4.6rem",
-      width: "0.7rem",
-      height: "1.5rem",
-      background: "#006E3E",
-      borderTopLeftRadius: "1rem",
-    };
-
 
     const ThumbUpIcon = {
       color: theme.palette.primary.light,
@@ -119,7 +127,6 @@ export const pricingStyles = () => {
       marginBottom: "4px",
     };
 
-
-
-    return { ribbonContainer, ribbon, ribbonTail,ThumbUpIcon, label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink, subtaskLinkWrapper, subtaskLinkText, subtaskIcon };
+    return { ribbonContainer, ribbon, ThumbUpIcon, label, labelText, notesControl, noteslabel, noteslabelText, noteIcon, projectOverviewLink, subtaskLinkWrapper, subtaskLinkText, subtaskIcon };
 };
+

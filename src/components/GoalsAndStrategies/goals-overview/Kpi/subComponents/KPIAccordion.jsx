@@ -21,6 +21,7 @@ import ReduxDialog from "../../../../common/ReduxDialog";
 import CreateProject from "../../../../project/Dialogs/CreateProject";
 import LinearProgressWithLabel from "../../../../common/LinearProgressWithLabel";
 import { getStrategyAllProjectsList } from "../../../../../api/modules/goalkpiModule";
+import { SearchWithFuse } from "../../../../../helpers/SearchWithFuse";
 
 const KPIAccordion = ({ kpi }) => {
   const sid = kpi.sid;
@@ -46,6 +47,10 @@ const KPIAccordion = ({ kpi }) => {
     setOpenKPI(true);
   };
   const dispatch = useDispatch();
+
+  const [query, setQuery] = useState("");
+  const newResults = SearchWithFuse(["sname"], query, kpiProdetails);
+
   return (
     <>
       <Accordion elevation={0} sx={{ border: "1px solid #f3f3f3" }}>
@@ -93,7 +98,7 @@ const KPIAccordion = ({ kpi }) => {
               </Tooltip>
             </Grid>
           </Grid>
-          {kpiProdetails.map((item, index) => {
+          {newResults?.map((item, index) => {
             return (
               <Fragment key={index}>
                 <KPIChildAccordion project={item} />

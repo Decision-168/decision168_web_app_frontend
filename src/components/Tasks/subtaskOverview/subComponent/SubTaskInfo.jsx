@@ -49,7 +49,6 @@ export default function SubTaskInfo({ styles, info }) {
       setLoading(true);
 
       const newStatus = event.target.value;
-
       const data = {
         stid: subtaskId,
         stassignee: assignee,
@@ -57,9 +56,8 @@ export default function SubTaskInfo({ styles, info }) {
       };
 
       const response = await changeSubTaskStatus(regId, data);
-
       // Update local state
-      setSelectedStatus(newStatus);
+      setSelectedStatus(response?.updatedStatus);
       setEditStatus(false);
 
       toast.success(`${response.message}`);

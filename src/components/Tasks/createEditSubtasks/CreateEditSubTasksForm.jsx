@@ -138,6 +138,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
 
   const handleFilesChange = (index) => (newValue) => {
     setFiles(newValue);
+    const time = Math.floor(Date.now() / 1000);
     setFields((prevFields) => {
       return prevFields.map((field, i) => {
         if (i === index) {
@@ -145,7 +146,7 @@ export default function CreateEditSubTasksForm({ editMode, taskData, subtaskData
             ...field,
             stfile:
               newValue?.map((file, fileIndex) => ({
-                [fileIndex]: file.name,
+                [fileIndex]: `${time}_${file.name.toLowerCase()}`,
               })) || [],
           };
         }

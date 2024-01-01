@@ -18,10 +18,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { fileItTask } from "../../../../api/modules/taskModule";
 import DuplicateTaskDialog from "../../subComponents/DuplicateTaskDialog";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 const TaskOverviewCard = ({ styles, task }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector(selectUserDetails);
 
   const handleAddTasksDialog = () => {
     dispatch(openModal("add-task"));

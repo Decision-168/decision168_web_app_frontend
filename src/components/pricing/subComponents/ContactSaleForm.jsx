@@ -1,7 +1,5 @@
 import React, { memo, useState } from "react";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
-import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
 import CustomNumberField from "../../common/CustomNumberField";
 import CustomSelect from "../../common/CustomSelect";
 import { DialogActions, DialogContent, Grid, Button, Box } from "@mui/material";
@@ -25,11 +23,8 @@ const items = [
 const ContactSaleForm = () => {
   const dispatch = useDispatch();
   const theme = useTheme();
-
-  //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
-  //get user id
 
   const [formContactSalesValues, setFormContactSalesValues] = useState({
     name: `${user.first_name} ${user.last_name}`,
@@ -79,7 +74,6 @@ const ContactSaleForm = () => {
         toast.error(`Please select options`);
       }
     } catch (error) {
-      // Handling error
       toast.error(`${error.response?.error}`);
     } finally {
       setLoading(false);
@@ -92,34 +86,13 @@ const ContactSaleForm = () => {
         <DialogContent dividers>
           <Grid container p={2}>
             <Grid item xs={12}>
-              <CustomLabelTextField
-                label="Name"
-                name="name"
-                required={true}
-                placeholder="Enter Name"
-                value={formContactSalesValues.name}
-                onChange={handleChange("name")}
-              />
+              <CustomLabelTextField label="Name" name="name" required={true} placeholder="Enter Name" value={formContactSalesValues.name} onChange={handleChange("name")} />
             </Grid>
             <Grid item xs={12}>
-              <CustomLabelTextField
-                label="Email"
-                name="email"
-                required={true}
-                placeholder="Enter Email Address"
-                value={formContactSalesValues.email}
-                onChange={handleChange("email")}
-              />
+              <CustomLabelTextField label="Email" name="email" required={true} placeholder="Enter Email Address" value={formContactSalesValues.email} onChange={handleChange("email")} />
             </Grid>
             <Grid item xs={12} pt={2}>
-              <CustomNumberField
-                label="Phone"
-                name="phone"
-                required={true}
-                placeholder="Enter Phone No"
-                value={formContactSalesValues.phone}
-                onChange={handleChange("phone")}
-              />
+              <CustomNumberField label="Phone" name="phone" required={true} placeholder="Enter Phone No" value={formContactSalesValues.phone} onChange={handleChange("phone")} />
             </Grid>
             <Grid item xs={12} pt={2}>
               <CustomSelect
@@ -150,12 +123,7 @@ const ContactSaleForm = () => {
                 Close
               </Button>
 
-              <Button
-                size="small"
-                type="submit"
-                variant="contained"
-                sx={{ ml: 1 }}
-              >
+              <Button size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
                 Send
               </Button>
             </Grid>

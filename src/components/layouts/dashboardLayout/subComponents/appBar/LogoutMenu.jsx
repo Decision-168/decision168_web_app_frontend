@@ -33,9 +33,10 @@ export default function LogoutMenu() {
     navigate("/");
     toast.success("Logout successful. Have a great day!");
   };
-  const handleRedirect = (path) => {
-    handleClose();
+  const handleRedirect = (e, path) => {
+    e.preventDefault();
     navigate(path);
+    handleClose();
   };
   return (
     <React.Fragment>
@@ -56,7 +57,7 @@ export default function LogoutMenu() {
           elevation: 0,
           sx: {
             overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.32))",
             mt: 1.5,
             "& .MuiAvatar-root": {
               width: 32,
@@ -80,14 +81,14 @@ export default function LogoutMenu() {
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-        <MenuItem onClick={() => handleRedirect("/profile")}>
+        <MenuItem onClick={(e) => handleRedirect(e , "/profile")}>
           <ListItemIcon>
             <BadgeIcon fontSize="small" />
           </ListItemIcon>
           My Profile
         </MenuItem>
 
-        <MenuItem onClick={() => handleRedirect("/update-profile")}>
+        <MenuItem onClick={(e) => handleRedirect(e ,"/update-profile")}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
