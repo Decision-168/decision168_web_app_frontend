@@ -1,6 +1,5 @@
 import React, { memo, useState } from "react";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
-import { useForm } from "react-hook-form";
 import { DialogActions, DialogContent, Grid, Button, Box } from "@mui/material";
 import { closeModal } from "../../../redux/action/modalSlice";
 import { useTheme } from "@emotion/react";
@@ -20,10 +19,8 @@ const items = [
 ];
 
 const FreeTrial = () => {
-  //get user id
   const user = useSelector(selectUserDetails);
   const user_id = user?.reg_id;
-  //get user id
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -57,7 +54,6 @@ const FreeTrial = () => {
         toast.error(`${response.message}`);
       }
     } catch (error) {
-      // Handling error
       toast.error(`${error.response?.error}`);
     } finally {
       setLoading(false);
@@ -70,14 +66,7 @@ const FreeTrial = () => {
         <DialogContent dividers>
           <Grid container p={2}>
             <Grid item xs={12}>
-              <CustomLabelTextField
-                label="Code/Coupon"
-                name="code"
-                required={true}
-                placeholder="Enter Code/Coupon"
-                value={formFreeTrialValues.code}
-                onChange={handleChange("code")}
-              />
+              <CustomLabelTextField label="Code/Coupon" name="code" required={true} placeholder="Enter Code/Coupon" value={formFreeTrialValues.code} onChange={handleChange("code")} />
             </Grid>
           </Grid>
         </DialogContent>
@@ -97,12 +86,7 @@ const FreeTrial = () => {
                 Close
               </Button>
 
-              <Button
-                size="small"
-                type="submit"
-                variant="contained"
-                sx={{ ml: 1 }}
-              >
+              <Button size="small" type="submit" variant="contained" sx={{ ml: 1 }}>
                 Apply
               </Button>
             </Grid>

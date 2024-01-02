@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { taskOverviewStyles } from "../taskOverview/styles";
 import TaskFiles from "../taskOverview/subComponents/TaskFiles";
 
-const AttachTaskFile = ({ task }) => {
+const AttachTaskFile = ({ task , fetchData , currentPage}) => {
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
@@ -34,6 +34,11 @@ const AttachTaskFile = ({ task }) => {
       };
       const response = await insertTaskFile(user_id, data);
       dispatch(closeModal("task-attach-file"));
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       toast.success(response.message);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);

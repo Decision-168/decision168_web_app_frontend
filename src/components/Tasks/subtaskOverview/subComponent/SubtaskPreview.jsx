@@ -21,9 +21,12 @@ import { patchDeleteSubtask } from "../../../../api/modules/TrashModule";
 import { toast } from "react-toastify";
 import DuplicateSubtaskDialog from "../../subComponents/DuplicateSubtaskDialog";
 import CreateEditSubTasksForm from "../../createEditSubtasks/CreateEditSubTasksForm";
+import { useSelector } from "react-redux";
+import { selectUserDetails } from "../../../../redux/action/userSlice";
 
 export default function SubtaskPreview({ styles, subtaskId, taskData, closePreview, fetchData, currentPage }) {
   const dispatch = useDispatch();
+  const user = useSelector(selectUserDetails);
 
   const [subTask, setSubTask] = React.useState({});
   const [loading, setLoading] = React.useState(false);

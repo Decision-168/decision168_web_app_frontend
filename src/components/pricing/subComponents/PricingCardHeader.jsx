@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Stack, Box, Typography, Avatar } from "@mui/material";
+import { Stack, Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 const PricingCardHeader = ({ name, icon, description }) => {

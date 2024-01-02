@@ -1,27 +1,11 @@
 import React, { memo } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  Avatar,
-  Box,
-  List,
-  Typography,
-  AccordionSummary,
-  AccordionDetails,
-  Accordion,
-} from "@mui/material";
+import { Avatar, Box, List, Typography, AccordionSummary, AccordionDetails, Accordion } from "@mui/material";
 import UserList from "./UserList";
+import { useTheme } from "@mui/material/styles";
 
-const MembersChildAccordion = ({
-  value,
-  expanded,
-  handleChange,
-  handleYesChange,
-  title,
-  bgColor,
-  pending,
-  displayBtns,
-  data
-}) => {
+const MembersChildAccordion = ({ value, expanded, handleChange, handleYesChange, title, bgColor, pending, displayBtns, data }) => {
+  const theme = useTheme();
   return (
     <Accordion expanded={expanded === value} onChange={handleChange(value)}>
       <AccordionSummary
@@ -50,14 +34,16 @@ const MembersChildAccordion = ({
           >
             {title}
           </Typography>
-          {!pending && (
+          {!pending && data?.length > 0 && (
             <Avatar
               sx={{
                 width: 16,
                 height: 16,
-                background: "tomato",
-                p: 0.2,
-                fontSize: 10,
+                background: theme.palette.tertiary.main,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "0.7rem",
                 ml: 1,
               }}
             >
@@ -70,7 +56,7 @@ const MembersChildAccordion = ({
         {data?.map((item, index) => {
           return (
             <List key={index} sx={{ m: 0, p: 0 }}>
-              <UserList data={item} assignManagerFlag={value} pending ={pending} displayBtns={displayBtns} passhandleYesChange={handleYesChange}/>
+              <UserList data={item} assignManagerFlag={value} pending={pending} displayBtns={displayBtns} passhandleYesChange={handleYesChange} />
             </List>
           );
         })}

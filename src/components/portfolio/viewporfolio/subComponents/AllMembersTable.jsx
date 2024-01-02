@@ -1,21 +1,17 @@
 import { useMemo, memo, useState } from "react";
-import {
-  useMaterialReactTable,
-  MaterialReactTable,
-} from "material-react-table";
+import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import {
-  openCnfModal,
-  closeCnfModal,
-} from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal, closeCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import { updatePortfolioMemberStatus } from "../../../../api/modules/porfolioModule";
 import { toast } from "react-toastify";
 import CustomDialog from "../../../common/CustomDialog";
 import AssignToSomeoneDailogContent from "./AssignToSomeoneDailogContent";
 import { useTheme } from "@mui/material/styles";
 import { getPortfolioTeamMembersAsync } from "../../../../redux/action/portfolioSlice";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import AddMemberForm from "./AddMemberForm";
 
 const AllMembersTable = ({ data }) => {
   const dispatch = useDispatch({ data });
@@ -46,9 +42,7 @@ const AllMembersTable = ({ data }) => {
       openCnfModal({
         modalName: "changeStatus",
         title: "Are you sure?",
-        description: `You want to ${
-          status === "active" ? "inactive" : "active"
-        } ${member}`,
+        description: `You want to ${status === "active" ? "inactive" : "active"} ${member}`,
       })
     );
   };
@@ -58,11 +52,7 @@ const AllMembersTable = ({ data }) => {
     const portfolioId = storedPorfolioId;
     const status = workingStatus === "active" ? "inactive" : "active";
     try {
-      const response = await updatePortfolioMemberStatus(
-        primaryId,
-        portfolioId,
-        status
-      );
+      const response = await updatePortfolioMemberStatus(primaryId, portfolioId, status);
       if (response.statusChanged === false) {
         if (response.result) {
           // open dialog
@@ -77,6 +67,16 @@ const AllMembersTable = ({ data }) => {
     } catch (error) {
       toast.error(`${error?.response?.data?.error}`);
     }
+  };
+
+  //Add Member Dailog code
+  const [openMemberDialog, setOpenMemberDialog] = useState(false);
+
+  const handleOpenMemberDailog = () => {
+    setOpenMemberDialog(true);
+  };
+  const handleCloseMemberDailog = () => {
+    setOpenMemberDialog(false);
   };
 
   const columns = useMemo(
@@ -103,8 +103,7 @@ const AllMembersTable = ({ data }) => {
             <Button
               sx={{
                 mr: 1,
-                color:
-                  row.original.working_status === "active" ? "black" : "white",
+                color: row.original.working_status === "active" ? "black" : "white",
                 backgroundColor:
                   row.original.working_status === "active"
                     ? theme.palette.primary.main // Use your active color code here
@@ -118,14 +117,7 @@ const AllMembersTable = ({ data }) => {
               }}
               size="small"
               variant="contained"
-              onClick={() =>
-                handleReopen(
-                  row.original.member_name,
-                  row.original.reg_id,
-                  row.original.pim_id,
-                  row.original.working_status
-                )
-              }
+              onClick={() => handleReopen(row.original.member_name, row.original.reg_id, row.original.pim_id, row.original.working_status)}
             >
               {row.original.working_status}
             </Button>
@@ -167,27 +159,22 @@ const AllMembersTable = ({ data }) => {
         backgroundColor: "#f5f5f5",
       },
     },
+
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Button onClick={handleOpenMemberDailog} variant="contained" size="small" sx={{mt:1}}>
+        Add member
+      </Button>
+    ),
   });
   return (
     <>
       <MaterialReactTable table={table} />
       <ConfirmationDialog value={"changeStatus"} handleYes={handleYes} />
-      <CustomDialog
-        handleClose={handleClose}
-        open={open}
-        modalTitle={`Inactive ${memberName}`}
-        showModalButton={false}
-        modalSize="sm"
-      >
-        <AssignToSomeoneDailogContent
-          result={result}
-          memberName={memberName}
-          memberRegId={memberRegId}
-          pimId={pimId}
-          portfolioId={storedPorfolioId}
-          data={data}
-          handleClose={handleClose}
-        />
+      <CustomDialog handleClose={handleClose} open={open} modalTitle={`Inactive ${memberName}`} showModalButton={false} modalSize="sm">
+        <AssignToSomeoneDailogContent result={result} memberName={memberName} memberRegId={memberRegId} pimId={pimId} portfolioId={storedPorfolioId} data={data} handleClose={handleClose} />
+      </CustomDialog>
+      <CustomDialog handleClose={handleCloseMemberDailog} open={openMemberDialog} modalTitle="Add to Portfolio Team Members" showModalButton={false} modalSize="sm">
+        <AddMemberForm handleClose={handleCloseMemberDailog} />
       </CustomDialog>
     </>
   );

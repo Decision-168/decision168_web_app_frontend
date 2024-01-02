@@ -10,7 +10,7 @@ import { insertSubtaskFile } from "../../../api/modules/taskModule";
 import { taskOverviewStyles } from "../taskOverview/styles";
 import SubtaskFiles from "../subtaskOverview/subComponent/SubtaskFiles";
 
-const AttachSubtaskFile = ({ subtask }) => {
+const AttachSubtaskFile = ({ subtask,  fetchData , currentPage }) => {
   const styles = taskOverviewStyles();
   const dispatch = useDispatch();
   const user = useSelector(selectUserDetails);
@@ -34,6 +34,11 @@ const AttachSubtaskFile = ({ subtask }) => {
 
       const response = await insertSubtaskFile(user_id, data);
       dispatch(closeModal("subtask-attach-file"));
+      if(currentPage){
+        fetchData(currentPage);
+      }else{
+        fetchData();
+      }
       toast.success(response.message);
     } catch (error) {
       toast.error(`${error.response?.data?.error}`);
