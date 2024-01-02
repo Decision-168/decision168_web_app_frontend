@@ -13,7 +13,6 @@ import VerifyGoalInviteRequestMember from "../components/GoalsAndStrategies/subC
 import VerifyProjectInviteRequestMember from "../components/project/subComponents/VerifyProjectInviteRequestMember";
 import VerifyProjectRequestMember from "../components/project/subComponents/VerifyProjectRequestMember";
 import ProjectTasksList from "../components/Tasks/ProjectTasksList";
-
 const Login = lazy(() => import("../components/auth/login"));
 const Register = lazy(() => import("../components/auth/register"));
 const ResetPassword = lazy(() => import("../components/auth/resetpassword"));
@@ -24,17 +23,33 @@ const Calendar = lazy(() => import("../components/calendar"));
 const Community = lazy(() => import("../components/community"));
 const UpdateProfile = lazy(() => import("../components/updateprofile"));
 const FileCabinet = lazy(() => import("../components/filecabinet"));
-const PortfolioView = lazy(() => import("../components/portfolio/viewporfolio/"));
+const PortfolioView = lazy(() =>
+  import("../components/portfolio/viewporfolio/")
+);
 const AllPortfolios = lazy(() => import("../components/portfolio/portfolios"));
 
-const CreateEditPortfolio = lazy(() => import("../components/portfolio/createEditPortfolio"));
-const PortfolioGoals = lazy(() => import("../components/GoalsAndStrategies/portfolio-goals/view-goals"));
-const GoalsOverview = lazy(() => import("../components/GoalsAndStrategies/goals-overview"));
-const GoalOverviewRequest = lazy(() => import("../components/GoalsAndStrategies/goal-overview-request"));
-const KPIOverview = lazy(() => import("../components/GoalsAndStrategies/kpi-overview"));
+const CreateEditPortfolio = lazy(() =>
+  import("../components/portfolio/createEditPortfolio")
+);
+const PortfolioGoals = lazy(() =>
+  import("../components/GoalsAndStrategies/portfolio-goals/view-goals")
+);
+const GoalsOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/goals-overview")
+);
+const GoalOverviewRequest = lazy(() =>
+  import("../components/GoalsAndStrategies/goal-overview-request")
+);
+const KPIOverview = lazy(() =>
+  import("../components/GoalsAndStrategies/kpi-overview")
+);
 const Project = lazy(() => import("../components/project"));
-const ProjectOverview = lazy(() => import("../components/project/projects-overview/ProjectOverview"));
-const ProjectOverviewRequest = lazy(() => import("../components/project/projects-overview-request"));
+const ProjectOverview = lazy(() =>
+  import("../components/project/projects-overview/ProjectOverview")
+);
+const ProjectOverviewRequest = lazy(() =>
+  import("../components/project/projects-overview-request")
+);
 const Archive = lazy(() => import("../components/archive"));
 const Trash = lazy(() => import("../components/trash"));
 
@@ -45,10 +60,23 @@ const PortfolioTasks = lazy(() => import("../components/Tasks/PortfolioTasks"));
 // const CreateEditTask = lazy(() => import("../components/Tasks/createEditTask"));
 const TaskOverview = lazy(() => import("../components/Tasks/taskOverview"));
 const MyAlert = lazy(() => import("../components/myAlert"));
-const AccountVerification = lazy(() => import("../components/auth/accountVerification"));
-const PortfolioProjects = lazy(() => import("../components/project/portfolio-projects"));
+const AccountVerification = lazy(() =>
+  import("../components/auth/accountVerification")
+);
+const PortfolioProjects = lazy(() =>
+  import("../components/project/portfolio-projects")
+);
 const ProjectsList = lazy(() => import("../components/project/projects-list"));
-const ProjectTeamMembersTasksList = lazy(() => import("../components/Tasks/ProjectTeamMembersTasksList"));
+const EventList = lazy(() =>
+  import("../components/calendar/subPages/EventList")
+);
+const TodoList = lazy(() => import("../components/calendar/subPages/TodoList"));
+const MeetingList = lazy(() =>
+  import("../components/calendar/subPages/MeetingList")
+);
+const ProjectTeamMembersTasksList = lazy(() =>
+  import("../components/Tasks/ProjectTeamMembersTasksList")
+);
 
 const RouteIndex = () => {
   return (
@@ -78,6 +106,30 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <Calendar />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-event-list"
+            element={
+              <DashboardLayout>
+                <EventList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-todo-list"
+            element={
+              <DashboardLayout>
+                <TodoList />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/calendar-meeting-list"
+            element={
+              <DashboardLayout>
+                <MeetingList />
               </DashboardLayout>
             }
           />
@@ -177,7 +229,6 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-
           <Route
             path="/all-tasks"
             element={
@@ -306,7 +357,6 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-
           <Route
             path="/archive"
             element={
@@ -323,22 +373,50 @@ const RouteIndex = () => {
               </DashboardLayout>
             }
           />
-          <Route exact path="/portfolio-invite-request/:portfolioId/:primaryId/:flag" element={<VerifyInviteMember />} />
+          <Route
+            exact
+            path="/portfolio-invite-request/:portfolioId/:primaryId/:flag"
+            element={<VerifyInviteMember />}
+          />
 
-          <Route exact path="/goal-request/:goalId/:primaryId/:flag" element={<VerifyGoalRequestMember />} />
+          <Route
+            exact
+            path="/goal-request/:goalId/:primaryId/:flag"
+            element={<VerifyGoalRequestMember />}
+          />
 
-          <Route exact path="/goal-invite-reject-request/:goalId/:primaryId/:flag" element={<VerifyGoalInviteRequestMember />} />
+          <Route
+            exact
+            path="/goal-invite-reject-request/:goalId/:primaryId/:flag"
+            element={<VerifyGoalInviteRequestMember />}
+          />
 
-          <Route exact path="/project-request/:projectId/:primaryId/:flag" element={<VerifyProjectRequestMember />} />
+          <Route
+            exact
+            path="/project-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectRequestMember />}
+          />
 
-          <Route exact path="/project-invite-reject-request/:projectId/:primaryId/:flag" element={<VerifyProjectInviteRequestMember />} />
+          <Route
+            exact
+            path="/project-invite-reject-request/:projectId/:primaryId/:flag"
+            element={<VerifyProjectInviteRequestMember />}
+          />
         </Route>
 
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
-          <Route exact path="/account-verification/:token" element={<AccountVerification />} />
+          <Route
+            exact
+            path="/account-verification/:token"
+            element={<AccountVerification />}
+          />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route exact path="/change-password/:id" element={<ChangePassword />} />
+          <Route
+            exact
+            path="/change-password/:id"
+            element={<ChangePassword />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
