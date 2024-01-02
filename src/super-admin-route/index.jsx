@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy } from "react";
 import DashboardLayout from "../components/superAdmin/layouts/dashboardLayout";
-import PageNotFound from "../utils/PageNotFound";
+import SAPageNotFound from "../utils/SAPageNotFound";
 import PrivateSuperAdminRoute from "./PrivateSuperAdminRoute";
 
 const Login = lazy(() => import("../components/superAdmin/auth/login"));
@@ -188,7 +188,7 @@ const SuperAdminRouteIndex = () => {
             }
           />
         </Route>
-        <Route path="*" element={<PageNotFound />} />
+        <Route path="*" element={<SAPageNotFound />} />
       </Routes>
     </Router>
   );
