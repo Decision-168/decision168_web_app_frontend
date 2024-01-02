@@ -18,6 +18,7 @@ axiosInstance.interceptors.response.use(
       // Token is expired or invalid, redirect to the "/" route
       localStorage.removeItem("token");
       window.location.replace("/");
+      //if user is admin then go to /super-admin/
     }
     return Promise.reject(error);
   }
