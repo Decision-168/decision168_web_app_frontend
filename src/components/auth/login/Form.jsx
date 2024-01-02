@@ -76,6 +76,7 @@ export default function Form() {
       setLoading(true);
       const response = await loginUser(formData);
       localStorage.setItem("token", response.token);
+      localStorage.setItem("userType", "User");
       axiosInstance.defaults.headers.Authorization = `Bearer ${response.token}`;
       if (rememberMe) {
         localStorage.setItem("rememberedUser", JSON.stringify(formData));
@@ -121,7 +122,15 @@ export default function Form() {
         />
       </Box>
 
-      <Box mb={1} sx={{maxWidth:"100%", overflow:"hidden", bgcolor:"#FFF", borderRadius:"3px"}}>
+      <Box
+        mb={1}
+        sx={{
+          maxWidth: "100%",
+          overflow: "hidden",
+          bgcolor: "#FFF",
+          borderRadius: "3px",
+        }}
+      >
         <ReCAPTCHA
           key={recaptchaKey}
           sitekey="6Lcljz4pAAAAAHq2EuMksbFq3ZM7AceT5527GkFT"
@@ -151,7 +160,7 @@ export default function Form() {
       <AuthButton
         loading={loading}
         buttonText="Log In"
-        disabled={!isCaptchaVerified}
+        // disabled={!isCaptchaVerified}
       />
     </Box>
   );

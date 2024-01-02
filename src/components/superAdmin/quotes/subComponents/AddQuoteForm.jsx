@@ -3,10 +3,10 @@ import { Box, Button, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTheme } from "@mui/material/styles";
 import CustomLabelTextField from "./../../common/CustomLabelTextField";
-import { globalValidations } from "./../../../utils/GlobalValidation";
+import { globalValidations } from "./../../../../utils/GlobalValidation";
 import CustomMultilineTextField from "./../../common/CustomMultilineTextField";
-import { closeModal } from "../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import { closeModal } from "../../../../redux/action/modalSlice";
 
 export default function AddQuoteForm({ editMode }) {
   const dispatch = useDispatch();
@@ -47,7 +47,14 @@ export default function AddQuoteForm({ editMode }) {
       />
 
       <Box textAlign="right" padding="0 20px 20px">
-        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
+        <Button
+          size="small"
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => dispatch(closeModal())}
+          sx={{ mr: 1, color: "#fff" }}
+        >
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">

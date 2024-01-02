@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
+import { globalValidations } from "../../../../utils/GlobalValidation";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { InfoOutlined } from "@mui/icons-material";
-import { closeModal } from "../../../redux/action/modalSlice";
+import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 
 export default function CreateEditCustomPackageForm({ editMode }) {
@@ -21,9 +21,21 @@ export default function CreateEditCustomPackageForm({ editMode }) {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} px={2} borderTop="1px solid #dadada">
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      px={2}
+      borderTop="1px solid #dadada"
+    >
       <Grid item xs={12} py={2} borderBottom="1px solid #dadada">
-        <Typography component="h5" variant="h5" fontSize="16px" textAlign="left" fontWeight="600">
+        <Typography
+          component="h5"
+          variant="h5"
+          fontSize="16px"
+          textAlign="left"
+          fontWeight="600"
+        >
           Company Details
         </Typography>
         <Grid item xs={12} pt={1} display="flex" gap={3} alignItems="center">
@@ -65,7 +77,13 @@ export default function CreateEditCustomPackageForm({ editMode }) {
       </Grid>
 
       <Grid item xs={12} py={2}>
-        <Typography component="h5" variant="h5" fontSize="16px" textAlign="left" fontWeight="600">
+        <Typography
+          component="h5"
+          variant="h5"
+          fontSize="16px"
+          textAlign="left"
+          fontWeight="600"
+        >
           Package Detail
         </Typography>
         <Grid item xs={12} pt={1} display="flex" gap={3} alignItems="center">
@@ -223,7 +241,14 @@ export default function CreateEditCustomPackageForm({ editMode }) {
       </Grid>
 
       <Box textAlign="right" padding="0 20px 20px 0">
-        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
+        <Button
+          size="small"
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => dispatch(closeModal())}
+          sx={{ mr: 1, color: "#fff" }}
+        >
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">

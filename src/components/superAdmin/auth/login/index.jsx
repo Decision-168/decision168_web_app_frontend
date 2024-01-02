@@ -9,11 +9,15 @@ import Copyright from "../subComponents/Copyright";
 import BackImage from "../subComponents/BackImage";
 import { useTheme } from "@mui/material/styles";
 import { Hidden, Stack } from "@mui/material";
+import { Navigate } from "react-router";
 // import Navigation from "../subComponents/Navigation";
 
 export default function Login() {
   const theme = useTheme();
-
+  const token = localStorage.getItem("token");
+  if (token) {
+    return <Navigate to="/super-admin/dashboard" />;
+  }
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
@@ -30,12 +34,20 @@ export default function Login() {
         elevation={6}
         square
         bgcolor={theme.palette.secondary.main}
-        sx={{ position: "relative" }}>
+        sx={{ position: "relative" }}
+      >
         <Hidden mdDown>
           <Ribbon />
         </Hidden>
 
-        <Stack direction="column" justifyContent="space-between" alignItems="center" color="white" p={4} sx={{ height: "100%" }}>
+        <Stack
+          direction="column"
+          justifyContent="space-between"
+          alignItems="center"
+          color="white"
+          p={4}
+          sx={{ height: "100%" }}
+        >
           <Box>
             {/* Decision-168 logo */}
             <Box mb={10}>
@@ -43,7 +55,10 @@ export default function Login() {
             </Box>
 
             {/* Welcome and text */}
-            <Header title="Welcome Super Admin!" text="Sign in to Decision168 !" />
+            <Header
+              title="Welcome Super Admin!"
+              text="Sign in to Decision168 !"
+            />
 
             {/* Form */}
             <Form />

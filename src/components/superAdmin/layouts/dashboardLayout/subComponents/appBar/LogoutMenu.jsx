@@ -25,7 +25,8 @@ export default function LogoutMenu() {
 
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
-    navigate("/super-admin/login");
+    localStorage.removeItem("userType");
+    navigate("/super-admin/");
   };
 
   return (
@@ -37,7 +38,8 @@ export default function LogoutMenu() {
             size="small"
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}>
+            aria-expanded={open ? "true" : undefined}
+          >
             <BackgroundLetterAvatars avatarBgColor="#B9B8B9" />
           </IconButton>
         </Tooltip>
@@ -75,7 +77,8 @@ export default function LogoutMenu() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
         <MenuItem onClick={LogoutFromApp}>
           <ListItemIcon>
             <Logout fontSize="small" />

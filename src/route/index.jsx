@@ -1,10 +1,56 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { lazy, useState, useEffect } from "react";
 import DashboardLayout from "../components/layouts/dashboardLayout";
+import SADashboardLayout from "../components/superAdmin/layouts/dashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import PageNotFound from "../utils/PageNotFound";
 import SubtaskOverview from "../components/Tasks/subtaskOverview";
+
+//-------------------adminPanel--------------------//
+
+const SALogin = lazy(() => import("../components/superAdmin/auth/login"));
+const SADashboard = lazy(() => import("../components/superAdmin/dashboard"));
+const Quotes = lazy(() => import("../components/superAdmin/quotes"));
+const RegisteredUsers = lazy(() =>
+  import("../components/superAdmin/registeredUsers")
+);
+const DeactivatedUsers = lazy(() =>
+  import(
+    "../components/superAdmin/registeredUsers/subComponents/deactivatedUsers"
+  )
+);
+const RefundList = lazy(() =>
+  import("../components/superAdmin/registeredUsers/subComponents/refundList")
+);
+const MenuPricing = lazy(() => import("../components/superAdmin/menuPricing"));
+const EnterpriseLeads = lazy(() =>
+  import("../components/superAdmin/enterpriseLeads")
+);
+const AdSetting = lazy(() => import("../components/superAdmin/adSetting"));
+const CouponSetting = lazy(() =>
+  import("../components/superAdmin/couponSetting")
+);
+const SACommunity = lazy(() => import("../components/superAdmin/community"));
+const Category = lazy(() =>
+  import(
+    "../components/superAdmin/community/subComponents/decisionMakersCategories"
+  )
+);
+const Agreement = lazy(() =>
+  import("../components/superAdmin/community/subComponents/agreement")
+);
+const TicketManagement = lazy(() =>
+  import("../components/superAdmin/ticketManagement")
+);
+const TicketOverview = lazy(() =>
+  import(
+    "../components/superAdmin/ticketManagement/subComponents/ticketOverview"
+  )
+);
+const Supporters = lazy(() => import("../components/superAdmin/supporters"));
+
+//------------------user-panel-----------------//
 import Pricing from "../components/pricing";
 import VerifyInviteMember from "../components/portfolio/viewporfolio/subComponents/VerifyInviteMember";
 import PaymentSuccess from "../components/pricing/subComponents/PaymentSuccess";
@@ -67,13 +113,6 @@ const PortfolioProjects = lazy(() =>
   import("../components/project/portfolio-projects")
 );
 const ProjectsList = lazy(() => import("../components/project/projects-list"));
-const EventList = lazy(() =>
-  import("../components/calendar/subPages/EventList")
-);
-const TodoList = lazy(() => import("../components/calendar/subPages/TodoList"));
-const MeetingList = lazy(() =>
-  import("../components/calendar/subPages/MeetingList")
-);
 const ProjectTeamMembersTasksList = lazy(() =>
   import("../components/Tasks/ProjectTeamMembersTasksList")
 );
@@ -82,6 +121,7 @@ const RouteIndex = () => {
   return (
     <Router>
       <Routes>
+        {/* User Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/" element={<PrivateRoute />}>
           <Route
@@ -106,30 +146,6 @@ const RouteIndex = () => {
             element={
               <DashboardLayout>
                 <Calendar />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/calendar-event-list"
-            element={
-              <DashboardLayout>
-                <EventList />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/calendar-todo-list"
-            element={
-              <DashboardLayout>
-                <TodoList />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/calendar-meeting-list"
-            element={
-              <DashboardLayout>
-                <MeetingList />
               </DashboardLayout>
             }
           />
@@ -403,7 +419,146 @@ const RouteIndex = () => {
             element={<VerifyProjectInviteRequestMember />}
           />
         </Route>
-
+        {/* Admin Routes */}
+        <Route path="/super-admin" element={<SALogin />} />
+        <Route path="/super-admin" element={<PrivateRoute />}>
+          <Route
+            path="/super-admin/dashboard"
+            element={
+              <SADashboardLayout>
+                <SADashboard />
+              </SADashboardLayout>
+            }
+          />
+          {/* <Route
+            path="/super-admin/profile"
+            element={
+              <SADashboardLayout>
+                <Profile />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/update-profile"
+            element={
+              <SADashboardLayout>
+                <UpdateProfile />
+              </SADashboardLayout>
+            }
+          /> */}
+          <Route
+            path="/super-admin/quotes-list"
+            element={
+              <SADashboardLayout>
+                <Quotes />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/registered-list"
+            element={
+              <SADashboardLayout>
+                <RegisteredUsers />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/deactivated-users"
+            element={
+              <SADashboardLayout>
+                <DeactivatedUsers />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/refund-list"
+            element={
+              <SADashboardLayout>
+                <RefundList />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/pricing-list"
+            element={
+              <SADashboardLayout>
+                <MenuPricing />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/contacted-sales-list"
+            element={
+              <SADashboardLayout>
+                <EnterpriseLeads />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/ad-list"
+            element={
+              <SADashboardLayout>
+                <AdSetting />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/coupon-list"
+            element={
+              <SADashboardLayout>
+                <CouponSetting />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/community"
+            element={
+              <SADashboardLayout>
+                <SACommunity />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/decision-maker-category"
+            element={
+              <SADashboardLayout>
+                <Category />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/agreement"
+            element={
+              <SADashboardLayout>
+                <Agreement />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/support-list"
+            element={
+              <SADashboardLayout>
+                <TicketManagement />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/ticket-overview/:id"
+            element={
+              <SADashboardLayout>
+                <TicketOverview />
+              </SADashboardLayout>
+            }
+          />
+          <Route
+            path="/super-admin/supporters"
+            element={
+              <SADashboardLayout>
+                <Supporters />
+              </SADashboardLayout>
+            }
+          />
+        </Route>
         <Route path="/" element={<PublicRoute />}>
           <Route path="/register" element={<Register />} />
           <Route

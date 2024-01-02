@@ -1,12 +1,15 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useEffect, useState } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Button, Stack } from "@mui/material";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
-import { getAllDeactivatedUsers } from "../../../../api/modules/registeredUsersModule";
+import { getAllDeactivatedUsers } from "../../../../../api/super-admin-modules/registeredUsersModule";
 
 const csvConfig = mkConfig({
   fieldSeparator: ",",
@@ -149,17 +152,31 @@ const DeactivatedUsersTable = () => {
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "60px", textTransform: "uppercase" }}
-          onClick={handleExportData}>
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "60px",
+            textTransform: "uppercase",
+          }}
+          onClick={handleExportData}
+        >
           Excel
         </Button>
         <Button
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "50px", textTransform: "uppercase" }}
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "50px",
+            textTransform: "uppercase",
+          }}
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+        >
           pdf
         </Button>
       </Stack>

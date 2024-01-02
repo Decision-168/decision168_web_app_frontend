@@ -1,13 +1,17 @@
-import { Box, Button, FormControlLabel, Checkbox, Stack } from "@mui/material";
-import { useState } from "react";
+import { Box, FormControlLabel, Checkbox, Stack } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
-// import CustomLink from "../../common/CustomLink";
+import CustomLink from "../../common/CustomLink";
 import CustomTextField from "../../common/CustomTextField";
 import { useForm } from "react-hook-form";
 import { authValidations } from "../authValidations";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from "react-router-dom";
-
+import { RecaptchaVerification } from "../../../../api/modules/authModule";
+import { loginSuperadmin } from "../../../../api/super-admin-modules/authModule";
+import AuthButton from "../subComponents/AuthButton";
+import { toast } from "react-toastify";
+import axiosInstance from "../../../../api/axios";
 export default function Form() {
   const {
     handleSubmit,
@@ -16,28 +20,83 @@ export default function Form() {
   } = useForm();
   const navigate = useNavigate();
   const [isCaptchaVerified, setCaptchaVerified] = useState(false);
+  const [recaptchaKey, setRecaptchaKey] = useState(1);
+  const [recaptchaKeyError, setRecaptchaKeyError] = useState(null);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleCaptchaChange = (response) => {
-    if (response) {
-      setCaptchaVerified(true);
+  // Function to prefill form fields with remembered user data
+  const prefillForm = () => {
+    const rememberedUser = localStorage.getItem("rememberedUser");
+    if (rememberedUser) {
+      const { email_address, password } = JSON.parse(rememberedUser);
+      setValue("email_address", email_address);
+      setValue("password", password);
+      setRememberMe(true);
     }
   };
-  // const onSubmit = (data) => {
-  //   if (isCaptchaVerified) {
-  //     alert(JSON.stringify(data));
-  //   } else {
-  //     alert("Please verify that you are not a robot.");
-  //   }
-  // };
 
-  const onSubmit = (data) => {
-    // alert(JSON.stringify(data));
-    localStorage.setItem("token", "dummyToken");
-    navigate("/super-admin/dashboard");
+  useEffect(() => {
+    prefillForm();
+  }, []);
+
+  const handleCaptchaChange = async (token) => {
+    if (token) {
+      try {
+        const passData = {
+          recaptchaToken: token,
+        };
+        const response = await RecaptchaVerification(passData);
+        if (response.success === true) {
+          setCaptchaVerified(true);
+          setRecaptchaKeyError(null);
+        } else {
+          setCaptchaVerified(false);
+          setRecaptchaKey((prevKey) => prevKey + 1);
+          setRecaptchaKeyError(
+            "ReCAPTCHA verification failed. Please try again."
+          );
+        }
+      } catch (error) {
+        setCaptchaVerified(false);
+        setRecaptchaKey((prevKey) => prevKey + 1);
+        setRecaptchaKeyError(
+          "ReCAPTCHA verification failed. Please try again."
+        );
+      }
+    }
+  };
+
+  const onSubmit = async (formData) => {
+    try {
+      setLoading(true);
+      const response = await loginSuperadmin(formData);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("userType", "Admin");
+      axiosInstance.defaults.headers.Authorization = `Bearer ${response.token}`;
+      if (rememberMe) {
+        localStorage.setItem("rememberedUser", JSON.stringify(formData));
+      } else {
+        // If "Remember Me" is not checked, remove the remembered user data
+        localStorage.removeItem("rememberedUser");
+      }
+
+      navigate("/super-admin/dashboard");
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      // sx={{ mt: 1 }}
+    >
       <Box sx={{ height: "65px" }}>
         <CustomTextField
           name="username"
@@ -58,18 +117,47 @@ export default function Form() {
           validation={authValidations.password} // Pass the validation rules as a prop
         />
       </Box>
-      <Box mb={1}>
-        <ReCAPTCHA sitekey="6LeGztMcAAAAAP6yPwVYpzxL2qPnmdK2nVgFb1Dp" onChange={handleCaptchaChange} />
+
+      <Box
+        mb={1}
+        sx={{
+          maxWidth: "100%",
+          overflow: "hidden",
+          bgcolor: "#FFF",
+          borderRadius: "3px",
+        }}
+      >
+        <ReCAPTCHA
+          key={recaptchaKey}
+          sitekey="6Lcljz4pAAAAAHq2EuMksbFq3ZM7AceT5527GkFT"
+          onChange={handleCaptchaChange}
+        />
+        {recaptchaKeyError && (
+          <div style={{ color: "red", marginTop: "10px", fontSize: "12px" }}>
+            <span>{recaptchaKeyError}</span>
+          </div>
+        )}
       </Box>
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <FormControlLabel control={<Checkbox value="remember" size="small" />} label="Remember me" />
-        {/* <CustomLink path="/reset-password">Forgot password?</CustomLink> */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              size="small"
+            />
+          }
+          label="Remember me"
+        />
+        <CustomLink path="/reset-password">Forgot password?</CustomLink>
       </Stack>
 
-      <Button type="submit" fullWidth variant="contained" sx={{ my: 2, borderRadius: "3px" }}>
-        Log In
-      </Button>
+      <AuthButton
+        loading={loading}
+        buttonText="Log In"
+        // disabled={!isCaptchaVerified}
+      />
     </Box>
   );
 }

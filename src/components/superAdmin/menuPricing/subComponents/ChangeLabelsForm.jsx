@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
-import { closeModal } from "../../../redux/action/modalSlice";
+import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
+import { globalValidations } from "../../../../utils/GlobalValidation";
 
 export default function ChangeLabelsForm() {
   const dispatch = useDispatch();
@@ -20,7 +20,13 @@ export default function ChangeLabelsForm() {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} px={2} borderTop="1px solid #dadada">
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      px={2}
+      borderTop="1px solid #dadada"
+    >
       <Grid item xs={12} pt={2} display="flex" gap={3} alignItems="center">
         <CustomLabelTextField
           label="Portfolio Label"
@@ -200,7 +206,14 @@ export default function ChangeLabelsForm() {
       </Grid>
 
       <Box textAlign="right" padding="16px 0 20px 0">
-        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
+        <Button
+          size="small"
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => dispatch(closeModal())}
+          sx={{ mr: 1, color: "#fff" }}
+        >
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">

@@ -1,17 +1,20 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
 import AddEditPackageForm from "../AddEditPackageForm";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { getPricingList } from "./../../../../api/modules/pricingModule";
 import ChangeLabelsForm from "../ChangeLabelsForm";
 import { FileCopyOutlined } from "@mui/icons-material";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
+import { getPricingList } from "../../../../../api/super-admin-modules/pricingModule";
 
 const PricingTable = () => {
   const dispatch = useDispatch();
@@ -68,7 +71,9 @@ const PricingTable = () => {
         openCnfModal({
           modalName: "statusModal",
           title: "Are you sure?",
-          description: `You want to ${status === "active" ? "Inactive" : "Active"} the Pack`,
+          description: `You want to ${
+            status === "active" ? "Inactive" : "Active"
+          } the Pack`,
         })
       );
     },
@@ -88,7 +93,9 @@ const PricingTable = () => {
         projects: pack.pack_projects,
         storage: pack.pack_storage,
         content_planner: pack.pack_content_planner,
-        custom_package: `${pack.coupon_pack}`.charAt(0).toUpperCase() + `${pack.coupon_pack}`.slice(1),
+        custom_package:
+          `${pack.coupon_pack}`.charAt(0).toUpperCase() +
+          `${pack.coupon_pack}`.slice(1),
         created_date: `${pack.pack_created_date}`.slice(0, 10),
         edit: "",
         labels: "",
@@ -185,12 +192,14 @@ const PricingTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
               size="small"
               variant="contained"
-              onClick={() => handleEdit(row?.original?.pack_id)}>
+              onClick={() => handleEdit(row?.original?.pack_id)}
+            >
               Edit
             </Button>
           </Box>
@@ -206,12 +215,14 @@ const PricingTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
               size="small"
               variant="contained"
-              onClick={() => handleChange(row?.original?.pack_id)}>
+              onClick={() => handleChange(row?.original?.pack_id)}
+            >
               Change
             </Button>
           </Box>
@@ -226,22 +237,30 @@ const PricingTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             {row?.original?.status === "active" ? (
               <Button
                 sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
                 size="small"
                 variant="contained"
-                onClick={() => handleStatus(row?.original?.status)}>
+                onClick={() => handleStatus(row?.original?.status)}
+              >
                 Active
               </Button>
             ) : (
               <Button
-                sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+                sx={{
+                  maxWidth: "36px",
+                  padding: "2px 5px",
+                  fontSize: "12px",
+                  color: "white",
+                }}
                 size="small"
                 variant="contained"
                 color="secondary"
-                onClick={() => handleStatus(row?.original?.status)}>
+                onClick={() => handleStatus(row?.original?.status)}
+              >
                 Inactive
               </Button>
             )}
@@ -303,10 +322,16 @@ const PricingTable = () => {
         handleClick={handleChangeLabels}
         buttonIcon={<FileCopyOutlined fontSize="14px" sx={{ mr: "4px" }} />}
         buttonText="Change Labels"
-        modalSize={"sm"}>
+        modalSize={"sm"}
+      >
         <AddEditPackageForm editMode={true} />
       </ReduxDialog>
-      <ReduxDialog value={"changeLabels"} modalTitle={"Change Labels"} showModalButton={false} modalSize={"sm"}>
+      <ReduxDialog
+        value={"changeLabels"}
+        modalTitle={"Change Labels"}
+        showModalButton={false}
+        modalSize={"sm"}
+      >
         <ChangeLabelsForm />
       </ReduxDialog>
       <ConfirmationDialog value={"statusModal"} />

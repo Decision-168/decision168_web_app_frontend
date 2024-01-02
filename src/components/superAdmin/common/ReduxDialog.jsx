@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import CustomLinkButton from "./CustomLinkButton";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal, selectModal } from "../../redux/action/modalSlice";
+import { closeModal, selectModal } from "../../../redux/action/modalSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -21,7 +21,17 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ReduxDialog = ({ children, value, modalTitle, showModalButton, modalSize, redirectPath, handleClick, buttonIcon, buttonText }) => {
+const ReduxDialog = ({
+  children,
+  value,
+  modalTitle,
+  showModalButton,
+  modalSize,
+  redirectPath,
+  handleClick,
+  buttonIcon,
+  buttonText,
+}) => {
   const theme = useTheme();
   const activeModal = useSelector(selectModal);
   const dispatch = useDispatch();
@@ -32,7 +42,8 @@ const ReduxDialog = ({ children, value, modalTitle, showModalButton, modalSize, 
       fullWidth={true}
       onClose={() => dispatch(closeModal())}
       aria-labelledby="customized-dialog-title"
-      open={activeModal === value}>
+      open={activeModal === value}
+    >
       <DialogTitle
         sx={{
           m: 0,
@@ -42,7 +53,8 @@ const ReduxDialog = ({ children, value, modalTitle, showModalButton, modalSize, 
           alignItems: "center",
           borderTop: `5px solid ${theme.palette.primary.main} `,
         }}
-        id="customized-dialog-title">
+        id="customized-dialog-title"
+      >
         <Typography component="h6" variant="subtitle2" mr={2}>
           {modalTitle}
         </Typography>
@@ -64,7 +76,8 @@ const ReduxDialog = ({ children, value, modalTitle, showModalButton, modalSize, 
           right: 8,
           top: 8,
           color: (theme) => theme.palette.grey[500],
-        }}>
+        }}
+      >
         <CloseIcon />
       </IconButton>
       {children}

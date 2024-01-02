@@ -1,13 +1,19 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useState, useEffect, useCallback } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Chip, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
 import RegisteredUsersDetail from "../RegisteredUsersDetail";
-import { getAllRegisteredUsers, getUserDetail } from "./../../../../api/modules/registeredUsersModule";
+import {
+  getAllRegisteredUsers,
+  getUserDetail,
+} from "./../../../../../api/super-admin-modules/registeredUsersModule";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -91,7 +97,9 @@ const RegisteredUsersTable = () => {
         reg_id: user.reg_id,
         name: `${user.first_name} ${user.last_name}`,
         email: user.email_address,
-        account_status: `${user.reg_acc_status === "activated" ? "Active" : ""}`,
+        account_status: `${
+          user.reg_acc_status === "activated" ? "Active" : ""
+        }`,
         reg_date: user.reg_date,
         last_login: user.last_login,
         package: user.package_id,
@@ -160,12 +168,19 @@ const RegisteredUsersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ mr: 1, minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+              sx={{
+                mr: 1,
+                minWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+              }}
               size="small"
               variant="contained"
-              onClick={() => handleViewDetail(row.original.reg_id)}>
+              onClick={() => handleViewDetail(row.original.reg_id)}
+            >
               View
             </Button>
           </Box>
@@ -222,17 +237,31 @@ const RegisteredUsersTable = () => {
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "60px", textTransform: "uppercase" }}
-          onClick={handleExportData}>
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "60px",
+            textTransform: "uppercase",
+          }}
+          onClick={handleExportData}
+        >
           Excel
         </Button>
         <Button
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "50px", textTransform: "uppercase" }}
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "50px",
+            textTransform: "uppercase",
+          }}
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+        >
           pdf
         </Button>
       </Stack>
@@ -295,7 +324,8 @@ const RegisteredUsersTable = () => {
         value={"viewDetailModal"}
         modalTitle={`${userDetail?.specificUser?.first_name} ${userDetail?.specificUser?.middle_name} ${userDetail?.specificUser?.last_name}`}
         showModalButton={false}
-        modalSize={"md"}>
+        modalSize={"md"}
+      >
         <RegisteredUsersDetail userDetail={userDetail} />
       </ReduxDialog>
     </>

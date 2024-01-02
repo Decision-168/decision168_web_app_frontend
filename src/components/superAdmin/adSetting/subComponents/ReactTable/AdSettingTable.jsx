@@ -1,13 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { useMemo, memo, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import { useCallback } from "react";
-import { getAdList } from "./../../../../api/modules/adSettingModule";
+import { getAdList } from "../../../../../api/super-admin-modules/adSettingModule";
 
 const AdSettigTable = () => {
   const dispatch = useDispatch();
@@ -110,22 +113,35 @@ const AdSettigTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             {row?.original?.status === "active" ? (
               <Button
-                sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+                sx={{
+                  maxWidth: "36px",
+                  padding: "2px 5px",
+                  fontSize: "12px",
+                  color: "white",
+                }}
                 size="small"
                 variant="contained"
-                onClick={() => handleActive(row?.original?.aid)}>
+                onClick={() => handleActive(row?.original?.aid)}
+              >
                 Active
               </Button>
             ) : (
               <Button
-                sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+                sx={{
+                  maxWidth: "36px",
+                  padding: "2px 5px",
+                  fontSize: "12px",
+                  color: "white",
+                }}
                 size="small"
                 variant="contained"
                 color="secondary"
-                onClick={() => handleInactive(row?.original?.aid)}>
+                onClick={() => handleInactive(row?.original?.aid)}
+              >
                 Inactive
               </Button>
             )}
@@ -140,13 +156,20 @@ const AdSettigTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+              sx={{
+                maxWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+                color: "white",
+              }}
               size="small"
               variant="contained"
               color="secondary"
-              onClick={() => handledelete(row.original.aid)}>
+              onClick={() => handledelete(row.original.aid)}
+            >
               Delete
             </Button>
           </Box>

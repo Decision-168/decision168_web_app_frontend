@@ -1,11 +1,11 @@
-import { Box, Button, Grid } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import QuotesTable from './subComponents/ReactTable/QuotesTable';
-import { openModal } from '../../redux/action/modalSlice';
-import { useDispatch } from 'react-redux';
-import ReduxDialog from '../common/ReduxDialog';
-import AddQuoteForm from './subComponents/AddQuoteForm';
-import BasicBreadcrumbs from './../common/BasicBreadcrumbs';
+import { Box, Button, Grid } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import QuotesTable from "./subComponents/ReactTable/QuotesTable";
+import { useDispatch } from "react-redux";
+import ReduxDialog from "../common/ReduxDialog";
+import AddQuoteForm from "./subComponents/AddQuoteForm";
+import BasicBreadcrumbs from "./../common/BasicBreadcrumbs";
+import { openModal } from "../../../redux/action/modalSlice";
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -16,15 +16,26 @@ const Index = () => {
         <Grid item xs={12} lg={12} mb={2}>
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}>
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <BasicBreadcrumbs currentPage="quotes" />
-            <Button sx={{ ml: 2, fontSize: '12px' }} size="small" variant="contained" onClick={() => dispatch(openModal('addQuote'))}>
-              <AddIcon sx={{ fontSize: '14px', mr: '2px' }} />
+            <Button
+              sx={{ ml: 2, fontSize: "12px" }}
+              size="small"
+              variant="contained"
+              onClick={() => dispatch(openModal("addQuote"))}
+            >
+              <AddIcon sx={{ fontSize: "14px", mr: "2px" }} />
               Add New
             </Button>
-            <ReduxDialog value={'addQuote'} modalTitle={'Add a Quote'} showModalButton={false} modalSize={'xs'}>
+            <ReduxDialog
+              value={"addQuote"}
+              modalTitle={"Add a Quote"}
+              showModalButton={false}
+              modalSize={"xs"}
+            >
               <AddQuoteForm editMode={false} />
             </ReduxDialog>
           </Box>

@@ -1,11 +1,11 @@
 import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
-import { stringAvatar } from "../../../helpers/stringAvatar";
+import { stringAvatar } from "../../../../helpers/stringAvatar";
 import { useTheme } from "@mui/material/styles";
 import Client from "../../common/Client";
 import CardFeatures from "../../common/CardFeatures";
 import CoverImage from "../../common/CoverImage";
 import { useEffect, useState } from "react";
-import { getRegisteredUsersCount } from "./../../../api/modules/dashboardModule";
+import { getRegisteredUsersCount } from "../../../../api/super-admin-modules/dashboardModule";
 
 export default function DashboardProfileCard() {
   const theme = useTheme();
@@ -40,7 +40,14 @@ export default function DashboardProfileCard() {
         <Typography
           component="h4"
           variant="subtitle2"
-          sx={{ color: theme.palette.secondary.dark, textTransform: "uppercase", fontWeight: "bold", mb: 2, fontSize: "16px" }}>
+          sx={{
+            color: theme.palette.secondary.dark,
+            textTransform: "uppercase",
+            fontWeight: "bold",
+            mb: 2,
+            fontSize: "16px",
+          }}
+        >
           welcome back !
         </Typography>
       </Grid>
@@ -59,7 +66,8 @@ export default function DashboardProfileCard() {
                 justifyContent: "center",
                 alignItems: "start",
                 marginTop: "-50px",
-              }}>
+              }}
+            >
               <Avatar
                 {...stringAvatar("Super Admin")}
                 sx={{
@@ -81,7 +89,8 @@ export default function DashboardProfileCard() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-            }}>
+            }}
+          >
             <CardFeatures items={items} />
           </Grid>
         </Grid>

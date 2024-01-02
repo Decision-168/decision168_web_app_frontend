@@ -1,15 +1,18 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 import AddQuoteForm from "../AddQuoteForm";
-import { getAllQuotes } from "./../../../../api/modules/quotesModule";
+import { getAllQuotes } from "../../../../../api/super-admin-modules/quotesModule";
 
 const QuotesTable = () => {
   const dispatch = useDispatch();
@@ -107,12 +110,19 @@ const QuotesTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ mr: 1, minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+              sx={{
+                mr: 1,
+                minWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+              }}
               size="small"
               variant="contained"
-              onClick={() => dispatch(openModal("editQuote"))}>
+              onClick={() => dispatch(openModal("editQuote"))}
+            >
               Edit
             </Button>
           </Box>
@@ -127,13 +137,21 @@ const QuotesTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ mr: 1, color: "white", minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+              sx={{
+                mr: 1,
+                color: "white",
+                minWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+              }}
               size="small"
               variant="contained"
               color="secondary"
-              onClick={() => handleDelete(row.original.sr_no)}>
+              onClick={() => handleDelete(row.original.sr_no)}
+            >
               Delete
             </Button>
           </Box>
@@ -189,7 +207,12 @@ const QuotesTable = () => {
     <>
       <MaterialReactTable table={table} />
       <ConfirmationDialog value={"deleteTask"} />
-      <ReduxDialog value={"editQuote"} modalTitle={"Edit a Quote"} showModalButton={false} modalSize={"xs"}>
+      <ReduxDialog
+        value={"editQuote"}
+        modalTitle={"Edit a Quote"}
+        showModalButton={false}
+        modalSize={"xs"}
+      >
         <AddQuoteForm editMode={true} />
       </ReduxDialog>
     </>

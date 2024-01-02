@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { globalValidations } from "../../../utils/GlobalValidation";
+import { globalValidations } from "../../../../utils/GlobalValidation";
 import CustomLabelTextField from "../../common/CustomLabelTextField";
 import { useState } from "react";
 import CustomSelect from "../../common/CustomSelect";
 import { InfoOutlined } from "@mui/icons-material";
-import { closeModal } from "../../../redux/action/modalSlice";
+import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 
 const items = [
@@ -34,9 +34,22 @@ export default function AddEditPackageForm({ editMode }) {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} px={2} borderTop="1px solid #dadada">
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      px={2}
+      borderTop="1px solid #dadada"
+    >
       <Grid item xs={12} pt={2}>
-        <CustomSelect items={items} label="Link with Stripe" labelColor="" required={true} handleChange={handleChange} value={value} />
+        <CustomSelect
+          items={items}
+          label="Link with Stripe"
+          labelColor=""
+          required={true}
+          handleChange={handleChange}
+          value={value}
+        />
       </Grid>
       <Grid item xs={12} pt={2} display="flex" gap={3} alignItems="center">
         <CustomLabelTextField
@@ -183,7 +196,14 @@ export default function AddEditPackageForm({ editMode }) {
       </Grid>
 
       <Box textAlign="right" padding="16px 0 20px 0">
-        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
+        <Button
+          size="small"
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => dispatch(closeModal())}
+          sx={{ mr: 1, color: "#fff" }}
+        >
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">

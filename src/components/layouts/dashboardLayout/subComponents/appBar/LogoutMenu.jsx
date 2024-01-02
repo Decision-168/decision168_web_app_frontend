@@ -30,6 +30,7 @@ export default function LogoutMenu() {
   };
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userType");
     navigate("/");
     toast.success("Logout successful. Have a great day!");
   };
@@ -42,7 +43,13 @@ export default function LogoutMenu() {
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
         <Tooltip arrow title="Account settings">
-          <IconButton onClick={handleClick} size="small" aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            aria-controls={open ? "account-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+          >
             <SmallAvatar backColor="#B9B8B9" />
           </IconButton>
         </Tooltip>
@@ -80,15 +87,16 @@ export default function LogoutMenu() {
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
-        <MenuItem onClick={(e) => handleRedirect(e , "/profile")}>
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={(e) => handleRedirect(e, "/profile")}>
           <ListItemIcon>
             <BadgeIcon fontSize="small" />
           </ListItemIcon>
           My Profile
         </MenuItem>
 
-        <MenuItem onClick={(e) => handleRedirect(e ,"/update-profile")}>
+        <MenuItem onClick={(e) => handleRedirect(e, "/update-profile")}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
@@ -99,7 +107,8 @@ export default function LogoutMenu() {
           style={{
             textDecoration: "none",
             color: theme.palette.secondary.main,
-          }}>
+          }}
+        >
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
               <SupportAgentIcon fontSize="small" />

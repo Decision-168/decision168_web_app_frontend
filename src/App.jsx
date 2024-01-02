@@ -4,7 +4,6 @@ import { Suspense, lazy } from "react";
 const RouteIndex = lazy(() => import("./route"));
 import { Provider } from "react-redux";
 import store from "./redux/store";
-import SuperAdminRouteIndex from "./super-admin-route";
 
 function App() {
   const theme = useTheme();
@@ -23,7 +22,6 @@ function App() {
     >
       <Provider store={store}>
         <RouteIndex />
-        <SuperAdminRouteIndex />
       </Provider>
     </Suspense>
   );

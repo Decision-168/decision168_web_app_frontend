@@ -1,18 +1,25 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useEffect, useState } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 import ReduxDialog from "../../../common/ReduxDialog";
 import CreateEditCustomPackageForm from "../CreateEditCustomPackageForm";
 import CompanyPackageDetail from "../CompanyPackageDetail";
-import { getContactedCompanyAndItsPackageDetail, getContactedSalesList } from "./../../../../api/modules/eterpriseLeadsModule";
+
 import { FileCopyOutlined } from "@mui/icons-material";
 import ChangeLabelsForm from "../../../menuPricing/subComponents/ChangeLabelsForm";
+import {
+  getContactedCompanyAndItsPackageDetail,
+  getContactedSalesList,
+} from "../../../../../api/super-admin-modules/eterpriseLeadsModule";
 
 const RegisteredUsersTable = () => {
   const dispatch = useDispatch();
@@ -179,46 +186,73 @@ const RegisteredUsersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             {row?.original?.status === "pending" ? (
               <Stack direction={"column"} spacing={1}>
                 <Button
-                  sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+                  sx={{
+                    minWidth: "36px",
+                    padding: "2px 5px",
+                    fontSize: "12px",
+                  }}
                   size="small"
                   variant="contained"
-                  onClick={() => dispatch(openModal("createPackageModal"))}>
+                  onClick={() => dispatch(openModal("createPackageModal"))}
+                >
                   Create custom package
                 </Button>
                 <Button
-                  sx={{ maxWidth: "30px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+                  sx={{
+                    maxWidth: "30px",
+                    padding: "2px 5px",
+                    fontSize: "12px",
+                    color: "white",
+                  }}
                   size="small"
                   variant="contained"
                   color="secondary"
-                  onClick={() => handledelete(row?.original?.cid)}>
+                  onClick={() => handledelete(row?.original?.cid)}
+                >
                   Delete
                 </Button>
               </Stack>
             ) : (
               <Stack direction={"row"} spacing={1}>
                 <Button
-                  sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+                  sx={{
+                    minWidth: "36px",
+                    padding: "2px 5px",
+                    fontSize: "12px",
+                  }}
                   size="small"
                   variant="contained"
-                  onClick={() => handleView(row?.original?.cid)}>
+                  onClick={() => handleView(row?.original?.cid)}
+                >
                   View
                 </Button>
                 <Button
-                  sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+                  sx={{
+                    minWidth: "36px",
+                    padding: "2px 5px",
+                    fontSize: "12px",
+                  }}
                   size="small"
                   variant="contained"
-                  onClick={() => handleEdit(row?.original?.cid)}>
+                  onClick={() => handleEdit(row?.original?.cid)}
+                >
                   Edit
                 </Button>
                 <Button
-                  sx={{ minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+                  sx={{
+                    minWidth: "36px",
+                    padding: "2px 5px",
+                    fontSize: "12px",
+                  }}
                   size="small"
                   variant="contained"
-                  onClick={() => handleActive(row?.original?.cid)}>
+                  onClick={() => handleActive(row?.original?.cid)}
+                >
                   Active
                 </Button>
               </Stack>
@@ -275,7 +309,12 @@ const RegisteredUsersTable = () => {
   return (
     <>
       <MaterialReactTable table={table} />
-      <ReduxDialog value={"createPackageModal"} modalTitle={"Add Package"} showModalButton={false} modalSize={"sm"}>
+      <ReduxDialog
+        value={"createPackageModal"}
+        modalTitle={"Add Package"}
+        showModalButton={false}
+        modalSize={"sm"}
+      >
         <CreateEditCustomPackageForm editMode={false} />
       </ReduxDialog>
       <ReduxDialog
@@ -285,13 +324,24 @@ const RegisteredUsersTable = () => {
         handleClick={handleChangeLabels}
         buttonIcon={<FileCopyOutlined fontSize="14px" sx={{ mr: "4px" }} />}
         buttonText="Change Labels"
-        modalSize={"sm"}>
+        modalSize={"sm"}
+      >
         <CreateEditCustomPackageForm editMode={true} />
       </ReduxDialog>
-      <ReduxDialog value={"changeLabels"} modalTitle={"Change Labels"} showModalButton={false} modalSize={"sm"}>
+      <ReduxDialog
+        value={"changeLabels"}
+        modalTitle={"Change Labels"}
+        showModalButton={false}
+        modalSize={"sm"}
+      >
         <ChangeLabelsForm />
       </ReduxDialog>
-      <ReduxDialog value={"viewDetailModal"} modalTitle={"Company & it's Package"} showModalButton={false} modalSize={"xs"}>
+      <ReduxDialog
+        value={"viewDetailModal"}
+        modalTitle={"Company & it's Package"}
+        showModalButton={false}
+        modalSize={"xs"}
+      >
         <CompanyPackageDetail contactedCompanyDetail={contactedCompanyDetail} />
       </ReduxDialog>
       <ConfirmationDialog value={"deleteTask"} />
