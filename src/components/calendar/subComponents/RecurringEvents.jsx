@@ -28,7 +28,7 @@ const RecurringEvents = ({
         select
         name="recurringEvents"
         fullWidth
-        margin="normal"
+        sx={{textAlign:"left"}}
         value={recurringValue}
         onChange={handleRecurringChange}
       >

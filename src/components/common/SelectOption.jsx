@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 
 export default function SelectOption({
   label,
+  hideLabel,
   required,
   field,
   idKey,
@@ -17,11 +18,11 @@ export default function SelectOption({
   formValues,
   setFormValues,
   isDisabled,
-  defaultValue
+  defaultValue,
 }) {
   const theme = useTheme();
   const [options, setOptions] = useState([]);
-  
+
   const handleChange = (fieldName) => async (event, value) => {
     setFormValues({
       ...formValues,
@@ -47,10 +48,12 @@ export default function SelectOption({
 
   return (
     <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px" }}>
-        {label}
-        {required && <span style={{ color: theme.palette.error.main }}> *</span>}
-      </InputLabel>
+      {hideLabel ? null :  (
+        <InputLabel sx={{ fontSize: "14px" }}>
+          {label}
+          {required && <span style={{ color: theme.palette.error.main }}> *</span>}
+        </InputLabel>
+      )}
 
       <Autocomplete
         sx={{ marginTop: "8px", width: "100%" }}
@@ -60,13 +63,7 @@ export default function SelectOption({
         value={options?.find((option) => option[idKey] === formValues[field]) || null}
         onChange={handleChange(field)}
         getOptionLabel={(option) => getOptionLabel(option)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={`Select Your ${label}`}
-           
-          />
-        )}
+        renderInput={(params) => <TextField {...params} placeholder={`Select ${label}`} />}
       />
     </Box>
   );

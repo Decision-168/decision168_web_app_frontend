@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 
 export default function MultiSelectOption({
   label,
+  hideLabel,
   required,
   field,
   idKey,
@@ -48,10 +49,14 @@ export default function MultiSelectOption({
 
   return (
     <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px" }}>
+
+      {
+        hideLabel ? null : <InputLabel sx={{ fontSize: "14px" }}>
         {label}
         {required && <span style={{ color: theme.palette.error.main }}> *</span>}
       </InputLabel>
+      }
+      
 
       <Autocomplete
         multiple
