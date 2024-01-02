@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUser } from "../../../api/modules/ticketManagementModule";
+import { getUser } from "../../../../api/super-admin-modules/ticketManagementModule";
 
 const Assignee = ({ assignee }) => {
   const [userDetail, setUserDetail] = useState({});

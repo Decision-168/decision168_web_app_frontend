@@ -1,6 +1,6 @@
 import { Box, Button, Grid } from "@mui/material";
 import BasicBreadcrumbs from "./../common/BasicBreadcrumbs";
-import { openModal } from "../../redux/action/modalSlice";
+import { openModal } from "../../../redux/action/modalSlice";
 import ReduxDialog from "../common/ReduxDialog";
 import { useDispatch } from "react-redux";
 import { Add } from "@mui/icons-material";
@@ -19,13 +19,24 @@ const Index = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <BasicBreadcrumbs currentPage="supporters" />
-              <Button sx={{ ml: 2, fontSize: "12px" }} size="small" variant="contained" onClick={() => dispatch(openModal("addResources"))}>
+              <Button
+                sx={{ ml: 2, fontSize: "12px" }}
+                size="small"
+                variant="contained"
+                onClick={() => dispatch(openModal("addResources"))}
+              >
                 <Add sx={{ fontSize: "14px", mr: "2px" }} />
                 Add Resources
               </Button>
-              <ReduxDialog value={"addResources"} modalTitle={"Add Supporter"} showModalButton={false} modalSize={"xs"}>
+              <ReduxDialog
+                value={"addResources"}
+                modalTitle={"Add Supporter"}
+                showModalButton={false}
+                modalSize={"xs"}
+              >
                 <AddResourcesForm />
               </ReduxDialog>
             </Box>
@@ -43,7 +54,8 @@ const Index = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <BasicBreadcrumbs currentPage="invited email addresses" />
             </Box>
           </Grid>

@@ -1,18 +1,21 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
-import { openModal } from "../../../../redux/action/modalSlice";
 import ViewEditPackageForm from "../ViewEditPackageForm";
-import { theme } from "./../../../../theme/theme";
-import { getCouponList } from "./../../../../api/modules/couponSettingModule";
+import { theme } from "./../../../../../theme/theme";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
+import { getCouponList } from "./../../../../../api/super-admin-modules/couponSettingModule";
 import ChangeLabelsForm from "../../../menuPricing/subComponents/ChangeLabelsForm";
 import { FileCopyOutlined } from "@mui/icons-material";
+import { openModal } from "../../../../../redux/action/modalSlice";
 
 const CouponSettigTable = () => {
   const dispatch = useDispatch();
@@ -59,7 +62,9 @@ const CouponSettigTable = () => {
         openCnfModal({
           modalName: "statusModal",
           title: "Are you sure?",
-          description: `You want to ${status === "active" ? "Inactive" : "Active"} the coupon`,
+          description: `You want to ${
+            status === "active" ? "Inactive" : "Active"
+          } the coupon`,
         })
       );
     },
@@ -106,7 +111,11 @@ const CouponSettigTable = () => {
         size: 70,
         enableColumnFilter: false,
         enableEditing: true,
-        Cell: ({ row }) => <Box sx={{ color: theme.palette.primary.main, fontWeight: "600" }}>{row.original.used}</Box>,
+        Cell: ({ row }) => (
+          <Box sx={{ color: theme.palette.primary.main, fontWeight: "600" }}>
+            {row.original.used}
+          </Box>
+        ),
       },
       {
         accessorKey: "limit",
@@ -146,12 +155,14 @@ const CouponSettigTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
               sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
               size="small"
               variant="contained"
-              onClick={() => handleViewEdit(row?.original?.co_id)}>
+              onClick={() => handleViewEdit(row?.original?.co_id)}
+            >
               View/Edit
             </Button>
           </Box>
@@ -167,22 +178,30 @@ const CouponSettigTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             {row?.original?.status === "active" ? (
               <Button
                 sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
                 size="small"
                 variant="contained"
-                onClick={() => handleStatus(row?.original?.status)}>
+                onClick={() => handleStatus(row?.original?.status)}
+              >
                 Active
               </Button>
             ) : (
               <Button
-                sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+                sx={{
+                  maxWidth: "36px",
+                  padding: "2px 5px",
+                  fontSize: "12px",
+                  color: "white",
+                }}
                 size="small"
                 variant="contained"
                 color="secondary"
-                onClick={() => handleStatus(row?.original?.status)}>
+                onClick={() => handleStatus(row?.original?.status)}
+              >
                 InActive
               </Button>
             )}
@@ -246,10 +265,16 @@ const CouponSettigTable = () => {
         handleClick={handleChangeLabels}
         buttonIcon={<FileCopyOutlined fontSize="14px" sx={{ mr: "4px" }} />}
         buttonText="Change Labels"
-        modalSize={"sm"}>
+        modalSize={"sm"}
+      >
         <ViewEditPackageForm editMode={true} />
       </ReduxDialog>
-      <ReduxDialog value={"changeLabels"} modalTitle={"Change Labels"} showModalButton={false} modalSize={"sm"}>
+      <ReduxDialog
+        value={"changeLabels"}
+        modalTitle={"Change Labels"}
+        showModalButton={false}
+        modalSize={"sm"}
+      >
         <ChangeLabelsForm />
       </ReduxDialog>
     </>

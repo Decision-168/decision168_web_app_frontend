@@ -3,7 +3,25 @@ import { Typography, Box, Button, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 const PageNotFound = () => {
   const isLoggedIn = localStorage.getItem("token");
-    const theme = useTheme();
+  const userType = localStorage.getItem("userType");
+
+  const redirectFn = () => {
+    if (userType === "Admin") {
+      if (isLoggedIn) {
+        return "/super-admin/dashboard";
+      } else {
+        return "/super-admin/";
+      }
+    } else if (userType === "User") {
+      if (isLoggedIn) {
+        return "/dashboard";
+      } else {
+        return "/";
+      }
+    }
+  };
+
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -22,7 +40,7 @@ const PageNotFound = () => {
       </Typography>
       <Button
         component={Link}
-        to={isLoggedIn ? "/dashboard" : "/"}
+        to={redirectFn()}
         variant="contained"
         sx={{
           px: 6,

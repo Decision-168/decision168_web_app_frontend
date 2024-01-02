@@ -1,13 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Chip } from "@mui/material";
 import { useDispatch } from "react-redux";
 
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { getAllInvitedEmailAddresses } from "../../../../api/modules/supportersModule";
+import { getAllInvitedEmailAddresses } from "../../../../../api/super-admin-modules/supportersModule";
 
 const InvitedTable = () => {
   const dispatch = useDispatch();
@@ -85,7 +88,8 @@ const InvitedTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             {row?.original?.approve === "yes" ? (
               <Chip
                 label="Approved"
@@ -157,13 +161,20 @@ const InvitedTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ maxWidth: "36px", padding: "2px 5px", fontSize: "12px", color: "white" }}
+              sx={{
+                maxWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+                color: "white",
+              }}
               size="small"
               variant="contained"
               color="secondary"
-              onClick={() => handleRemove(row?.original?.invite_id)}>
+              onClick={() => handleRemove(row?.original?.invite_id)}
+            >
               Remove
             </Button>
           </Box>

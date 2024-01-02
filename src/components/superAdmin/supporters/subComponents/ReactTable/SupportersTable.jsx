@@ -1,18 +1,24 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useEffect, useState } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Chip, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import ReduxDialog from "../../../common/ReduxDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { getAllSupporters, getSupporterDetail } from "./../../../../api/modules/supportersModule";
+import {
+  getAllSupporters,
+  getSupporterDetail,
+} from "./../../../../../api/super-admin-modules/supportersModule";
 import StatusSwitch from "./../../../common/StatusSwitch";
 import SupporterDetail from "../SupporterDetail";
 
@@ -145,8 +151,10 @@ const SupportersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
-            {row?.original?.supporter_mail === 1 && row?.original?.supporter_approve === "" ? (
+            }}
+          >
+            {row?.original?.supporter_mail === 1 &&
+            row?.original?.supporter_approve === "" ? (
               <Chip
                 label="Invited"
                 color="primary"
@@ -162,7 +170,8 @@ const SupportersTable = () => {
                   borderRadius: "5px",
                 }}
               />
-            ) : row?.original?.supporter_mail === 1 && row?.original?.supporter_approve === "no" ? (
+            ) : row?.original?.supporter_mail === 1 &&
+              row?.original?.supporter_approve === "no" ? (
               <Chip
                 label="Denied"
                 color="error"
@@ -178,7 +187,8 @@ const SupportersTable = () => {
                   borderRadius: "5px",
                 }}
               />
-            ) : row?.original?.supporter_mail === 1 && row?.original?.supporter_approve === "yes" ? (
+            ) : row?.original?.supporter_mail === 1 &&
+              row?.original?.supporter_approve === "yes" ? (
               <Chip
                 label="Approved"
                 size="small"
@@ -224,8 +234,11 @@ const SupportersTable = () => {
             onClick={() => handleChange(row?.original?.reg_id)}
             sx={{
               display: "flex",
-            }}>
-            <StatusSwitch status={row?.original?.active === "active" ? true : false} />
+            }}
+          >
+            <StatusSwitch
+              status={row?.original?.active === "active" ? true : false}
+            />
           </Box>
         ),
       },
@@ -238,12 +251,19 @@ const SupportersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ mr: 1, minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+              sx={{
+                mr: 1,
+                minWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+              }}
               size="small"
               variant="contained"
-              onClick={() => handleView(row?.original?.reg_id)}>
+              onClick={() => handleView(row?.original?.reg_id)}
+            >
               View
             </Button>
           </Box>
@@ -300,17 +320,31 @@ const SupportersTable = () => {
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "60px", textTransform: "uppercase" }}
-          onClick={handleExportData}>
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "60px",
+            textTransform: "uppercase",
+          }}
+          onClick={handleExportData}
+        >
           Excel
         </Button>
         <Button
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "50px", textTransform: "uppercase" }}
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "50px",
+            textTransform: "uppercase",
+          }}
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+        >
           pdf
         </Button>
       </Stack>
@@ -328,7 +362,8 @@ const SupportersTable = () => {
           `${supporterDetail?.supporterDetailResult?.first_name} ${supporterDetail?.supporterDetailResult?.middle_name} ${supporterDetail?.supporterDetailResult?.last_name}`
         }
         showModalButton={false}
-        modalSize={"md"}>
+        modalSize={"md"}
+      >
         <SupporterDetail detail={supporterDetail ? supporterDetail : {}} />
       </ReduxDialog>
     </>

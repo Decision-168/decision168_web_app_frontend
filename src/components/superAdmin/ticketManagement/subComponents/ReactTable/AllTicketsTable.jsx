@@ -1,20 +1,33 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
-import { Box, Button, Chip, IconButton, Stack, Typography } from "@mui/material";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import {
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import { AttachFile, Chat, Delete, Visibility } from "@mui/icons-material";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../common/ReduxDialog";
-import { closeModal, openModal } from "../../../../redux/action/modalSlice";
+import { closeModal, openModal } from "../../../../../redux/action/modalSlice";
 import TicketDetail from "../TicketDetail";
 import AttachedFileContent from "../AttachedFileContent";
-import { getAllSupporter, getTicketDetail } from "../../../../api/modules/ticketManagementModule";
+import {
+  getAllSupporter,
+  getTicketDetail,
+} from "../../../../../api/super-admin-modules/ticketManagementModule";
 import SelectBox from "../SelectBox";
 import Assignee from "../Assignee";
 import ChatSection from "../chatSection/ChatSection";
@@ -126,7 +139,10 @@ const AllTicketsTable = ({ title, data }) => {
         Cell: ({ row }) => (
           <Box display="flex" alignItems="center" gap={1}>
             <Typography>T-{row?.original?.unique_id}</Typography>
-            <IconButton color="secondary" onClick={() => handleDetail(row?.original?.ticket_id)}>
+            <IconButton
+              color="secondary"
+              onClick={() => handleDetail(row?.original?.ticket_id)}
+            >
               <Visibility sx={{ fontSize: "20px" }} />
             </IconButton>
           </Box>
@@ -206,10 +222,16 @@ const AllTicketsTable = ({ title, data }) => {
         enableColumnFilter: false,
         enableEditing: false,
         Cell: ({ row }) =>
-          row.original.status === "closed" || row.original.status === "cancelled" || row.original.status === "resolved" ? (
+          row.original.status === "closed" ||
+          row.original.status === "cancelled" ||
+          row.original.status === "resolved" ? (
             <Assignee assignee={row.original.assignee} />
           ) : (
-            <SelectBox TicketId={row?.original?.ticket_id} items={items} assignee={row?.original?.assignee} />
+            <SelectBox
+              TicketId={row?.original?.ticket_id}
+              items={items}
+              assignee={row?.original?.assignee}
+            />
           ),
       },
       {
@@ -226,13 +248,23 @@ const AllTicketsTable = ({ title, data }) => {
         enableColumnFilter: false,
         Cell: ({ row }) => (
           <Box>
-            <IconButton color="error" size="small" onClick={() => handleDelete(row?.original?.ticket_id)}>
+            <IconButton
+              color="error"
+              size="small"
+              onClick={() => handleDelete(row?.original?.ticket_id)}
+            >
               <Delete sx={{ fontSize: "20px" }} />
             </IconButton>
-            <IconButton color="secondary" onClick={() => handleLink(row?.original?.ticket_id)}>
+            <IconButton
+              color="secondary"
+              onClick={() => handleLink(row?.original?.ticket_id)}
+            >
               <AttachFile sx={{ fontSize: "20px" }} />
             </IconButton>
-            <IconButton color="secondary" onClick={() => handleChat(row?.original?.ticket_id)}>
+            <IconButton
+              color="secondary"
+              onClick={() => handleChat(row?.original?.ticket_id)}
+            >
               <Chat sx={{ fontSize: "20px" }} />
             </IconButton>
           </Box>
@@ -291,7 +323,8 @@ const AllTicketsTable = ({ title, data }) => {
             fontWeight: "600",
             fontSize: "16px",
             textAlign: "left",
-          }}>
+          }}
+        >
           {title} Tickets
         </Typography>
         <Stack direction={"row"} spacing={1}>
@@ -305,7 +338,8 @@ const AllTicketsTable = ({ title, data }) => {
               minWidth: "60px",
               textTransform: "uppercase",
             }}
-            onClick={handleExportData}>
+            onClick={handleExportData}
+          >
             Excel
           </Button>
           <Button
@@ -319,7 +353,10 @@ const AllTicketsTable = ({ title, data }) => {
               textTransform: "uppercase",
             }}
             disabled={table.getPrePaginationRowModel().rows.length === 0}
-            onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+            onClick={() =>
+              handleExportRows(table.getPrePaginationRowModel().rows)
+            }
+          >
             pdf
           </Button>
         </Stack>
@@ -337,13 +374,27 @@ const AllTicketsTable = ({ title, data }) => {
         showModalButton={true}
         handleClick={() => dispatch(closeModal("ticketDetailModal"))}
         redirectPath={`/super-admin/ticket-overview/${ticketDetail.ticket_id}`}
-        modalSize={"sm"}>
-        <TicketDetail ticketDetail={ticketDetail && ticketDetail} items={items} />
+        modalSize={"sm"}
+      >
+        <TicketDetail
+          ticketDetail={ticketDetail && ticketDetail}
+          items={items}
+        />
       </ReduxDialog>
-      <ReduxDialog value={"linkModal"} modalTitle={"Ticket ID"} showModalButton={false} modalSize={"sm"}>
+      <ReduxDialog
+        value={"linkModal"}
+        modalTitle={"Ticket ID"}
+        showModalButton={false}
+        modalSize={"sm"}
+      >
         <AttachedFileContent ticketDetail={ticketDetail} />
       </ReduxDialog>
-      <ReduxDialog value={"chatModal"} modalTitle={ticketDetail && `T-${ticketDetail?.unique_id}`} showModalButton={false} modalSize={"xs"}>
+      <ReduxDialog
+        value={"chatModal"}
+        modalTitle={ticketDetail && `T-${ticketDetail?.unique_id}`}
+        showModalButton={false}
+        modalSize={"xs"}
+      >
         <ChatSection ticket_id={ticketDetail.ticket_id} />
       </ReduxDialog>
     </>

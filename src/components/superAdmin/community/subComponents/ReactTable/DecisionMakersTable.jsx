@@ -1,20 +1,25 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 import { Box, Button, Chip, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { openModal } from "../../../../redux/action/modalSlice";
+import { openModal } from "../../../../../redux/action/modalSlice";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import ReduxDialog from "../../../common/ReduxDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { openCnfModal } from "../../../../../redux/action/confirmationModalSlice";
 import ConfirmationDialog from "../../../common/ConfirmationDialog";
 import DecisionMakerDetail from "../DecisionMakerDetail";
-import { getDecisionMakers } from "./../../../../api/modules/communityModule";
-import { getDecisionMakerDetail } from "./../../../../api/modules/communityModule";
+import {
+  getDecisionMakers,
+  getDecisionMakerDetail,
+} from "./../../../../../api/super-admin-modules/communityModule";
 import StatusSwitch from "../../../common/StatusSwitch";
 
 const csvConfig = mkConfig({
@@ -101,8 +106,12 @@ const DecisionMakersTable = () => {
         expert_approve: decisionMaker?.expert_approve,
         expert: decisionMaker?.expert,
         admin_approve: decisionMaker?.admin_approve,
-        applied_on: `${decisionMaker?.expert_apply_date}`.slice(0, 19).replace("T", " "),
-        approved_on: `${decisionMaker?.expert_approved_date}`.slice(0, 19).replace("T", " "),
+        applied_on: `${decisionMaker?.expert_apply_date}`
+          .slice(0, 19)
+          .replace("T", " "),
+        approved_on: `${decisionMaker?.expert_approved_date}`
+          .slice(0, 19)
+          .replace("T", " "),
         active: decisionMaker?.expert_status,
         detail: "",
         reg_id: decisionMaker?.reg_id,
@@ -143,8 +152,10 @@ const DecisionMakersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
-            {row?.original?.expert_approve === 1 && row?.original?.expert === 1 ? (
+            }}
+          >
+            {row?.original?.expert_approve === 1 &&
+            row?.original?.expert === 1 ? (
               <Chip
                 label="Approved & Agreed to Terms"
                 color="success"
@@ -162,7 +173,8 @@ const DecisionMakersTable = () => {
                   color: "#34c38f",
                 }}
               />
-            ) : row?.original?.admin_approve === 1 && row?.original?.expert_approve === 0 ? (
+            ) : row?.original?.admin_approve === 1 &&
+              row?.original?.expert_approve === 0 ? (
               <Chip
                 label="Approved By Admin"
                 color="success"
@@ -182,10 +194,16 @@ const DecisionMakersTable = () => {
               />
             ) : (
               <Button
-                sx={{ mr: 1, minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+                sx={{
+                  mr: 1,
+                  minWidth: "36px",
+                  padding: "2px 5px",
+                  fontSize: "12px",
+                }}
                 size="small"
                 variant="contained"
-                onClick={() => console.log("approve")}>
+                onClick={() => console.log("approve")}
+              >
                 Approve
               </Button>
             )}
@@ -217,8 +235,11 @@ const DecisionMakersTable = () => {
             onClick={handleChange}
             sx={{
               display: "flex",
-            }}>
-            <StatusSwitch status={row?.original?.active === "active" ? true : false} />
+            }}
+          >
+            <StatusSwitch
+              status={row?.original?.active === "active" ? true : false}
+            />
           </Box>
         ),
       },
@@ -231,12 +252,19 @@ const DecisionMakersTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Button
-              sx={{ mr: 1, minWidth: "36px", padding: "2px 5px", fontSize: "12px" }}
+              sx={{
+                mr: 1,
+                minWidth: "36px",
+                padding: "2px 5px",
+                fontSize: "12px",
+              }}
               size="small"
               variant="contained"
-              onClick={() => handleView(row?.original?.reg_id)}>
+              onClick={() => handleView(row?.original?.reg_id)}
+            >
               View
             </Button>
           </Box>
@@ -293,17 +321,31 @@ const DecisionMakersTable = () => {
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "60px", textTransform: "uppercase" }}
-          onClick={handleExportData}>
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "60px",
+            textTransform: "uppercase",
+          }}
+          onClick={handleExportData}
+        >
           Excel
         </Button>
         <Button
           size="small"
           variant="contained"
           color="secondary"
-          sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "50px", textTransform: "uppercase" }}
+          sx={{
+            color: "#eff2f7",
+            paddingInline: "5px",
+            minWidth: "50px",
+            textTransform: "uppercase",
+          }}
           disabled={table.getPrePaginationRowModel().rows.length === 0}
-          onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+        >
           pdf
         </Button>
       </Stack>
@@ -314,7 +356,12 @@ const DecisionMakersTable = () => {
     <>
       <MaterialReactTable table={table} />
       <ConfirmationDialog value={"activeModal"} />
-      <ReduxDialog value={"viewDetailModal"} modalTitle={"View Details"} showModalButton={false} modalSize={"md"}>
+      <ReduxDialog
+        value={"viewDetailModal"}
+        modalTitle={"View Details"}
+        showModalButton={false}
+        modalSize={"md"}
+      >
         <DecisionMakerDetail detail={decisionMakerDetail} />
       </ReduxDialog>
     </>

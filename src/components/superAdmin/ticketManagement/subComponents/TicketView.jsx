@@ -3,7 +3,7 @@
 import { memo, useEffect, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import AllTicketsTable from "./ReactTable/AllTicketsTable";
-import { getAllTickets } from "./../../../api/modules/ticketManagementModule";
+import { getAllTickets } from "./../../../../api/super-admin-modules/ticketManagementModule";
 
 const TicketView = ({ value }) => {
   const [allTicketsData, setAllTicketsData] = useState([]);
@@ -24,14 +24,54 @@ const TicketView = ({ value }) => {
 
   const tableData = {
     all: [{ title: "All", data: allTicketsData }],
-    open: [{ title: "Open", data: allTicketsData?.filter((i) => i.status === "open") }],
-    assigned: [{ title: "Assigned", data: allTicketsData?.filter((i) => i.status === "assigned") }],
-    in_progress: [{ title: "In Progress", data: allTicketsData?.filter((i) => i.status === "in progress") }],
-    in_review: [{ title: "In Review", data: allTicketsData?.filter((i) => i.status === "in review") }],
-    pending: [{ title: "Pending", data: allTicketsData?.filter((i) => i.status === "pending") }],
-    resolved: [{ title: "Resolved", data: allTicketsData?.filter((i) => i.status === "resolved") }],
-    closed: [{ title: "Closed", data: allTicketsData?.filter((i) => i.status === "closed") }],
-    cancelled: [{ title: "Cancelled", data: allTicketsData?.filter((i) => i.status === "cancelled") }],
+    open: [
+      {
+        title: "Open",
+        data: allTicketsData?.filter((i) => i.status === "open"),
+      },
+    ],
+    assigned: [
+      {
+        title: "Assigned",
+        data: allTicketsData?.filter((i) => i.status === "assigned"),
+      },
+    ],
+    in_progress: [
+      {
+        title: "In Progress",
+        data: allTicketsData?.filter((i) => i.status === "in progress"),
+      },
+    ],
+    in_review: [
+      {
+        title: "In Review",
+        data: allTicketsData?.filter((i) => i.status === "in review"),
+      },
+    ],
+    pending: [
+      {
+        title: "Pending",
+        data: allTicketsData?.filter((i) => i.status === "pending"),
+      },
+    ],
+    resolved: [
+      {
+        title: "Resolved",
+        data: allTicketsData?.filter((i) => i.status === "resolved"),
+      },
+    ],
+    closed: [
+      {
+        title: "Closed",
+        data: allTicketsData?.filter((i) => i.status === "closed"),
+      },
+    ],
+    cancelled: [
+      {
+        title: "Cancelled",
+        data: allTicketsData?.filter((i) => i.status === "cancelled"),
+      },
+    ],
   };
 
   const tablesToRender = tableData[value] || [];

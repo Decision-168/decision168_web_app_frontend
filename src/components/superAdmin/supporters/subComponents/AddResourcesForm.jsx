@@ -2,7 +2,7 @@ import { Box, Button, Grid } from "@mui/material";
 import CustomSelect from "../../common/CustomSelect";
 import { useState } from "react";
 import EmailInput from "./EmailInput";
-import { closeModal } from "../../../redux/action/modalSlice";
+import { closeModal } from "../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 
 const items = [
@@ -39,10 +39,33 @@ const AddResourcesForm = () => {
   return (
     <>
       <Box component="form" py={2} borderTop="1px solid #dadada">
-        <Grid item xs={12} px={2} pb={2} display={"flex"} flexDirection={"column"} gap={2} alignItems={"flex-start"}>
-          <Grid item display="flex" justifyContent="space-between" gap={2} alignItems="center" textAlign="left">
+        <Grid
+          item
+          xs={12}
+          px={2}
+          pb={2}
+          display={"flex"}
+          flexDirection={"column"}
+          gap={2}
+          alignItems={"flex-start"}
+        >
+          <Grid
+            item
+            display="flex"
+            justifyContent="space-between"
+            gap={2}
+            alignItems="center"
+            textAlign="left"
+          >
             <Grid item xs={6} sx={{ minWidth: "230px" }}>
-              <CustomSelect items={items} label="" labelColor="" required={false} handleChange={handleChange} value={value} />
+              <CustomSelect
+                items={items}
+                label=""
+                labelColor=""
+                required={false}
+                handleChange={handleChange}
+                value={value}
+              />
             </Grid>
             <Grid item xs={6}>
               <Button variant="contained" size="small" onClick={handleAddEmail}>
@@ -66,7 +89,8 @@ const AddResourcesForm = () => {
             variant="contained"
             color="secondary"
             onClick={() => dispatch(closeModal())}
-            sx={{ mr: 1, color: "#fff" }}>
+            sx={{ mr: 1, color: "#fff" }}
+          >
             Close
           </Button>
           <Button type="submit" variant="contained" size="small">

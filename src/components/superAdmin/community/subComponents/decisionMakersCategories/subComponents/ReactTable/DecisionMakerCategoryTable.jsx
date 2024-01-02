@@ -1,20 +1,30 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useMemo, memo, useCallback, useState, useEffect } from "react";
-import { MaterialReactTable, useMaterialReactTable } from "material-react-table";
-import { Box, Button, Chip, IconButton, Stack, Typography } from "@mui/material";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import {
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { mkConfig, generateCsv, download } from "export-to-csv";
-import { openCnfModal } from "../../../../../../redux/action/confirmationModalSlice";
-import { openModal } from "../../../../../../redux/action/modalSlice";
+import { openCnfModal } from "../../../../../../../redux/action/confirmationModalSlice";
+import { openModal } from "../../../../../../../redux/action/modalSlice";
 import ConfirmationDialog from "../../../../../common/ConfirmationDialog";
 import ReduxDialog from "../../../../../common/ReduxDialog";
 import { Delete, Edit } from "@mui/icons-material";
 import AddEditCategoryForm from "../AddEditCategoryForm";
-import { getDecisionMakerCategory } from "../../../../../../api/modules/communityModule";
+import { getDecisionMakerCategory } from "../../../../../../../api/super-admin-modules/communityModule";
 import StatusSwitch from "../../../../../common/StatusSwitch";
 
 const csvConfig = mkConfig({
@@ -27,7 +37,9 @@ const DecisionMakerCategoryTable = () => {
   const dispatch = useDispatch();
 
   // get decision maker category
-  const [allDecisionMakerCategories, setAllDecisionMakerCategories] = useState([]);
+  const [allDecisionMakerCategories, setAllDecisionMakerCategories] = useState(
+    []
+  );
 
   const fetchDecisionMakerCategories = async () => {
     try {
@@ -117,7 +129,8 @@ const DecisionMakerCategoryTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <Chip
               label={row.original.created_on}
               color="success"
@@ -148,8 +161,11 @@ const DecisionMakerCategoryTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
-            <StatusSwitch status={row?.original?.status === "active" ? true : false} />
+            }}
+          >
+            <StatusSwitch
+              status={row?.original?.status === "active" ? true : false}
+            />
           </Box>
         ),
       },
@@ -162,11 +178,15 @@ const DecisionMakerCategoryTable = () => {
           <Box
             sx={{
               display: "flex",
-            }}>
+            }}
+          >
             <IconButton color="error" onClick={handleDelete}>
               <Delete />
             </IconButton>
-            <IconButton color="secondary" onClick={() => dispatch(openModal("editModal"))}>
+            <IconButton
+              color="secondary"
+              onClick={() => dispatch(openModal("editModal"))}
+            >
               <Edit />
             </IconButton>
           </Box>
@@ -224,7 +244,8 @@ const DecisionMakerCategoryTable = () => {
             fontWeight: "600",
             fontSize: "16px",
             textAlign: "left",
-          }}>
+          }}
+        >
           All Categories
         </Typography>
         <Stack direction={"row"} spacing={1}>
@@ -232,17 +253,31 @@ const DecisionMakerCategoryTable = () => {
             size="small"
             variant="contained"
             color="secondary"
-            sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "60px", textTransform: "uppercase" }}
-            onClick={handleExportData}>
+            sx={{
+              color: "#eff2f7",
+              paddingInline: "5px",
+              minWidth: "60px",
+              textTransform: "uppercase",
+            }}
+            onClick={handleExportData}
+          >
             Excel
           </Button>
           <Button
             size="small"
             variant="contained"
             color="secondary"
-            sx={{ color: "#eff2f7", paddingInline: "5px", minWidth: "50px", textTransform: "uppercase" }}
+            sx={{
+              color: "#eff2f7",
+              paddingInline: "5px",
+              minWidth: "50px",
+              textTransform: "uppercase",
+            }}
             disabled={table.getPrePaginationRowModel().rows.length === 0}
-            onClick={() => handleExportRows(table.getPrePaginationRowModel().rows)}>
+            onClick={() =>
+              handleExportRows(table.getPrePaginationRowModel().rows)
+            }
+          >
             pdf
           </Button>
         </Stack>
@@ -254,7 +289,12 @@ const DecisionMakerCategoryTable = () => {
     <>
       <MaterialReactTable table={table} />
       <ConfirmationDialog value={"deleteModal"} />
-      <ReduxDialog value={"editModal"} modalTitle={"Edit Category"} showModalButton={false} modalSize={"xs"}>
+      <ReduxDialog
+        value={"editModal"}
+        modalTitle={"Edit Category"}
+        showModalButton={false}
+        modalSize={"xs"}
+      >
         <AddEditCategoryForm editMode={true} />
       </ReduxDialog>
     </>

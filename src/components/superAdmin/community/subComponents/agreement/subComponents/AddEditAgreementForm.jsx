@@ -2,8 +2,8 @@
 import { Box, Button, Grid, InputLabel, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import CustomLabelTextField from "./../../../../common/CustomLabelTextField";
-import { globalValidations } from "./../../../../../utils/GlobalValidation";
-import { closeModal } from "../../../../../redux/action/modalSlice";
+import { globalValidations } from "./../../../../../../utils/GlobalValidation";
+import { closeModal } from "../../../../../../redux/action/modalSlice";
 import { useDispatch } from "react-redux";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -42,7 +42,21 @@ export default function AddEditAgreementForm({ editMode }) {
     ],
     fontSize: [12, 14, 16, 18, 20],
     colorList: [
-      ["#828282", "#FF5400", "#676464", "#F1F2F4", "#FF9B00", "#F00", "#fa6e30", "#000", "#FF6600", "#0099FF", "#74CC6D", "#FF9900", "#CCCCCC"],
+      [
+        "#828282",
+        "#FF5400",
+        "#676464",
+        "#F1F2F4",
+        "#FF9B00",
+        "#F00",
+        "#fa6e30",
+        "#000",
+        "#FF6600",
+        "#0099FF",
+        "#74CC6D",
+        "#FF9900",
+        "#CCCCCC",
+      ],
     ],
   };
 
@@ -57,7 +71,13 @@ export default function AddEditAgreementForm({ editMode }) {
   };
 
   return (
-    <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} py={2} borderTop="1px solid #dadada">
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      py={2}
+      borderTop="1px solid #dadada"
+    >
       <Grid item xs={12} px="20px">
         <CustomLabelTextField
           label="Title"
@@ -83,8 +103,19 @@ export default function AddEditAgreementForm({ editMode }) {
         />
       </Grid>
 
-      <Box textAlign="right" padding="20px 20px 0" borderTop="1px solid #dadada">
-        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
+      <Box
+        textAlign="right"
+        padding="20px 20px 0"
+        borderTop="1px solid #dadada"
+      >
+        <Button
+          size="small"
+          type="button"
+          variant="contained"
+          color="secondary"
+          onClick={() => dispatch(closeModal())}
+          sx={{ mr: 1, color: "#fff" }}
+        >
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">
