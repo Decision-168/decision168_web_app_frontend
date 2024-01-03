@@ -30,7 +30,7 @@ export default function LogoutMenu() {
   };
   const LogoutFromApp = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userType");
+    localStorage.removeItem("userUserType");
     navigate("/");
     toast.success("Logout successful. Have a great day!");
   };

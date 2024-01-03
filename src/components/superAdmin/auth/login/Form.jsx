@@ -69,10 +69,10 @@ export default function Form() {
 
   const onSubmit = async (formData) => {
     try {
-      localStorage.setItem("userType", "Admin");
+      localStorage.setItem("adminUserType", "Admin");
       setLoading(true);
       const response = await loginSuperadmin(formData);
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("adminToken", response.token);
 
       axiosInstance.defaults.headers.Authorization = `Bearer ${response.token}`;
       if (rememberMe) {

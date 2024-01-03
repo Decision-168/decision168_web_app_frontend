@@ -24,8 +24,8 @@ export default function LogoutMenu() {
   };
 
   const LogoutFromApp = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userType");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminUserType");
     navigate("/super-admin/");
   };
 

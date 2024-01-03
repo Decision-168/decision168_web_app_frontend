@@ -118,13 +118,14 @@ const ProjectTeamMembersTasksList = lazy(() =>
 );
 
 const RouteIndex = () => {
-  const userType = localStorage.getItem("userType");
+  const token = localStorage.getItem("token");
+  const adminToken = localStorage.getItem("adminToken");
   return (
     <Router>
       <Routes>
         {/* User Routes */}
         <Route path="/" element={<Login />} />
-        {userType === "User" && (
+        {token && (
           <Route path="/" element={<PrivateRoute />}>
             <Route
               path="/dashboard"
@@ -425,7 +426,7 @@ const RouteIndex = () => {
 
         {/* Admin Routes */}
         <Route path="/super-admin" element={<SALogin />} />
-        {userType === "Admin" && (
+        {adminToken && (
           <Route path="/super-admin" element={<PrivateRoute />}>
             <Route
               path="/super-admin/dashboard"

@@ -73,7 +73,7 @@ export default function Form() {
 
   const onSubmit = async (formData) => {
     try {
-      localStorage.setItem("userType", "User");
+      localStorage.setItem("userUserType", "User");
       setLoading(true);
       const response = await loginUser(formData);
       localStorage.setItem("token", response.token);

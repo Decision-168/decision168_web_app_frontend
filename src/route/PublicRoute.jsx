@@ -3,13 +3,14 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const PublicRoute = () => {
   const token = localStorage.getItem("token");
+  const adminToken = localStorage.getItem("adminToken");
   const userType = localStorage.getItem("userType");
+
   if (token) {
-    if (userType) {
-      return <Navigate to="/super-admin/dashboard" />;
-    } else {
-      return <Navigate to="/dashboard" />;
-    }
+    return <Navigate to="/dashboard" />;
+  }
+  if (adminToken) {
+    return <Navigate to="/super-admin/dashboard" />;
   }
   return <Outlet />;
 };
