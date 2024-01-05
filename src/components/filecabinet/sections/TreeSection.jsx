@@ -107,20 +107,26 @@ const TreeSection = ({ handleModuleOpen, handleFileOpen, value, data }) => {
           textAlign: "left",
         }}
       >
-        <TreeView
-          sx={{
-            "& .MuiTreeItem-group": {
-              borderLeft: "1px dashed rgba(0, 0, 0, 0.4)",
-              marginLeft: "15px",
-              paddingLeft: "18px",
-            },
-          }}
-          aria-label="customized"
-          defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />}
-          defaultExpandIcon={<AddBoxOutlinedIcon />}
-        >
-          {data?.map((nodes) => renderTree(nodes))}
-        </TreeView>
+        {data.length > 0 ? (
+          <TreeView
+            sx={{
+              "& .MuiTreeItem-group": {
+                borderLeft: "1px dashed rgba(0, 0, 0, 0.4)",
+                marginLeft: "15px",
+                paddingLeft: "18px",
+              },
+            }}
+            aria-label="customized"
+            defaultCollapseIcon={<IndeterminateCheckBoxOutlinedIcon />}
+            defaultExpandIcon={<AddBoxOutlinedIcon />}
+          >
+            {data?.map((nodes) => renderTree(nodes))}
+          </TreeView>
+        ) : (
+          <Typography sx={{ fontSize: "13px", ml: 1 }}>
+            No Data Found
+          </Typography>
+        )}
       </Box>
     </Paper>
   );

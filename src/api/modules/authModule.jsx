@@ -76,3 +76,12 @@ export const RecaptchaVerification = async (data) => {
     throw error;
   }
 };
+
+export const getUser = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}${api.getUser}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

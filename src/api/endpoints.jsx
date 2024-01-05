@@ -25,6 +25,9 @@ const api = {
   //-----------------------------Dashboard Module Start----------------
 
   //user details by user id
+  getUser: "api/users",
+
+  //user details by user id
   userDetails: "user/get-user/",
 
   //user package details by pack id
@@ -102,7 +105,8 @@ const api = {
   // ProjectCount: "goal/get-project-count/",
 
   //getAccepted_PortTM_GoalList
-  Accepted_PortTM_GoalList: "goal/get-all-accepted-portfolio-team-member-goal-list/",
+  Accepted_PortTM_GoalList:
+    "goal/get-all-accepted-portfolio-team-member-goal-list/",
 
   //view_history_date_wise_goal
   ViewHistoryDateWiseGoal: "goal/view-history-date-wise-goal/",
@@ -316,7 +320,8 @@ const api = {
   changeSubtaskStatusDND: "subtask/change-status/",
 
   //get all accepted active portfolio team members(Assignee dropdown) by portfolio id
-  activePotfolioTeamMembers: "portfolio/get-all-accepted-active-portfolio-team-members/",
+  activePotfolioTeamMembers:
+    "portfolio/get-all-accepted-active-portfolio-team-members/",
 
   //get all Goal team members without read_more status (Assignee dropdown) by gid
   getGoalTeamMembers: "goal/goal-team-member/",
@@ -627,16 +632,19 @@ const api = {
   AddSuggestedProjectMember: "project/add-suggested-project-member/",
 
   //Add Suggested Project Invited Member
-  AddSuggestedInvitedProjectMember: "project/add-invited-suggested-project-member/",
+  AddSuggestedInvitedProjectMember:
+    "project/add-invited-suggested-project-member/",
 
   //Direct Remove Project Manager
   DirectRemoveProjectManager: "project/direct-remove-project-manager/",
 
   //Accepted Portfolio team member project list
-  Accepted_PortTM_ProjectList: "project/get-all-accepted-portfolio-team-member-project-list/",
+  Accepted_PortTM_ProjectList:
+    "project/get-all-accepted-portfolio-team-member-project-list/",
 
   //Accepted Goal team member project list
-  Accepted_GoalTM_ProjectList: "project/get-all-accepted-goal-team-member-project-list/",
+  Accepted_GoalTM_ProjectList:
+    "project/get-all-accepted-goal-team-member-project-list/",
 
   //Insert Project Member
   InsertProjectMember: "project/insert-project-member",
