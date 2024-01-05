@@ -9,7 +9,7 @@ import Form from "./Form";
 import Copyright from "../subComponents/Copyright";
 import BackImage from "../subComponents/BackImage";
 import { useTheme } from "@mui/material/styles";
-import { Hidden, Stack } from "@mui/material";
+import { Hidden, Stack, Typography } from "@mui/material";
 import Navigation from "../subComponents/Navigation";
 import { Navigate } from "react-router-dom";
 import { getUser } from "../../../api/modules/authModule";
@@ -96,7 +96,14 @@ export default function Login() {
 
             {/* Form */}
             <Form />
-            {data}
+            {data.map((item, index) => {
+              return (
+                <Box key={index}>
+                  <Typography>{item.name}</Typography>
+                  <Typography>{item.email}</Typography>
+                </Box>
+              );
+            })}
           </Box>
 
           {/* Social Media platforms */}
