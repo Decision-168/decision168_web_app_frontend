@@ -7,6 +7,8 @@ import { globalValidations } from "./../../../../utils/GlobalValidation";
 import CustomMultilineTextField from "./../../common/CustomMultilineTextField";
 import { useDispatch } from "react-redux";
 import { closeModal } from "../../../../redux/action/modalSlice";
+import { addQuote } from "../../../../api/super-admin-modules/quotesModule";
+import { toast } from "react-toastify";
 
 export default function AddQuoteForm({ editMode }) {
   const dispatch = useDispatch();
@@ -17,8 +19,19 @@ export default function AddQuoteForm({ editMode }) {
   } = useForm();
   const theme = useTheme();
 
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
+  // const onSubmit = (formData) => {
+  //   alert(JSON.stringify(formData));
+  // };
+
+  const onSubmit = async (formData) => {
+    try {
+      const response = await addQuote(formData);
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(`${error.response?.data?.error}`);
+    } finally {
+      dispatch(closeModal());
+    }
   };
 
   return (
@@ -27,7 +40,7 @@ export default function AddQuoteForm({ editMode }) {
         <CustomLabelTextField
           label="Author"
           labelColor={theme.palette.primary.main}
-          name="AuthorName"
+          name="writer"
           required={true}
           placeholder="Enter Author Name..."
           register={register}
@@ -47,14 +60,7 @@ export default function AddQuoteForm({ editMode }) {
       />
 
       <Box textAlign="right" padding="0 20px 20px">
-        <Button
-          size="small"
-          type="button"
-          variant="contained"
-          color="secondary"
-          onClick={() => dispatch(closeModal())}
-          sx={{ mr: 1, color: "#fff" }}
-        >
+        <Button size="small" type="button" variant="contained" color="secondary" onClick={() => dispatch(closeModal())} sx={{ mr: 1, color: "#fff" }}>
           Close
         </Button>
         <Button size="small" type="submit" variant="contained">
