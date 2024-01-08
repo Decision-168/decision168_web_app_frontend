@@ -1,5 +1,5 @@
 import { Box, FormControlLabel, Checkbox, Stack } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CustomPasswordField from "../subComponents/CustomPasswordField";
 import CustomLink from "../../common/CustomLink";
 import CustomTextField from "../../common/CustomTextField";
@@ -16,6 +16,7 @@ export default function Form() {
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
@@ -29,8 +30,8 @@ export default function Form() {
   const prefillForm = () => {
     const rememberedUser = localStorage.getItem("rememberedUser");
     if (rememberedUser) {
-      const { email_address, password } = JSON.parse(rememberedUser);
-      setValue("email_address", email_address);
+      const { username, password } = JSON.parse(rememberedUser);
+      setValue("username", username);
       setValue("password", password);
       setRememberMe(true);
     }
@@ -53,16 +54,12 @@ export default function Form() {
         } else {
           setCaptchaVerified(false);
           setRecaptchaKey((prevKey) => prevKey + 1);
-          setRecaptchaKeyError(
-            "ReCAPTCHA verification failed. Please try again."
-          );
+          setRecaptchaKeyError("ReCAPTCHA verification failed. Please try again.");
         }
       } catch (error) {
         setCaptchaVerified(false);
         setRecaptchaKey((prevKey) => prevKey + 1);
-        setRecaptchaKeyError(
-          "ReCAPTCHA verification failed. Please try again."
-        );
+        setRecaptchaKeyError("ReCAPTCHA verification failed. Please try again.");
       }
     }
   };
@@ -126,13 +123,8 @@ export default function Form() {
           overflow: "hidden",
           bgcolor: "#FFF",
           borderRadius: "3px",
-        }}
-      >
-        <ReCAPTCHA
-          key={recaptchaKey}
-          sitekey="6Lcljz4pAAAAAHq2EuMksbFq3ZM7AceT5527GkFT"
-          onChange={handleCaptchaChange}
-        />
+        }}>
+        <ReCAPTCHA key={recaptchaKey} sitekey="6Lcljz4pAAAAAHq2EuMksbFq3ZM7AceT5527GkFT" onChange={handleCaptchaChange} />
         {recaptchaKeyError && (
           <div style={{ color: "red", marginTop: "10px", fontSize: "12px" }}>
             <span>{recaptchaKeyError}</span>
@@ -142,13 +134,7 @@ export default function Form() {
 
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              size="small"
-            />
-          }
+          control={<Checkbox checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} size="small" />}
           label="Remember me"
         />
         <CustomLink path="/reset-password">Forgot password?</CustomLink>
