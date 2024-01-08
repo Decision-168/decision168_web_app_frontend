@@ -3,7 +3,6 @@ import Grid from "@mui/material/Grid";
 import DashboardProfileCard from "./subComponents/DashboardProfileCard";
 
 export default function Dashboard() {
-  console.log(Dashboard);
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
