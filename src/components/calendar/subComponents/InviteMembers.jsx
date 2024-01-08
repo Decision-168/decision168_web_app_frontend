@@ -22,7 +22,7 @@ const InviteMembers = ({}) => {
   };
 
   return (
-    <Grid container>
+    <Grid container sx={{pt:1}}>
       <Grid item xs={2} textAlign={"left"}>
         <Button variant="contained" size="medium" onClick={handleAddClick}>
           Invite More

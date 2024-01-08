@@ -1,4 +1,3 @@
-// CustomRecurrence.jsx
 import React, { useState } from "react";
 import { Checkbox, FormControlLabel, FormGroup, Box } from "@mui/material";
 

@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from "react";
-import { Box, Button, Grid, TableCell } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { useMaterialReactTable } from "material-react-table";
 import CustomTable from "../../../common/CustomTable";
@@ -7,15 +7,19 @@ import BasicBreadcrumbs from "../../../common/BasicBreadcrumbs";
 import CustomSearchField from "../../../common/CustomSearchField";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../../redux/action/modalSlice";
-import ReduxDialog from "../../../common/ReduxDialog";
-import Event from "../../subComponents/Event";
-import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
-import EventView from "../../subComponents/Dialogs/EventView";
+import CreateNewEvent from "./subComponents/CreateNewEvent";
+import UpdateEvent from "./subComponents/UpdateEvent";
+import PrimaryButton from "../../../common/PrimaryButton";
+import { useTheme } from "@mui/material/styles";
+import EventViewDialog from "../../subComponents/EventViewDialog";
+import DeleteEventDialog from "../../subComponents/DeleteEventDialog";
+import EditEventDialog from "../../subComponents/EditEventDialog";
+import AddTodo from "../../subComponents/AddTodo";
 
 const EventList = () => {
   const dispatch = useDispatch();
-
+  const theme = useTheme();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [data, setData] = useState([
     {
       event: "Event 1",
@@ -45,38 +49,25 @@ const EventList = () => {
       startTime: "06:00 AM",
       reminderTime: "No reminder",
     },
-    // ... (other data entries)
   ]);
 
-  const handleEdit = (row) => {
-    // Handle edit action here, e.g., open edit modal
-    console.log("Edit clicked for row:", row);
-    dispatch(openModal("event-update"));
-  };
-  const handleCreateNewButton = () => {
-    dispatch(openModal("new-event"));
-    console.log("create new event");
+  const handleCreateNewEvent = () => {
+    dispatch(openModal("create-new-event-in-list"));
   };
 
-  const handleDeleteClick = (row) => {
-    // Handle delete action here, e.g., open delete modal
-    console.log("Delete clicked for row:", row);
-    dispatch(
-      openCnfModal({
-        modalName: "deleteEvent",
-        title: "Are you sure?",
-        description: "You want to Delete Event",
-      })
-    );
+  const handleViewEvent = (eventText) => {
+    dispatch(openModal("select-event"));
   };
 
-  const handleEventClick = (eventText) => {
-    // Dispatch an action to open the modal or implement your modal logic
-    console.log(`Event clicked: ${eventText}`);
-    dispatch(openModal("list-event-view"));
+  const handleEditEvent = (row) => {
+    dispatch(openModal("update-event-in-list"));
   };
 
-  // Define table columns
+  const handleDeleteEvent = (row) => {
+    setDeleteDialogOpen(true);
+  };
+
+  // Define columns
   const columns = useMemo(
     () => [
       {
@@ -87,11 +78,11 @@ const EventList = () => {
         Cell: ({ row }) => {
           return (
             <Box
-              onClick={() => handleEventClick(row.original.event)}
+              onClick={() => handleViewEvent(row.original.event)}
               sx={{
                 cursor: "pointer",
-                ":hover": {
-                  color: "blue", // Change to your desired hover background color
+                "&:hover": {
+                  color: theme.palette.primary.dark,
                 },
               }}
             >
@@ -131,26 +122,15 @@ const EventList = () => {
         enableEditing: false,
         Cell: ({ row }) => (
           <>
-            <Button
-              onClick={() => handleEdit(row.original)}
-              startIcon={<Edit fontSize="small" />}
-              size="small"
-            >
-              {/* Edit */}
-            </Button>
-            <Button
-              onClick={() => handleDeleteClick(row.original)}
-              startIcon={<Delete fontSize="small" />}
-              size="small"
-            >
-              {/* Delete */}
-            </Button>
+            <Button onClick={() => handleEditEvent(row.original)} startIcon={<Edit fontSize="small" />} size="small" />
+            <Button onClick={() => handleDeleteEvent(row.original)} startIcon={<Delete fontSize="small" />} size="small" />
           </>
         ),
       },
     ],
     []
   );
+
   // Initialize material-react-table
   const table = useMaterialReactTable({
     columns,
@@ -202,15 +182,10 @@ const EventList = () => {
             }}
           >
             <BasicBreadcrumbs currentPage="EVENTS" />
-            <Button
-              variant="contained"
-              startIcon={<Add fontSize="small" />}
-              size="small"
-              sx={{ fontSize: 12 }}
-              onClick={handleCreateNewButton}
-            >
+
+            <PrimaryButton onClick={handleCreateNewEvent} startIcon={<Add />}>
               Create New
-            </Button>
+            </PrimaryButton>
           </Box>
         </Grid>
 
@@ -221,43 +196,21 @@ const EventList = () => {
 
       <CustomTable table={table} />
 
-      <ReduxDialog
-        value="event-update"
-        modalTitle="Update"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Event />
-      </ReduxDialog>
-      <ReduxDialog
-        value="new-event"
-        modalTitle="Create New"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Event />
-      </ReduxDialog>
-      <ConfirmationDialog value={"deleteEvent"} />
-      <ReduxDialog
-        value="list-event-view"
-        modalTitle="Event Details"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="sm"
-      >
-        <EventView />
-      </ReduxDialog>
-      {/* <ReduxDialog
-        value="event-update"
-        modalTitle="Update"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Event />
-      </ReduxDialog> */}
+      {/* Create New Event */}
+      <CreateNewEvent />
+
+      {/* View Event */}
+      <EventViewDialog />
+
+      {/* Inside the Event view  */}
+      <AddTodo/>
+      <EditEventDialog type={"event"}/>
+
+      {/* Update Event */}
+      <UpdateEvent />
+
+      {/* Delete Event */}
+      <DeleteEventDialog type="Event" setDeleteDialogOpen={setDeleteDialogOpen} isDeleteDialogOpen={isDeleteDialogOpen} />
     </Box>
   );
 };

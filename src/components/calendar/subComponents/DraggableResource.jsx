@@ -1,6 +1,4 @@
-import { Box, Button, Checkbox, FormControlLabel, IconButton, Paper, Typography } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Checkbox, FormControlLabel, Paper, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/action/modalSlice";
@@ -9,19 +7,16 @@ import { openCnfModal } from "../../../redux/action/confirmationModalSlice";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import SecondaryButton from "../../common/SecondaryButton";
 import { useTheme } from "@mui/material/styles";
+import { getCustomStyle } from "../getCustomStyle";
+import { EVENTS } from "../data";
+import CircleIcon from "@mui/icons-material/Circle";
+import CreateIcon from "@mui/icons-material/Create";
+import CloseIcon from "@mui/icons-material/Close";
 
 const DraggableResource = ({ setDraggedEvent }) => {
   const theme = useTheme();
   const [removeAfterDrop, setRemoveAfterDrop] = useState(false);
   const [localDraggedEvent, setLocalDraggedEvent] = useState(null);
-  const [boxes, setBoxes] = useState([
-    { backgroundColor: "#999", text: "event", fontSize: "14px" },
-    { backgroundColor: "#397", text: "test", fontSize: "14px" },
-    { backgroundColor: "#167", text: "does not repeat", fontSize: "14px" },
-    { backgroundColor: "#999", text: "dr2", fontSize: "14px" },
-    { backgroundColor: "#397", text: "test", fontSize: "14px" },
-    { backgroundColor: "#167", text: "does not repeat", fontSize: "14px" },
-  ]);
 
   const dispatch = useDispatch();
   const handleCheckboxChange = (event) => {
@@ -35,7 +30,6 @@ const DraggableResource = ({ setDraggedEvent }) => {
 
   const handleDragOver = (event) => {
     event.preventDefault();
-    // console.log("click", localDraggedEvent.text);
     handleDrop();
   };
 
@@ -52,8 +46,7 @@ const DraggableResource = ({ setDraggedEvent }) => {
     setLocalDraggedEvent(null);
   };
 
-  const handleCreateDraggableEventClick = () => {
-    // console.log("createDraggableEventClick");
+  const handleCreateDraggableEvent = () => {
     dispatch(openModal("create-draggable-event"));
   };
 
@@ -75,23 +68,20 @@ const DraggableResource = ({ setDraggedEvent }) => {
     <>
       <Paper
         sx={{
-          padding: "16px",
+          p: 2,
           height: "100%",
         }}
       >
-        <SecondaryButton onClick={handleCreateDraggableEventClick} startIcon={<AddCircleOutlineIcon />} fullWidth={true}>
+        <SecondaryButton onClick={handleCreateDraggableEvent} startIcon={<AddCircleOutlineIcon />} fullWidth={true}>
           Create Draggable Event
         </SecondaryButton>
 
         <Typography
-          variant="body2"
-          color="textSecondary"
           sx={{
-            fontSize: "13px",
-            color: theme.palette.secondary.main,
-            opacity: 0.7,
-            mt: "10px",
-            textAlign: "start",
+            fontSize: "12px",
+            color: theme.palette.tertiary.main,
+            mt: 1,
+            textAlign: "left",
           }}
         >
           Drag and drop your draggable event in the calendar.
@@ -101,62 +91,31 @@ const DraggableResource = ({ setDraggedEvent }) => {
           sx={{
             overflowY: "auto",
             overflowX: "hidden",
-            maxHeight: "150px", // Adjust this value as needed
-            mt: "20px",
+            maxHeight: "100px",
+            my: 2,
             "&::-webkit-scrollbar": {
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              backgroundColor: theme.palette.tertiary.light,
               borderRadius: "4px",
-              width: "5px", // Adjust the width as needed
+              width: "5px",
             },
             "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Adjust the color as needed
+              backgroundColor: theme.palette.tertiary.main,
               borderRadius: "4px",
             },
           }}
           onDragOver={handleDragOver}
         >
           <>
-            {boxes.map((box, index) => (
-              <Box
-                key={index}
-                sx={{
-                  backgroundColor: box?.backgroundColor,
-                  borderRadius: "3px",
-                  mb: "2px",
-                  textAlign: "left",
-                  px: "10px",
-                  py: "2px",
-                  fontSize: box?.fontSize || "inherit",
-                  cursor: "move",
-                }}
-                draggable="true"
-                onDragStart={(e) => handleDragStart(e, box)}
-              >
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <Box
-                    sx={{
-                      height: "10px",
-                      width: "10px",
-                      borderRadius: "50%",
-                      border: "1px solid white",
-                      mt: "10px",
-                    }}
-                  ></Box>
-                  {box?.text}
-                  {/* Edit Icon */}
+            {EVENTS.map((event, index) => (
+              <Box key={index} sx={{ ...getCustomStyle(event), p: 0.7, my: 0.5, cursor: "move" }} draggable="true" onDragStart={(e) => handleDragStart(e, event)}>
+                <CircleIcon sx={{ fontSize: "0.9rem", mx: 0.5, color: "inherite" }} />
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                  <Typography component="h6" sx={{ fontSize: "0.7rem", fontWeight: "500", color: "inherite" }}>
+                    {event?.title}
+                  </Typography>
                   <Box>
-                    <IconButton color="primary" aria-label={`edit ${box?.text}`}>
-                      <EditIcon onClick={handleUpdateDraggableEventClick} sx={{ fontSize: "14px" }} />
-                    </IconButton>
-                    {/* Close Icon */}
-                    <IconButton color="secondary" aria-label={`close ${box?.text}`}>
-                      <CloseIcon
-                        sx={{
-                          fontSize: "14px",
-                        }}
-                        onClick={handleDelete}
-                      />
-                    </IconButton>
+                    <CreateIcon color="inherite" fontSize="inherite" sx={{ cursor: "pointer", mr: 1 }} />
+                    <CloseIcon color="inherite" fontSize="inherite" sx={{ cursor: "pointer" }} />
                   </Box>
                 </Box>
               </Box>
@@ -166,9 +125,15 @@ const DraggableResource = ({ setDraggedEvent }) => {
 
         <Box sx={{ width: "100%", textAlign: "left" }}>
           <FormControlLabel
-            control={<Checkbox size="small" checked={removeAfterDrop} onChange={handleCheckboxChange} color="secondary" />}
+            control={<Checkbox size="small" checked={removeAfterDrop} onChange={handleCheckboxChange} style={{ color: theme.palette.secondary.main }} />}
             label={
-              <Typography variant="body2" color="textSecondary">
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  color: theme.palette.tertiary.main,
+                  textAlign: "left",
+                }}
+              >
                 Remove after drop
               </Typography>
             }

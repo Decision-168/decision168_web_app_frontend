@@ -51,24 +51,9 @@ const Editor = (props) => {
           getSunEditorInstance={getSunEditorInstance}
           setOptions={{
             plugins: plugins,
-            buttonList: [
-              ["undo", "redo"],
-              ["bold", "italic", "underline", "strike"],
-              ["link", "table"],
-              ["align", "lineHeight"],
-              ["removeFormat"],
-            ],
+            buttonList: [["undo", "redo"], ["bold", "italic", "underline", "strike"], ["link", "table"], ["align", "lineHeight"], ["removeFormat"]],
 
-            colorList: [
-              [
-                "#ccc",
-                "#dedede",
-                "OrangeRed",
-                "Orange",
-                "RoyalBlue",
-                "SaddleBrown",
-              ],
-            ],
+            colorList: [["#ccc", "#dedede", "OrangeRed", "Orange", "RoyalBlue", "SaddleBrown"]],
           }}
         />
       </Box>

@@ -8,13 +8,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import IconButton from "@mui/material/IconButton";
 import { DashboardLayoutStyle } from "../../styles";
 import generateMenuItems from "./menuItems";
-import {
-  Collapse,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Collapse, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -50,16 +44,14 @@ export default function ListItems({ drawerOpen }) {
         <Tooltip title={menuItem.text} placement="right">
           <ListItemIcon
             sx={{
-              color:
-                window.location.pathname === menuItem?.link
-                  ? "#c7df19"
-                  : "#6a7187",
+              color: window.location.pathname === menuItem?.link ? "#c7df19" : "#6a7187",
             }}
           >
             {menuItem.icon}
           </ListItemIcon>
         </Tooltip>
         <ListItemText
+          onClick={() => navigate(menuItem?.link, { replace: true })}
           primary={
             <Typography
               sx={{
@@ -75,11 +67,11 @@ export default function ListItems({ drawerOpen }) {
           <React.Fragment>
             {open ? (
               <IconButton onClick={() => handleClick(menuItem)}>
-                <ExpandLess />
+                <ExpandLess sx={{ color: window.location.pathname === menuItem?.link ? "#c7df19" : "#6a7187" }} />
               </IconButton>
             ) : (
               <IconButton onClick={() => handleClick(menuItem)}>
-                <ExpandMore />
+                <ExpandMore sx={{ color: window.location.pathname === menuItem?.link ? "#c7df19" : "#6a7187" }} />
               </IconButton>
             )}
           </React.Fragment>
@@ -101,6 +93,7 @@ export default function ListItems({ drawerOpen }) {
       >
         MENU
       </Typography>
+
       {menuItems?.map((menuItem, index) => (
         <React.Fragment key={index}>
           {["Help Center", "Support"].includes(menuItem.text) ? (
@@ -117,16 +110,9 @@ export default function ListItems({ drawerOpen }) {
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {menuItem.subItems.map((subItem, subIndex) => (
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-                    key={subIndex}
-                    to={subItem.link}
-                    component="a"
-                  >
-                    <ListItemIcon sx={{ color: "#B9B8B9" }}>
-                      {subItem.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={subItem.text} />
+                  <ListItemButton sx={{ pl: 4 }} key={subIndex} to={subItem.link} component="a">
+                    <ListItemIcon sx={{ color: "#B9B8B9" }}>{subItem.icon}</ListItemIcon>
+                    <ListItemText sx={{ "& .MuiTypography-root": { fontSize: "12px" } }} primary={subItem.text} />
                   </ListItemButton>
                 ))}
               </List>

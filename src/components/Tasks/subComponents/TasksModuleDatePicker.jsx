@@ -7,18 +7,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTheme } from "@mui/material/styles";
 import { getGoalDetails } from "../../../api/modules/taskModule";
 
-function TasksModuleDatePicker({
-  label,
-  required,
-  sizeWidth,
-  showBorder,
-  value,
-  onChange,
-  isDisabled,
-  type,
-  gid,
-  parentTaskDueDate,
-}) {
+function TasksModuleDatePicker({ label, required, sizeWidth, showBorder, value, onChange, isDisabled, type, gid, parentTaskDueDate }) {
   const theme = useTheme();
   const [userInteracted, setUserInteracted] = useState(false);
   const [startDate, setStartDate] = useState(value || new Date()); // Use the provided value or initialize a new date
@@ -41,6 +30,17 @@ function TasksModuleDatePicker({
   const textFieldStyles = {
     "& .MuiInputBase-root": {
       border: "none", // Remove the border
+      backgroundColor: "#E4E4E4",
+      borderRadius: "20px",
+      height: "25px",
+    },
+    "& .MuiInputBase-input": {
+      backgroundColor: "#E4E4E4",
+      borderRadius: "20px",
+      height: "25px",
+      py: 0,
+      px: 1,
+      fontSize: "0.9rem",
     },
   };
 
@@ -75,51 +75,43 @@ function TasksModuleDatePicker({
   }
 
   return (
-    <Box sx={{ textAlign: "left" }}>
-      <InputLabel sx={{ fontSize: "14px", color: "black", mb: 1 }}>
-        {label}
-        {required && (
-          <span style={{ color: theme.palette.error.main }}> *</span>
-        )}
-      </InputLabel>
-      <TextField
-        variant="outlined"
-        disabled
-        fullWidth
-        value={startDate.toISOString().split("T")[0]} // Format the date in YY/MM/DD format
-        sx={{
-          width: sizeWidth,
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderWidth: showBorder ? "1px" : "0px",
-          },
-          "& .MuiOutlinedInput-root": {
-            paddingRight: "0px",
-          },
-          ...textFieldStyles,
-        }}
-        InputProps={{
-          endAdornment: (
-            <DatePicker
-              selected={startDate}
-              onChange={handleDateChange}
-              peekNextMonth
-              showMonthDropdown
-              showYearDropdown
-              dropdownMode="select"
-              dateFormat="yyyy-MM-dd" // Set the date format
-              minDate={dynamicMinDate}
-              maxDate={dynamicMaxDate}
-              disabled={isDisabled}
-              customInput={
-                <IconButton size="small" sx={{ fontSize: "1.2rem" }}>
-                  <CalendarMonthIcon fontSize="inherit" />
-                </IconButton>
-              }
-            />
-          ),
-        }}
-      />
-    </Box>
+    <TextField
+      variant="outlined"
+      disabled
+      fullWidth
+      value={startDate.toISOString().split("T")[0]} // Format the date in YY/MM/DD format
+      sx={{
+        width: sizeWidth,
+        "& .MuiOutlinedInput-notchedOutline": {
+          borderWidth: showBorder ? "1px" : "0px",
+        },
+        "& .MuiOutlinedInput-root": {
+          padding: "2px",
+        },
+        ...textFieldStyles,
+      }}
+      InputProps={{
+        startAdornment: (
+          <DatePicker
+            selected={startDate}
+            onChange={handleDateChange}
+            peekNextMonth
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            dateFormat="yyyy-MM-dd" // Set the date format
+            minDate={dynamicMinDate}
+            maxDate={dynamicMaxDate}
+            disabled={isDisabled}
+            customInput={
+              <IconButton size="small" sx={{ fontSize: "1rem" }}>
+                <CalendarMonthIcon fontSize="inherit" />
+              </IconButton>
+            }
+          />
+        ),
+      }}
+    />
   );
 }
 

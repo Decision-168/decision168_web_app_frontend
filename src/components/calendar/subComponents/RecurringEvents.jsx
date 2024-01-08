@@ -13,14 +13,14 @@ const RecurringEvents = ({
   const [isMonthlyEnabled, setMonthlyEnabled] = useState(false);
   const [isYearlyEnabled, setYearlyEnabled] = useState(false);
 
-  useEffect(() => {
-    const dateDifference = endDate.diff(startDate, "days");
-    setCustomEnabled(dateDifference >= 2);
-    setWeekdaysEnabled(dateDifference >= 4);
-    setWeeklyEnabled(dateDifference >= 7);
-    setMonthlyEnabled(dateDifference >= 30);
-    setYearlyEnabled(dateDifference >= 365);
-  }, [startDate, endDate]);
+  // useEffect(() => {
+  //   const dateDifference = endDate.diff(startDate, "days");
+  //   setCustomEnabled(dateDifference >= 2);
+  //   setWeekdaysEnabled(dateDifference >= 4);
+  //   setWeeklyEnabled(dateDifference >= 7);
+  //   setMonthlyEnabled(dateDifference >= 30);
+  //   setYearlyEnabled(dateDifference >= 365);
+  // }, [startDate, endDate]);
 
   return (
     <>
@@ -28,6 +28,7 @@ const RecurringEvents = ({
         select
         name="recurringEvents"
         fullWidth
+        margin="dense"
         sx={{textAlign:"left"}}
         value={recurringValue}
         onChange={handleRecurringChange}

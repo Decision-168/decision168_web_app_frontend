@@ -7,15 +7,19 @@ import BasicBreadcrumbs from "../../../common/BasicBreadcrumbs";
 import CustomSearchField from "../../../common/CustomSearchField";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../../redux/action/modalSlice";
-import ReduxDialog from "../../../common/ReduxDialog";
-import Meeting from "../../subComponents/Meeting";
-import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import EventView from "../../subComponents/Dialogs/EventView";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import { useTheme } from "@mui/material/styles";
+import PrimaryButton from "../../../common/PrimaryButton";
+import CreateNewMeeting from "./subComponents/CreateNewMeeting";
+import MeetingViewDialog from "../../subComponents/MeetingViewDialog";
+import UpdateMeeting from "./subComponents/UpdateMeeting";
+import DeleteEventDialog from "../../subComponents/DeleteEventDialog";
+import EditEventDialog from "../../subComponents/EditEventDialog";
+import AddTodo from "../../subComponents/AddTodo";
 
 const MeetingList = () => {
   const dispatch = useDispatch();
-
+  const theme = useTheme();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [data, setData] = useState([
     {
       meeting: "Meeting 1",
@@ -42,34 +46,23 @@ const MeetingList = () => {
     // ... (other data entries)
   ]);
 
-  const handleEdit = (row) => {
-    // Handle edit action here, e.g., open edit modal
-    console.log("Edit clicked for row:", row);
-    dispatch(openModal("meeting-update"));
-  };
-  const handleCreateNewButton = () => {
-    dispatch(openModal("new-meeting"));
-    console.log("create new meeting");
+  const handleCreateNewMeeting = () => {
+    dispatch(openModal("create-new-meeting-in-list"));
   };
 
-  const handleDeleteClick = (row) => {
-    // Handle delete action here, e.g., open delete modal
-    console.log("Delete clicked for row:", row);
-    dispatch(
-      openCnfModal({
-        modalName: "deleteMeeting",
-        title: "Are you sure?",
-        description: "You want to Delete Meeting",
-      })
-    );
+  const handleViewMeeting = () => {
+    dispatch(openModal("select-meeting"));
   };
 
-  const handleEventClick = (eventText) => {
-    // Dispatch an action to open the modal or implement your modal logic
-    console.log(`Event clicked: ${eventText}`);
-    dispatch(openModal("list-meeting-view"));
+  const handleEditMeeting = (row) => {
+    dispatch(openModal("update-meeting-in-list"));
   };
-  // Define table columns
+
+  const handleDeleteMeeting = (row) => {
+    setDeleteDialogOpen(true);
+  };
+
+  // Define columns
   const columns = useMemo(
     () => [
       {
@@ -81,11 +74,11 @@ const MeetingList = () => {
           console.log(row.original);
           return (
             <Box
-              onClick={() => handleEventClick(row.original.meeting)}
+              onClick={() => handleViewMeeting(row.original.meeting)}
               sx={{
                 cursor: "pointer",
-                ":hover": {
-                  color: "blue", // Change to your desired hover background color
+                "&:hover": {
+                  color: theme.palette.primary.dark,
                 },
               }}
             >
@@ -125,26 +118,15 @@ const MeetingList = () => {
         enableEditing: false,
         Cell: ({ row }) => (
           <>
-            <Button
-              onClick={() => handleEdit(row.original)}
-              startIcon={<Edit fontSize="small" />}
-              size="small"
-            >
-              {/* Edit */}
-            </Button>
-            <Button
-              onClick={() => handleDeleteClick(row.original)}
-              startIcon={<Delete fontSize="small" />}
-              size="small"
-            >
-              {/* Delete */}
-            </Button>
+            <Button onClick={() => handleEditMeeting(row.original)} startIcon={<Edit fontSize="small" />} size="small" />
+            <Button onClick={() => handleDeleteMeeting(row.original)} startIcon={<Delete fontSize="small" />} size="small" />
           </>
         ),
       },
     ],
     []
   );
+
   // Initialize material-react-table
   const table = useMaterialReactTable({
     columns,
@@ -184,7 +166,6 @@ const MeetingList = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      {/* Container for the header }*/}
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={8} sm={8} md={4} lg={4}>
           <Box
@@ -196,25 +177,13 @@ const MeetingList = () => {
               gap: "1rem",
             }}
           >
-            {/* Breadcrumbs for navigation */}
             <BasicBreadcrumbs currentPage="MEETING'S" />
-            <Button
-              variant="contained"
-              startIcon={<Add fontSize="small" />}
-              size="small"
-              sx={{ fontSize: 12 }}
-            >
-              Schedule
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<Add fontSize="small" />}
-              size="small"
-              sx={{ fontSize: 12 }}
-              onClick={handleCreateNewButton}
-            >
+
+            <PrimaryButton startIcon={<Add />}>Schedule</PrimaryButton>
+
+            <PrimaryButton onClick={handleCreateNewMeeting} startIcon={<Add />}>
               Create New
-            </Button>
+            </PrimaryButton>
           </Box>
         </Grid>
 
@@ -222,36 +191,24 @@ const MeetingList = () => {
           <CustomSearchField />
         </Grid>
       </Grid>
+
       <CustomTable table={table} />
 
-      <ReduxDialog
-        value="meeting-update"
-        modalTitle="Update"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Meeting />
-      </ReduxDialog>
-      <ReduxDialog
-        value="new-meeting"
-        modalTitle="Create New"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Meeting />
-      </ReduxDialog>
-      <ConfirmationDialog value={"deleteMeeting"} />
-      <ReduxDialog
-        value="list-meeting-view"
-        modalTitle="Meeting Details"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="sm"
-      >
-        <EventView />
-      </ReduxDialog>
+      {/* Create New Meeting */}
+      <CreateNewMeeting />
+
+      {/* View Meeting */}
+      <MeetingViewDialog />
+
+      {/* Inside the Meeting view  */}
+      <AddTodo />
+      <EditEventDialog type={"meeting"} />
+
+      {/* Update Meeting */}
+      <UpdateMeeting />
+
+      {/* Delete Event */}
+      <DeleteEventDialog type="Meeting" setDeleteDialogOpen={setDeleteDialogOpen} isDeleteDialogOpen={isDeleteDialogOpen} />
     </Box>
   );
 };

@@ -23,7 +23,7 @@ const ColorPickerComponent = () => {
   const open = Boolean(anchorEl);
 
   return (
-    <Box sx={{py:1}}>
+    <Box sx={{pt:1}}>
       <Button
       onClick={handleClick}
         fullWidth

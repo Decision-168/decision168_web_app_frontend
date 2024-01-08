@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { useMaterialReactTable } from "material-react-table";
@@ -7,15 +7,19 @@ import BasicBreadcrumbs from "../../../common/BasicBreadcrumbs";
 import CustomSearchField from "../../../common/CustomSearchField";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../../redux/action/modalSlice";
-import ReduxDialog from "../../../common/ReduxDialog";
-import Todo from "../../subComponents/Todo";
-import ConfirmationDialog from "../../../common/ConfirmationDialog";
-import EventView from "../../subComponents/Dialogs/EventView";
-import { openCnfModal } from "../../../../redux/action/confirmationModalSlice";
+import CreateNewTodo from "./subComponents/CreateNewTodo";
+import TodoViewDialog from "../../subComponents/TodoViewDialog";
+import EditEventDialog from "../../subComponents/EditEventDialog";
+import UpdateTodo from "./subComponents/UpdateTodo";
+import DeleteEventDialog from "../../subComponents/DeleteEventDialog";
+import PrimaryButton from "../../../common/PrimaryButton";
+import { useTheme } from "@mui/material/styles";
+import AddTodo from "../../subComponents/AddTodo";
 
 const TodoList = () => {
   const dispatch = useDispatch();
-
+  const theme = useTheme();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [data, setData] = useState([
     {
       todo: "Todo 1",
@@ -48,34 +52,23 @@ const TodoList = () => {
     // ... (other data entries)
   ]);
 
-  const handleEdit = (row) => {
-    // Handle edit action here, e.g., open edit modal
-    console.log("Edit clicked for row:", row);
-    dispatch(openModal("todo-update"));
-  };
-  const handleCreateNewButton = () => {
-    dispatch(openModal("new-todo"));
-    console.log("create new Todo");
+  const handleCreateNewTodo = () => {
+    dispatch(openModal("create-new-todo-in-list"));
   };
 
-  const handleDeleteClick = (row) => {
-    // Handle delete action here, e.g., open delete modal
-    console.log("Delete clicked for row:", row);
-    dispatch(
-      openCnfModal({
-        modalName: "deleteTodo",
-        title: "Are you sure?",
-        description: "You want to Delete Todo",
-      })
-    );
+  const handleViewTodo = () => {
+    dispatch(openModal("select-todo"));
   };
 
-  const handleEventClick = (eventText) => {
-    // Dispatch an action to open the modal or implement your modal logic
-    console.log(`Event clicked: ${eventText}`);
-    dispatch(openModal("list-todo-view"));
+  const handleEditTodo = (row) => {
+    dispatch(openModal("update-todo-in-list"));
   };
-  // define columns
+
+  const handleDeleteTodo = (row) => {
+    setDeleteDialogOpen(true);
+  };
+
+  // Define columns
   const columns = useMemo(
     () => [
       {
@@ -84,14 +77,13 @@ const TodoList = () => {
         size: 150,
         enableEditing: false,
         Cell: ({ row }) => {
-          console.log(row.original);
           return (
             <Box
-              onClick={() => handleEventClick(row.original.todo)}
+              onClick={() => handleViewTodo(row.original.todo)}
               sx={{
                 cursor: "pointer",
-                ":hover": {
-                  color: "blue", // Change to your desired hover background color
+                "&:hover": {
+                  color: theme.palette.primary.dark,
                 },
               }}
             >
@@ -131,26 +123,15 @@ const TodoList = () => {
         enableEditing: false,
         Cell: ({ row }) => (
           <>
-            <Button
-              onClick={() => handleEdit(row.original)}
-              startIcon={<Edit fontSize="small" />}
-              size="small"
-            >
-              {/* Edit */}
-            </Button>
-            <Button
-              onClick={() => handleDeleteClick(row.original)}
-              startIcon={<Delete fontSize="small" />}
-              size="small"
-            >
-              {/* Delete */}
-            </Button>
+            <Button onClick={() => handleEditTodo(row.original)} startIcon={<Edit fontSize="small" />} size="small" />
+            <Button onClick={() => handleDeleteTodo(row.original)} startIcon={<Delete fontSize="small" />} size="small" />
           </>
         ),
       },
     ],
     []
   );
+
   // Initialize material-react-table
   const table = useMaterialReactTable({
     columns,
@@ -190,7 +171,6 @@ const TodoList = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }} mb={2}>
-      {/* Container for the header }*/}
       <Grid container alignItems="center" justifyContent="space-between">
         <Grid item xs={8} sm={8} md={4} lg={4}>
           <Box
@@ -202,18 +182,11 @@ const TodoList = () => {
               gap: "1rem",
             }}
           >
-            {/* Breadcrumbs for navigation */}
             <BasicBreadcrumbs currentPage="TODO'S" />
 
-            <Button
-              variant="contained"
-              startIcon={<Add fontSize="small" />}
-              size="small"
-              sx={{ fontSize: 12 }}
-              onClick={handleCreateNewButton}
-            >
+            <PrimaryButton onClick={handleCreateNewTodo} startIcon={<Add />}>
               Create New
-            </Button>
+            </PrimaryButton>
           </Box>
         </Grid>
 
@@ -221,45 +194,24 @@ const TodoList = () => {
           <CustomSearchField />
         </Grid>
       </Grid>
+
       <CustomTable table={table} />
 
-      <ReduxDialog
-        value="todo-update"
-        modalTitle="Update"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Todo />
-      </ReduxDialog>
-      <ReduxDialog
-        value="new-todo"
-        modalTitle="Create New"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Todo />
-      </ReduxDialog>
-      <ConfirmationDialog value={"deleteTodo"} />
-      <ReduxDialog
-        value="list-todo-view"
-        modalTitle="Todo Details"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="sm"
-      >
-        <EventView />
-      </ReduxDialog>
-      {/* <ReduxDialog
-        value="add-todo"
-        modalTitle="create new Todo"
-        showModalButton={false}
-        redirectPath=""
-        modalSize="xs"
-      >
-        <Todo />
-      </ReduxDialog> */}
+      {/* Create New Todo */}
+      <CreateNewTodo />
+
+      {/* View Todo */}
+      <TodoViewDialog />
+
+      {/* Inside the Event view  */}
+      <AddTodo/>
+      <EditEventDialog type={"todo"} />
+
+      {/* Update Event */}
+      <UpdateTodo />
+
+      {/* Delete Event */}
+      <DeleteEventDialog type="Todo" setDeleteDialogOpen={setDeleteDialogOpen} isDeleteDialogOpen={isDeleteDialogOpen} />
     </Box>
   );
 };

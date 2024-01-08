@@ -9,6 +9,12 @@ import CustomLinkButton from "./CustomLinkButton";
 import { useTheme } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, selectModal } from "../../redux/action/modalSlice";
+import { Grid } from "@mui/material";
+import PrimaryButton from "./PrimaryButton";
+import SecondaryButton from "./SecondaryButton";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -19,56 +25,66 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ReduxDialog = ({
-  children,
-  value,
-  modalTitle,
-  showModalButton,
-  modalSize,
-  redirectPath,
-}) => {
+const ReduxDialog = ({ children, value, modalTitle, showModalButton, modalSize, redirectPath, isEventModal, handleAddTodo, handleEditClick, handleDeleteClick }) => {
   const theme = useTheme();
   const activeModal = useSelector(selectModal);
   const dispatch = useDispatch();
   return (
-    <BootstrapDialog
-      maxWidth={modalSize}
-      fullWidth={true}
-      onClose={() => dispatch(closeModal())}
-      aria-labelledby="customized-dialog-title"
-      open={activeModal === value}
-    >
+    <BootstrapDialog maxWidth={modalSize} fullWidth={true} onClose={() => dispatch(closeModal())} aria-labelledby="customized-dialog-title" open={activeModal === value}>
       <DialogTitle
         sx={{
-          m: 0,
-          p: 2,
-          display: "flex",
-          justifyContent: "left",
-          alignItems: "center",
+          px: 2,
+          py:1,
+          display:"flex",
+          justifyContent:"left",
+          alignItems:"center",
           borderTop: `5px solid ${theme.palette.primary.main} `,
         }}
         id="customized-dialog-title"
       >
-        <Typography component="h6" variant="subtitle2" mr={2}>
-          {modalTitle}
-        </Typography>
+        {isEventModal ? (
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <PrimaryButton onClick={handleAddTodo} startIcon={<AddIcon />}>
+                Add Todo
+              </PrimaryButton>
+            </Grid>
 
-        {showModalButton && (
-          <CustomLinkButton path={redirectPath} text="Open" />
+            <Grid item>
+              <PrimaryButton onClick={handleEditClick} startIcon={<EditIcon />}>
+                Edit
+              </PrimaryButton>
+            </Grid>
+
+            <Grid item>
+              <SecondaryButton onClick={handleDeleteClick} startIcon={<DeleteIcon />}>
+                Delete
+              </SecondaryButton>
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <Typography component="h6" variant="subtitle2">
+                {modalTitle}
+              </Typography>
+            </Grid>
+
+            <Grid item>{showModalButton && <CustomLinkButton path={redirectPath} text="Open" />}</Grid>
+          </Grid>
         )}
+
+        <IconButton
+          aria-label="close"
+          onClick={() => dispatch(closeModal())}
+          sx={{
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </DialogTitle>
-      <IconButton
-        aria-label="close"
-        onClick={() => dispatch(closeModal())}
-        sx={{
-          position: "absolute",
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
+
       {children}
     </BootstrapDialog>
   );

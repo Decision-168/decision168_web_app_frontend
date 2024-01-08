@@ -1,34 +1,34 @@
-// Calendar.js
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Paper, Grid, Dialog, DialogTitle, DialogContent, Tab, Tabs, styled, useTheme, DialogActions, Button, Box } from "@mui/material";
+import { Paper, Grid, useTheme, Box } from "@mui/material";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import { Draggable } from "@hello-pangea/dnd";
-
-import { openModal, closeModal, addEvent, addTodo, addReminder, addMeeting, updateEvent } from "../../redux/action/calendarSlice";
+import { addEvent, updateEvent } from "../../redux/action/calendarSlice";
 import { openModal as reduxOpenModal } from "../../redux/action/modalSlice";
-
-import Event from "./subComponents/Event";
-import Todo from "./subComponents/Todo";
-import ReminderForm from "./subComponents/ReminderForm";
-import Meeting from "./subComponents/Meeting";
-import ReduxDialog from "../common/ReduxDialog";
-import EventView from "./subComponents/Dialogs/EventView";
 import DraggableResource from "./subComponents/DraggableResource";
 import Quote from "../dashboard/subComponents/Quote";
-import SecondaryButton from "../common/SecondaryButton";
+import "./index.css";
+import CreateNewDialog from "./subComponents/CreateNewDialog";
+import { EVENTS } from "./data";
+import CustomCalendarEvent from "./subComponents/CustomCalendarEvent";
+import { getCustomStyle } from "./getCustomStyle";
+import EventViewDialog from "./subComponents/EventViewDialog";
+import TodoViewDialog from "./subComponents/TodoViewDialog";
+import ReminderViewDialog from "./subComponents/ReminderViewDialog";
+import MeetingViewDialog from "./subComponents/MeetingViewDialog";
+import AddTodo from "./subComponents/AddTodo";
+import EditEventDialog from "./subComponents/EditEventDialog";
+import { SignalCellularNull } from "@mui/icons-material";
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(BigCalendar);
 
 const Calendar = () => {
   const dispatch = useDispatch();
-  const theme = useTheme();
-
   const { isModalOpen, selectedDate, events, todos, reminders, meetings } = useSelector((state) => state.calendar);
 
   const getDefaultEventDetails = (selectedDate) => {
@@ -53,32 +53,11 @@ const Calendar = () => {
   const [todoDetails, setTodoDetails] = useState(getDefaultEventDetails(selectedDate));
   const [reminderDetails, setReminderDetails] = useState(getDefaultEventDetails(selectedDate));
   const [meetingDetails, setMeetingDetails] = useState(getDefaultEventDetails(selectedDate));
-  const [selectedTab, setSelectedTab] = useState("events");
-
-  useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-    localStorage.setItem("todos", JSON.stringify(todos));
-    localStorage.setItem("reminders", JSON.stringify(reminders));
-    localStorage.setItem("meetings", JSON.stringify(meetings));
-  }, [events, todos, reminders, meetings]);
-
-  const resetDetailsState = (range) => {
-    return {
-      title: "",
-      startDate: moment(range.start),
-      endDate: moment(range.end).subtract(1, "hour").toDate(),
-      startTime: moment(range.start).format("HH:mm"),
-      endTime: moment(range.end).add(1, "hour").format("HH:mm"),
-      color: "default",
-      recurrence: "doesnotrepeat",
-      isDraggable: true,
-      reminderTime: 0,
-      CustomDays: "",
-    };
-  };
+  const [eventType, setEventType] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState(SignalCellularNull);
 
   const handleSelect = (range) => {
-    dispatch(openModal({ start: range.start.getTime(), end: range.end.getTime() })); // ?
     dispatch(reduxOpenModal("create-New"));
     setEventDetails(resetDetailsState(range));
     setTodoDetails(resetDetailsState(range));
@@ -86,102 +65,32 @@ const Calendar = () => {
     setMeetingDetails(resetDetailsState(range));
   };
 
-  const handleClose = () => {
-    dispatch(closeModal());
-    setEventDetails(resetDetailsState(selectedDate || new Date()));
-    setTodoDetails(resetDetailsState(selectedDate || new Date()));
-    setReminderDetails(resetDetailsState(selectedDate || new Date()));
-    setMeetingDetails(resetDetailsState(selectedDate || new Date()));
-    setSelectedTab("events");
-  };
-
-  const handleInputChange = ({ target: { name, value } }) => {
-    const updateDetails = (prevDetails) => ({
-      ...prevDetails,
-      [name]: name.includes("Date") ? moment(value, "YYYY-MM-DD") : value,
-    });
-
-    switch (selectedTab) {
-      case "events":
-        setEventDetails((prevDetails) => updateDetails(prevDetails));
-        break;
-      case "todo":
-        setTodoDetails((prevDetails) => updateDetails(prevDetails));
-        break;
-      case "reminder":
-        setReminderDetails((prevDetails) => updateDetails(prevDetails));
-        break;
-      case "meeting":
-        setMeetingDetails((prevDetails) => updateDetails(prevDetails));
-        break;
-      default:
-        return;
-    }
-  };
-
-  const saveDispatchAction = (dispatch, details, actionCreator) => {
-    const { title, startDate, endDate, startTime, endTime, color, recurrence, reminderTime, CustomDays } = details;
-
-    dispatch(
-      actionCreator({
-        title,
-        startDate: moment(startDate).format("YYYY-MM-DD"),
-        endDate: moment(endDate).format("YYYY-MM-DD"),
-        startTime: moment(startTime, "HH:mm").format("HH:mm"),
-        endTime: moment(endTime, "HH:mm").format("HH:mm"),
-        color,
-        recurrence,
-        reminderTime,
-        CustomDays,
-      })
-    );
-  };
-
-  const handleSave = () => {
-    switch (selectedTab) {
-      case "events":
-        saveDispatchAction(dispatch, eventDetails, addEvent);
-        break;
-      case "todo":
-        saveDispatchAction(dispatch, todoDetails, addTodo);
-        break;
-      case "reminder":
-        saveDispatchAction(dispatch, reminderDetails, addReminder);
-        break;
-      case "meeting":
-        saveDispatchAction(dispatch, meetingDetails, addMeeting);
-        break;
-      default:
-        return;
-    }
-    setSelectedTab("events");
-
-    handleClose();
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setSelectedTab(newValue);
-  };
-
   const combinedEvents = [...events, ...todos, ...reminders, ...meetings];
 
-  const eventStyleGetter = (event) => {
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    const style = getCustomStyle(event?.data?.selectedStyle);
     return {
-      style: {
-        backgroundColor: event.color,
-        color: "#333",
-        height: "20px",
-        fontSize: "12px",
-      },
-      draggable: combinedEvents.isDraggable,
+      style,
     };
   };
 
-  const [selectedEvent, setSelectedEvent] = useState("");
-
   const handleEventSelect = (event) => {
+    setSelectedId(event?.id);
+    setEventType(event?.created_type);
     setSelectedEvent(event);
-    dispatch(reduxOpenModal("select-event"));
+    const type = event?.created_type;
+    switch (type) {
+      case "event":
+        return dispatch(reduxOpenModal("select-event"));
+      case "todo":
+        return dispatch(reduxOpenModal("select-todo"));
+      case "reminder":
+        return dispatch(reduxOpenModal("select-reminder"));
+      case "meeting":
+        return dispatch(reduxOpenModal("select-meeting"));
+      default:
+        return null;
+    }
   };
 
   const moveEvent = useCallback(
@@ -241,131 +150,92 @@ const Calendar = () => {
     [dispatch, draggedEvent]
   );
 
-  return (
-    <Grid container spacing={1}>
-      <Grid item xs={9}>
-        <Paper style={{ padding: "16px", height: "40em" }}>
-          <DnDCalendar
-            localizer={localizer}
-            events={combinedEvents.map((event) => ({
-              ...event,
-              start: new Date(event.start),
-              end: new Date(event.end),
-            }))}
-            startAccessor="start"
-            endAccessor="end"
-            selectable={true}
-            onEventDrop={moveEvent}
-            onEventResize={resizeEvent}
-            popup
-            resizable
-            onSelectSlot={handleSelect}
-            onSelectEvent={handleEventSelect}
-            eventPropGetter={eventStyleGetter}
-            style={{ height: "100%" }}
-            draggableAccessor={Draggable}
-            onDropFromOutside={onDropFromOutside}
-          />
-        </Paper>
-      </Grid>
+  const handleNavigate = (newDate, view) => {
+    const currentMonth = moment(newDate).format("MMMM YYYY");
+    alert(`currentMonth ${JSON.stringify(currentMonth)}`);
+    alert(`view ${JSON.stringify(view)}`);
+  };
 
-      <Grid item xs={3} sx={{ mt: -8 }}>
-        <Grid container>
-          <Grid xs={12}>
-            <Quote />
-          </Grid>
-          <Grid xs={12} sx={{ mt: -6 }}>
-            <DraggableResource setDraggedEvent={setDraggedEvent} />
+  const handleViewChange = (view) => {
+    alert(`view ${JSON.stringify(view)}`);
+  };
+
+  const components = {
+    event: ({ event }) => {
+      const type = event?.created_type;
+      switch (type) {
+        case "event":
+          return <CustomCalendarEvent event={event} />;
+        case "todo":
+          return <CustomCalendarEvent event={event} />;
+        case "reminder":
+          return <CustomCalendarEvent event={event} />;
+        case "meeting":
+          return <CustomCalendarEvent event={event} />;
+        default:
+          return null;
+      }
+    },
+  };
+
+  return (
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={8} lg={9}>
+          <Paper style={{ padding: "16px", height: "40em" }}>
+            <DnDCalendar
+              localizer={localizer}
+              events={EVENTS}
+              components={components}
+              startAccessor="start"
+              endAccessor="end"
+              selectable={true}
+              onEventDrop={moveEvent}
+              onEventResize={resizeEvent}
+              popup
+              resizable={false}
+              onSelectSlot={handleSelect}
+              onSelectEvent={handleEventSelect}
+              eventPropGetter={eventStyleGetter}
+              style={{ height: "100%" }}
+              draggableAccessor={Draggable}
+              onDropFromOutside={onDropFromOutside}
+              onNavigate={handleNavigate}
+              onView={handleViewChange}
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={4} lg={3}>
+          <Grid container rowSpacing={2}>
+            <Grid item xs={12}>
+              <Quote />
+            </Grid>
+            <Grid item xs={12}>
+              <DraggableResource setDraggedEvent={setDraggedEvent} />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
 
-      {/* <Dialog open={isModalOpen} onClose={handleClose} maxWidth="sm" PaperProps={{ style: { maxHeight: "70vh" } }}>
-        <DialogTitle
-          style={{
-            borderTop: `7px solid ${theme.palette.primary.main}`,
-            fontSize: "0.9rem",
-            fontWeight: "400",
-            textAlign: "left",
-          }}
-        >
-          Create New
-        </DialogTitle>
-        <DialogContent dividers sx={{ px: 1 }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">
-              <Tab label="Event" value="events" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Todo" value="todo" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Reminder" value="reminder" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Meeting" value="meeting" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-            </Tabs>
-          </Box>
+      <CreateNewDialog
+        eventDetails={eventDetails}
+        setEventDetails={setEventDetails}
+        todoDetails={todoDetails}
+        setTodoDetails={setTodoDetails}
+        reminderDetails={reminderDetails}
+        setReminderDetails={setReminderDetails}
+        meetingDetails={meetingDetails}
+        setMeetingDetails={setMeetingDetails}
+      />
 
-          {selectedTab === "events" && <Event eventDetails={eventDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-          {selectedTab === "todo" && <Todo todoDetails={todoDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-          {selectedTab === "reminder" && (
-            <ReminderForm reminderDetails={reminderDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />
-          )}
-          {selectedTab === "meeting" && <Meeting meetingDetails={meetingDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="outlined" sx={{ marginRight: 2 }}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} variant="contained" color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog> */}
+      <EventViewDialog event={selectedEvent} />
+      <TodoViewDialog event={selectedEvent} />
+      <ReminderViewDialog event={selectedEvent} />
+      <MeetingViewDialog event={selectedEvent} />
 
-      <ReduxDialog value="create-New" modalTitle="Create New" showModalButton={false} modalSize="sm">
-        <DialogContent dividers sx={{ p: 1 }}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider",mt:-4, position:"sticky", top:"-17px", zIndex: 1200, bgcolor:"white" }}>
-            <Tabs value={selectedTab} onChange={handleTabChange} aria-label="basic tabs example">
-              <Tab label="Event" value="events" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Todo" value="todo" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Reminder" value="reminder" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-              <Tab label="Meeting" value="meeting" sx={{ flexGrow: 1, fontSize: "0.8rem" }} />
-            </Tabs>
-          </Box>
-
-          {selectedTab === "events" && <Event eventDetails={eventDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-          {selectedTab === "todo" && <Todo todoDetails={todoDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-          {selectedTab === "reminder" && (
-            <ReminderForm reminderDetails={reminderDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />
-          )}
-          {selectedTab === "meeting" && <Meeting meetingDetails={meetingDetails} handleInputChange={handleInputChange} onSave={handleSave} onClose={handleClose} isCalendarDialog={isModalOpen} />}
-        </DialogContent>
-        <DialogActions>
-          <SecondaryButton onClick={handleClose}>Cancel</SecondaryButton>
-
-          <Button onClick={handleSave} variant="contained" color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </ReduxDialog>
-
-      <ReduxDialog value="select-event" modalTitle={selectedEvent.title} showModalButton={false} redirectPath="" modalSize="sm">
-        <EventView selectedEvent={selectedEvent} />
-      </ReduxDialog>
-
-      <ReduxDialog value="event-update" modalTitle="Update" showModalButton={false} redirectPath="" modalSize="xs">
-        <Event />
-      </ReduxDialog>
-
-      <ReduxDialog value="add-todo" modalTitle="create new Todo" showModalButton={false} redirectPath="" modalSize="xs">
-        <Todo />
-      </ReduxDialog>
-
-      <ReduxDialog value="create-draggable-event" modalTitle="Create New Draggable Event" showModalButton={false} redirectPath="" modalSize="sm">
-         <Todo />
-      </ReduxDialog>
-
-
-      <ReduxDialog value="update-draggable-event" modalTitle="Update Draggable Event" showModalButton={false} redirectPath="" modalSize="xs">
-        <Todo />
-      </ReduxDialog>
-    </Grid>
+      <AddTodo />
+      <EditEventDialog type={eventType} />
+    </>
   );
 };
 
